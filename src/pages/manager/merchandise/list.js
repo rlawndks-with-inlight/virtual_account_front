@@ -29,13 +29,6 @@ const UserList = () => {
       }
     },
     {
-      id: 'parent_user_name',
-      label: '상위유저아이디',
-      action: (row) => {
-        return row['parent_user_name'] ?? "---"
-      }
-    },
-    {
       id: 'nickname',
       label: '닉네임',
       action: (row) => {
@@ -54,13 +47,6 @@ const UserList = () => {
       label: '전화번호',
       action: (row) => {
         return row['phone_num'] ?? "---"
-      }
-    },
-    {
-      id: 'level',
-      label: '유저레벨',
-      action: (row) => {
-        return getUserLevelByNumber(row['level'])
       }
     },
     {
@@ -95,7 +81,6 @@ const UserList = () => {
               onChangePage(searchObj)
             }
           }}
-
         >
           <MenuItem value={'0'}>{'정상'}</MenuItem>
           <MenuItem value={'1'}>{'가입대기'}</MenuItem>
@@ -174,7 +159,7 @@ const UserList = () => {
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
-    onChangePage({ ...searchObj, page: 1 });
+    onChangePage({ ...searchObj, page: 1, level: 10, });
   }
   const onChangePage = async (obj) => {
     setData({
@@ -211,6 +196,12 @@ const UserList = () => {
     <>
       <Dialog
         open={dialogObj.changePassword}
+        onClose={() => {
+          setDialogObj({
+            ...dialogObj,
+            changePassword: false
+          })
+        }}
       >
         <DialogTitle>{`비밀번호 변경`}</DialogTitle>
         <DialogContent>
@@ -253,7 +244,7 @@ const UserList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'영업자 추가'}
+            add_button_text={'가맹점 추가'}
           />
         </Card>
       </Stack>

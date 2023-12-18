@@ -43,16 +43,7 @@ const Dashboards = () => {
         <>
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={3}>
-                        <AppWelcome
-                            title={`${user?.nickname}님\n 환영합니다!`}
-                            description="새로운 상품 판매를 위해 쇼핑몰을 방문해 주세요."
-                            img={<>
-                            </>}
-                            action={<Button variant="contained" onClick={() => { router.push('/shop') }}>쇼핑몰가기</Button>}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={4}>
                         <AppWidgetSummary
                             title="일매출"
                             sx={{ height: '100%' }}
@@ -65,7 +56,7 @@ const Dashboards = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={4}>
                         <AppWidgetSummary
                             title="주매출"
                             sx={{ height: `${window.innerWidth > 900 ? '241px' : '157px'}` }}
@@ -78,7 +69,7 @@ const Dashboards = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={4}>
                         <AppWidgetSummary
                             title="월매출"
                             sx={{ height: `${window.innerWidth > 900 ? '241px' : '157px'}` }}
@@ -90,29 +81,6 @@ const Dashboards = () => {
                                 series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
                             }}
                         />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={4}>
-                        <AppCurrentDownload
-                            title="자주 발생하는 계약형태"
-                            chart={{
-                                colors: [
-                                    theme.palette.primary.main,
-                                    theme.palette.info.main,
-                                    theme.palette.error.main,
-                                    theme.palette.warning.main,
-                                ],
-                                series: [
-                                    { label: '상품판매', value: 122442 },
-                                    { label: '영업자계약', value: 53345 },
-                                ],
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={4}>
-                        <AppTopRelated title="매출이 잘나오는 상품" list={_appRelated} sx={{ height: '100%' }} />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={4}>
-                        <AppTopAuthors title="고마운 고객님" list={_appAuthors} sx={{ height: '100%' }} />
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
                         <AppAreaInstalled

@@ -1,5 +1,5 @@
 
-import { Button, Card, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { themeObj } from "src/components/elements/styled-components";
@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
+import { operatorLevelList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -21,7 +22,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const UserEdit = () => {
   const { setModal } = useModal()
-  const { themeMode } = useSettingsContext();
+  const { themeMode, themeDnsData } = useSettingsContext();
 
   const router = useRouter();
 
@@ -38,18 +39,24 @@ const UserEdit = () => {
     user_pw: '',
     note: '',
   })
-
   useEffect(() => {
     settingPage();
-  }, [])
+  }, [router.query])
   const settingPage = async () => {
     let data = item;
     if (router.query?.edit_category == 'edit') {
       data = await apiManager('users', 'get', {
         id: router.query.id
       })
+    } else {
+      data = {};
+      for (var i = 0; i < operatorLevelList.length; i++) {
+        if (themeDnsData?.level_obj[`is_use_sales${5 - i}`] == 1) {
+          data.level = operatorLevelList[i].value;
+          break;
+        }
+      }
     }
-
     setItem(data);
     setLoading(false);
   }
@@ -62,7 +69,7 @@ const UserEdit = () => {
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
-      router.push('/manager/user');
+      router.push(`/manager/operator/list/${item.level}`);
     }
   }
   return (
@@ -170,6 +177,26 @@ const UserEdit = () => {
                       )
                     }} />
                   <Stack spacing={1}>
+                    <FormControl disabled={router.query?.id || router.query?.edit_category != 'add'}>
+                      <InputLabel>영업자레벨</InputLabel>
+                      <Select
+                        label='영업자레벨'
+                        value={item.level}
+                        onChange={e => {
+                          setItem({
+                            ...item,
+                            ['level']: e.target.value
+                          })
+                        }}
+                      >
+                        {operatorLevelList.map((item, idx) => {
+                          if (themeDnsData?.level_obj[`is_use_sales${5 - idx}`] != 1) {
+                            return;
+                          }
+                          return <MenuItem value={item.value}>{themeDnsData?.level_obj[`sales${5 - idx}_name`]}</MenuItem>
+                        })}
+                      </Select>
+                    </FormControl>
                   </Stack>
                 </Stack>
               </Card>

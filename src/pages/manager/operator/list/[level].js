@@ -29,13 +29,6 @@ const UserList = () => {
       }
     },
     {
-      id: 'parent_user_name',
-      label: '상위유저아이디',
-      action: (row) => {
-        return row['parent_user_name'] ?? "---"
-      }
-    },
-    {
       id: 'nickname',
       label: '닉네임',
       action: (row) => {
@@ -54,13 +47,6 @@ const UserList = () => {
       label: '전화번호',
       action: (row) => {
         return row['phone_num'] ?? "---"
-      }
-    },
-    {
-      id: 'level',
-      label: '유저레벨',
-      action: (row) => {
-        return getUserLevelByNumber(row['level'])
       }
     },
     {
@@ -133,7 +119,7 @@ const UserList = () => {
           <>
             <IconButton>
               <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`edit/${row?.id}`)
+                router.push(`/manager/operator/edit/${row?.id}`)
               }} />
             </IconButton>
             <IconButton onClick={() => {
@@ -211,6 +197,12 @@ const UserList = () => {
     <>
       <Dialog
         open={dialogObj.changePassword}
+        onClose={() => {
+          setDialogObj({
+            ...dialogObj,
+            changePassword: false
+          })
+        }}
       >
         <DialogTitle>{`비밀번호 변경`}</DialogTitle>
         <DialogContent>
@@ -253,7 +245,7 @@ const UserList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'영업자 추가'}
+            add_button_text={''}
           />
         </Card>
       </Stack>

@@ -108,12 +108,12 @@ const navConfig = () => {
     {
       items: [
         {
-          title: '대리점관리',
+          title: '가맹점관리',
           path: PATH_MANAGER.merchandise.root,
           icon: ICONS.user,
           children: [
-            { title: '대리점관리', path: PATH_MANAGER.merchandise.list },
-            { title: '대리점추가', path: PATH_MANAGER.merchandise.add },
+            { title: '가맹점관리', path: PATH_MANAGER.merchandise.list },
+            { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
           ],
         },
       ],

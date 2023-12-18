@@ -96,6 +96,14 @@ export const getDomain = () => {
 }
 
 export const getUserLevelByNumber = (num) => {
+  let dns_data = getLocalStorage('themeDnsData');
+  dns_data = JSON.parse(dns_data);
+
+  for (var i = 0; i < operatorLevelList.length; i++) {
+    if (num == operatorLevelList[i].value) {
+      return dns_data?.level_obj[`sales${5 - i}_name`]
+    }
+  }
   if (num == 0)
     return '일반유저'
   else if (num == 10)
@@ -248,6 +256,7 @@ export const detetimeFormat = (datetime) => {
   return `${datetime.substring(0, 4)}년 ${datetime.substring(5, 7)}월 ${datetime.substring(8, 10)}일 ${datetime.substring(11, 19)}`
 }
 import { useEffect, useState } from 'react'
+import { operatorLevelList } from "./format";
 
 function easeOutExpo(t) {
   return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)

@@ -167,20 +167,6 @@ const UserEdit = () => {
                         }
                       )
                     }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='상위영업자아이디'
-                        value={item.parent_user_name}
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['parent_user_name']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
                   <Stack spacing={1}>
                   </Stack>
                 </Stack>
