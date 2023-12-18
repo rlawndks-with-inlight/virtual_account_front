@@ -42,7 +42,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       sx={{
         height: 1,
         '& .simplebar-content': {
-          height: 1,
+          height: '100vh',
           display: 'flex',
           flexDirection: 'column',
         },

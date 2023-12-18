@@ -19,7 +19,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
   loading: () => <p>Loading ...</p>,
 })
 
-const WithdrawEdit = () => {
+const UserEdit = () => {
   const { setModal } = useModal()
   const { themeMode } = useSettingsContext();
 
@@ -60,7 +60,7 @@ const WithdrawEdit = () => {
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
-      router.push('/manager/withdraw');
+      router.push('/manager/user');
     }
   }
   return (
@@ -208,5 +208,5 @@ const WithdrawEdit = () => {
     </>
   )
 }
-WithdrawEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default WithdrawEdit
+UserEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default UserEdit

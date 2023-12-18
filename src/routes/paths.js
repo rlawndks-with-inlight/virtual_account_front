@@ -21,10 +21,6 @@ export const PATH_MANAGER = {
     list: path(ROOTS_MANAGER, '/brand/list'),
     shopDesign: path(ROOTS_MANAGER, '/brand/shop-design'),
   },
-  user: {
-    root: path(ROOTS_MANAGER, '/user'),
-    list: path(ROOTS_MANAGER, '/user/list'),
-  },
   merchandise: {
     root: path(ROOTS_MANAGER, '/merchandise'),
     list: path(ROOTS_MANAGER, '/merchandise/list'),
@@ -34,6 +30,11 @@ export const PATH_MANAGER = {
     root: path(ROOTS_MANAGER, '/operator'),
     list: path(ROOTS_MANAGER, '/operator/list'),
     add: path(ROOTS_MANAGER, '/operator/add'),
+  },
+  deposit: {
+    root: path(ROOTS_MANAGER, '/deposit'),
+    list: path(ROOTS_MANAGER, '/deposit/list'),
+    add: path(ROOTS_MANAGER, '/deposit/add'),
   },
   withdraw: {
     root: path(ROOTS_MANAGER, '/withdraw'),
@@ -45,6 +46,11 @@ export const PATH_MANAGER = {
     root: path(ROOTS_MANAGER, '/virtual-account'),
     list: path(ROOTS_MANAGER, '/virtual-account/list'),
     edit: path(ROOTS_MANAGER, '/virtual-account/edit'),
+  },
+  motherAccount: {
+    root: path(ROOTS_MANAGER, '/mother-account'),
+    list: path(ROOTS_MANAGER, '/mother-account/list'),
+    add: path(ROOTS_MANAGER, '/mother-account/add'),
   },
   log: {
     root: path(ROOTS_MANAGER, '/log'),

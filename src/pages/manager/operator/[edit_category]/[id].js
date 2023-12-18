@@ -43,12 +43,14 @@ const UserEdit = () => {
     settingPage();
   }, [])
   const settingPage = async () => {
+    let data = item;
     if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('users', 'get', {
+      data = await apiManager('users', 'get', {
         id: router.query.id
       })
-      setItem(data);
     }
+
+    setItem(data);
     setLoading(false);
   }
   const onSave = async () => {
@@ -167,20 +169,6 @@ const UserEdit = () => {
                         }
                       )
                     }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='상위영업자아이디'
-                        value={item.parent_user_name}
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['parent_user_name']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
                   <Stack spacing={1}>
                   </Stack>
                 </Stack>

@@ -7,8 +7,8 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.pathname === '/manager/operator') {
-      router.push('/manager/operator/list');
+    if (router.pathname === '/manager/mother-account') {
+      router.push('/manager/mother-account/list');
     }
   });
   return null;

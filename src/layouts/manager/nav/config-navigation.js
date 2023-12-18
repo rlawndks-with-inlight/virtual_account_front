@@ -6,6 +6,8 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 import { useEffect } from 'react';
 import { apiManager } from 'src/utils/api-manager';
 import { useState } from 'react';
+import { useSettingsContext } from 'src/components/settings';
+import { operatorLevelList } from 'src/utils/format';
 
 // ----------------------------------------------------------------------
 
@@ -20,19 +22,34 @@ const ICONS = {
   dashboard: icon('ic_dashboard'),
 };
 const navConfig = () => {
+
+  const { themeDnsData } = useSettingsContext();
   const { user } = useAuthContext();
 
-  const [productCategoryList, setProductCategoryList] = useState([]);
+  const [operatorList, setOperatorList] = useState([]);
   const isDeveloper = () => {
     return user?.level >= 50
+  }
+  const isManager = () => {
+    return user?.level >= 40
   }
   useEffect(() => {
     settingSidebar();
   }, [])
-
   const settingSidebar = async () => {
-    let product_category_list = await apiManager('product-categories', 'list');
-    setProductCategoryList(product_category_list?.content ?? []);
+
+    let operator_list = [];
+    for (var i = 5; i >= 0; i--) {
+      if (themeDnsData?.level_obj[`is_use_sales${i}`] == 1) {
+        console.log(operatorLevelList[5 - i])
+        operator_list.push({
+          title: `${themeDnsData?.level_obj[`sales${i}_name`]}관리`,
+          path: PATH_MANAGER.operator.list + `/${operatorLevelList[5 - i].value}`,
+        },)
+      }
+    }
+    console.log(operator_list)
+    setOperatorList(operator_list);
 
   }
   return [
@@ -41,6 +58,24 @@ const navConfig = () => {
     {
       items: [
         { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
+      ],
+    },
+    {
+      items: [
+        { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: ICONS.user },
+      ],
+    },
+    {
+      items: [
+        {
+          title: '모계좌관리',
+          path: PATH_MANAGER.motherAccount.root,
+          icon: ICONS.user,
+          children: [
+            { title: '모계좌내역', path: PATH_MANAGER.motherAccount.list },
+            { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.add },
+          ],
+        },
       ],
     },
     {
@@ -57,19 +92,19 @@ const navConfig = () => {
         },
       ],
     },
-    {
+    ...((operatorList && operatorList?.length > 0 && isManager()) ? [{
       items: [
         {
           title: '영업자관리',
           path: PATH_MANAGER.operator.root,
           icon: ICONS.user,
           children: [
-            { title: '영업자관리', path: PATH_MANAGER.operator.list },
+            ...operatorList,
             { title: '영업자추가', path: PATH_MANAGER.operator.add },
           ],
         },
       ],
-    },
+    }] : []),
     {
       items: [
         {
