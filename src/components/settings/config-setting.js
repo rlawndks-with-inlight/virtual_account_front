@@ -5,7 +5,7 @@ export const defaultSettings = {
   themeMode: 'light',
   themeDirection: 'ltr',
   themeContrast: 'default',
-  themeLayout: 'horizontal',
+  themeLayout: 'vertical',
   themeColorPresets: 'default',
   themeStretch: true,
   themeDnsData: {},// dns정보
