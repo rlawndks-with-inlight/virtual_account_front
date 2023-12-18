@@ -48,7 +48,6 @@ const navConfig = () => {
         },)
       }
     }
-    console.log(operator_list)
     setOperatorList(operator_list);
 
   }

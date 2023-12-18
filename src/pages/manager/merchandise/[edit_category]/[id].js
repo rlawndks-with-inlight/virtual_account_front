@@ -23,6 +23,7 @@ const UserEdit = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
+  const [operatorList, setOperatorList] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
   const [item, setItem] = useState({
     profile_file: undefined,
@@ -57,6 +58,12 @@ const UserEdit = () => {
     settingPage();
   }, [])
   const settingPage = async () => {
+    let operator_list = await apiManager(`users`, 'list', {
+      level_list: themeDnsData?.operator_list.map(itm => {
+        return itm?.value
+      }),
+    })
+    setOperatorList(operator_list?.content ?? []);
     if (router.query?.edit_category == 'edit') {
       let data = await apiManager('users', 'get', {
         id: router.query.id
@@ -207,8 +214,44 @@ const UserEdit = () => {
                     <Stack spacing={3}>
                       {operatorLevelList.map((itm, idx) => {
                         if (themeDnsData?.level_obj[`is_use_sales${5 - idx}`] == 1) {
-                          return <Row>
-
+                          return <Row style={{ columnGap: '1rem' }}>
+                            <FormControl style={{ width: '50%' }}>
+                              <InputLabel>{`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}</InputLabel>
+                              <Select
+                                label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}
+                                value={item[`sales${5 - idx}_id`]}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    [`sales${5 - idx}_id`]: e.target.value
+                                  })
+                                }}
+                              >
+                                {operatorList && operatorList.map((operator, idx) => {
+                                  if (operator?.level == itm?.value) {
+                                    return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
+                                  }
+                                })}
+                              </Select>
+                            </FormControl>
+                            <TextField
+                              style={{ width: '50%' }}
+                              type="number"
+                              label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 수수료`}
+                              value={item[`sales${5 - idx}_fee`]}
+                              placeholder=""
+                              onChange={(e) => {
+                                setItem(
+                                  {
+                                    ...item,
+                                    [`sales${5 - idx}_fee`]: e.target.value
+                                  }
+                                )
+                              }}
+                              InputProps={{
+                                endAdornment: <div>%</div>
+                              }}
+                            />
                           </Row>
                         }
                       })}
