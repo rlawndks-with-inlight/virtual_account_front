@@ -10,20 +10,15 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
+
 const VirtualAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const defaultColumns = [
-    {
-      id: 'profile_img',
-      label: '유저프로필',
-      action: (row) => {
-        return <Avatar src={row['profile_img'] ?? "---"} />
-      }
-    },
+
     {
       id: 'user_name',
-      label: '유저아이디',
+      label: '가맹점',
       action: (row) => {
         return row['user_name'] ?? "---"
       }
@@ -57,13 +52,6 @@ const VirtualAccountList = () => {
       }
     },
     {
-      id: 'level',
-      label: '유저레벨',
-      action: (row) => {
-        return getUserLevelByNumber(row['level'])
-      }
-    },
-    {
       id: 'created_at',
       label: '가입일',
       action: (row) => {
@@ -87,7 +75,7 @@ const VirtualAccountList = () => {
           value={row?.status}
           disabled={!(user?.level >= 40)}
           onChange={async (e) => {
-            let result = await apiManager(`users/change-status`, 'update', {
+            let result = await apiManager(`virtual-account/change-status`, 'update', {
               id: row?.id,
               status: e.target.value
             });
@@ -181,20 +169,20 @@ const VirtualAccountList = () => {
       ...data,
       content: undefined
     })
-    let data_ = await apiManager('users', 'list', obj);
+    let data_ = await apiManager('virtual-account', 'list', obj);
     if (data_) {
       setData(data_);
     }
     setSearchObj(obj);
   }
   const deleteUser = async (id) => {
-    let data = await apiManager('users', 'delete', { id });
+    let data = await apiManager('virtual-account', 'delete', { id });
     if (data) {
       onChangePage(searchObj);
     }
   }
   const onChangeUserPassword = async () => {
-    let result = await apiManager(`users/change-pw`, 'update', changePasswordObj);
+    let result = await apiManager(`virtual-account/change-pw`, 'update', changePasswordObj);
     if (result) {
       setDialogObj({
         ...dialogObj,
@@ -253,7 +241,6 @@ const VirtualAccountList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'영업자 추가'}
           />
         </Card>
       </Stack>

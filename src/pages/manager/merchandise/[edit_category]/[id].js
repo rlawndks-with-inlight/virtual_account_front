@@ -84,7 +84,7 @@ const UserEdit = () => {
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
-      router.push('/manager/user');
+      router.push('/manager/merchandise');
     }
   }
   return (
@@ -219,14 +219,19 @@ const UserEdit = () => {
                               <InputLabel>{`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}</InputLabel>
                               <Select
                                 label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}
-                                value={item[`sales${5 - idx}_id`]}
+                                value={item[`sales${5 - idx}_id`] ?? 0}
                                 onChange={e => {
-                                  setItem({
+                                  let obj = {
                                     ...item,
                                     [`sales${5 - idx}_id`]: e.target.value
-                                  })
+                                  }
+                                  if (!e.target.value) {
+                                    obj[`sales${5 - idx}_fee`] = 0;
+                                  }
+                                  setItem(obj);
                                 }}
                               >
+                                <MenuItem value={0}>선택안함</MenuItem>
                                 {operatorList && operatorList.map((operator, idx) => {
                                   if (operator?.level == itm?.value) {
                                     return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>

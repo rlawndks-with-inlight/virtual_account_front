@@ -45,7 +45,7 @@ export const PATH_MANAGER = {
   virtualAccount: {
     root: path(ROOTS_MANAGER, '/virtual-account'),
     list: path(ROOTS_MANAGER, '/virtual-account/list'),
-    edit: path(ROOTS_MANAGER, '/virtual-account/edit'),
+    add: path(ROOTS_MANAGER, '/virtual-account/add'),
   },
   motherAccount: {
     root: path(ROOTS_MANAGER, '/mother-account'),

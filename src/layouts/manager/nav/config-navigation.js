@@ -127,7 +127,7 @@ const navConfig = () => {
           icon: ICONS.user,
           children: [
             { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
-            { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.edit },
+            { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
           ],
         },
       ],

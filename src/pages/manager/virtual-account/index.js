@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 // ----------------------------------------------------------------------
 
 export default function Index() {
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(() => {
-        if (router.pathname === '/manager/virtual-account') {
-            router.push('/manager/virtual-account/edit');
-        }
-    });
-    return null;
+  useEffect(() => {
+    if (router.pathname === '/manager/virtual-account') {
+      router.push('/manager/virtual-account/list');
+    }
+  });
+  return null;
 }

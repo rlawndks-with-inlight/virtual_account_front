@@ -10,9 +10,12 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
+import { operatorLevelList } from "src/utils/format";
+import { useSettingsContext } from "src/components/settings";
 const UserList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
       id: 'profile_img',
@@ -49,6 +52,25 @@ const UserList = () => {
         return row['phone_num'] ?? "---"
       }
     },
+    ...(themeDnsData?.operator_list ?? []).map(operator => {
+      console.log(operator)
+      return [
+        {
+          id: `operator`,
+          label: operator?.label,
+          action: (row) => {
+            return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
+          }
+        },
+        {
+          id: `operator`,
+          label: `${operator?.label} 수수료`,
+          action: (row) => {
+            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
+          }
+        },
+      ]
+    }).flat(),
     {
       id: 'created_at',
       label: '가입일',
@@ -67,7 +89,6 @@ const UserList = () => {
       id: 'status',
       label: '유저상태',
       action: (row, idx) => {
-
         return <Select
           size='small'
           value={row?.status}
