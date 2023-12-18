@@ -15,13 +15,6 @@ const WithdrawList = () => {
   const { user } = useAuthContext();
   const defaultColumns = [
     {
-      id: 'profile_img',
-      label: '유저프로필',
-      action: (row) => {
-        return <Avatar src={row['profile_img'] ?? "---"} />
-      }
-    },
-    {
       id: 'user_name',
       label: '유저아이디',
       action: (row) => {
@@ -29,100 +22,10 @@ const WithdrawList = () => {
       }
     },
     {
-      id: 'parent_user_name',
-      label: '상위유저아이디',
-      action: (row) => {
-        return row['parent_user_name'] ?? "---"
-      }
-    },
-    {
-      id: 'nickname',
-      label: '닉네임',
-      action: (row) => {
-        return row['nickname'] ?? "---"
-      }
-    },
-    {
-      id: 'name',
-      label: '이름',
-      action: (row) => {
-        return row['name'] ?? "---"
-      }
-    },
-    {
-      id: 'phone_num',
-      label: '전화번호',
-      action: (row) => {
-        return row['phone_num'] ?? "---"
-      }
-    },
-    {
-      id: 'level',
-      label: '유저레벨',
-      action: (row) => {
-        return getUserLevelByNumber(row['level'])
-      }
-    },
-    {
       id: 'created_at',
-      label: '가입일',
+      label: '생성일',
       action: (row) => {
         return row['created_at'] ?? "---"
-      }
-    },
-    {
-      id: 'last_login_time',
-      label: '마지막로그인시간',
-      action: (row) => {
-        return row['last_login_time'] ?? "---"
-      }
-    },
-    {
-      id: 'status',
-      label: '유저상태',
-      action: (row, idx) => {
-
-        return <Select
-          size='small'
-          value={row?.status}
-          disabled={!(user?.level >= 40)}
-          onChange={async (e) => {
-            let result = await apiManager(`users/change-status`, 'update', {
-              id: row?.id,
-              status: e.target.value
-            });
-            if (result) {
-              onChangePage(searchObj)
-            }
-          }}
-
-        >
-          <MenuItem value={'0'}>{'정상'}</MenuItem>
-          <MenuItem value={'1'}>{'가입대기'}</MenuItem>
-          <MenuItem value={'2'}>{'로그인금지'}</MenuItem>
-        </Select>
-      }
-    },
-    {
-      id: 'edit_password',
-      label: '비밀번호 변경',
-      action: (row) => {
-        if (user?.level < row?.level) {
-          return "---"
-        }
-        return (
-          <>
-            <IconButton onClick={() => {
-              setDialogObj({ ...dialogObj, changePassword: true })
-              setChangePasswordObj({
-                user_pw: '',
-                id: row?.id
-              })
-            }}>
-              <Icon icon='material-symbols:lock-outline' />
-            </IconButton>
-          </>
-        )
       }
     },
     {
@@ -181,20 +84,20 @@ const WithdrawList = () => {
       ...data,
       content: undefined
     })
-    let data_ = await apiManager('users', 'list', obj);
+    let data_ = await apiManager('deposits', 'list', obj);
     if (data_) {
       setData(data_);
     }
     setSearchObj(obj);
   }
   const deleteUser = async (id) => {
-    let data = await apiManager('users', 'delete', { id });
+    let data = await apiManager('deposits', 'delete', { id });
     if (data) {
       onChangePage(searchObj);
     }
   }
   const onChangeUserPassword = async () => {
-    let result = await apiManager(`users/change-pw`, 'update', changePasswordObj);
+    let result = await apiManager(`deposits/change-pw`, 'update', changePasswordObj);
     if (result) {
       setDialogObj({
         ...dialogObj,
@@ -253,7 +156,6 @@ const WithdrawList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'영업자 추가'}
           />
         </Card>
       </Stack>

@@ -6,10 +6,6 @@ import { themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
-import styled from "styled-components";
-import { react_quill_data } from "src/data/manager-data";
-import { axiosIns } from "src/utils/axios";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -44,7 +40,7 @@ const VirtualAccountEdit = () => {
   }, [])
   const settingPage = async () => {
     if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('users', 'get', {
+      let data = await apiManager('virtual-account', 'get', {
         id: router.query.id
       })
       setItem(data);
@@ -54,9 +50,9 @@ const VirtualAccountEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('users', 'update', item);
+      result = await apiManager('virtual-account', 'update', item);
     } else {//추가
-      result = await apiManager('users', 'create', item);
+      result = await apiManager('virtual-account', 'create', item);
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
