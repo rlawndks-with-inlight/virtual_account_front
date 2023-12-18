@@ -105,19 +105,21 @@ const navConfig = () => {
         },
       ],
     }] : []),
-    {
-      items: [
-        {
-          title: '가맹점관리',
-          path: PATH_MANAGER.merchandise.root,
-          icon: ICONS.user,
-          children: [
-            { title: '가맹점관리', path: PATH_MANAGER.merchandise.list },
-            { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
-          ],
-        },
-      ],
-    },
+    ...(isManager() ? [
+      {
+        items: [
+          {
+            title: '가맹점관리',
+            path: PATH_MANAGER.merchandise.root,
+            icon: ICONS.user,
+            children: [
+              { title: '가맹점관리', path: PATH_MANAGER.merchandise.list },
+              { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     {
       items: [
         {
@@ -131,7 +133,7 @@ const navConfig = () => {
         },
       ],
     },
-    ...(user?.level >= 40 ? [
+    ...(isManager() ? [
       {
         items: [
           {
@@ -140,7 +142,7 @@ const navConfig = () => {
             icon: ICONS.user,
             children: [
               { title: '기본설정', path: PATH_MANAGER.brand.edit },
-              ...(user?.level >= 50 ? [{
+              ...(isDeveloper() ? [{
                 title: '브랜드관리', path: PATH_MANAGER.brand.list
               }] : []),
             ],
