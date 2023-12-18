@@ -5,6 +5,7 @@ import { Box, Link, Typography } from '@mui/material';
 import { useAuthContext } from '../../../auth/useAuthContext';
 // components
 import { CustomAvatar } from '../../../components/custom-avatar';
+import { getUserLevelByNumber } from 'src/utils/function';
 
 // ----------------------------------------------------------------------
 
@@ -27,15 +28,15 @@ export default function NavAccount() {
   return (
     <Link underline="none" color="inherit">
       <StyledRoot>
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar src={user?.profile_img} alt={user?.nickname} name={user?.nickname} />
 
         <Box sx={{ ml: 2, minWidth: 0 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {user?.nickname}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.role}
+            {getUserLevelByNumber(user?.level)}
           </Typography>
         </Box>
       </StyledRoot>

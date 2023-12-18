@@ -65,6 +65,20 @@ export const defaultManagerObj = {
     theme_css: {
       main_color: '#00ab55'
     },
+    level_obj: {
+      is_use_sales5: 0,
+      is_use_sales4: 0,
+      is_use_sales3: 0,
+      is_use_sales2: 0,
+      is_use_sales1: 0,
+      is_use_sales0: 0,
+      sales5_name: '지사',
+      sales4_name: '하위 지사',
+      sales3_name: '총판',
+      sales2_name: '하위 총판',
+      sales1_name: '대리점',
+      sales0_name: '하위 대리점',
+    }
   },
   products: {
     product_file: undefined,

@@ -41,8 +41,9 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       {...other}
     >
       <img src={themeDnsData?.logo_img} style={{
-        width: '100%',
+        width: 'auto',
         height: '100%',
+        margin: 'auto'
       }} />
     </Box>
   );

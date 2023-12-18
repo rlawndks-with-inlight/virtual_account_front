@@ -43,53 +43,16 @@ const navConfig = () => {
         { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
       ],
     },
-    // MANAGEMENT
-    // ----------------------------------------------------------------------
     {
       items: [
         {
-          title: '상품관리',
-          path: PATH_MANAGER.product.root,
+          title: '출금관리',
+          path: PATH_MANAGER.withdraw.root,
           icon: ICONS.user,
           children: [
-            {
-              title: '상품관리', path: PATH_MANAGER.product.list,
-              children: [
-                { title: '전체', path: PATH_MANAGER.product.list + `/all` },
-                ...productCategoryList.map((item) => {
-                  return {
-                    title: item?.name,
-                    path: PATH_MANAGER.product.list + `/${item?.id}`
-                  }
-                })
-              ]
-            },
-            { title: '상품카테고리관리', path: PATH_MANAGER.product.category.list },
-          ],
-        },
-      ],
-    },
-    {
-      items: [
-        {
-          title: '고객관리',
-          path: PATH_MANAGER.customer.root,
-          icon: ICONS.user,
-          children: [
-            { title: '회원관리', path: PATH_MANAGER.customer.list },
-          ],
-        },
-      ],
-    },
-
-    {
-      items: [
-        {
-          title: '계약관리',
-          path: PATH_MANAGER.contract.root,
-          icon: ICONS.user,
-          children: [
-            { title: '계약관리', path: PATH_MANAGER.contract.list },
+            { title: '출금내역', path: PATH_MANAGER.withdraw.list },
+            { title: '출금요청', path: PATH_MANAGER.withdraw.add },
+            { title: '반환요청', path: PATH_MANAGER.withdraw.return },
           ],
         },
       ],
@@ -98,11 +61,37 @@ const navConfig = () => {
       items: [
         {
           title: '영업자관리',
-          path: PATH_MANAGER.user.root,
+          path: PATH_MANAGER.operator.root,
           icon: ICONS.user,
           children: [
-            { title: '영업자관리', path: PATH_MANAGER.user.list },
-            { title: '영업자조직도', path: PATH_MANAGER.user.organizationChart },
+            { title: '영업자관리', path: PATH_MANAGER.operator.list },
+            { title: '영업자추가', path: PATH_MANAGER.operator.add },
+          ],
+        },
+      ],
+    },
+    {
+      items: [
+        {
+          title: '대리점관리',
+          path: PATH_MANAGER.merchandise.root,
+          icon: ICONS.user,
+          children: [
+            { title: '대리점관리', path: PATH_MANAGER.merchandise.list },
+            { title: '대리점추가', path: PATH_MANAGER.merchandise.add },
+          ],
+        },
+      ],
+    },
+    {
+      items: [
+        {
+          title: '가상계좌관리',
+          path: PATH_MANAGER.virtualAccount.root,
+          icon: ICONS.user,
+          children: [
+            { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
+            { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.edit },
           ],
         },
       ],
@@ -116,7 +105,6 @@ const navConfig = () => {
             icon: ICONS.user,
             children: [
               { title: '기본설정', path: PATH_MANAGER.brand.edit },
-              { title: '쇼핑몰디자인관리', path: PATH_MANAGER.brand.shopDesign },
               ...(user?.level >= 50 ? [{
                 title: '브랜드관리', path: PATH_MANAGER.brand.list
               }] : []),

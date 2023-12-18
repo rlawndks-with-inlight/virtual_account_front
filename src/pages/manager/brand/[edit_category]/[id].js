@@ -1,5 +1,5 @@
 
-import { Avatar, Button, Card, CardHeader, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Tab, Tabs, TextField, TextareaAutosize, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardHeader, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, Tab, Tabs, TextField, TextareaAutosize, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -16,6 +16,7 @@ import axios from "axios";
 import { useAuthContext } from "src/auth/useAuthContext";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
+import { operatorLevelList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -76,10 +77,10 @@ const BrandEdit = () => {
       value: 3,
       label: '사용할 본사 계정'
     }] : []),
-    ...(user?.level >= 50 ? [{
+    {
       value: 4,
-      label: '데모설정'
-    }] : []),
+      label: '영업점 단계설정'
+    },
   ]
 
   useEffect(() => {
@@ -553,31 +554,45 @@ const BrandEdit = () => {
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <FormControl>
-                        <InputLabel>쇼핑몰 데모넘버</InputLabel>
-                        <Select label='쇼핑몰 데모넘버' value={item.setting_obj?.shop_demo_num} onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['setting_obj']: {
-                                ...item.setting_obj,
-                                shop_demo_num: e.target.value
+                      {operatorLevelList.map((itm, idx) => {
+                        return <TextField
+                          label='영업자등급6'
+                          value={item?.level_obj[`sales${5 - idx}_name`]}
+                          onChange={(e) => {
+                            setItem(
+                              {
+                                ...item,
+                                ['level_obj']: {
+                                  ...item.level_obj,
+                                  [`sales${5 - idx}_name`]: e.target.value
+                                }
                               }
-                            }
-                          )
-                        }}>
-                          <MenuItem value={0}>사용안함</MenuItem>
-                          {[1, 2, 3].map((num, idx) => {
-                            return <MenuItem value={num}>데모 {num}</MenuItem>
-                          })}
-                        </Select>
-                      </FormControl>
+                            )
+                          }} />
+                      })}
+
+
                     </Stack>
                   </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      {operatorLevelList.map((itm, idx) => {
+                        return <Stack>
+                          <FormControlLabel control={<Switch checked={item.level_obj[`is_use_sales${5 - idx}`] == 1} />} label={`${item.level_obj[`sales${5 - idx}_name`]} 사용여부`}
+                            onChange={(e) => {
+                              setItem({
+                                ...item,
+                                ['level_obj']: {
+                                  ...item.level_obj,
+                                  [`is_use_sales${5 - idx}`]: e.target.checked ? 1 : 0
+                                }
+                              })
+                            }}
+                          />
+                        </Stack>
+                      })}
 
                     </Stack>
                   </Card>
