@@ -31,13 +31,13 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (user?.level >= 10) {
-      router.push(PATH_MANAGER.dashboards);
+      router.push(PATH_MANAGER.deposit.list);
     }
     setLoading(false);
   }, [user])
   useEffect(() => {
     if (router.query?.is_first && !user) {
-      openTour('is-first', "판매자 계정이 없으시면 클릭 후 가입해 주세요.\n5분 내에 가입이 완료됩니다 !")
+
     }
   }, [router.query?.is_first])
   const LoginSchema = Yup.object().shape({
@@ -48,7 +48,7 @@ const Login = () => {
   const onSubmit = async () => {
     let user = await login(username, password);
     if (user) {
-      router.push(PATH_MANAGER.dashboards)
+      router.push(PATH_MANAGER.deposit.list)
     }
   };
   const [tourOpen, setTourOpen] = useState(false);

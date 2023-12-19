@@ -130,7 +130,10 @@ export function SettingsProvider({ children }) {
       console.log(err)
     }
   }
-
+  const getSettingData = async () => {
+    let result = await apiShop('', 'get');
+    onChangeShopSetting(result);
+  }
   // Mode
   const onToggleMode = useCallback(() => {
     const value = themeMode === 'light' ? 'dark' : 'light';

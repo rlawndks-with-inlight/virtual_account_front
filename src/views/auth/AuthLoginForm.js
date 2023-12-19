@@ -34,7 +34,7 @@ export default function AuthLoginForm() {
 
   useEffect(()=>{
     if(user){
-      router.push(PATH_MANAGER.dashboards)
+      router.push(PATH_MANAGER.deposit.list)
     }
   },[user])
   return (

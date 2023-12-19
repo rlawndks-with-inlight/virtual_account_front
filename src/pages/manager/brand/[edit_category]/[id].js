@@ -16,7 +16,8 @@ import axios from "axios";
 import { useAuthContext } from "src/auth/useAuthContext";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { operatorLevelList } from "src/utils/format";
+import { apiCorpList, bankCodeList, operatorLevelList } from "src/utils/format";
+import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -77,10 +78,14 @@ const BrandEdit = () => {
       value: 3,
       label: '사용할 본사 계정'
     }] : []),
-    {
+    ...(user?.level >= 50 ? [{
       value: 4,
       label: '영업점 단계설정'
-    },
+    },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 5,
+      label: '데모설정'
+    },] : []),
   ]
 
   useEffect(() => {
@@ -594,6 +599,286 @@ const BrandEdit = () => {
                         </Stack>
                       })}
 
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 5 &&
+              <>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj.is_use_deposit == 1} />} label={`입금 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`is_use_deposit`]: e.target.checked ? 1 : 0
+                              }
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <FormControl>
+                        <InputLabel>상위사 선택</InputLabel>
+                        <Select
+                          label='상위사 선택'
+                          value={item.deposit_corp_type}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['deposit_corp_type']: e.target.value
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>선택안함</MenuItem>
+                          {apiCorpList.map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>마더 입금계좌 은행</InputLabel>
+                        <Select
+                          label='마더 입금계좌 은행'
+                          value={item.mother_deposit_bank_code}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['mother_deposit_bank_code']: e.target.value
+                            })
+                          }}
+                        >
+                          {bankCodeList.map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label='마더 입금계좌 계좌번호'
+                        value={item.mother_deposit_acct_num}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['mother_deposit_acct_num']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='마더 입금계좌 예금주명'
+                        value={item.mother_deposit_acct_name}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['mother_deposit_acct_name']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='GUID'
+                        value={item.deposit_guid}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_guid']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='API ID'
+                        value={item.deposit_api_id}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_api_id']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='API 서명키'
+                        value={item.deposit_sign_key}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_sign_key']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='암호화키'
+                        value={item.deposit_encr_key}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_encr_key']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='IV'
+                        value={item.deposit_iv}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_iv']: e.target.value
+                            }
+                          )
+                        }} />
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj.is_use_withdraw == 1} />} label={`출금 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`is_use_withdraw`]: e.target.checked ? 1 : 0,
+                              },
+
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <FormControl>
+                        <InputLabel>상위사 선택</InputLabel>
+                        <Select
+                          label='상위사 선택'
+                          value={item.withdraw_corp_type}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['withdraw_corp_type']: e.target.value
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>선택안함</MenuItem>
+                          {apiCorpList.map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>마더 출금계좌 은행</InputLabel>
+                        <Select
+                          label='마더 출금계좌 은행'
+                          value={item.mother_withdraw_bank_code}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['mother_withdraw_bank_code']: e.target.value
+                            })
+                          }}
+                        >
+                          {bankCodeList.map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label='마더 출금계좌 계좌번호'
+                        value={item.mother_withdraw_acct_num}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['mother_withdraw_acct_num']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='마더 출금계좌 예금주명'
+                        value={item.mother_withdraw_acct_name}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['mother_withdraw_acct_name']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='GUID'
+                        value={item.withdraw_guid}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_guid']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='API ID'
+                        value={item.withdraw_api_id}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_api_id']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='API 서명키'
+                        value={item.withdraw_sign_key}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_sign_key']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='암호화키'
+                        value={item.withdraw_encr_key}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_encr_key']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='IV'
+                        value={item.withdraw_iv}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_iv']: e.target.value
+                            }
+                          )
+                        }} />
                     </Stack>
                   </Card>
                 </Grid>

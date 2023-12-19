@@ -50,3 +50,7 @@ export const bankCodeList = [
     { value: '092', label: '토스뱅크', },
     { value: '105', label: '웰컴저축은행' },
 ]
+
+export const apiCorpList = [
+    { value: 1, label: '뱅크너스' },
+]
