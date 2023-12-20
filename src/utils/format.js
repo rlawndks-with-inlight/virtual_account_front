@@ -54,3 +54,6 @@ export const bankCodeList = [
 export const apiCorpList = [
     { value: 1, label: '뱅크너스' },
 ]
+export const virtualAccountStatusList = [
+    { value: 0, label: '정상', color: 'success' },
+]

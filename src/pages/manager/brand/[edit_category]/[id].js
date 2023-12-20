@@ -575,8 +575,6 @@ const BrandEdit = () => {
                             )
                           }} />
                       })}
-
-
                     </Stack>
                   </Card>
                 </Grid>
@@ -598,7 +596,6 @@ const BrandEdit = () => {
                           />
                         </Stack>
                       })}
-
                     </Stack>
                   </Card>
                 </Grid>

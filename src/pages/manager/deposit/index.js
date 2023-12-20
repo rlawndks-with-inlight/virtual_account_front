@@ -7,8 +7,8 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.pathname === '/manager/withdraw') {
-      router.push('/manager/withdraw/list');
+    if (router.pathname === '/manager/deposit') {
+      router.push('/manager/deposit/list');
     }
   });
   return null;

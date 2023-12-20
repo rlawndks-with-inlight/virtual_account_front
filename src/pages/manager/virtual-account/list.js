@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -10,6 +10,8 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
+import { virtualAccountStatusList } from "src/utils/format";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
@@ -20,21 +22,21 @@ const VirtualAccountList = () => {
       id: 'user_name',
       label: '가맹점',
       action: (row) => {
-        return row['user_name'] ?? "---"
+        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
       }
     },
     {
-      id: 'phone_num',
+      id: 'deposit_acct_name',
       label: '입금자명',
       action: (row) => {
-        return row['phone_num'] ?? "---"
+        return row['deposit_acct_name'] ?? "---"
       }
     },
     {
-      id: 'phone_num',
+      id: 'virtual_acct_num',
       label: '가상계좌번호',
       action: (row) => {
-        return row['phone_num'] ?? "---"
+        return row['virtual_acct_num'] ?? "---"
       }
     },
     {
@@ -45,24 +47,24 @@ const VirtualAccountList = () => {
       }
     },
     {
-      id: 'phone_num',
+      id: 'birth',
       label: '생년월일',
       action: (row) => {
-        return row['phone_num'] ?? "---"
+        return row['birth'] ?? "---"
       }
     },
     {
-      id: 'phone_num',
+      id: 'status',
       label: '상태',
       action: (row) => {
-        return row['phone_num'] ?? "---"
+        return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status }).label} color={_.find(virtualAccountStatusList, { value: row?.status }).color} />
       }
     },
     {
-      id: 'phone_num',
+      id: 'deposit_acct_num',
       label: '입금계좌정보',
       action: (row) => {
-        return row['phone_num'] ?? "---"
+        return row['deposit_acct_num'] ?? "---"
       }
     },
     {
@@ -70,30 +72,6 @@ const VirtualAccountList = () => {
       label: '생성일',
       action: (row) => {
         return row['created_at'] ?? "---"
-      }
-    },
-    {
-      id: 'edit',
-      label: '수정/삭제',
-      action: (row) => {
-        return (
-          <>
-            <IconButton>
-              <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`edit/${row?.id}`)
-              }} />
-            </IconButton>
-            <IconButton onClick={() => {
-              setModal({
-                func: () => { deleteUser(row?.id) },
-                icon: 'material-symbols:delete-outline',
-                title: '정말 삭제하시겠습니까?'
-              })
-            }}>
-              <Icon icon='material-symbols:delete-outline' />
-            </IconButton>
-          </>
-        )
       }
     },
   ]
@@ -121,25 +99,20 @@ const VirtualAccountList = () => {
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
-    onChangePage({ ...searchObj, page: 1 });
+    onChangePage({ ...searchObj, page: 1, level: 10, });
   }
   const onChangePage = async (obj) => {
     setData({
       ...data,
       content: undefined
     })
-    let data_ = await apiManager('virtual-account', 'list', obj);
+    let data_ = await apiManager('virtual-accounts', 'list', obj);
     if (data_) {
       setData(data_);
     }
     setSearchObj(obj);
   }
-  const deleteUser = async (id) => {
-    let data = await apiManager('virtual-account', 'delete', { id });
-    if (data) {
-      onChangePage(searchObj);
-    }
-  }
+
 
   return (
     <>
@@ -150,6 +123,7 @@ const VirtualAccountList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
+            add_button_text={'가상계좌 발급'}
           />
         </Card>
       </Stack>

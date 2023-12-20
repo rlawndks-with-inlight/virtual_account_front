@@ -35,7 +35,7 @@ const CustomTableRow = muiStyled(TableRow)(({ theme }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, width } = props;
   const { page, page_size } = props?.searchObj;
 
   const theme = useTheme();
@@ -164,7 +164,7 @@ export default function ManagerTable(props) {
             </>
             :
             <>
-              <Table sx={{ minWidth: 800, overflowX: 'auto' }}>
+              <Table sx={{ minWidth: 800, width: (width || '100%') }}>
                 <TableHeadCustom headLabel={columns} />
                 <TableBody>
                   {data.content && data.content.map((row, index) => (
@@ -200,7 +200,7 @@ export default function ManagerTable(props) {
               })
             }} />
         </Box>
-      </TableContainer>
+      </TableContainer >
     </>
 
   );

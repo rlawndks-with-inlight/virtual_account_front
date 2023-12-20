@@ -55,6 +55,9 @@ const UserEdit = () => {
     },
   ]
   useEffect(() => {
+    if (router.query?.tab >= 0) {
+      setCurrentTab(router.query?.tab ?? 0);
+    }
     settingPage();
   }, [])
   const settingPage = async () => {
@@ -260,9 +263,24 @@ const UserEdit = () => {
                           </Row>
                         }
                       })}
-                      <Row>
-
-                      </Row>
+                      <TextField
+                        style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
+                        type="number"
+                        label={`가맹점 수수료`}
+                        value={item[`mcht_fee`]}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              [`mcht_fee`]: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <div>%</div>
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>

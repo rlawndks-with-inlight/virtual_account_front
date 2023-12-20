@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -46,6 +46,22 @@ const UserList = () => {
       }
     },
     {
+      id: 'settle_account',
+      label: '정산계좌정보',
+      action: (row) => {
+        return <Button variant="outlined" onClick={() => {
+          router.push(`edit/${row?.id}?tab=2`)
+        }}>정산계좌</Button>
+      }
+    },
+    {
+      id: 'name',
+      label: '보유정산금',
+      action: (row) => {
+        return commarNumber(row['settle_amount'])
+      }
+    },
+    {
       id: 'phone_num',
       label: '전화번호',
       action: (row) => {
@@ -66,7 +82,7 @@ const UserList = () => {
           id: `operator`,
           label: `${operator?.label} 수수료`,
           action: (row) => {
-            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
+            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
           }
         },
       ]

@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 const UserList = () => {
   const { setModal } = useModal()
@@ -40,6 +40,13 @@ const UserList = () => {
       label: '이름',
       action: (row) => {
         return row['name'] ?? "---"
+      }
+    },
+    {
+      id: 'name',
+      label: '보유정산금',
+      action: (row) => {
+        return commarNumber(row['settle_amount'])
       }
     },
     {

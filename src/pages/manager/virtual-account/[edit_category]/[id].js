@@ -1,5 +1,5 @@
 
-import { Button, Card, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { themeObj } from "src/components/elements/styled-components";
@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
+import { bankCodeList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -21,26 +22,28 @@ const VirtualAccountEdit = () => {
 
   const router = useRouter();
 
+  const [mchtList, setMchtList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({
-    profile_file: undefined,
-    user_name: '',
+    mcht_user_name: '',
+    deposit_bank_code: '',
+    deposit_acct_num: '',
+    deposit_acct_name: '',
+    birth: '',
     phone_num: '',
-    nickname: '',
-    name: '',
-    parent_id: -1,
-    parent_user_name: '',
-    level: 10,
-    user_pw: '',
-    note: '',
+    type: 0,
   })
 
   useEffect(() => {
     settingPage();
   }, [])
   const settingPage = async () => {
+    let mcht_list = await apiManager(`users`, 'list', {
+      level: 10,
+    })
+    setMchtList(mcht_list?.content ?? []);
     if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('virtual-account', 'get', {
+      let data = await apiManager('virtual-accounts', 'get', {
         id: router.query.id
       })
       setItem(data);
@@ -50,13 +53,13 @@ const VirtualAccountEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('virtual-account', 'update', item);
+      result = await apiManager('virtual-accounts', 'update', item);
     } else {//추가
-      result = await apiManager('virtual-account', 'create', item);
+      result = await apiManager('virtual-accounts', 'create', item);
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
-      router.push('/manager/withdraw');
+      router.push('/manager/virtual-account');
     }
   }
   return (
@@ -64,95 +67,76 @@ const VirtualAccountEdit = () => {
       {!loading &&
         <>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Card sx={{ p: 2, height: '100%' }}>
-                <Stack spacing={3}>
-                  <Stack spacing={1}>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                      프로필사진
-                    </Typography>
-                    <Upload file={item.profile_file || item.profile_img} onDrop={(acceptedFiles) => {
-                      const newFile = acceptedFiles[0];
-                      if (newFile) {
-                        setItem(
-                          {
-                            ...item,
-                            ['profile_file']: Object.assign(newFile, {
-                              preview: URL.createObjectURL(newFile),
-                            })
-                          }
-                        );
-                      }
-                    }} onDelete={() => {
-                      setItem(
-                        {
-                          ...item,
-                          ['profile_img']: '',
-                          ['profile_file']: undefined,
-                        }
-                      )
-                    }}
-                    />
-                  </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
                   <TextField
-                    label='아이디'
-                    value={item.user_name}
+                    label='가맹점아이디'
+                    value={item.mcht_user_name}
                     disabled={router.query?.edit_category == 'edit'}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['user_name']: e.target.value
+                          ['mcht_user_name']: e.target.value
                         }
                       )
                     }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='패스워드'
-                        value={item.user_pw}
-
-                        type='password'
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['user_pw']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
+                  <Stack spacing={1}>
+                    <FormControl>
+                      <InputLabel>입금은행</InputLabel>
+                      <Select
+                        label='입금은행'
+                        value={item.deposit_bank_code}
+                        onChange={e => {
+                          setItem({
+                            ...item,
+                            ['deposit_bank_code']: e.target.value
+                          })
+                        }}
+                      >
+                        {bankCodeList.map((itm, idx) => {
+                          return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Stack>
                   <TextField
-                    label='닉네임'
-                    value={item.nickname}
+                    label='입금계좌번호'
+                    value={item.deposit_acct_num}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['nickname']: e.target.value
+                          ['deposit_acct_num']: e.target.value
                         }
                       )
                     }} />
                   <TextField
-                    label='이름'
-                    value={item.name}
-                    placeholder=""
+                    label='입금자명'
+                    value={item.deposit_acct_name}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['name']: e.target.value
+                          ['deposit_acct_name']: e.target.value
                         }
                       )
                     }} />
                   <TextField
-                    label='전화번호'
+                    label='생년월일'
+                    value={item.birth}
+                    placeholder="19990101"
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['birth']: e.target.value
+                        }
+                      )
+                    }} />
+                  <TextField
+                    label='휴대폰번호'
                     value={item.phone_num}
                     placeholder="하이픈(-) 제외 입력"
                     onChange={(e) => {
@@ -163,20 +147,6 @@ const VirtualAccountEdit = () => {
                         }
                       )
                     }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='상위영업자아이디'
-                        value={item.parent_user_name}
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['parent_user_name']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
                   <Stack spacing={1}>
                   </Stack>
                 </Stack>

@@ -1,2 +1,2 @@
-import WithdrawEdit from "./[id]";
-export default WithdrawEdit
+import DepositEdit from "./[id]";
+export default DepositEdit

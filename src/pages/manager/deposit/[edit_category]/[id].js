@@ -1,50 +1,47 @@
 
-import { Button, Card, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
-import styled from "styled-components";
-import { react_quill_data } from "src/data/manager-data";
-import { axiosIns } from "src/utils/axios";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
+import { bankCodeList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 })
 
-const WithdrawEdit = () => {
+const DepositEdit = () => {
   const { setModal } = useModal()
   const { themeMode } = useSettingsContext();
 
   const router = useRouter();
 
+  const [mchtList, setMchtList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({
-    profile_file: undefined,
-    user_name: '',
-    phone_num: '',
-    nickname: '',
-    name: '',
-    parent_id: -1,
-    parent_user_name: '',
-    level: 10,
-    user_pw: '',
-    note: '',
+    virtual_acct_num: '',
+    amount: 0,
+    deposit_bank_code: '',
+    deposit_acct_num: '',
+    deposit_acct_name: '',
   })
 
   useEffect(() => {
     settingPage();
   }, [])
   const settingPage = async () => {
+    let mcht_list = await apiManager(`users`, 'list', {
+      level: 10,
+    })
+    setMchtList(mcht_list?.content ?? []);
     if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('users', 'get', {
+      let data = await apiManager('deposits', 'get', {
         id: router.query.id
       })
       setItem(data);
@@ -54,13 +51,13 @@ const WithdrawEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('users', 'update', item);
+      result = await apiManager('deposits', 'update', item);
     } else {//추가
-      result = await apiManager('users', 'create', item);
+      result = await apiManager('deposits', 'create', item);
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
-      router.push('/manager/user');
+      router.push('/manager/deposit');
     }
   }
   return (
@@ -68,121 +65,75 @@ const WithdrawEdit = () => {
       {!loading &&
         <>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
+                  <TextField
+                    label='가상계좌번호'
+                    value={item.virtual_acct_num}
+                    placeholder="가상계좌번호"
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['virtual_acct_num']: e.target.value
+                        }
+                      )
+                    }} />
+                  <TextField
+                    label='결제금액'
+                    value={item.amount}
+                    placeholder="결제금액"
+                    type="number"
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['amount']: e.target.value
+                        }
+                      )
+                    }} />
                   <Stack spacing={1}>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                      프로필사진
-                    </Typography>
-                    <Upload file={item.profile_file || item.profile_img} onDrop={(acceptedFiles) => {
-                      const newFile = acceptedFiles[0];
-                      if (newFile) {
-                        setItem(
-                          {
+                    <FormControl>
+                      <InputLabel>입금은행</InputLabel>
+                      <Select
+                        label='입금은행'
+                        value={item.deposit_bank_code}
+                        onChange={e => {
+                          setItem({
                             ...item,
-                            ['profile_file']: Object.assign(newFile, {
-                              preview: URL.createObjectURL(newFile),
-                            })
-                          }
-                        );
-                      }
-                    }} onDelete={() => {
-                      setItem(
-                        {
-                          ...item,
-                          ['profile_img']: '',
-                          ['profile_file']: undefined,
-                        }
-                      )
-                    }}
-                    />
+                            ['deposit_bank_code']: e.target.value
+                          })
+                        }}
+                      >
+                        {bankCodeList.map((itm, idx) => {
+                          return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                        })}
+                      </Select>
+                    </FormControl>
                   </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Card sx={{ p: 2, height: '100%' }}>
-                <Stack spacing={3}>
                   <TextField
-                    label='아이디'
-                    value={item.user_name}
-                    disabled={router.query?.edit_category == 'edit'}
+                    label='입금계좌번호'
+                    value={item.deposit_acct_num}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['user_name']: e.target.value
-                        }
-                      )
-                    }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='패스워드'
-                        value={item.user_pw}
-
-                        type='password'
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['user_pw']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
-                  <TextField
-                    label='닉네임'
-                    value={item.nickname}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['nickname']: e.target.value
+                          ['deposit_acct_num']: e.target.value
                         }
                       )
                     }} />
                   <TextField
-                    label='이름'
-                    value={item.name}
-                    placeholder=""
+                    label='입금자명'
+                    value={item.deposit_acct_name}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['name']: e.target.value
+                          ['deposit_acct_name']: e.target.value
                         }
                       )
                     }} />
-                  <TextField
-                    label='전화번호'
-                    value={item.phone_num}
-                    placeholder="하이픈(-) 제외 입력"
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['phone_num']: e.target.value
-                        }
-                      )
-                    }} />
-                  {router.query?.edit_category == 'add' &&
-                    <>
-                      <TextField
-                        label='상위영업자아이디'
-                        value={item.parent_user_name}
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['parent_user_name']: e.target.value
-                            }
-                          )
-                        }} />
-                    </>}
-                  <Stack spacing={1}>
-                  </Stack>
                 </Stack>
               </Card>
             </Grid>
@@ -208,5 +159,5 @@ const WithdrawEdit = () => {
     </>
   )
 }
-WithdrawEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default WithdrawEdit
+DepositEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default DepositEdit

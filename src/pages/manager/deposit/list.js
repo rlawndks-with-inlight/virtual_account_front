@@ -8,48 +8,110 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-const WithdrawList = () => {
+import { useSettingsContext } from "src/components/settings";
+import { bankCodeList } from "src/utils/format";
+import _ from "lodash";
+const DepositList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
       id: 'user_name',
-      label: '유저아이디',
+      label: '거래번호',
+      action: (row) => {
+        return "---"
+      }
+    },
+    {
+      id: 'user_name',
+      label: '가맹점',
+      action: (row) => {
+        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+      }
+    },
+    {
+      id: 'user_name',
+      label: '입금은행',
+      action: (row) => {
+        return _.find(bankCodeList, { value: row['deposit_bank_code'] }).label
+      }
+    },
+    {
+      id: 'user_name',
+      label: '가상계좌번호',
+      action: (row) => {
+        return row['virtual_acct_num'] ?? "---"
+      }
+    },
+    {
+      id: 'user_name',
+      label: '상태',
       action: (row) => {
         return row['user_name'] ?? "---"
       }
     },
     {
+      id: 'user_name',
+      label: '입금예정금액',
+      action: (row) => {
+        return commarNumber(row['amount'])
+      }
+    },
+    {
+      id: 'user_name',
+      label: '실제입금금액',
+      action: (row) => {
+        return commarNumber(row['amount'])
+      }
+    },
+    {
+      id: 'user_name',
+      label: '가맹점 정산금액',
+      action: (row) => {
+        return commarNumber(row['mcht_amount'])
+      }
+    },
+    {
+      id: 'user_name',
+      label: '가맹점 수수료',
+      action: (row) => {
+        return row['mcht_fee'] ?? "---"
+      }
+    },
+    ...(themeDnsData?.operator_list ?? []).map(operator => {
+      console.log(operator)
+      return [
+        {
+          id: `operator`,
+          label: operator?.label,
+          action: (row) => {
+            return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
+          }
+        },
+        {
+          id: `operator`,
+          label: `${operator?.label} 수수료`,
+          action: (row) => {
+            return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
+          }
+        },
+        {
+          id: `operator`,
+          label: `${operator?.label} 수수료율`,
+          action: (row) => {
+            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
+          }
+        },
+      ]
+    }).flat(),
+    {
       id: 'created_at',
       label: '생성일',
       action: (row) => {
         return row['created_at'] ?? "---"
-      }
-    },
-    {
-      id: 'edit',
-      label: '수정/삭제',
-      action: (row) => {
-        return (
-          <>
-            <IconButton>
-              <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`edit/${row?.id}`)
-              }} />
-            </IconButton>
-            <IconButton onClick={() => {
-              setModal({
-                func: () => { deleteUser(row?.id) },
-                icon: 'material-symbols:delete-outline',
-                title: '정말 삭제하시겠습니까?'
-              })
-            }}>
-              <Icon icon='material-symbols:delete-outline' />
-            </IconButton>
-          </>
-        )
       }
     },
   ]
@@ -96,59 +158,9 @@ const WithdrawList = () => {
       onChangePage(searchObj);
     }
   }
-  const onChangeUserPassword = async () => {
-    let result = await apiManager(`deposits/change-pw`, 'update', changePasswordObj);
-    if (result) {
-      setDialogObj({
-        ...dialogObj,
-        changePassword: false
-      })
-      setChangePasswordObj({
-        id: '',
-        user_pw: ''
-      })
-      toast.success("성공적으로 변경 되었습니다.");
-    }
-  }
+
   return (
     <>
-      <Dialog
-        open={dialogObj.changePassword}
-      >
-        <DialogTitle>{`비밀번호 변경`}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            새 비밀번호를 입력 후 확인을 눌러주세요.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            fullWidth
-            value={changePasswordObj.user_pw}
-            type="password"
-            margin="dense"
-            label="새 비밀번호"
-            onChange={(e) => {
-              setChangePasswordObj({
-                ...changePasswordObj,
-                user_pw: e.target.value
-              })
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={onChangeUserPassword}>
-            변경
-          </Button>
-          <Button color="inherit" onClick={() => {
-            setDialogObj({
-              ...dialogObj,
-              changePassword: false
-            })
-          }}>
-            취소
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Stack spacing={3}>
         <Card>
           <ManagerTable
@@ -156,11 +168,13 @@ const WithdrawList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
+            add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
+            width={'150%'}
           />
         </Card>
       </Stack>
     </>
   )
 }
-WithdrawList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default WithdrawList
+DepositList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default DepositList
