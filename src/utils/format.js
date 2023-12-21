@@ -57,3 +57,7 @@ export const apiCorpList = [
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
 ]
+export const payTypeList = [
+    { value: 0, label: '입금' },
+    { value: 5, label: '출금' },
+]

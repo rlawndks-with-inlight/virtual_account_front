@@ -19,17 +19,17 @@ const DepositList = () => {
   const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
-      id: 'user_name',
+      id: 'trx_id',
       label: '거래번호',
       action: (row) => {
-        return "---"
+        return row['trx_id'] ?? "---"
       }
     },
     {
       id: 'user_name',
       label: '가맹점',
       action: (row) => {
-        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        return <div style={{ textAlign: 'center' }}>{`${row[`mcht_nickname`]}\n(${row['mcht_user_name']})`}</div>
       }
     },
     {

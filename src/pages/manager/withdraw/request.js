@@ -1,7 +1,7 @@
 import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { themeObj } from "src/components/elements/styled-components";
+import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
@@ -14,12 +14,16 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
+import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
 })
 
 const WithdrawRequest = () => {
+
+    const { user } = useAuthContext();
     const { setModal } = useModal()
     const { themeMode } = useSettingsContext();
 
@@ -44,7 +48,10 @@ const WithdrawRequest = () => {
     const onSave = async () => {
         let result = undefined
 
-        result = await apiManager('withdraws', 'create', item);
+        result = await apiManager('withdraws', 'create', {
+            withdraw_amount: item?.withdraw_amount,
+            user_id: user?.id,
+        });
 
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
@@ -59,6 +66,18 @@ const WithdrawRequest = () => {
                         <Grid item xs={12} md={6}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            입금계좌
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            <Row style={{ columnGap: '0.25rem' }}>
+                                                <div>{_.find(bankCodeList, { value: item?.settle_bank_code })?.label}</div>
+                                                <div>{item?.settle_acct_num}</div>
+                                                <div>{item?.settle_acct_name}</div>
+                                            </Row>
+                                        </Typography>
+                                    </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             현재 보유정산금

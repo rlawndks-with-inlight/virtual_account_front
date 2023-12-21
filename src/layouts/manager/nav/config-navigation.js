@@ -64,19 +64,21 @@ const navConfig = () => {
         { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: ICONS.user },
       ],
     },
-    {
-      items: [
-        {
-          title: '모계좌관리',
-          path: PATH_MANAGER.motherAccount.root,
-          icon: ICONS.user,
-          children: [
-            { title: '모계좌내역', path: PATH_MANAGER.motherAccount.list },
-            { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.add },
-          ],
-        },
-      ],
-    },
+    ...(isManager() ? [
+      {
+        items: [
+          {
+            title: '모계좌관리',
+            path: PATH_MANAGER.motherAccount.root,
+            icon: ICONS.user,
+            children: [
+              { title: '모계좌내역', path: PATH_MANAGER.motherAccount.list },
+              { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     {
       items: [
         {
@@ -85,8 +87,8 @@ const navConfig = () => {
           icon: ICONS.user,
           children: [
             { title: '출금내역', path: PATH_MANAGER.withdraw.list },
-            { title: '출금요청', path: PATH_MANAGER.withdraw.request },
-            { title: '반환요청', path: PATH_MANAGER.withdraw.return },
+            ...(!isManager() ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
+            //    { title: '반환요청', path: PATH_MANAGER.withdraw.return },
           ],
         },
       ],

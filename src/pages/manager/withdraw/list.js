@@ -10,15 +10,87 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
+import { bankCodeList, payTypeList } from "src/utils/format";
+import _ from "lodash";
 const WithdrawList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const defaultColumns = [
     {
-      id: 'user_name',
-      label: '유저아이디',
+      id: 'trx_id',
+      label: '거래번호',
       action: (row) => {
-        return row['user_name'] ?? "---"
+        return row['trx_id'] ?? "---"
+      }
+    },
+    {
+      id: 'level',
+      label: '유저레벨',
+      action: (row) => {
+        return getUserLevelByNumber(row['level'])
+      }
+    },
+    {
+      id: 'nickname',
+      label: '상호',
+      action: (row) => {
+        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+      }
+    },
+    {
+      id: 'settle_bank_code',
+      label: '은행',
+      action: (row) => {
+        return _.find(bankCodeList, { value: row['settle_bank_code'] }).label
+      }
+    },
+    {
+      id: 'settle_acct_num',
+      label: '계좌번호',
+      action: (row) => {
+        return row['settle_acct_num'] ?? "---"
+      }
+    },
+    {
+      id: 'settle_acct_name',
+      label: '예금주명',
+      action: (row) => {
+        return row['settle_acct_name'] ?? "---"
+      }
+    },
+    {
+      id: 'status',
+      label: '상태',
+      action: (row) => {
+        return "---"
+      }
+    },
+    {
+      id: 'user_name',
+      label: '출금구분',
+      action: (row) => {
+        return _.find(payTypeList, { value: row?.pay_type }).label
+      }
+    },
+    {
+      id: 'amount',
+      label: '이체금',
+      action: (row) => {
+        return row['amount'] * (-1) - row['withdraw_fee']
+      }
+    },
+    {
+      id: 'withdraw_fee',
+      label: '이체 수수료',
+      action: (row) => {
+        return row['withdraw_fee'] ?? "---"
+      }
+    },
+    {
+      id: 'amount',
+      label: '차감 보유정산금',
+      action: (row) => {
+        return row['amount'] * (-1)
       }
     },
     {
@@ -26,30 +98,6 @@ const WithdrawList = () => {
       label: '생성일',
       action: (row) => {
         return row['created_at'] ?? "---"
-      }
-    },
-    {
-      id: 'edit',
-      label: '수정/삭제',
-      action: (row) => {
-        return (
-          <>
-            <IconButton>
-              <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`edit/${row?.id}`)
-              }} />
-            </IconButton>
-            <IconButton onClick={() => {
-              setModal({
-                func: () => { deleteUser(row?.id) },
-                icon: 'material-symbols:delete-outline',
-                title: '정말 삭제하시겠습니까?'
-              })
-            }}>
-              <Icon icon='material-symbols:delete-outline' />
-            </IconButton>
-          </>
-        )
       }
     },
   ]

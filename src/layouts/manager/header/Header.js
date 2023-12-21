@@ -19,6 +19,7 @@ import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ContactsPopover from './ContactsPopover';
 import NotificationsPopover from './NotificationsPopover';
+import SvgColor from 'src/components/svg-color/SvgColor';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ Header.propTypes = {
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
 
-  const { themeLayout } = useSettingsContext();
+  const { themeLayout, themeMode, onToggleMode } = useSettingsContext();
 
   const isNavHorizontal = themeLayout === 'horizontal';
 
@@ -41,7 +42,7 @@ export default function Header({ onOpenNav }) {
 
   const renderContent = (
     <>
-      {isDesktop && isNavHorizontal && <Logo link={'/manager/dashboards'} sx={{ mr: 2.5, height:72 }} />}
+      {isDesktop && isNavHorizontal && <Logo link={'/manager/dashboards'} sx={{ mr: 2.5, height: 72 }} />}
 
       {!isDesktop && (
         <IconButton onClick={onOpenNav} sx={{ mr: 1, color: 'text.primary' }}>
@@ -58,6 +59,13 @@ export default function Header({ onOpenNav }) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
+        <IconButton
+          onClick={() => onToggleMode()}
+        >
+          <SvgColor
+            src={`/assets/icons/setting/${themeMode === 'light' ? 'ic_sun' : 'ic_moon'}.svg`}
+          />
+        </IconButton>
         <NotificationsPopover />
         <ContactsPopover />
         <AccountPopover />

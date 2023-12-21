@@ -10,6 +10,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
+import { Provider as ReduxProvider } from 'react-redux'
 // editor
 import 'react-quill/dist/quill.snow.css';
 
@@ -28,6 +29,7 @@ import ThemeContrast from 'src/components/settings/ThemeContrast';
 import { MotionLazyContainer } from 'src/components/animate';
 import { ModalProvider } from 'src/components/dialog/ModalProvider';
 import { useState } from 'react';
+import { store } from '../redux/store'
 
 const App = (props) => {
   const { Component, pageProps, head_data, host, host_data } = props;
@@ -63,22 +65,24 @@ const App = (props) => {
         <meta name="theme-color" content={head_data?.theme_css?.main_color || headData?.theme_css?.main_color} />
       </Head>
       <AuthProvider>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <ThemeColorPresets>
-            <ThemeContrast>
-              <SettingsProvider>
-                <MotionLazyContainer>
-                  <ThemeProvider>
-                    <ModalProvider>
-                      {getLayout(<Component {...pageProps} />)}
-                    </ModalProvider>
-                    <Toaster position={'right-top'} toastOptions={{ className: 'react-hot-toast' }} />
-                  </ThemeProvider>
-                </MotionLazyContainer>
-              </SettingsProvider>
-            </ThemeContrast>
-          </ThemeColorPresets>
-        </LocalizationProvider>
+        <ReduxProvider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ThemeColorPresets>
+              <ThemeContrast>
+                <SettingsProvider>
+                  <MotionLazyContainer>
+                    <ThemeProvider>
+                      <ModalProvider>
+                        {getLayout(<Component {...pageProps} />)}
+                      </ModalProvider>
+                      <Toaster position={'right-top'} toastOptions={{ className: 'react-hot-toast' }} />
+                    </ThemeProvider>
+                  </MotionLazyContainer>
+                </SettingsProvider>
+              </ThemeContrast>
+            </ThemeColorPresets>
+          </LocalizationProvider>
+        </ReduxProvider>
       </AuthProvider>
     </>
   );
