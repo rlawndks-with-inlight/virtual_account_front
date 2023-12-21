@@ -55,7 +55,7 @@ export default function AccountPopover() {
   const handleLogout = async () => {
     try {
       logout();
-      deleteCookie('token');
+      await deleteCookie('token');
       window.location.href = '/login'
       handleClosePopover();
     } catch (error) {
