@@ -43,6 +43,15 @@ const UserList = () => {
       }
     },
     {
+      id: 'settle_account',
+      label: '정산계좌정보',
+      action: (row) => {
+        return <Button variant="outlined" onClick={() => {
+          router.push(`/manager/operator/edit/${row?.id}?tab=1`)
+        }}>정산계좌</Button>
+      }
+    },
+    {
       id: 'name',
       label: '보유정산금',
       action: (row) => {

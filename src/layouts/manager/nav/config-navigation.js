@@ -85,7 +85,7 @@ const navConfig = () => {
           icon: ICONS.user,
           children: [
             { title: '출금내역', path: PATH_MANAGER.withdraw.list },
-            { title: '출금요청', path: PATH_MANAGER.withdraw.add },
+            { title: '출금요청', path: PATH_MANAGER.withdraw.request },
             { title: '반환요청', path: PATH_MANAGER.withdraw.return },
           ],
         },

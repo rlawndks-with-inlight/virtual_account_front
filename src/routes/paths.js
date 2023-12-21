@@ -40,6 +40,7 @@ export const PATH_MANAGER = {
     root: path(ROOTS_MANAGER, '/withdraw'),
     list: path(ROOTS_MANAGER, '/withdraw/list'),
     add: path(ROOTS_MANAGER, '/withdraw/add'),
+    request: path(ROOTS_MANAGER, '/withdraw/request'),
     return: path(ROOTS_MANAGER, '/withdraw/return'),
   },
   virtualAccount: {

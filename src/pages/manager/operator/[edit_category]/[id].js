@@ -55,6 +55,9 @@ const UserEdit = () => {
     },
   ]
   useEffect(() => {
+    if (router.query?.tab >= 0) {
+      setCurrentTab(router.query?.tab ?? 0);
+    }
     settingPage();
   }, [router.query])
   const settingPage = async () => {
