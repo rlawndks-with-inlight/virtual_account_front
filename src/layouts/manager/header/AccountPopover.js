@@ -14,6 +14,7 @@ import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
 import { getUserLevelByNumber } from 'src/utils/function';
+import { deleteCookie } from 'src/utils/react-cookie';
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +55,7 @@ export default function AccountPopover() {
   const handleLogout = async () => {
     try {
       logout();
+      deleteCookie('token');
       window.location.href = '/login'
       handleClosePopover();
     } catch (error) {
