@@ -36,6 +36,8 @@ const OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+
+  const router = useRouter();
   const { replace, push } = useRouter();
 
   const { user, logout } = useAuthContext();
@@ -55,7 +57,8 @@ export default function AccountPopover() {
   const handleLogout = async () => {
     try {
       await deleteCookie('token');
-      logout();
+      let result = await logout();
+      router.push('/')
       handleClosePopover();
     } catch (error) {
       console.error(error);
