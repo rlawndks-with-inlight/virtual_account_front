@@ -56,7 +56,6 @@ export default function AccountPopover() {
     try {
       await deleteCookie('token');
       logout();
-      window.location.href = '/login'
       handleClosePopover();
     } catch (error) {
       console.error(error);
