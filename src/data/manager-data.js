@@ -76,6 +76,9 @@ export const defaultManagerObj = {
     withdraw_sign_key: '',
     withdraw_encr_key: '',
     withdraw_iv: '',
+    default_deposit_fee: 0,
+    default_withdraw_fee: 0,
+    head_office_fee: 0,
     setting_obj: {
       tutorial_num: 0,
       is_use_deposit: 0,

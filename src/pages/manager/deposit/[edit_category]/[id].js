@@ -92,7 +92,13 @@ const DepositEdit = () => {
                           ['amount']: e.target.value
                         }
                       )
-                    }} />
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <div>원</div>
+                      )
+                    }}
+                  />
                   <Stack spacing={1}>
                     <FormControl>
                       <InputLabel>입금은행</InputLabel>

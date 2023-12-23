@@ -302,7 +302,13 @@ const UserEdit = () => {
                               ['withdraw_fee']: e.target.value
                             }
                           )
-                        }} />
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                       <TextField
                         label='최소 출금액'
                         type="number"
@@ -315,7 +321,13 @@ const UserEdit = () => {
                               ['min_withdraw_price']: e.target.value
                             }
                           )
-                        }} />
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                       <TextField
                         label='최소 출금잔액'
                         type="number"
@@ -328,7 +340,13 @@ const UserEdit = () => {
                               ['min_withdraw_remain_price']: e.target.value
                             }
                           )
-                        }} />
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>

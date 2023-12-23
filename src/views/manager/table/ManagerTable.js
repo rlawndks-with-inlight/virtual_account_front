@@ -1,5 +1,5 @@
 // @mui
-import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip } from '@mui/material';
+import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip, TableHead } from '@mui/material';
 import { TableHeadCustom, TableNoData } from 'src/components/table';
 import {
   DatePicker,
@@ -35,7 +35,7 @@ const CustomTableRow = muiStyled(TableRow)(({ theme }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj, width } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width } = props;
   const { page, page_size } = props?.searchObj;
 
   const theme = useTheme();
@@ -43,7 +43,18 @@ export default function ManagerTable(props) {
   const [sDt, setSDt] = useState(undefined);
   const [eDt, setEDt] = useState(undefined);
   const [keyword, setKeyWord] = useState("");
+  const [zColumn, setZColumn] = useState([]);
+  const [zHeadColumn, setZHeadColumn] = useState([]);
 
+  useEffect(() => {
+    settingColumns();
+  }, [columns, head_columns]);
+  const settingColumns = async () => {
+    let column_list = [...columns];
+    let head_column_list = [...head_columns];
+    setZColumn(column_list);
+    setZHeadColumn(head_column_list);
+  }
   const getMaxPage = (total, page_size) => {
     if (total == 0) {
       return 1;
@@ -53,6 +64,13 @@ export default function ManagerTable(props) {
     } else {
       return parseInt(total / page_size) + 1;
     }
+  }
+  if (!(zColumn.length > 0)) {
+    return (
+      <>
+
+      </>
+    )
   }
   return (
     <>
@@ -165,11 +183,28 @@ export default function ManagerTable(props) {
             :
             <>
               <Table sx={{ minWidth: 800, width: (width || '100%') }}>
-                <TableHeadCustom headLabel={columns} />
+                {zHeadColumn &&
+                  <>
+                    <TableHead>
+                      <TableRow sx={{ padding: '1rem 0' }}>
+                        {zHeadColumn.map((head, idx) => (
+                          <>
+                            <TableCell colSpan={head.count} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}>
+                              <div style={{ borderRight: `1px solid #ccc` }}>
+                                {head.title}
+                              </div>
+                            </TableCell>
+                          </>
+                        ))}
+                        <TableCell colSpan={zColumn.length - zHeadColumn.length} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }} />
+                      </TableRow>
+                    </TableHead>
+                  </>}
+                <TableHeadCustom headLabel={zColumn} />
                 <TableBody>
                   {data.content && data.content.map((row, index) => (
                     <CustomTableRow key={index}>
-                      {columns && columns.map((col, idx) => (
+                      {zColumn && zColumn.map((col, idx) => (
                         <>
                           <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}) }}>{col.action(row, idx)}</TableCell>
                         </>

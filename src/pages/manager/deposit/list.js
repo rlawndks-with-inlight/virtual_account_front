@@ -17,6 +17,21 @@ const DepositList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
+  const defaultHeadColumns = [
+    {
+      title: '기본정보',
+      count: 7,
+    },
+    {
+      title: '유저정보',
+      count: 3
+    },
+
+    {
+      title: '영업자정보',
+      count: 1 + (themeDnsData?.operator_list.length ?? 0) * 3
+    },
+  ]
   const defaultColumns = [
     {
       id: 'trx_id',
@@ -76,9 +91,23 @@ const DepositList = () => {
     },
     {
       id: 'user_name',
-      label: '가맹점 수수료',
+      label: '입금수수료',
       action: (row) => {
-        return row['mcht_fee'] ?? "---"
+        return commarNumber(row['deposit_fee'])
+      }
+    },
+    {
+      id: 'user_name',
+      label: '가맹점 수수료율',
+      action: (row) => {
+        return row['mcht_fee'] + '%'
+      }
+    },
+    {
+      id: 'user_name',
+      label: '본사 수수료율',
+      action: (row) => {
+        return row['head_office_fee'] + '%'
       }
     },
     ...(themeDnsData?.operator_list ?? []).map(operator => {
@@ -170,6 +199,7 @@ const DepositList = () => {
             onChangePage={onChangePage}
             add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
             width={'150%'}
+            head_columns={defaultHeadColumns}
           />
         </Card>
       </Stack>

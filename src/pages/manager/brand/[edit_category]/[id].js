@@ -86,6 +86,10 @@ const BrandEdit = () => {
       value: 5,
       label: '데모설정'
     },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 6,
+      label: '수수료설정'
+    },] : []),
   ]
 
   useEffect(() => {
@@ -876,6 +880,78 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 6 &&
+              <>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        label='입금수수료 기본값'
+                        value={item.default_deposit_fee}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['default_deposit_fee']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='본사 수수료'
+                            value={item.head_office_fee}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['head_office_fee']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>%</div>
+                              )
+                            }}
+                          />
+                        </>}
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        label='출금수수료 기본값'
+                        value={item.default_withdraw_fee}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['default_withdraw_fee']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
