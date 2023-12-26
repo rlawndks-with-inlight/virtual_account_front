@@ -204,6 +204,7 @@ const BrandList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'브랜드 추가'}
+            head_columns={[]}
           />
         </Card>
       </Stack>

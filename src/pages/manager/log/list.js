@@ -195,6 +195,7 @@ const LogList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={''}
+            head_columns={[]}
           />
         </Card>
       </Stack>

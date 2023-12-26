@@ -124,6 +124,7 @@ const VirtualAccountList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'가상계좌 발급'}
+            head_columns={[]}
           />
         </Card>
       </Stack>

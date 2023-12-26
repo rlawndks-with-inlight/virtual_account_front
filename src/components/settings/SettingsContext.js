@@ -7,6 +7,7 @@ import { useTheme } from '@emotion/react';
 import { deleteLocalStorage, getLocalStorage, setLocalStorage } from 'src/utils/local-storage';
 import { apiShop, getShopCategoriesByUser } from 'src/utils/api-shop';
 import axios from 'axios';
+import { apiManager } from 'src/utils/api-manager';
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -125,14 +126,21 @@ export function SettingsProvider({ children }) {
       const { data: response } = await axios.get(`/api/domain?dns=${process.env.IS_TEST == 1 ? 'localhost' : window.location.host.split(':')[0]}`);
       dns_data = response?.data;
       dns_data['shop_demo_num'] = dns_data?.setting_obj?.shop_demo_num;
-      onChangeDnsData(dns_data);
+      let setting = await getSettingData();
+      onChangeDnsData({
+        ...dns_data,
+        ...setting,
+      });
     } catch (err) {
       console.log(err)
     }
   }
   const getSettingData = async () => {
-    let result = await apiShop('', 'get');
-    onChangeShopSetting(result);
+    let bank_list_result = await apiManager('util', 'get');
+
+    return {
+      bank_list: bank_list_result
+    }
   }
   // Mode
   const onToggleMode = useCallback(() => {

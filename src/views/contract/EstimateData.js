@@ -53,7 +53,6 @@ const EstimateData = (props) => {
         dns_data,
         estimate,
     } = props;
-    console.log(estimate)
     const styles = StyleSheet.create({
         col: {
             display: 'flex',
@@ -218,15 +217,15 @@ const EstimateData = (props) => {
                             }
                             return <>
                                 <TableRow>
-                                    <TableCellComponent sx={styles.table_body_cell}  rowSpan={select_groups?.length + characters?.length + 1}>
+                                    <TableCellComponent sx={styles.table_body_cell} rowSpan={select_groups?.length + characters?.length + 1}>
                                         <img src={product?.product_img} style={{ width: '150px' }} />
                                     </TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} >상품명</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} >{product?.name}</TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  rowSpan={select_groups?.length + characters?.length + 1}>{product?.count}</TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  rowSpan={select_groups?.length + characters?.length + 1}>{commarNumber((calculatorPrice(product).total - calculatorPrice(product).install_price) / product?.count)}</TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  rowSpan={select_groups?.length + characters?.length + 1}>{commarNumber(calculatorPrice(product).total - calculatorPrice(product).install_price)}</TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  style={{ maxWidth: '200px' }} rowSpan={select_groups?.length + characters?.length + 1}>{product_estimate?.note}</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} rowSpan={select_groups?.length + characters?.length + 1}>{product?.count}</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} rowSpan={select_groups?.length + characters?.length + 1}>{commarNumber((calculatorPrice(product).total - calculatorPrice(product).install_price) / product?.count)}</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} rowSpan={select_groups?.length + characters?.length + 1}>{commarNumber(calculatorPrice(product).total - calculatorPrice(product).install_price)}</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} style={{ maxWidth: '200px' }} rowSpan={select_groups?.length + characters?.length + 1}>{product_estimate?.note}</TableCellComponent>
                                 </TableRow>
                                 {select_groups && select_groups.map((group, idx) => (
                                     <>
@@ -245,16 +244,16 @@ const EstimateData = (props) => {
                                     </>
                                 ))}
                                 <TableRow>
-                                    <TableCellComponent sx={styles.table_body_cell}  colSpan={3}>배송 및 설치비</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} colSpan={3}>배송 및 설치비</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} >{commarNumber(product_estimate?.install_count)}</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} >{commarNumber(product_estimate?.install_price)}</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} >{commarNumber(product_estimate?.install_price * product_estimate?.install_count)}</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} ></TableCellComponent>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCellComponent sx={styles.table_body_cell}  colSpan={3}>총합계</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} colSpan={3}>총합계</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} ></TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  colSpan={2}>
+                                    <TableCellComponent sx={styles.table_body_cell} colSpan={2}>
                                         <Row style={{ justifyContent: 'space-between' }}>
                                             <div>{commarNumber(calculatorPrice(product).total)}</div>
                                             <div>원</div>
@@ -267,9 +266,9 @@ const EstimateData = (props) => {
                         {!(idx >= 0) &&
                             <>
                                 <TableRow>
-                                    <TableCellComponent sx={styles.table_body_cell}  colSpan={3} style={{ color: 'red' }}>총합계</TableCellComponent>
+                                    <TableCellComponent sx={styles.table_body_cell} colSpan={3} style={{ color: 'red' }}>총합계</TableCellComponent>
                                     <TableCellComponent sx={styles.table_body_cell} ></TableCellComponent>
-                                    <TableCellComponent sx={styles.table_body_cell}  colSpan={2} style={{ color: 'red' }}>
+                                    <TableCellComponent sx={styles.table_body_cell} colSpan={2} style={{ color: 'red' }}>
                                         <Row style={{ justifyContent: 'space-between' }}>
                                             <div>{commarNumber(_.sum(products.map((item) => { return calculatorPrice(item).total })))}</div>
                                             <div>원</div>

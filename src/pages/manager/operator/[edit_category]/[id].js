@@ -6,10 +6,6 @@ import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
-import styled from "styled-components";
-import { react_quill_data } from "src/data/manager-data";
-import { axiosIns } from "src/utils/axios";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -34,6 +30,7 @@ const UserEdit = () => {
     phone_num: '',
     nickname: '',
     name: '',
+    email: '',
     level: 10,
     user_pw: '',
     note: '',
@@ -49,10 +46,12 @@ const UserEdit = () => {
       value: 0,
       label: '기본정보'
     },
-    {
-      value: 1,
-      label: '정산정보'
-    },
+    ...(router.query?.edit_category == 'edit' ? [
+      {
+        value: 1,
+        label: '정산정보'
+      },
+    ] : []),
   ]
   useEffect(() => {
     if (router.query?.tab >= 0) {
@@ -79,9 +78,6 @@ const UserEdit = () => {
     setLoading(false);
   }
   const onSave = async () => {
-    if (!item.settle_bank_code) {
-      return toast.error('정산 입금은행을 선택해 주세요.');
-    }
     let result = undefined
     if (item?.id) {//수정
       result = await apiManager('users', 'update', item);
@@ -91,6 +87,18 @@ const UserEdit = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push(`/manager/operator/list/${item.level}`);
+    }
+  }
+  const oneWonCertification = async () => {
+    let result = await apiManager(`users/one-won-certification`, 'create', item);
+    console.log(result)
+    if (result) {
+      toast.success('성공적으로 발송 되었습니다.');
+      setItem({
+        ...item,
+        is_send_one_won_check: true,
+        tid: result?.tid
+      })
     }
   }
   return (
@@ -198,6 +206,30 @@ const UserEdit = () => {
                           )
                         }} />
                       <TextField
+                        label='이메일'
+                        value={item.email}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['email']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='생년월일'
+                        value={item.birth}
+                        placeholder="19990101"
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['birth']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
                         label='전화번호'
                         value={item.phone_num}
                         placeholder="하이픈(-) 제외 입력"
@@ -253,7 +285,7 @@ const UserEdit = () => {
                               })
                             }}
                           >
-                            {bankCodeList.map((itm, idx) => {
+                            {bankCodeList().map((itm, idx) => {
                               return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                             })}
                           </Select>
@@ -283,6 +315,23 @@ const UserEdit = () => {
                             }
                           )
                         }} />
+                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                      {item.is_send_one_won_check &&
+                        <>
+                          <TextField
+                            label='인증번호'
+                            value={item.vrf_bank_code}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['vrf_bank_code']: e.target.value
+                                }
+                              )
+                            }} />
+
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>

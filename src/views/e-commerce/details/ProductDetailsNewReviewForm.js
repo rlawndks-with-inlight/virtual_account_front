@@ -76,7 +76,7 @@ export default function ProductDetailsNewReviewForm({ onClose, onChangePage, ...
   };
   const onSubmit = async () => {
     let result = await addProductReviewByUser(reviewData);
-    if(result){
+    if (result) {
       toast.success("성공적으로 리뷰를 작성하였습니다.");
       onClose();
       onChangePage(1);
@@ -94,7 +94,6 @@ export default function ProductDetailsNewReviewForm({ onClose, onChangePage, ...
             name="rating"
             control={control}
             render={({ field }) => <Rating {...field} value={reviewData.scope / 2} onChange={(e) => {
-              console.log(e.target.value)
               setReviewData({
                 ...reviewData,
                 scope: e.target.value * 2

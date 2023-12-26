@@ -11,6 +11,7 @@ import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 import Iconify from '../../iconify';
 //
 import { StyledItem, StyledIcon, StyledDotIcon } from './styles';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ NavItem.propTypes = {
 
 export default function NavItem({ item, depth, open, active, isExternalLink, ...other }) {
   const { translate } = useLocales();
+  const router = useRouter();
 
   const { title, path, icon, info, children, disabled, caption, roles } = item;
 

@@ -51,7 +51,7 @@ const DepositList = () => {
       id: 'user_name',
       label: '입금은행',
       action: (row) => {
-        return _.find(bankCodeList, { value: row['deposit_bank_code'] }).label
+        return _.find(bankCodeList(), { value: row['deposit_bank_code'] }).label
       }
     },
     {
@@ -111,24 +111,23 @@ const DepositList = () => {
       }
     },
     ...(themeDnsData?.operator_list ?? []).map(operator => {
-      console.log(operator)
       return [
         {
-          id: `operator`,
+          id: `sales${operator?.num}_id`,
           label: operator?.label,
           action: (row) => {
             return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
           }
         },
         {
-          id: `operator`,
+          id: `sales${operator?.num}_amount`,
           label: `${operator?.label} 수수료`,
           action: (row) => {
             return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
           }
         },
         {
-          id: `operator`,
+          id: `sales${operator?.num}_fee`,
           label: `${operator?.label} 수수료율`,
           action: (row) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
@@ -144,7 +143,6 @@ const DepositList = () => {
       }
     },
   ]
-  const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
@@ -155,13 +153,7 @@ const DepositList = () => {
     search: '',
     is_sales_man: true,
   })
-  const [dialogObj, setDialogObj] = useState({
-    changePassword: false,
-  })
-  const [changePasswordObj, setChangePasswordObj] = useState({
-    id: '',
-    user_pw: ''
-  })
+
   useEffect(() => {
     pageSetting();
   }, [])
@@ -180,12 +172,6 @@ const DepositList = () => {
       setData(data_);
     }
     setSearchObj(obj);
-  }
-  const deleteUser = async (id) => {
-    let data = await apiManager('deposits', 'delete', { id });
-    if (data) {
-      onChangePage(searchObj);
-    }
   }
 
   return (

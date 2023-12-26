@@ -1,2 +1,2 @@
-import UserEdit from "./[id]";
-export default UserEdit
+import MotherAccountEdit from "./[id]";
+export default MotherAccountEdit

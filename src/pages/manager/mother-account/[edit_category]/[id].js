@@ -19,7 +19,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
   loading: () => <p>Loading ...</p>,
 })
 
-const UserEdit = () => {
+const MotherAccountEdit = () => {
   const { setModal } = useModal()
   const { themeMode } = useSettingsContext();
 
@@ -208,5 +208,5 @@ const UserEdit = () => {
     </>
   )
 }
-UserEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default UserEdit
+MotherAccountEdit.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default MotherAccountEdit

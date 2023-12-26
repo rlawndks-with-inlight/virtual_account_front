@@ -41,7 +41,6 @@ const navConfig = () => {
     let operator_list = [];
     for (var i = 5; i >= 0; i--) {
       if (themeDnsData?.level_obj[`is_use_sales${i}`] == 1) {
-        console.log(operatorLevelList[5 - i])
         operator_list.push({
           title: `${themeDnsData?.level_obj[`sales${i}_name`]}관리`,
           path: PATH_MANAGER.operator.list + `/${operatorLevelList[5 - i].value}`,

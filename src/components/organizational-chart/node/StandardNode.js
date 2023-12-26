@@ -30,7 +30,6 @@ export default function StandardNode({ node, onEdit, onDelete, sx }) {
     setOpenPopover(null);
   };
   const onResize = useCallback((target) => {
-    console.log(returnMoment());
     // Handle the resize event
   }, []);
 

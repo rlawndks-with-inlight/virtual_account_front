@@ -11,12 +11,13 @@ import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 //
 import Iconify from '../../iconify';
 import { StyledItem, StyledIcon } from './styles';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
 const NavItem = forwardRef(({ item, depth, open, active, isExternalLink, ...other }, ref) => {
   const { translate } = useLocales();
-
+  const router = useRouter();
   const { title, path, icon, children, disabled, caption, roles } = item;
 
   const subItem = depth !== 1;
@@ -78,14 +79,18 @@ const NavItem = forwardRef(({ item, depth, open, active, isExternalLink, ...othe
     // ExternalLink
     if (isExternalLink)
       return (
-        <Link href={path} target="_blank" rel="noopener" underline="none">
+        <Link onClick={() => {
+          router.push(path)
+        }} href={path} target="_blank" rel="noopener" underline="none">
           {renderContent}
         </Link>
       );
 
     // Default
     return (
-      <Link component={NextLink} href={path} underline="none">
+      <Link onClick={() => {
+        router.push(path)
+      }} component={NextLink} href={path} underline="none">
         {renderContent}
       </Link>
     );

@@ -7,6 +7,7 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(router.pathname)
     if (router.pathname === '/manager/operator') {
       router.push('/manager/operator/list');
     }

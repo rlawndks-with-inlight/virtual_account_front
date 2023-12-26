@@ -30,10 +30,12 @@ import { MotionLazyContainer } from 'src/components/animate';
 import { ModalProvider } from 'src/components/dialog/ModalProvider';
 import { useState } from 'react';
 import { store } from '../redux/store'
+import { useRouter } from 'next/router';
 
 const App = (props) => {
   const { Component, pageProps, head_data, host, host_data } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
+  const router = useRouter();
   const [headData, setHeadData] = useState({});
   useEffect(() => {
     if (Object.keys(head_data).length > 0) {
@@ -73,7 +75,7 @@ const App = (props) => {
                   <MotionLazyContainer>
                     <ThemeProvider>
                       <ModalProvider>
-                        {getLayout(<Component {...pageProps} />)}
+                        {getLayout(<Component {...pageProps} key={router.asPath} />)}
                       </ModalProvider>
                       <Toaster position={'right-top'} toastOptions={{ className: 'react-hot-toast' }} />
                     </ThemeProvider>

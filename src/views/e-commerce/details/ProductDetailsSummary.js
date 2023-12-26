@@ -115,7 +115,6 @@ export default function ProductDetailsSummary({ product, onGotoStep, onAddCart, 
     });
     setSelectGroups(select_groups);
   }
-  console.log(characters)
   return (
     <>
       <form>
@@ -143,7 +142,7 @@ export default function ProductDetailsSummary({ product, onGotoStep, onAddCart, 
             <Typography variant="h7" color={themeObj.grey[500]}>{sub_name}</Typography>
             {characters.map((character, idx) => (
               <>
-                <Typography variant="h8" color={themeObj.grey[600]} sx={{fontSize:'0.8rem'}}>{character?.character_key}: {character?.character_value}</Typography>
+                <Typography variant="h8" color={themeObj.grey[600]} sx={{ fontSize: '0.8rem' }}>{character?.character_key}: {character?.character_value}</Typography>
               </>
             ))}
             <Typography variant="h4">

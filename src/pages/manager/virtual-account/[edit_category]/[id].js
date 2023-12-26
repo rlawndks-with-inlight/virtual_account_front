@@ -84,69 +84,23 @@ const VirtualAccountEdit = () => {
                     }} />
                   <Stack spacing={1}>
                     <FormControl>
-                      <InputLabel>입금은행</InputLabel>
+                      <InputLabel>발급은행</InputLabel>
                       <Select
-                        label='입금은행'
-                        value={item.deposit_bank_code}
+                        label='발급은행'
+                        value={item.virtual_bank_code}
                         onChange={e => {
                           setItem({
                             ...item,
-                            ['deposit_bank_code']: e.target.value
+                            ['virtual_bank_code']: e.target.value
                           })
                         }}
                       >
-                        {bankCodeList.map((itm, idx) => {
+                        {bankCodeList().map((itm, idx) => {
                           return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                         })}
                       </Select>
                     </FormControl>
                   </Stack>
-                  <TextField
-                    label='입금계좌번호'
-                    value={item.deposit_acct_num}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['deposit_acct_num']: e.target.value
-                        }
-                      )
-                    }} />
-                  <TextField
-                    label='입금자명'
-                    value={item.deposit_acct_name}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['deposit_acct_name']: e.target.value
-                        }
-                      )
-                    }} />
-                  <TextField
-                    label='생년월일'
-                    value={item.birth}
-                    placeholder="19990101"
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['birth']: e.target.value
-                        }
-                      )
-                    }} />
-                  <TextField
-                    label='휴대폰번호'
-                    value={item.phone_num}
-                    placeholder="하이픈(-) 제외 입력"
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['phone_num']: e.target.value
-                        }
-                      )
-                    }} />
                   <Stack spacing={1}>
                   </Stack>
                 </Stack>

@@ -72,7 +72,7 @@ const WithdrawRequest = () => {
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             <Row style={{ columnGap: '0.25rem' }}>
-                                                <div>{_.find(bankCodeList, { value: item?.settle_bank_code })?.label}</div>
+                                                <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
                                                 <div>{item?.settle_acct_num}</div>
                                                 <div>{item?.settle_acct_name}</div>
                                             </Row>

@@ -55,7 +55,7 @@ const UserList = () => {
       }
     },
     {
-      id: 'name',
+      id: 'settle_amount',
       label: '보유정산금',
       action: (row) => {
         return commarNumber(row['settle_amount'])
@@ -69,17 +69,16 @@ const UserList = () => {
       }
     },
     ...(themeDnsData?.operator_list ?? []).map(operator => {
-      console.log(operator)
       return [
         {
-          id: `operator`,
+          id: `sales${operator?.num}_id`,
           label: operator?.label,
           action: (row) => {
             return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
           }
         },
         {
-          id: `operator`,
+          id: `sales${operator?.num}_fee`,
           label: `${operator?.label} 수수료`,
           action: (row) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
@@ -282,6 +281,7 @@ const UserList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'가맹점 추가'}
+            head_columns={[]}
           />
         </Card>
       </Stack>

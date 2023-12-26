@@ -38,7 +38,6 @@ export default function ManagerTable(props) {
   const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width } = props;
   const { page, page_size } = props?.searchObj;
 
-  const theme = useTheme();
   const router = useRouter();
   const [sDt, setSDt] = useState(undefined);
   const [eDt, setEDt] = useState(undefined);
@@ -48,21 +47,26 @@ export default function ManagerTable(props) {
 
   useEffect(() => {
     settingColumns();
-  }, [columns, head_columns]);
+  }, [columns, head_columns, router.asPath]);
   const settingColumns = async () => {
-    let column_list = [...columns];
-    let head_column_list = [...head_columns];
-    setZColumn(column_list);
-    setZHeadColumn(head_column_list);
+    try {
+      let column_list = [...columns];
+      let head_column_list = [...head_columns];
+      setZColumn(column_list);
+      setZHeadColumn(head_column_list);
+    } catch (err) {
+      console.log(err)
+    }
+
   }
-  const getMaxPage = (total, page_size) => {
+  const getMaxPage = (total = 0, page_size = 1) => {
     if (total == 0) {
       return 1;
     }
-    if (total % page_size == 0) {
-      return parseInt(total / page_size);
+    if (total % parseInt(page_size) == 0) {
+      return parseInt(total / parseInt(page_size));
     } else {
-      return parseInt(total / page_size) + 1;
+      return parseInt(total / parseInt(page_size)) + 1;
     }
   }
   if (!(zColumn.length > 0)) {
@@ -182,7 +186,7 @@ export default function ManagerTable(props) {
             </>
             :
             <>
-              <Table sx={{ minWidth: 800, width: (width || '100%') }}>
+              <Table sx={{ minWidth: 800, width: `${width ? width : '100%'}` }}>
                 {zHeadColumn &&
                   <>
                     <TableHead>

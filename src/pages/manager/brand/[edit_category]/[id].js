@@ -652,7 +652,7 @@ const BrandEdit = () => {
                             })
                           }}
                         >
-                          {bankCodeList.map((itm, idx) => {
+                          {bankCodeList().map((itm, idx) => {
                             return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                           })}
                         </Select>
@@ -791,7 +791,7 @@ const BrandEdit = () => {
                             })
                           }}
                         >
-                          {bankCodeList.map((itm, idx) => {
+                          {bankCodeList().map((itm, idx) => {
                             return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                           })}
                         </Select>

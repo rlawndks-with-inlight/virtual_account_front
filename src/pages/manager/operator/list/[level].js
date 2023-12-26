@@ -10,7 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-const UserList = () => {
+const OperatorList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const defaultColumns = [
@@ -52,7 +52,7 @@ const UserList = () => {
       }
     },
     {
-      id: 'name',
+      id: 'settle_amount',
       label: '보유정산금',
       action: (row) => {
         return commarNumber(row['settle_amount'])
@@ -133,10 +133,10 @@ const UserList = () => {
       action: (row) => {
         return (
           <>
-            <IconButton>
-              <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`/manager/operator/edit/${row?.id}`)
-              }} />
+            <IconButton onClick={() => {
+              router.push(`/manager/operator/edit/${row?.id}`)
+            }}>
+              <Icon icon='material-symbols:edit-outline' />
             </IconButton>
             <IconButton onClick={() => {
               setModal({
@@ -262,11 +262,12 @@ const UserList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={''}
+            head_columns={[]}
           />
         </Card>
       </Stack>
     </>
   )
 }
-UserList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default UserList
+OperatorList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default OperatorList

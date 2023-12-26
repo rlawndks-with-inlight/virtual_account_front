@@ -10,7 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-const UserList = () => {
+const MotherAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const defaultColumns = [
@@ -36,7 +36,7 @@ const UserList = () => {
       id: 'nickname',
       label: '상호',
       action: (row) => {
-        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        return `${row[`nickname`]}\n(${row['user_name']})`
       }
     },
     {
@@ -54,7 +54,6 @@ const UserList = () => {
       }
     },
   ]
-  const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
@@ -65,13 +64,7 @@ const UserList = () => {
     search: '',
     is_sales_man: true,
   })
-  const [dialogObj, setDialogObj] = useState({
-    changePassword: false,
-  })
-  const [changePasswordObj, setChangePasswordObj] = useState({
-    id: '',
-    user_pw: ''
-  })
+
   useEffect(() => {
     pageSetting();
   }, [])
@@ -95,7 +88,6 @@ const UserList = () => {
 
   return (
     <>
-
       <Stack spacing={3}>
         <Card>
           <ManagerTable
@@ -103,11 +95,13 @@ const UserList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
+            add_button_text={''}
+            head_columns={[]}
           />
         </Card>
       </Stack>
     </>
   )
 }
-UserList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default UserList
+MotherAccountList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default MotherAccountList

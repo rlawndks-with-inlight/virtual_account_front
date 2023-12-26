@@ -31,6 +31,7 @@ const UserEdit = () => {
     phone_num: '',
     nickname: '',
     name: '',
+    email: '',
     level: 10,
     user_pw: '',
     settle_bank_code: '',
@@ -39,6 +40,8 @@ const UserEdit = () => {
     withdraw_fee: 0,
     min_withdraw_price: 0,
     min_withdraw_remain_price: 0,
+    is_send_one_won_check: false,
+    vrf_bank_code: '',
   })
   const tab_list = [
     {
@@ -49,10 +52,12 @@ const UserEdit = () => {
       value: 1,
       label: '수수료정보'
     },
-    {
-      value: 2,
-      label: '정산정보'
-    },
+    ...(router.query?.edit_category == 'edit' ? [
+      {
+        value: 2,
+        label: '정산정보'
+      },
+    ] : []),
   ]
   useEffect(() => {
     if (router.query?.tab >= 0) {
@@ -68,22 +73,21 @@ const UserEdit = () => {
     })
     setOperatorList(operator_list?.content ?? []);
     let data = item;
-    if (router.query?.edit_category == 'add') {
-      data['withdraw_fee'] = themeDnsData?.default_withdraw_fee;
-      data['deposit_fee'] = themeDnsData?.default_deposit_fee;
-    }
+
     if (router.query?.edit_category == 'edit') {
       data = await apiManager('users', 'get', {
         id: router.query.id
       })
     }
+    if (router.query?.edit_category == 'add') {
+      data['withdraw_fee'] = themeDnsData?.default_withdraw_fee;
+      data['deposit_fee'] = themeDnsData?.default_deposit_fee;
+    }
     setItem(data);
     setLoading(false);
   }
   const onSave = async () => {
-    if (!item.settle_bank_code) {
-      return toast.error('정산 입금은행을 선택해 주세요.');
-    }
+
     let result = undefined
     if (item?.id) {//수정
       result = await apiManager('users', 'update', item);
@@ -93,6 +97,18 @@ const UserEdit = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push('/manager/merchandise');
+    }
+  }
+  const oneWonCertification = async () => {
+    let result = await apiManager(`users/one-won-certification`, 'create', item);
+    console.log(result)
+    if (result) {
+      toast.success('성공적으로 발송 되었습니다.');
+      setItem({
+        ...item,
+        is_send_one_won_check: true,
+        tid: result?.tid
+      })
     }
   }
   return (
@@ -200,6 +216,30 @@ const UserEdit = () => {
                           )
                         }} />
                       <TextField
+                        label='이메일'
+                        value={item.email}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['email']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='생년월일'
+                        value={item.birth}
+                        placeholder="19990101"
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['birth']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
                         label='전화번호'
                         value={item.phone_num}
                         placeholder="하이픈(-) 제외 입력"
@@ -208,6 +248,19 @@ const UserEdit = () => {
                             {
                               ...item,
                               ['phone_num']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='guid'
+                        value={item.guid}
+                        disabled={true}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['guid']: e.target.value
                             }
                           )
                         }} />
@@ -340,7 +393,7 @@ const UserEdit = () => {
                               })
                             }}
                           >
-                            {bankCodeList.map((itm, idx) => {
+                            {bankCodeList().map((itm, idx) => {
                               return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                             })}
                           </Select>
@@ -370,6 +423,23 @@ const UserEdit = () => {
                             }
                           )
                         }} />
+                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                      {item.is_send_one_won_check &&
+                        <>
+                          <TextField
+                            label='인증번호'
+                            value={item.vrf_bank_code}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['vrf_bank_code']: e.target.value
+                                }
+                              )
+                            }} />
+
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>

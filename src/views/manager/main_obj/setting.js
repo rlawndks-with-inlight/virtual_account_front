@@ -159,7 +159,6 @@ const MainObjSetting = (props) => {
         })
         brand_data = settingBrandObj(item, brand_data);
         let content_list = brand_data[`${MAIN_OBJ_TYPE}`] ?? [];
-        console.log(content_list)
         setItem(brand_data);
         setContentList(content_list);
         setLoading(false);

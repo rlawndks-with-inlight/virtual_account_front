@@ -41,7 +41,7 @@ const WithdrawList = () => {
       id: 'settle_bank_code',
       label: '은행',
       action: (row) => {
-        return _.find(bankCodeList, { value: row['settle_bank_code'] }).label
+        return _.find(bankCodeList(), { value: row['settle_bank_code'] }).label
       }
     },
     {
@@ -87,7 +87,7 @@ const WithdrawList = () => {
       }
     },
     {
-      id: 'amount',
+      id: 'minus_amount',
       label: '차감 보유정산금',
       action: (row) => {
         return row['amount'] * (-1)
@@ -154,6 +154,7 @@ const WithdrawList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
+            head_columns={[]}
           />
         </Card>
       </Stack>
