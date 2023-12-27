@@ -11,25 +11,24 @@ import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
-import { virtualAccountStatusList } from "src/utils/format";
+import { bankCodeList, virtualAccountStatusList } from "src/utils/format";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const defaultColumns = [
-
     {
       id: 'user_name',
       label: '가맹점',
       action: (row) => {
-        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
       }
     },
     {
-      id: 'deposit_acct_name',
-      label: '입금자명',
+      id: 'virtual_bank_code',
+      label: '가상계좌은행',
       action: (row) => {
-        return row['deposit_acct_name'] ?? "---"
+        return _.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"
       }
     },
     {
@@ -40,31 +39,10 @@ const VirtualAccountList = () => {
       }
     },
     {
-      id: 'phone_num',
-      label: '휴대폰번호',
-      action: (row) => {
-        return row['phone_num'] ?? "---"
-      }
-    },
-    {
-      id: 'birth',
-      label: '생년월일',
-      action: (row) => {
-        return row['birth'] ?? "---"
-      }
-    },
-    {
       id: 'status',
       label: '상태',
       action: (row) => {
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status }).label} color={_.find(virtualAccountStatusList, { value: row?.status }).color} />
-      }
-    },
-    {
-      id: 'deposit_acct_num',
-      label: '입금계좌정보',
-      action: (row) => {
-        return row['deposit_acct_num'] ?? "---"
       }
     },
     {

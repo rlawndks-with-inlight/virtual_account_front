@@ -74,6 +74,10 @@ const UserEdit = () => {
         }
       }
     }
+    if (router.query?.edit_category == 'add') {
+      data['withdraw_fee'] = themeDnsData?.default_withdraw_fee;
+      data['deposit_fee'] = themeDnsData?.default_deposit_fee;
+    }
     setItem(data);
     setLoading(false);
   }

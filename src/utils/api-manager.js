@@ -25,7 +25,7 @@ export const post = async (url, obj) => {
         }
     } catch (err) {
         console.log(err)
-        toast.error(err?.response?.data?.message);
+        toast.error(err?.message);
         return false;
     }
 }
@@ -65,14 +65,16 @@ export const put = async (url, obj) => {
         }
     } catch (err) {
         console.log(err)
-        toast.error(err?.response?.data?.message);
+        toast.error(err?.message);
         return false;
     }
 }
 export const get = async (url, params) => {
     try {
         let query = new URLSearchParams(params).toString()
+
         const { data: response } = await axios.get(`${url}?${query}`);
+
         if (response?.result > 0) {
             return response?.data;
         } else {

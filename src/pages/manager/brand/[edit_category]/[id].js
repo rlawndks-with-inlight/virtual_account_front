@@ -90,6 +90,10 @@ const BrandEdit = () => {
       value: 6,
       label: '수수료설정'
     },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 7,
+      label: 'api url 설정'
+    },] : []),
   ]
 
   useEffect(() => {
@@ -949,6 +953,67 @@ const BrandEdit = () => {
                         InputProps={{
                           endAdornment: (
                             <div>원</div>
+                          )
+                        }}
+                      />
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 7 &&
+              <>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        label='API URL'
+                        value={item.api_url}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['api_url']: e.target.value
+                            }
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='입금 노티 주소'
+                        value={item.deposit_noti_url}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_noti_url']: e.target.value
+                            }
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='출금 노티 주소'
+                        value={item.withdraw_noti_url}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_noti_url']: e.target.value
+                            }
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='출금실패 노티 주소'
+                        value={item.withdraw_fail_noti_url}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_fail_noti_url']: e.target.value
+                            }
                           )
                         }}
                       />
