@@ -29,7 +29,7 @@ const DepositList = () => {
 
     {
       title: '영업자정보',
-      count: 1 + (themeDnsData?.operator_list.length ?? 0) * 3
+      count: 2 + (themeDnsData?.operator_list.length ?? 0) * 3
     },
   ]
   const defaultColumns = [
@@ -41,21 +41,21 @@ const DepositList = () => {
       }
     },
     {
-      id: 'user_name',
+      id: 'mcht_nickname',
       label: '가맹점',
       action: (row) => {
         return <div style={{ textAlign: 'center' }}>{`${row[`mcht_nickname`]}\n(${row['mcht_user_name']})`}</div>
       }
     },
     {
-      id: 'user_name',
+      id: 'deposit_bank_code',
       label: '입금은행',
       action: (row) => {
         return _.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label
       }
     },
     {
-      id: 'user_name',
+      id: 'virtual_acct_num',
       label: '가상계좌번호',
       action: (row) => {
         return row['virtual_acct_num'] ?? "---"
@@ -69,45 +69,52 @@ const DepositList = () => {
       }
     },
     {
-      id: 'user_name',
+      id: 'amount_ago',
       label: '입금예정금액',
       action: (row) => {
         return commarNumber(row['amount'])
       }
     },
     {
-      id: 'user_name',
+      id: 'amount',
       label: '실제입금금액',
       action: (row) => {
         return commarNumber(row['amount'])
       }
     },
     {
-      id: 'user_name',
+      id: 'mcht_amount',
       label: '가맹점 정산금액',
       action: (row) => {
         return commarNumber(row['mcht_amount'])
       }
     },
     {
-      id: 'user_name',
+      id: 'deposit_fee',
       label: '입금수수료',
       action: (row) => {
         return commarNumber(row['deposit_fee'])
       }
     },
     {
-      id: 'user_name',
+      id: 'mcht_fee',
       label: '가맹점 수수료율',
       action: (row) => {
         return row['mcht_fee'] + '%'
       }
     },
     {
-      id: 'user_name',
+      id: 'head_office_fee',
       label: '본사 수수료율',
       action: (row) => {
         return row['head_office_fee'] + '%'
+      }
+    },
+    {
+      id: 'head_office_amount',
+      label: '본사 수수료',
+      action: (row) => {
+        return row['head_office_amount']
       }
     },
     ...(themeDnsData?.operator_list ?? []).map(operator => {
