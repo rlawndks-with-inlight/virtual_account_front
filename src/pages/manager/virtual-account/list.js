@@ -39,10 +39,17 @@ const VirtualAccountList = () => {
       }
     },
     {
+      id: 'virtual_acct_name',
+      label: '가상계좌명',
+      action: (row) => {
+        return row['virtual_acct_name'] ?? "---"
+      }
+    },
+    {
       id: 'status',
       label: '상태',
       action: (row) => {
-        return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status }).label} color={_.find(virtualAccountStatusList, { value: row?.status }).color} />
+        return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
     {

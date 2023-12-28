@@ -58,7 +58,6 @@ export const bankCodeList = () => {
             { value: '105', label: '웰컴저축은행' },
         ]
     }
-
 }
 
 export const apiCorpList = [
@@ -66,6 +65,7 @@ export const apiCorpList = [
 ]
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
+    { value: 5, label: '생성중', color: 'warning' },
 ]
 export const payTypeList = [
     { value: 0, label: '입금' },

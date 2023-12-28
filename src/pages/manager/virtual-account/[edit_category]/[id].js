@@ -9,7 +9,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -25,7 +25,7 @@ const VirtualAccountEdit = () => {
   const [mchtList, setMchtList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({
-    mcht_user_name: '',
+    mid: '',
     deposit_bank_code: '',
     deposit_acct_num: '',
     deposit_acct_name: '',
@@ -52,14 +52,48 @@ const VirtualAccountEdit = () => {
   }
   const onSave = async () => {
     let result = undefined
-    if (item?.id) {//수정
-      result = await apiManager('virtual-accounts', 'update', item);
-    } else {//추가
-      result = await apiManager('virtual-accounts', 'create', item);
-    }
-    if (result) {
+    result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', item);
+    if (result?.tid) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push('/manager/virtual-account');
+    }
+  }
+  const oneWonCertification = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/acct/v1`, 'create', {
+      mid: item?.mid,
+      bank_code: item?.deposit_bank_code,
+      account: item?.deposit_acct_num,
+      name: item?.deposit_acct_name,
+      birth: item?.birth,
+      phone_num: item?.phone_num,
+      guid: item?.guid,
+    });
+    let data = item;
+    data.guid = result?.guid;
+    console.log(data)
+    if (result?.tid) {
+      toast.success('성공적으로 발송 되었습니다.');
+      data = {
+        ...data,
+        is_send_one_won_check: true,
+        tid: result?.tid,
+      }
+    }
+    setItem(data);
+  }
+  const checkOneWonCertification = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/acct/v1/check`, 'create', {
+      mid: item?.mid,
+      tid: item?.tid,
+      vrf_word: item?.vrf_word,
+      guid: item?.guid,
+    });
+    if (result?.tid) {
+      toast.success('성공적으로 인증 되었습니다.');
+      setItem({
+        ...item,
+        is_check_bank: true
+      })
     }
   }
   return (
@@ -71,27 +105,50 @@ const VirtualAccountEdit = () => {
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
                   <TextField
-                    label='가맹점아이디'
-                    value={item.mcht_user_name}
-                    disabled={router.query?.edit_category == 'edit'}
+                    label='MID'
+                    value={item.mid}
                     onChange={(e) => {
                       setItem(
                         {
                           ...item,
-                          ['mcht_user_name']: e.target.value
+                          ['mid']: e.target.value
+                        }
+                      )
+                    }} />
+                  <TextField
+                    label='생년월일'
+                    value={item.birth}
+                    placeholder="19990101"
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['birth']: e.target.value
+                        }
+                      )
+                    }} />
+                  <TextField
+                    label='휴대폰번호'
+                    value={item.phone_num}
+                    placeholder="하이픈(-) 제외 입력"
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['phone_num']: e.target.value
                         }
                       )
                     }} />
                   <Stack spacing={1}>
                     <FormControl>
-                      <InputLabel>발급은행</InputLabel>
+                      <InputLabel>입금은행</InputLabel>
                       <Select
-                        label='발급은행'
-                        value={item.virtual_bank_code}
+                        label='입금은행'
+                        value={item.deposit_bank_code}
                         onChange={e => {
                           setItem({
                             ...item,
-                            ['virtual_bank_code']: e.target.value
+                            ['deposit_bank_code']: e.target.value
                           })
                         }}
                       >
@@ -101,8 +158,45 @@ const VirtualAccountEdit = () => {
                       </Select>
                     </FormControl>
                   </Stack>
-                  <Stack spacing={1}>
-                  </Stack>
+                  <TextField
+                    label='입금계좌번호'
+                    value={item.deposit_acct_num}
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['deposit_acct_num']: e.target.value
+                        }
+                      )
+                    }} />
+                  <TextField
+                    label='입금자명'
+                    value={item.deposit_acct_name}
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['deposit_acct_name']: e.target.value
+                        }
+                      )
+                    }} />
+                  <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                  {item.is_send_one_won_check &&
+                    <>
+                      <TextField
+                        label='인증번호'
+                        value={item.vrf_word}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['vrf_word']: e.target.value
+                            }
+                          )
+                        }} />
+                      <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                    </>}
                 </Stack>
               </Card>
             </Grid>

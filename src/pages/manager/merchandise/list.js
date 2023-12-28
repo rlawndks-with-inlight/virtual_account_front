@@ -32,6 +32,13 @@ const UserList = () => {
       }
     },
     {
+      id: 'mid',
+      label: 'MID',
+      action: (row) => {
+        return row['mid'] ?? "---"
+      }
+    },
+    {
       id: 'nickname',
       label: '닉네임',
       action: (row) => {

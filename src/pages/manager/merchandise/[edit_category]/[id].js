@@ -99,18 +99,6 @@ const UserEdit = () => {
       router.push('/manager/merchandise');
     }
   }
-  const oneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification`, 'create', item);
-    console.log(result)
-    if (result) {
-      toast.success('성공적으로 발송 되었습니다.');
-      setItem({
-        ...item,
-        is_send_one_won_check: true,
-        tid: result?.tid
-      })
-    }
-  }
   return (
     <>
       {!loading &&
@@ -423,23 +411,6 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
-                      {item.is_send_one_won_check &&
-                        <>
-                          <TextField
-                            label='인증번호'
-                            value={item.vrf_bank_code}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['vrf_bank_code']: e.target.value
-                                }
-                              )
-                            }} />
-
-                        </>}
                     </Stack>
                   </Card>
                 </Grid>

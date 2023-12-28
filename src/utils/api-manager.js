@@ -29,6 +29,31 @@ export const post = async (url, obj) => {
         return false;
     }
 }
+export const postReturn = async (url, obj) => {
+    try {
+        let formData = new FormData();
+        let form_data_options = {
+            indices: true,
+        }
+        formData = serialize(obj, form_data_options);
+        let config = {
+            headers: {
+                'Content-Type': "multipart/form-data",
+            }
+        };
+        const { data: response } = await axios.post(url, formData, config);
+        if (response?.result > 0) {
+            return response?.data;
+        } else {
+            toast.error(response?.message);
+            return response?.data;
+        }
+    } catch (err) {
+        console.log(err)
+        toast.error(err?.message);
+        return false;
+    }
+}
 export const deleteItem = async (url, obj) => {
     try {
         const { data: response } = await axios.delete(url, obj);
@@ -110,6 +135,21 @@ export const apiManager = (table, type, params) => {
     if (type == 'delete') {
         return deleteItem(`${base_url}/${table}/${params?.id}`);
     }
+}
+export const apiServer = (url, type, params) => {
+    let obj = settingParams("", type, params);
+    if (!(obj?.brand_id > 0)) {
+        let dns_data = getLocalStorage('themeDnsData');
+        dns_data = JSON.parse(dns_data);
+        obj['brand_id'] = dns_data?.id;
+    }
+    if (type == 'get') {
+        return get(`${url}`);
+    }
+    if (type == 'create') {
+        return postReturn(`${url}`, obj);
+    }
+
 }
 export const uploadMultipleFiles = async (files = []) => {
     try {

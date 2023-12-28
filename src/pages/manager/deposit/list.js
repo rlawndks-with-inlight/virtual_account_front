@@ -51,7 +51,7 @@ const DepositList = () => {
       id: 'user_name',
       label: '입금은행',
       action: (row) => {
-        return _.find(bankCodeList(), { value: row['deposit_bank_code'] }).label
+        return _.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label
       }
     },
     {
