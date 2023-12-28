@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { Row } from "src/components/elements/styled-components";
+import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
@@ -52,6 +52,17 @@ const VirtualAccountList = () => {
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
+    {
+      id: 'virtual_acct_name',
+      label: '입금은행정보',
+      action: (row) => {
+        return <Col>
+          <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+        </Col>
+      }
+    },
+
     {
       id: 'created_at',
       label: '생성일',

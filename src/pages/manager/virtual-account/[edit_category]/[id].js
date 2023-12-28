@@ -70,7 +70,6 @@ const VirtualAccountEdit = () => {
     });
     let data = item;
     data.guid = result?.guid;
-    console.log(data)
     if (result?.tid) {
       toast.success('성공적으로 발송 되었습니다.');
       data = {

@@ -73,10 +73,12 @@ export function AuthProvider({ children }) {
   const storageAvailable = localStorageAvailable();
 
   const initialize = useCallback(async () => {
+    let user = undefined;
     try {
       const { data: response } = await axios.get(`/api/auth`);
+
       if (response?.data?.id > 0) {
-        const user = response?.data;
+        user = response?.data;
         dispatch({
           type: 'INITIAL',
           payload: {
@@ -105,6 +107,7 @@ export function AuthProvider({ children }) {
         },
       });
     }
+    return user;
   }, []);
 
   useEffect(() => {
@@ -170,6 +173,7 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      initialize,
     }),
     [state.isAuthenticated, state.isInitialized, state.user, login, logout, register]
   );

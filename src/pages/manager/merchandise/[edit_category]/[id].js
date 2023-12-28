@@ -9,7 +9,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -97,6 +97,32 @@ const UserEdit = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push('/manager/merchandise');
+    }
+  }
+  const oneWonCertification = async () => {
+    let result = await apiManager(`users/one-won-certification`, 'create', item);
+    if (result) {
+      toast.success('성공적으로 발송 되었습니다.');
+      setItem({
+        ...item,
+        is_send_one_won_check: true,
+        tid: result?.tid
+      })
+    }
+  }
+  const checkOneWonCertification = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/acct/v1/check`, 'create', {
+      mid: item?.mid,
+      tid: item?.tid,
+      vrf_word: item?.vrf_word,
+      guid: item?.guid,
+    });
+    if (result?.tid) {
+      toast.success('성공적으로 인증 되었습니다.');
+      setItem({
+        ...item,
+        is_check_bank: true
+      })
     }
   }
   return (
@@ -411,6 +437,23 @@ const UserEdit = () => {
                             }
                           )
                         }} />
+                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                      {item.is_send_one_won_check &&
+                        <>
+                          <TextField
+                            label='인증번호'
+                            value={item.vrf_word}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['vrf_word']: e.target.value
+                                }
+                              )
+                            }} />
+                          <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
