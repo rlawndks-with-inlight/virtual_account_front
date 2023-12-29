@@ -11,7 +11,7 @@ import { useSettingsContext } from '../settings';
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const theme = useTheme();
-  const { themeDnsData } = useSettingsContext();
+  const { themeDnsData, themeMode } = useSettingsContext();
   const PRIMARY_LIGHT = theme.palette.primary.light;
 
   const PRIMARY_MAIN = theme.palette.primary.main;
@@ -40,7 +40,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       }}
       {...other}
     >
-      <img src={themeDnsData?.logo_img} style={{
+      <img src={themeMode == 'dark' ? themeDnsData?.dark_logo_img : themeDnsData?.logo_img} style={{
         width: 'auto',
         height: '100%',
         margin: 'auto'
