@@ -77,6 +77,38 @@ const VirtualAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
+    {
+      id: 'edit',
+      label: '이어서 생성',
+      action: (row) => {
+        return row['status'] == 5 ? <>
+          <IconButton>
+            <Icon icon='material-symbols:edit-outline' onClick={() => {
+              router.push(`edit/${row?.id}`)
+            }} />
+          </IconButton>
+        </> : "---"
+      }
+    },
+    {
+      id: 'delete',
+      label: '삭제',
+      action: (row) => {
+        return (
+          <>
+            <IconButton onClick={() => {
+              setModal({
+                func: () => { deleteUser(row?.id) },
+                icon: 'material-symbols:delete-outline',
+                title: '정말 삭제하시겠습니까?'
+              })
+            }}>
+              <Icon icon='material-symbols:delete-outline' />
+            </IconButton>
+          </>
+        )
+      }
+    },
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
@@ -115,7 +147,12 @@ const VirtualAccountList = () => {
     }
     setSearchObj(obj);
   }
-
+  const deleteUser = async (id) => {
+    let data = await apiManager('virtual-accounts', 'delete', { id });
+    if (data) {
+      onChangePage(searchObj);
+    }
+  }
 
   return (
     <>
