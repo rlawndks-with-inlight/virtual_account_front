@@ -187,7 +187,7 @@ const UserList = () => {
     s_dt: '',
     e_dt: '',
     search: '',
-    is_sales_man: true,
+    level: 10,
   })
   const [dialogObj, setDialogObj] = useState({
     changePassword: false,
