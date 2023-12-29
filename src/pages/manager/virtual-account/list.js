@@ -46,6 +46,13 @@ const VirtualAccountList = () => {
       }
     },
     {
+      id: 'guid',
+      label: 'USER GUID',
+      action: (row) => {
+        return row['guid'] ?? "---"
+      }
+    },
+    {
       id: 'status',
       label: '상태',
       action: (row) => {

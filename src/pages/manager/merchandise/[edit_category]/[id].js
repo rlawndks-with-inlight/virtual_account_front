@@ -111,12 +111,8 @@ const UserEdit = () => {
     }
   }
   const checkOneWonCertification = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/acct/v1/check`, 'create', {
-      mid: item?.mid,
-      tid: item?.tid,
-      vrf_word: item?.vrf_word,
-      guid: item?.guid,
-    });
+    let result = await apiManager(`users/one-won-certification/check`, 'create', item);
+    console.log(result)
     if (result?.tid) {
       toast.success('성공적으로 인증 되었습니다.');
       setItem({
@@ -452,7 +448,9 @@ const UserEdit = () => {
                                 }
                               )
                             }} />
+                          {/*
                           <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                            */}
                         </>}
                     </Stack>
                   </Card>

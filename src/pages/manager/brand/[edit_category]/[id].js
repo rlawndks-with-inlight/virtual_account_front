@@ -94,6 +94,10 @@ const BrandEdit = () => {
       value: 7,
       label: 'api url 설정'
     },] : []),
+    ...(user?.level >= 40 ? [{
+      value: 8,
+      label: '출금계좌등록'
+    },] : []),
   ]
 
   useEffect(() => {
