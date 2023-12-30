@@ -72,7 +72,7 @@ const navConfig = () => {
             icon: ICONS.user,
             children: [
               { title: '모계좌내역', path: PATH_MANAGER.motherAccount.list },
-              { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.add },
+              { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.request },
             ],
           },
         ],
@@ -163,7 +163,12 @@ const navConfig = () => {
           },
         ],
       },
-    ] : [])
+    ] : []),
+    {
+      items: [
+        { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: ICONS.user },
+      ],
+    },
   ];
 }
 

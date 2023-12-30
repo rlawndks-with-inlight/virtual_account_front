@@ -141,6 +141,23 @@ const BrandEdit = () => {
     }
 
   }
+  const oneWonCertification = async () => {
+    let result = await apiManager(`users/one-won-certification`, 'create', {
+      birth: item.settle_birth,
+      settle_bank_code: item.settle_bank_code,
+      settle_acct_num: item.settle_acct_num,
+      settle_acct_name: item.settle_acct_name,
+      guid: item?.deposit_guid,
+    });
+    if (result) {
+      toast.success('성공적으로 발송 되었습니다.');
+      setItem({
+        ...item,
+        is_send_one_won_check: true,
+        tid: result?.tid
+      })
+    }
+  }
   return (
     <>
       {!loading &&
@@ -648,47 +665,7 @@ const BrandEdit = () => {
                           })}
                         </Select>
                       </FormControl>
-                      <FormControl>
-                        <InputLabel>마더 입금계좌 은행</InputLabel>
-                        <Select
-                          label='마더 입금계좌 은행'
-                          value={item.mother_deposit_bank_code}
-                          onChange={e => {
-                            setItem({
-                              ...item,
-                              ['mother_deposit_bank_code']: e.target.value
-                            })
-                          }}
-                        >
-                          {bankCodeList().map((itm, idx) => {
-                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                          })}
-                        </Select>
-                      </FormControl>
-                      <TextField
-                        label='마더 입금계좌 계좌번호'
-                        value={item.mother_deposit_acct_num}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['mother_deposit_acct_num']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='마더 입금계좌 예금주명'
-                        value={item.mother_deposit_acct_name}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['mother_deposit_acct_name']: e.target.value
-                            }
-                          )
-                        }} />
+
                       <TextField
                         label='GUID'
                         value={item.deposit_guid}
@@ -787,47 +764,7 @@ const BrandEdit = () => {
                           })}
                         </Select>
                       </FormControl>
-                      <FormControl>
-                        <InputLabel>마더 출금계좌 은행</InputLabel>
-                        <Select
-                          label='마더 출금계좌 은행'
-                          value={item.mother_withdraw_bank_code}
-                          onChange={e => {
-                            setItem({
-                              ...item,
-                              ['mother_withdraw_bank_code']: e.target.value
-                            })
-                          }}
-                        >
-                          {bankCodeList().map((itm, idx) => {
-                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                          })}
-                        </Select>
-                      </FormControl>
-                      <TextField
-                        label='마더 출금계좌 계좌번호'
-                        value={item.mother_withdraw_acct_num}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['mother_withdraw_acct_num']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='마더 출금계좌 예금주명'
-                        value={item.mother_withdraw_acct_name}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['mother_withdraw_acct_name']: e.target.value
-                            }
-                          )
-                        }} />
+
                       <TextField
                         label='GUID'
                         value={item.withdraw_guid}
@@ -1021,6 +958,85 @@ const BrandEdit = () => {
                           )
                         }}
                       />
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 8 &&
+              <>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <FormControl>
+                        <InputLabel>출금계좌 은행</InputLabel>
+                        <Select
+                          label='출금계좌 은행'
+                          value={item.settle_bank_code}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['settle_bank_code']: e.target.value
+                            })
+                          }}
+                        >
+                          {bankCodeList().map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label='출금 계좌번호'
+                        value={item.settle_acct_num}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['settle_acct_num']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='생년월일'
+                        value={item.settle_birth}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['settle_birth']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='예금주명'
+                        value={item.settle_acct_name}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['settle_acct_name']: e.target.value
+                            }
+                          )
+                        }} />
+                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                      {item.is_send_one_won_check &&
+                        <>
+                          <TextField
+                            label='인증번호'
+                            value={item.vrf_word}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['vrf_word']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+
                     </Stack>
                   </Card>
                 </Grid>
