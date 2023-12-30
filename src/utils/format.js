@@ -71,3 +71,7 @@ export const payTypeList = [
     { value: 0, label: '입금' },
     { value: 5, label: '출금' },
 ]
+export const withdrawStatusList = [
+    { value: 0, label: '출금완료', color: 'success' },
+    { value: 5, label: '출금요청완료', color: 'warning' },
+]

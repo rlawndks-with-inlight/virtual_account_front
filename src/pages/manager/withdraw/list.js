@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -10,7 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { bankCodeList, payTypeList } from "src/utils/format";
+import { bankCodeList, payTypeList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
 const WithdrawList = () => {
   const { setModal } = useModal()
@@ -41,7 +41,7 @@ const WithdrawList = () => {
       id: 'settle_bank_code',
       label: '은행',
       action: (row) => {
-        return _.find(bankCodeList(), { value: row['settle_bank_code'] }).label
+        return _.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"
       }
     },
     {
@@ -62,7 +62,7 @@ const WithdrawList = () => {
       id: 'status',
       label: '상태',
       action: (row) => {
-        return "---"
+        return <Chip variant="soft" label={_.find(withdrawStatusList, { value: row?.withdraw_status })?.label} color={_.find(withdrawStatusList, { value: row?.withdraw_status })?.color} />
       }
     },
     {
