@@ -11,6 +11,7 @@ import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList } from "src/utils/format";
+import _ from "lodash";
 const OperatorList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();

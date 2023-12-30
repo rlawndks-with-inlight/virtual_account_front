@@ -12,6 +12,7 @@ import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
+import _ from "lodash";
 const UserList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
