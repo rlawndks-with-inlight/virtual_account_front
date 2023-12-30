@@ -263,19 +263,35 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      <TextField
-                        label='guid'
-                        value={item.guid}
-                        disabled={true}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['guid']: e.target.value
-                            }
-                          )
-                        }} />
+                      {router.query?.edit_category == 'edit' &&
+                        <>
+                          <TextField
+                            label='guid'
+                            value={item.guid}
+                            disabled={true}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['guid']: e.target.value
+                                }
+                              )
+                            }} />
+                          <TextField
+                            label='mid'
+                            value={item.mid}
+                            disabled={true}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['mid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
