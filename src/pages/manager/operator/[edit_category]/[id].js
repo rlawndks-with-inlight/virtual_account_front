@@ -211,6 +211,7 @@ const UserEdit = () => {
                         label='이름'
                         value={item.name}
                         placeholder=""
+                        helperText={<div>&#8251; 정산계좌에 사용할 이름과 일치해야 합니다.</div>}
                         onChange={(e) => {
                           setItem(
                             {
