@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { Row } from "src/components/elements/styled-components";
+import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { operatorLevelList } from "src/utils/format";
+import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 const UserList = () => {
   const { setModal } = useModal()
@@ -59,6 +59,16 @@ const UserList = () => {
         return <Button variant="outlined" onClick={() => {
           router.push(`edit/${row?.id}?tab=2`)
         }}>정산계좌</Button>
+      }
+    },
+    {
+      id: 'virtual_bank_code',
+      label: '가상계좌정보',
+      action: (row) => {
+        return <Col>
+          <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
+          <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
+        </Col>
       }
     },
     {

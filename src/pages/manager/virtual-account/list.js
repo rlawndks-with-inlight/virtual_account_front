@@ -60,7 +60,7 @@ const VirtualAccountList = () => {
       }
     },
     {
-      id: 'virtual_acct_name',
+      id: 'deposit_bank_code',
       label: '입금은행정보',
       action: (row) => {
         return <Col>

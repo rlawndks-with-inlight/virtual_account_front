@@ -448,9 +448,6 @@ const UserEdit = () => {
                                 }
                               )
                             }} />
-                          {/*
-                          <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
-                            */}
                         </>}
                     </Stack>
                   </Card>
