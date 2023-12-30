@@ -1020,7 +1020,9 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
-                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                      <Button
+                        //  onClick={oneWonCertification} 
+                        variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
                       {item.is_send_one_won_check &&
                         <>
                           <TextField
