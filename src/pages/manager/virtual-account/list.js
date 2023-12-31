@@ -21,7 +21,11 @@ const VirtualAccountList = () => {
       id: 'user_name',
       label: '가맹점',
       action: (row) => {
-        return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        if (row['user_name']) {
+          return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        } else {
+          return "---"
+        }
       }
     },
     {

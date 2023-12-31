@@ -1,6 +1,7 @@
 import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { useState } from "react";
 import { Row, themeObj, Col } from "src/components/elements/styled-components";
+import { useSettingsContext } from "src/components/settings";
 import styled from "styled-components";
 
 export const Title2 = styled.h2`
@@ -24,6 +25,7 @@ white-space: pre;
 
 const ApiV1 = () => {
 
+    const { themeDnsData } = useSettingsContext();
     const [currentTab, setCurrentTab] = useState(0);
     const tab_list = [
         {
@@ -51,7 +53,8 @@ const ApiV1 = () => {
                 '타입',
             ],
             req_body: [
-                ['mid', '가맹점 mid', 'O', 'String'],
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
                 ['bank_code', '입금은행코드', 'O', 'String'],
                 ['account', '입금계좌번호', 'O', 'String'],
                 ['name', '이름', 'O', 'String'],
@@ -83,7 +86,8 @@ const ApiV1 = () => {
                 '타입',
             ],
             req_body: [
-                ['mid', '가맹점 mid', 'O', 'String'],
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
                 ['tid', '입금은행 1원인증 요청 tid', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
@@ -112,7 +116,8 @@ const ApiV1 = () => {
                 '타입',
             ],
             req_body: [
-                ['mid', '가맹점 mid', 'O', 'String'],
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
             ],
             res_head: [
@@ -220,7 +225,6 @@ const ApiV1 = () => {
                                             </Title3>
                                             {returnTable(table_obj[itm.value].res_head, table_obj[itm.value].data_res_body,)}
                                         </>}
-
                                 </>
                             ))}
                         </Stack>

@@ -94,10 +94,6 @@ const BrandEdit = () => {
       value: 7,
       label: 'api url 설정'
     },] : []),
-    ...(user?.level >= 40 ? [{
-      value: 8,
-      label: '출금계좌등록'
-    },] : []),
   ]
 
   useEffect(() => {
@@ -141,23 +137,7 @@ const BrandEdit = () => {
     }
 
   }
-  const oneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification`, 'create', {
-      birth: item.settle_birth,
-      settle_bank_code: item.settle_bank_code,
-      settle_acct_num: item.settle_acct_num,
-      settle_acct_name: item.settle_acct_name,
-      guid: item?.deposit_guid,
-    });
-    if (result) {
-      toast.success('성공적으로 발송 되었습니다.');
-      setItem({
-        ...item,
-        is_send_one_won_check: true,
-        tid: result?.tid
-      })
-    }
-  }
+
   return (
     <>
       {!loading &&
@@ -302,6 +282,14 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                      {router.query?.edit_category == 'edit' &&
+                        <>
+                          <TextField
+                            label='API KEY'
+                            value={item.api_key}
+                            disabled={true}
+                          />
+                        </>}
                       <Stack spacing={1}>
                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                           비고
@@ -958,87 +946,6 @@ const BrandEdit = () => {
                           )
                         }}
                       />
-                    </Stack>
-                  </Card>
-                </Grid>
-              </>}
-            {currentTab == 8 &&
-              <>
-                <Grid item xs={12} md={12}>
-                  <Card sx={{ p: 2, height: '100%' }}>
-                    <Stack spacing={3}>
-                      <FormControl>
-                        <InputLabel>출금계좌 은행</InputLabel>
-                        <Select
-                          label='출금계좌 은행'
-                          value={item.settle_bank_code}
-                          onChange={e => {
-                            setItem({
-                              ...item,
-                              ['settle_bank_code']: e.target.value
-                            })
-                          }}
-                        >
-                          {bankCodeList().map((itm, idx) => {
-                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                          })}
-                        </Select>
-                      </FormControl>
-                      <TextField
-                        label='출금 계좌번호'
-                        value={item.settle_acct_num}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['settle_acct_num']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='생년월일'
-                        value={item.settle_birth}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['settle_birth']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='예금주명'
-                        value={item.settle_acct_name}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['settle_acct_name']: e.target.value
-                            }
-                          )
-                        }} />
-                      <Button
-                        //  onClick={oneWonCertification} 
-                        variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
-                      {item.is_send_one_won_check &&
-                        <>
-                          <TextField
-                            label='인증번호'
-                            value={item.vrf_word}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['vrf_word']: e.target.value
-                                }
-                              )
-                            }} />
-                        </>}
-
                     </Stack>
                   </Card>
                 </Grid>

@@ -54,21 +54,22 @@ const UserList = () => {
       }
     },
     {
-      id: 'settle_account',
-      label: '정산계좌정보',
-      action: (row) => {
-        return <Button variant="outlined" onClick={() => {
-          router.push(`edit/${row?.id}?tab=2`)
-        }}>정산계좌</Button>
-      }
-    },
-    {
       id: 'virtual_bank_code',
       label: '가상계좌정보',
       action: (row) => {
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
           <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
+        </Col>
+      }
+    },
+    {
+      id: 'virtual_bank_code',
+      label: '정산계좌정보',
+      action: (row) => {
+        return <Col>
+          <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
+          <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
         </Col>
       }
     },

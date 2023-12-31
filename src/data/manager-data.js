@@ -77,9 +77,6 @@ export const defaultManagerObj = {
     default_deposit_fee: 0,
     default_withdraw_fee: 0,
     head_office_fee: 0,
-    settle_bank_code: '',
-    settle_acct_num: '',
-    settle_acct_name: '',
     setting_obj: {
       tutorial_num: 0,
       is_use_deposit: 0,

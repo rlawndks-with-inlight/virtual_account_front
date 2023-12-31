@@ -18,7 +18,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const VirtualAccountEdit = () => {
   const { setModal } = useModal()
-  const { themeMode } = useSettingsContext();
+  const { themeMode, themeDnsData } = useSettingsContext();
 
   const router = useRouter();
 
@@ -52,7 +52,7 @@ const VirtualAccountEdit = () => {
   }
   const onSave = async () => {
     let result = undefined
-    result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', item);
+    result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, });
     if (result?.tid) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push('/manager/virtual-account');
@@ -67,6 +67,7 @@ const VirtualAccountEdit = () => {
       birth: item?.birth,
       phone_num: item?.phone_num,
       guid: item?.guid,
+      api_key: themeDnsData?.api_key,
     });
     let data = item;
     data.guid = result?.guid;
@@ -86,6 +87,7 @@ const VirtualAccountEdit = () => {
       tid: item?.tid,
       vrf_word: item?.vrf_word,
       guid: item?.guid,
+      api_key: themeDnsData?.api_key,
     });
     if (result?.tid) {
       toast.success('성공적으로 인증 되었습니다.');

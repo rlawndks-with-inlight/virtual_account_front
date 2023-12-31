@@ -34,9 +34,6 @@ const UserEdit = () => {
     level: 10,
     user_pw: '',
     note: '',
-    settle_bank_code: '',
-    settle_acct_num: '',
-    settle_acct_name: '',
     withdraw_fee: 0,
     min_withdraw_price: 0,
     min_withdraw_remain_price: 0,
@@ -46,12 +43,10 @@ const UserEdit = () => {
       value: 0,
       label: '기본정보'
     },
-    ...(router.query?.edit_category == 'edit' ? [
-      {
-        value: 1,
-        label: '정산정보'
-      },
-    ] : []),
+    {
+      value: 1,
+      label: '정산정보'
+    },
   ]
   useEffect(() => {
     if (router.query?.tab >= 0) {
@@ -93,28 +88,7 @@ const UserEdit = () => {
       router.push(`/manager/operator/list/${item.level}`);
     }
   }
-  const oneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification`, 'create', item);
-    if (result) {
-      toast.success('성공적으로 발송 되었습니다.');
-      setItem({
-        ...item,
-        is_send_one_won_check: true,
-        tid: result?.tid
-      })
-    }
-  }
-  const checkOneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification/check`, 'create', item);
-    console.log(result)
-    if (result?.tid) {
-      toast.success('성공적으로 인증 되었습니다.');
-      setItem({
-        ...item,
-        is_check_bank: true
-      })
-    }
-  }
+
   return (
     <>
       {!loading &&
@@ -211,36 +185,11 @@ const UserEdit = () => {
                         label='이름'
                         value={item.name}
                         placeholder=""
-                        helperText={<div>&#8251; 정산계좌에 사용할 이름과 일치해야 합니다.</div>}
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
                               ['name']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='이메일'
-                        value={item.email}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['email']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='생년월일'
-                        value={item.birth}
-                        placeholder="19990101"
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['birth']: e.target.value
                             }
                           )
                         }} />
@@ -284,75 +233,7 @@ const UserEdit = () => {
               </>}
             {currentTab == 1 &&
               <>
-                <Grid item xs={12} md={6}>
-                  <Card sx={{ p: 2, height: '100%' }}>
-                    <Stack spacing={3}>
-                      <Stack spacing={1}>
-                        <FormControl>
-                          <InputLabel>정산 입금은행</InputLabel>
-                          <Select
-                            label='정산 입금은행'
-                            value={item.settle_bank_code}
-                            onChange={e => {
-                              setItem({
-                                ...item,
-                                ['settle_bank_code']: e.target.value
-                              })
-                            }}
-                          >
-                            {bankCodeList().map((itm, idx) => {
-                              return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                            })}
-                          </Select>
-                        </FormControl>
-                      </Stack>
-                      <TextField
-                        label='정산 계좌번호'
-                        value={item.settle_acct_num}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['settle_acct_num']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='정산 예금주'
-                        value={item.settle_acct_name}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['settle_acct_name']: e.target.value
-                            }
-                          )
-                        }} />
-                      <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
-                      {item.is_send_one_won_check &&
-                        <>
-                          <TextField
-                            label='인증번호'
-                            value={item.vrf_word}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['vrf_word']: e.target.value
-                                }
-                              )
-                            }} />
-                          {/*
-                          <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
-                            */}
-                        </>}
-                    </Stack>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={12}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
 
