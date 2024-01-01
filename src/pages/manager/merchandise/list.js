@@ -54,6 +54,23 @@ const UserList = () => {
       }
     },
     {
+      id: 'name',
+      label: '가상계좌발급주소',
+      action: (row) => {
+        let link = window.location.protocol + '//' + window.location.host + `/virtual-account/${row?.mid}`;
+        return <div style={{
+          cursor: 'pointer',
+          color: 'blue',
+        }}
+          onClick={() => {
+            window.open(link)
+          }}
+        >
+          {link}
+        </div>
+      }
+    },
+    {
       id: 'virtual_bank_code',
       label: '가상계좌정보',
       action: (row) => {
