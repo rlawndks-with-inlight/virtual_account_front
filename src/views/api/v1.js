@@ -210,7 +210,7 @@ const ApiV1 = () => {
                                                 </Row>
                                             </Col>
                                             <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
-                                                응답 바디는 JSON 객체로 구성됩니다.
+                                                요청 바디는 JSON 객체로 구성됩니다.
                                             </Title3>
                                             {returnTable(table_obj[itm.value].req_head, table_obj[itm.value].req_body,)}
                                             <Title3>
