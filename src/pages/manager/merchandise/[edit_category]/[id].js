@@ -62,6 +62,9 @@ const UserEdit = () => {
     settingPage();
   }, [])
   const settingPage = async () => {
+    if (!item?.mcht_fee) {
+      return toast.error('가맹점 수수료는 필수값입니다.');
+    }
     let operator_list = await apiManager(`users`, 'list', {
       level_list: themeDnsData?.operator_list.map(itm => {
         return itm?.value
