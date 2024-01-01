@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, CircularProgress, Dialog, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSettingsContext } from "src/components/settings";
@@ -21,7 +21,7 @@ const VirtualAccountAddNoneAuth = () => {
     const router = useRouter();
 
     const [mchtList, setMchtList] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [item, setItem] = useState({
         deposit_bank_code: '',
         deposit_acct_num: '',
@@ -35,9 +35,11 @@ const VirtualAccountAddNoneAuth = () => {
         result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: router.query?.mid, });
         if (result?.tid) {
             toast.success("성공적으로 발급 되었습니다.");
+            router.push(`/virtual-account/result?ci=${result?.ci}`);
         }
     }
     const oneWonCertification = async () => {
+        setLoading(true);
         let result = await apiServer(`${process.env.API_URL}/api/acct/v1`, 'create', {
             mid: router.query?.mid,
             bank_code: item?.deposit_bank_code,
@@ -59,6 +61,7 @@ const VirtualAccountAddNoneAuth = () => {
             }
         }
         setItem(data);
+        setLoading(false);
     }
     const checkOneWonCertification = async () => {
         let result = await apiServer(`${process.env.API_URL}/api/acct/v1/check`, 'create', {
@@ -79,6 +82,20 @@ const VirtualAccountAddNoneAuth = () => {
 
     return (
         <>
+            <Dialog
+                open={loading}
+                onClose={() => {
+                    setLoading(false)
+                }}
+                PaperProps={{
+                    style: {
+                        background: 'transparent',
+                        overflow: 'hidden'
+                    }
+                }}
+            >
+                <CircularProgress />
+            </Dialog>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12}>
                     <Card sx={{ p: 2, height: '100%' }}>
@@ -171,16 +188,19 @@ const VirtualAccountAddNoneAuth = () => {
                 <Grid item xs={12} md={12}>
                     <Card sx={{ p: 3 }}>
                         <Stack spacing={1} style={{ display: 'flex' }}>
-                            <Button variant="contained" style={{
-                                height: '48px', width: '120px', marginLeft: 'auto'
-                            }} onClick={() => {
-                                setModal({
-                                    func: () => { onSave() },
-                                    icon: 'material-symbols:edit-outline',
-                                    title: '저장 하시겠습니까?'
-                                })
-                            }}>
-                                저장
+
+                            <Button variant="contained"
+                                disabled={!item?.is_check_bank}
+                                style={{
+                                    height: '48px', width: '120px', marginLeft: 'auto'
+                                }} onClick={() => {
+                                    setModal({
+                                        func: () => { onSave() },
+                                        icon: 'material-symbols:edit-outline',
+                                        title: '발급 하시겠습니까?'
+                                    })
+                                }}>
+                                발급
                             </Button>
                         </Stack>
                     </Card>
