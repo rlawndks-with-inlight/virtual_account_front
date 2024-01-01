@@ -24,7 +24,7 @@ const VirtualAccountList = () => {
         if (row['user_name']) {
           return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
         } else {
-          return "---"
+          return "---";
         }
       }
     },

@@ -37,6 +37,7 @@ const UserEdit = () => {
     withdraw_fee: 0,
     min_withdraw_price: 0,
     min_withdraw_remain_price: 0,
+    guid: '',
   })
   const tab_list = [
     {
@@ -202,6 +203,18 @@ const UserEdit = () => {
                             {
                               ...item,
                               ['phone_num']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='guid'
+                        value={item.guid}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['guid']: e.target.value
                             }
                           )
                         }} />
