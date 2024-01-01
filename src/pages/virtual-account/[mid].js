@@ -1,16 +1,14 @@
 
 import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { themeObj } from "src/components/elements/styled-components";
+import { useState } from "react";
 import { useSettingsContext } from "src/components/settings";
-import { Upload } from "src/components/upload";
-import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager, apiServer } from "src/utils/api-manager";
+import { apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
+import BlankLayout from "src/layouts/BlankLayout";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -18,7 +16,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const VirtualAccountAddNoneAuth = () => {
     const { setModal } = useModal()
-    const { themeMode, themeDnsData } = useSettingsContext();
+    const { themeDnsData } = useSettingsContext();
 
     const router = useRouter();
 
@@ -191,5 +189,5 @@ const VirtualAccountAddNoneAuth = () => {
         </>
     )
 }
-
+VirtualAccountAddNoneAuth.getLayout = (page) => <BlankLayout>{page}</BlankLayout>;
 export default VirtualAccountAddNoneAuth;
