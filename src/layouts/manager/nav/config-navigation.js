@@ -8,11 +8,12 @@ import { apiManager } from 'src/utils/api-manager';
 import { useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { operatorLevelList } from 'src/utils/format';
+import { Icon } from '@iconify/react';
 
 // ----------------------------------------------------------------------
 
 const icon = (name) => (
-  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
+  < SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
 );
 
 const ICONS = {
@@ -60,7 +61,7 @@ const navConfig = () => {
     // },
     {
       items: [
-        { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: ICONS.user },
+        { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: <Icon icon='iconamoon:history-fill' style={{ fontSize: '1.5rem' }} /> },
       ],
     },
     ...(isManager() ? [
@@ -69,7 +70,7 @@ const navConfig = () => {
           {
             title: '모계좌관리',
             path: PATH_MANAGER.motherAccount.root,
-            icon: ICONS.user,
+            icon: <Icon icon='tabler:affiliate' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '모계좌내역', path: PATH_MANAGER.motherAccount.list },
               { title: '모계좌출금요청', path: PATH_MANAGER.motherAccount.request },
@@ -83,7 +84,7 @@ const navConfig = () => {
         {
           title: '출금관리',
           path: PATH_MANAGER.withdraw.root,
-          icon: ICONS.user,
+          icon: <Icon icon='bx:money-withdraw' style={{ fontSize: '1.5rem' }} />,
           children: [
             { title: '출금내역', path: PATH_MANAGER.withdraw.list },
             ...(!isManager() ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
@@ -97,7 +98,7 @@ const navConfig = () => {
         {
           title: '영업자관리',
           path: PATH_MANAGER.operator.root,
-          icon: ICONS.user,
+          icon: <Icon icon='icon-park-outline:sales-report' style={{ fontSize: '1.5rem' }} />,
           children: [
             ...operatorList,
             { title: '영업자추가', path: PATH_MANAGER.operator.add },
@@ -111,7 +112,7 @@ const navConfig = () => {
           {
             title: '가맹점관리',
             path: PATH_MANAGER.merchandise.root,
-            icon: ICONS.user,
+            icon: <Icon icon='tabler:map-pin' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '가맹점관리', path: PATH_MANAGER.merchandise.list },
               { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
@@ -125,7 +126,7 @@ const navConfig = () => {
         {
           title: '가상계좌관리',
           path: PATH_MANAGER.virtualAccount.root,
-          icon: ICONS.user,
+          icon: <Icon icon='mdi:cloud-key-outline' style={{ fontSize: '1.5rem' }} />,
           children: [
             { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
             { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
@@ -139,7 +140,7 @@ const navConfig = () => {
           {
             title: '설정관리',
             path: PATH_MANAGER.brand.root,
-            icon: ICONS.user,
+            icon: <Icon icon='uil:setting' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '기본설정', path: PATH_MANAGER.brand.edit },
               ...(isDeveloper() ? [{
@@ -156,7 +157,7 @@ const navConfig = () => {
           {
             title: '로그관리',
             path: PATH_MANAGER.log.root,
-            icon: ICONS.user,
+            icon: <Icon icon='mdi:math-log' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '로그관리', path: PATH_MANAGER.log.list },
             ],
@@ -166,7 +167,7 @@ const navConfig = () => {
     ] : []),
     {
       items: [
-        { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: ICONS.user },
+        { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
       ],
     },
   ];

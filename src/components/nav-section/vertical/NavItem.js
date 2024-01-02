@@ -36,7 +36,7 @@ export default function NavItem({ item, depth, open, active, isExternalLink, ...
       {icon && <StyledIcon>{icon}</StyledIcon>}
 
       {subItem && (
-        <StyledIcon>
+        <StyledIcon style={{ marginLeft: '1rem' }}>
           <StyledDotIcon active={active && subItem} />
         </StyledIcon>
       )}
