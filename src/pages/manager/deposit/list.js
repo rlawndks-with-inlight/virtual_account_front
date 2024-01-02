@@ -190,7 +190,7 @@ const DepositList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
+            //add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
             width={'150%'}
             head_columns={defaultHeadColumns}
           />
