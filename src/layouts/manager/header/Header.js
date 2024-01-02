@@ -67,7 +67,7 @@ export default function Header({ onOpenNav }) {
           />
         </IconButton>
         <NotificationsPopover />
-        <ContactsPopover />
+        {/* <ContactsPopover /> */}
         <AccountPopover />
       </Stack>
     </>
