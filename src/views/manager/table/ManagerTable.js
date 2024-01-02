@@ -88,7 +88,6 @@ export default function ManagerTable(props) {
       let return_moment = returnMoment().split(' ')[0];
       let return_moment_list = return_moment.split('-');
       let date = parseInt(return_moment_list[2]);
-      console.log(date)
       cir_num = (date - 1) * (-1);
     }
     setSDt(new Date(returnMoment(cir_num)));
