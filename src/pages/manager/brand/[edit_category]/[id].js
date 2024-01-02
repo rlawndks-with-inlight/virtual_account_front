@@ -290,6 +290,18 @@ const BrandEdit = () => {
                             disabled={true}
                           />
                         </>}
+                      <TextField
+                        label='guid'
+                        value={item.guid}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['guid']: e.target.value
+                            }
+                          )
+                        }} />
                       <Stack spacing={1}>
                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                           비고

@@ -70,6 +70,8 @@ export const virtualAccountStatusList = [
 export const payTypeList = [
     { value: 0, label: '입금' },
     { value: 5, label: '출금' },
+    { value: 10, label: '모계좌출금' },
+    { value: 15, label: '가맹점 -> 모계좌이체' },
 ]
 export const withdrawStatusList = [
     { value: 0, label: '출금완료', color: 'success' },

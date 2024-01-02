@@ -38,11 +38,12 @@ const MotherAccountRequest = () => {
         settingPage();
     }, [])
     const settingPage = async () => {
-        let data = await apiManager('auth/deposit', 'get',);
+        let data = await apiManager('withdraws/mother', 'get',);
         setItem({
             ...item,
             ...data,
         });
+        console.log(data)
         setLoading(false);
     }
     const onSave = async () => {
@@ -72,18 +73,18 @@ const MotherAccountRequest = () => {
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             <Row style={{ columnGap: '0.25rem' }}>
-                                                <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
-                                                <div>{item?.settle_acct_num}</div>
-                                                <div>{item?.settle_acct_name}</div>
+                                                <div>{_.find(bankCodeList(), { value: item?.brand?.settle_bank_code })?.label}</div>
+                                                <div>{item?.brand?.settle_acct_num}</div>
+                                                <div>{item?.brand?.settle_acct_name}</div>
                                             </Row>
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            현재 보유정산금
+                                            모계좌 잔액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount)} 원
+                                            {commarNumber(item?.real_amount)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -91,23 +92,40 @@ const MotherAccountRequest = () => {
                                             출금 수수료
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_fee)} 원
+                                            0 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            차감 보유정산금
+                                            출금후 잔액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_amount + item?.withdraw_fee)} 원
+                                            {commarNumber(item?.real_amount - item?.withdraw_amount)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금후 보유정산금
+                                            가맹점 보유정산금총합
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_amount)} 원
+                                            {commarNumber(item?.sum?.total_mcht_amount)} 원
+
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            영업자 보유정산금총합
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_oper_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            차액 (본사 보유정산금)
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -115,7 +133,7 @@ const MotherAccountRequest = () => {
                                             출금 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_fee)} 원
+                                            {commarNumber(item?.real_amount)} 원
                                         </Typography>
                                     </Stack>
                                 </Stack>

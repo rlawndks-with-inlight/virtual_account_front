@@ -10,6 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
+import { payTypeList } from "src/utils/format";
 const MotherAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -40,10 +41,17 @@ const MotherAccountList = () => {
       }
     },
     {
+      id: 'pay_type',
+      label: '거래구분',
+      action: (row) => {
+        return _.find(payTypeList, { value: row['pay_type'] })?.label
+      }
+    },
+    {
       id: 'amount',
       label: '금액',
       action: (row) => {
-        return commarNumber(row['amount'])
+        return (row['amount'] > 0 ? '+' : '') + commarNumber(row['amount'])
       }
     },
     {
@@ -62,7 +70,7 @@ const MotherAccountList = () => {
     s_dt: '',
     e_dt: '',
     search: '',
-    is_sales_man: true,
+    is_mother: 1,
   })
 
   useEffect(() => {
