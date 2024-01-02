@@ -19,35 +19,41 @@ const OperatorList = () => {
     {
       id: 'profile_img',
       label: '유저프로필',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row['profile_img'];
+        }
         return <Avatar src={row['profile_img'] ?? "---"} />
       }
     },
     {
       id: 'user_name',
       label: '유저아이디',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['user_name'] ?? "---"
       }
     },
     {
       id: 'nickname',
       label: '닉네임',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['nickname'] ?? "---"
       }
     },
     {
       id: 'name',
       label: '이름',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['name'] ?? "---"
       }
     },
     {
       id: 'virtual_bank_code',
       label: '가상계좌정보',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+        }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
           <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
@@ -57,7 +63,10 @@ const OperatorList = () => {
     {
       id: 'virtual_bank_code',
       label: '정산계좌정보',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+        }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
           <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
@@ -67,36 +76,38 @@ const OperatorList = () => {
     {
       id: 'settle_amount',
       label: '보유정산금',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['settle_amount'])
       }
     },
     {
       id: 'phone_num',
       label: '전화번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['phone_num'] ?? "---"
       }
     },
     {
       id: 'created_at',
       label: '가입일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
     {
       id: 'last_login_time',
       label: '마지막로그인시간',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['last_login_time'] ?? "---"
       }
     },
     {
       id: 'status',
       label: '유저상태',
-      action: (row, idx) => {
-
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---"
+        }
         return <Select
           size='small'
           value={row?.status}
@@ -121,7 +132,7 @@ const OperatorList = () => {
     {
       id: 'edit_password',
       label: '비밀번호 변경',
-      action: (row) => {
+      action: (row, is_excel) => {
         if (user?.level < row?.level) {
           return "---"
         }
@@ -143,7 +154,7 @@ const OperatorList = () => {
     {
       id: 'edit',
       label: '수정/삭제',
-      action: (row) => {
+      action: (row, is_excel) => {
         return (
           <>
             <IconButton onClick={() => {
@@ -276,6 +287,8 @@ const OperatorList = () => {
             onChangePage={onChangePage}
             add_button_text={''}
             head_columns={[]}
+            table={'users'}
+            excel_name={getUserLevelByNumber(router.query?.level)}
           />
         </Card>
       </Stack>

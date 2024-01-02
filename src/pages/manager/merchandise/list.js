@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber, getUserStatusByNum } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -21,43 +21,49 @@ const UserList = () => {
     {
       id: 'profile_img',
       label: '유저프로필',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row['profile_img']
+        }
         return <Avatar src={row['profile_img'] ?? "---"} />
       }
     },
     {
       id: 'user_name',
       label: '유저아이디',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['user_name'] ?? "---"
       }
     },
     {
       id: 'mid',
       label: 'MID',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['mid'] ?? "---"
       }
     },
     {
       id: 'nickname',
       label: '닉네임',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['nickname'] ?? "---"
       }
     },
     {
       id: 'name',
       label: '이름',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['name'] ?? "---"
       }
     },
     {
       id: 'name',
       label: '가상계좌발급주소',
-      action: (row) => {
+      action: (row, is_excel) => {
         let link = 'https://' + themeDnsData?.dns + `/virtual-account/${row?.mid}`;
+        if (is_excel) {
+          return link
+        }
         return <div style={{
           cursor: 'pointer',
           color: 'blue',
@@ -73,7 +79,12 @@ const UserList = () => {
     {
       id: 'virtual_bank_code',
       label: '가상계좌정보',
-      action: (row) => {
+      action: (row, is_excel) => {
+
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+        }
+
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
           <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
@@ -83,7 +94,10 @@ const UserList = () => {
     {
       id: 'virtual_bank_code',
       label: '정산계좌정보',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+        }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
           <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
@@ -93,14 +107,14 @@ const UserList = () => {
     {
       id: 'settle_amount',
       label: '보유정산금',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['settle_amount'])
       }
     },
     {
       id: 'phone_num',
       label: '전화번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['phone_num'] ?? "---"
       }
     },
@@ -109,14 +123,14 @@ const UserList = () => {
         {
           id: `sales${operator?.num}_id`,
           label: operator?.label,
-          action: (row) => {
+          action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
           }
         },
         {
           id: `sales${operator?.num}_fee`,
           label: `${operator?.label} 수수료`,
-          action: (row) => {
+          action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
           }
         },
@@ -125,21 +139,24 @@ const UserList = () => {
     {
       id: 'created_at',
       label: '가입일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
     {
       id: 'last_login_time',
       label: '마지막로그인시간',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['last_login_time'] ?? "---"
       }
     },
     {
       id: 'status',
       label: '유저상태',
-      action: (row, idx) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return getUserStatusByNum(row?.status)
+        }
         return <Select
           size='small'
           value={row?.status}
@@ -163,7 +180,10 @@ const UserList = () => {
     {
       id: 'edit_password',
       label: '비밀번호 변경',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---"
+        }
         if (user?.level < row?.level) {
           return "---"
         }
@@ -185,7 +205,10 @@ const UserList = () => {
     {
       id: 'edit',
       label: '수정/삭제',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---"
+        }
         return (
           <>
             <IconButton>
@@ -318,6 +341,8 @@ const UserList = () => {
             onChangePage={onChangePage}
             add_button_text={'가맹점 추가'}
             head_columns={[]}
+            table={'users'}
+            excel_name={'가맹점'}
           />
         </Card>
       </Stack>

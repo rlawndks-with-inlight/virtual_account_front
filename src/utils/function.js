@@ -3,6 +3,8 @@ import { LOCALSTORAGE } from "src/data/data";
 import { t } from "i18next";
 import { toast } from "react-hot-toast";
 import { deleteCookie, getCookie } from "./react-cookie";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 export const objToQuery = (obj_) => {
   let obj = { ...obj_ };
@@ -315,4 +317,43 @@ export function hexToRgb(hex) {
 }
 export const isManagerRouter = (router) => {
   return router.asPath.split('/')[1] == 'manager'
+}
+export const excelDownload = async (excelData, columns = [], param_table) => {
+  const excelFileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  const excelFileExtension = '.xlsx';
+  const excelFileName = `${param_table}_${returnMoment().substring(0, 10).replaceAll('-', '')}`;
+  let name_list = [];
+  console.log(columns)
+  for (var i = 0; i < columns.length; i++) {
+    name_list.push(columns[i]?.label)
+  }
+
+  let dns_data = await getLocalStorage(LOCALSTORAGE.DNS_DATA);
+  dns_data = JSON.parse(dns_data);
+
+  const ws = XLSX.utils.aoa_to_sheet([
+    name_list
+  ]);
+
+  let result = [...excelData];
+
+  await result.map(async (data, idx) => {
+    XLSX.utils.sheet_add_aoa(
+      ws,
+      [
+        data
+      ],
+      { origin: -1 }
+    );
+    ws['!cols'] = [
+      { wpx: 50 },
+      { wpx: 50 }
+    ]
+
+    return false;
+  });
+  const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+  const excelButter = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const excelFile = new Blob([excelButter], { type: excelFileType });
+  FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
 }

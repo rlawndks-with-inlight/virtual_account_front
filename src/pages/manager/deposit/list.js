@@ -36,107 +36,137 @@ const DepositList = () => {
     {
       id: 'trx_id',
       label: '거래번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['trx_id'] ?? "---"
       }
     },
     {
       id: 'mcht_nickname',
       label: '가맹점',
-      action: (row) => {
-        return <div style={{ textAlign: 'center' }}>{`${row[`mcht_nickname`]}\n(${row['mcht_user_name']})`}</div>
+      action: (row, is_excel) => {
+        return `${row[`mcht_nickname`]}\n(${row['mcht_user_name']})`
       }
     },
     {
       id: 'deposit_bank_code',
       label: '입금은행',
-      action: (row) => {
+      action: (row, is_excel) => {
         return _.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label
       }
     },
     {
       id: 'virtual_acct_num',
       label: '가상계좌번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['virtual_acct_num'] ?? "---"
       }
     },
     {
       id: 'user_name',
       label: '상태',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['user_name'] ?? "---"
       }
     },
     {
       id: 'amount_ago',
       label: '입금예정금액',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['amount'])
-      }
+      },
+      sx: (row) => {
+        return {
+          color: 'green'
+        }
+      },
     },
     {
       id: 'amount',
       label: '실제입금금액',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['amount'])
-      }
+      },
+      sx: (row) => {
+        return {
+          color: 'blue'
+        }
+      },
     },
     {
       id: 'mcht_amount',
       label: '가맹점 정산금액',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['mcht_amount'])
-      }
+      },
+      sx: (row) => {
+        return {
+          color: '#a52a2a'
+        }
+      },
+      sx: (row) => {
+        return {
+          color: 'red'
+        }
+      },
     },
     {
       id: 'deposit_fee',
       label: '입금수수료',
-      action: (row) => {
+      action: (row, is_excel) => {
         return commarNumber(row['deposit_fee'])
       }
     },
     {
       id: 'mcht_fee',
       label: '가맹점 수수료율',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['mcht_fee'] + '%'
       }
     },
     {
       id: 'head_office_fee',
       label: '본사 수수료율',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['head_office_fee'] + '%'
       }
     },
     {
       id: 'head_office_amount',
       label: '본사 수수료',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['head_office_amount']
-      }
+      },
+      sx: (row) => {
+        return {
+          color: '#a52a2a'
+        }
+      },
     },
     ...(themeDnsData?.operator_list ?? []).map(operator => {
       return [
         {
           id: `sales${operator?.num}_id`,
           label: operator?.label,
-          action: (row) => {
+          action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
           }
         },
         {
           id: `sales${operator?.num}_amount`,
           label: `${operator?.label} 수수료`,
-          action: (row) => {
+          action: (row, is_excel) => {
             return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
-          }
+          },
+          sx: (row) => {
+            return {
+              color: '#a52a2a'
+            }
+          },
         },
         {
           id: `sales${operator?.num}_fee`,
           label: `${operator?.label} 수수료율`,
-          action: (row) => {
+          action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
           }
         },
@@ -145,7 +175,7 @@ const DepositList = () => {
     {
       id: 'created_at',
       label: '생성일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
@@ -193,6 +223,8 @@ const DepositList = () => {
             //add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
             width={'150%'}
             head_columns={defaultHeadColumns}
+            table={'deposits'}
+            excel_name={'출금'}
           />
         </Card>
       </Stack>

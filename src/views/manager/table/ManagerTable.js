@@ -1,5 +1,5 @@
 // @mui
-import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip, TableHead } from '@mui/material';
+import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip, TableHead, Select, MenuItem } from '@mui/material';
 import { TableHeadCustom, TableNoData } from 'src/components/table';
 import {
   DatePicker,
@@ -15,8 +15,9 @@ import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
 import { styled as muiStyled } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { returnMoment } from 'src/utils/function';
+import { excelDownload, returnMoment } from 'src/utils/function';
 import { Spinner } from 'evergreen-ui';
+import { apiManager } from 'src/utils/api-manager';
 // ----------------------------------------------------------------------
 const TableHeaderContainer = styled.div`
 padding: 0.75rem;
@@ -35,7 +36,7 @@ const CustomTableRow = muiStyled(TableRow)(({ theme }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name } = props;
   const { page, page_size } = props?.searchObj;
 
   const router = useRouter();
@@ -76,11 +77,47 @@ export default function ManagerTable(props) {
       </>
     )
   }
+  const onClickDateButton = (num) => {
+    let cir_num = 0;
+    if (num < 0) {
+      cir_num = num;
+    } else {
+      cir_num = (-1) * num;
+    }
+    if (num == 30) {
+      let return_moment = returnMoment().split(' ')[0];
+      let return_moment_list = return_moment.split('-');
+      let date = parseInt(return_moment_list[2]);
+      console.log(date)
+      cir_num = (date - 1) * (-1);
+    }
+    setSDt(new Date(returnMoment(cir_num)));
+    setEDt(new Date(returnMoment()));
+
+    onChangePage({
+      ...searchObj,
+      s_dt: returnMoment(cir_num).substring(0, 10),
+      e_dt: returnMoment().substring(0, 10),
+    })
+  }
+  const exportExcel = async () => {
+    let data = await apiManager(table, 'list', { ...searchObj, page_size: 50000 });
+    let result = [];
+    for (var i = 0; i < data.content.length; i++) {
+      let col = data.content[i];
+      result[i] = [];
+      for (var j = 0; j < zColumn.length; j++) {
+        let text = zColumn[j].action(col, true);
+        result[i].push(text);
+      }
+    }
+    await excelDownload(result, zColumn, excel_name);
+  }
   return (
     <>
       <TableContainer sx={{ overflow: 'unset' }}>
         <TableHeaderContainer>
-          <Row>
+          <Row style={{ rowGap: '1rem', flexWrap: 'wrap', columnGap: '0.75rem' }}>
             {window.innerWidth > 1000 ?
               <>
                 <DesktopDatePicker
@@ -92,7 +129,7 @@ export default function ManagerTable(props) {
                     onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
                   }}
                   renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ marginRight: '0.75rem', width: '180px', height: '32px' }}
+                  sx={{ width: '180px', height: '32px' }}
                   slotProps={{ textField: { size: 'small' } }}
                 />
                 <DesktopDatePicker
@@ -110,33 +147,45 @@ export default function ManagerTable(props) {
               </>
               :
               <>
-                <MobileDatePicker
-                  label="시작일 선택"
-                  value={sDt}
-                  format='yyyy-MM-dd'
-                  onChange={(newValue) => {
-                    setSDt(newValue);
-                    onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                  }}
-                  renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ marginRight: '0.75rem', flexGrow: 1 }}
-                  slotProps={{ textField: { size: 'small' } }}
-                />
-                <MobileDatePicker
-                  label="종료일 선택"
-                  value={eDt}
-                  format='yyyy-MM-dd'
-                  onChange={(newValue) => {
-                    setEDt(newValue);
-                    onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                  }}
-                  renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ flexGrow: 1 }}
-                  slotProps={{ textField: { size: 'small' } }}
-                />
+                <Row style={{ columnGap: '0.5rem' }}>
+                  <MobileDatePicker
+                    label="시작일 선택"
+                    value={sDt}
+                    format='yyyy-MM-dd'
+                    onChange={(newValue) => {
+                      setSDt(newValue);
+                      onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                    }}
+                    renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                    sx={{ flexGrow: 1 }}
+                    slotProps={{ textField: { size: 'small' } }}
+                  />
+                  <MobileDatePicker
+                    label="종료일 선택"
+                    value={eDt}
+                    format='yyyy-MM-dd'
+                    onChange={(newValue) => {
+                      setEDt(newValue);
+                      onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                    }}
+                    renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                    sx={{ flexGrow: 1 }}
+                    slotProps={{ textField: { size: 'small' } }}
+                  />
+                </Row>
               </>}
+            <Row style={{ columnGap: '0.5rem' }}>
+              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(-1)}>어제</Button>
+              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(0)}>당일</Button>
+              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(3)}>3일전</Button>
+              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(30)}>1개월</Button>
+            </Row>
           </Row>
-          <Row>
+          <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.75rem' }}>
+            <Button variant='outlined'
+              startIcon={<Icon icon={'icon-park-outline:excel'} />}
+              onClick={exportExcel}
+            >엑셀추출</Button>
             <FormControl variant="outlined">
               <OutlinedInput
                 size='small'
@@ -162,7 +211,7 @@ export default function ManagerTable(props) {
             </FormControl>
             {add_button_text ?
               <>
-                <Button variant='contained' sx={{ marginLeft: '0.75rem' }} onClick={() => {
+                <Button variant='contained' onClick={() => {
                   let path = router.asPath;
                   if (router.asPath.includes('list')) {
                     path = path.replace('list', '');
@@ -210,7 +259,11 @@ export default function ManagerTable(props) {
                     <CustomTableRow key={index}>
                       {zColumn && zColumn.map((col, idx) => (
                         <>
-                          <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.8rem' }}>{col.action(row, idx)}</TableCell>
+                          <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.8rem', padding: '16px 0' }}>
+                            <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, padding: '0 16px' }}>
+                              {col.action(row)}
+                            </div>
+                          </TableCell>
                         </>
                       ))}
                     </CustomTableRow>
@@ -224,9 +277,21 @@ export default function ManagerTable(props) {
             </>}
         </div>
         <Divider />
-        <Box sx={{ padding: '0.75rem', display: 'flex' }}>
+        <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
+          <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
+            <InputLabel>페이지사이즈</InputLabel>
+            <Select label='페이지사이즈' value={page_size}
+              onChange={(e) => {
+                onChangePage({ ...searchObj, page_size: e.target.value })
+              }}>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </FormControl>
           <Pagination
-            sx={{ marginLeft: 'auto' }}
             size={'medium'}
             count={getMaxPage(data?.total, data?.page_size)}
             page={page}

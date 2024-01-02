@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -11,6 +11,7 @@ import { apiManager } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { payTypeList } from "src/utils/format";
+import _ from "lodash";
 const MotherAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -18,14 +19,14 @@ const MotherAccountList = () => {
     {
       id: 'trx_id',
       label: '거래번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['trx_id'] ?? "---"
       }
     },
     {
       id: 'level',
       label: '유저레벨',
-      action: (row) => {
+      action: (row, is_excel) => {
         if (row?.pay_type == 5) {
           return getUserLevelByNumber(row['level'])
         } else {
@@ -36,21 +37,21 @@ const MotherAccountList = () => {
     {
       id: 'nickname',
       label: '상호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return `${row[`nickname`]}\n(${row['user_name']})`
       }
     },
     {
       id: 'pay_type',
       label: '거래구분',
-      action: (row) => {
-        return _.find(payTypeList, { value: row['pay_type'] })?.label
+      action: (row, is_excel) => {
+        return <Chip variant="soft" label={_.find(payTypeList, { value: row['pay_type'] })?.label} color={_.find(payTypeList, { value: row['pay_type'] })?.color} />
       }
     },
     {
       id: 'amount',
       label: '금액',
-      action: (row) => {
+      action: (row, is_excel) => {
         let amount = 0;
         if (row['pay_type'] == 0) {
           amount = row['amount'];
@@ -62,12 +63,27 @@ const MotherAccountList = () => {
           amount = row['amount'];
         }
         return (amount > 0 ? '+' : '') + commarNumber(amount)
-      }
+      },
+      sx: (row) => {
+        let amount = 0;
+        if (row['pay_type'] == 0) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 5) {
+          amount = row['amount'] + row['withdraw_fee'];
+        } else if (row['pay_type'] == 10) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 15) {
+          amount = row['amount'];
+        }
+        return {
+          color: `${amount > 0 ? 'blue' : 'red'}`
+        }
+      },
     },
     {
       id: 'created_at',
       label: '생성일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
@@ -115,6 +131,8 @@ const MotherAccountList = () => {
             onChangePage={onChangePage}
             add_button_text={''}
             head_columns={[]}
+            table={'deposits'}
+            excel_name={'모계좌'}
           />
         </Card>
       </Stack>

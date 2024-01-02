@@ -20,7 +20,10 @@ const VirtualAccountList = () => {
     {
       id: 'user_name',
       label: '가맹점',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${row[`nickname`]} (${row['user_name']})`
+        }
         if (row['user_name']) {
           return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
         } else {
@@ -31,42 +34,48 @@ const VirtualAccountList = () => {
     {
       id: 'virtual_bank_code',
       label: '가상계좌은행',
-      action: (row) => {
+      action: (row, is_excel) => {
         return _.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"
       }
     },
     {
       id: 'virtual_acct_num',
       label: '가상계좌번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['virtual_acct_num'] ?? "---"
       }
     },
     {
       id: 'virtual_acct_name',
       label: '가상계좌명',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['virtual_acct_name'] ?? "---"
       }
     },
     {
       id: 'guid',
       label: 'USER GUID',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['guid'] ?? "---"
       }
     },
     {
       id: 'status',
       label: '상태',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return _.find(virtualAccountStatusList, { value: row?.status })?.label
+        }
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
     {
       id: 'deposit_bank_code',
       label: '입금은행정보',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+        }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
           <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
@@ -77,14 +86,17 @@ const VirtualAccountList = () => {
     {
       id: 'created_at',
       label: '생성일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
     {
       id: 'edit',
       label: '이어서 생성',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `---`
+        }
         return row['status'] == 5 ? <>
           <IconButton>
             <Icon icon='material-symbols:edit-outline' onClick={() => {
@@ -98,7 +110,7 @@ const VirtualAccountList = () => {
      {
       id: 'delete',
       label: '삭제',
-      action: (row) => {
+      action: (row, is_excel) => {
         return (
           <>
             <IconButton onClick={() => {
@@ -171,6 +183,8 @@ const VirtualAccountList = () => {
             onChangePage={onChangePage}
             add_button_text={'가상계좌 발급'}
             head_columns={[]}
+            table={'virtual-accounts'}
+            excel_name={'가상계좌'}
           />
         </Card>
       </Stack>

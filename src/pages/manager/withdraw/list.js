@@ -19,84 +19,90 @@ const WithdrawList = () => {
     {
       id: 'trx_id',
       label: '거래번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['trx_id'] ?? "---"
       }
     },
     {
       id: 'level',
       label: '유저레벨',
-      action: (row) => {
+      action: (row, is_excel) => {
         return getUserLevelByNumber(row['level'])
       }
     },
     {
       id: 'nickname',
       label: '상호',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${row[`nickname`]} (${row['user_name']})`
+        }
         return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
       }
     },
     {
       id: 'settle_bank_code',
       label: '은행',
-      action: (row) => {
+      action: (row, is_excel) => {
         return _.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"
       }
     },
     {
       id: 'settle_acct_num',
       label: '계좌번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['settle_acct_num'] ?? "---"
       }
     },
     {
       id: 'settle_acct_name',
       label: '예금주명',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['settle_acct_name'] ?? "---"
       }
     },
     {
       id: 'status',
       label: '상태',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return _.find(withdrawStatusList, { value: row?.withdraw_status })?.label
+        }
         return <Chip variant="soft" label={_.find(withdrawStatusList, { value: row?.withdraw_status })?.label} color={_.find(withdrawStatusList, { value: row?.withdraw_status })?.color} />
       }
     },
     {
       id: 'user_name',
       label: '출금구분',
-      action: (row) => {
+      action: (row, is_excel) => {
         return _.find(payTypeList, { value: row?.pay_type }).label
       }
     },
     {
       id: 'amount',
       label: '이체금',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['amount'] * (-1) - row['withdraw_fee']
       }
     },
     {
       id: 'withdraw_fee',
       label: '이체 수수료',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['withdraw_fee'] ?? "---"
       }
     },
     {
       id: 'minus_amount',
       label: '차감 보유정산금',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['amount'] * (-1)
       }
     },
     {
       id: 'created_at',
       label: '생성일',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
@@ -155,6 +161,8 @@ const WithdrawList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             head_columns={[]}
+            table={'withdraws'}
+            excel_name={'출금'}
           />
         </Card>
       </Stack>

@@ -16,22 +16,24 @@ const LogList = () => {
     {
       id: 'user_id',
       label: '회원No.',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['user_id'] ?? "---"
       }
     },
     {
       id: 'user_name',
       label: '회원아이디',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['user_name'] ?? "---"
       }
     },
     {
       id: 'result',
       label: 'RESULT',
-      action: (row) => {
-
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row['response_result']
+        }
         return <>
           <Chip label={row['response_result'] ?? "---"} color={row['response_result'] > 0 ? 'secondary' : 'error'} />
         </>
@@ -40,7 +42,7 @@ const LogList = () => {
     {
       id: 'method',
       label: 'METHOD',
-      action: (row) => {
+      action: (row, is_excel) => {
         let request = JSON.parse(row['request']);
         return request['method'] ?? "---"
       }
@@ -48,7 +50,7 @@ const LogList = () => {
     {
       id: 'url',
       label: 'URL',
-      action: (row) => {
+      action: (row, is_excel) => {
         let request = JSON.parse(row['request']);
         return request['url'] ?? "---"
       }
@@ -56,8 +58,12 @@ const LogList = () => {
     {
       id: 'request_data',
       label: 'REQUEST DATA',
-      action: (row) => {
+      action: (row, is_excel) => {
         let request = JSON.parse(row['request']);
+
+        if (is_excel) {
+          return `query: ${JSON.stringify(request?.query)}\nparams: ${JSON.stringify(request?.params)}\nbody: ${JSON.stringify(request?.body)}`
+        }
         let tooltip = <>
           <div>{`query: ${JSON.stringify(request?.query)}`}</div>
           <div>{`params: ${JSON.stringify(request?.params)}`}</div>
@@ -75,14 +81,17 @@ const LogList = () => {
     {
       id: 'response_message',
       label: 'RESULT MESSAGE',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['response_message'] ?? "---"
       }
     },
     {
       id: 'response_data',
       label: 'RESULT DATA',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row?.response_data
+        }
         return <>
           <Tooltip title={row?.response_data}>
             <IconButton>
@@ -95,21 +104,24 @@ const LogList = () => {
     {
       id: 'ip',
       label: 'IP',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['request_ip'] ?? "---"
       }
     },
     {
       id: 'created_at',
       label: '생성시간',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
     {
       id: 'edit',
       label: `삭제`,
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---"
+        }
         return (
           <>
             {user?.level >= 50 &&
@@ -196,6 +208,8 @@ const LogList = () => {
             onChangePage={onChangePage}
             add_button_text={''}
             head_columns={[]}
+            table={'logs'}
+            excel_name={'로그'}
           />
         </Card>
       </Stack>

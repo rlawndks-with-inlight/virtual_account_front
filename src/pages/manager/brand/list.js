@@ -17,70 +17,79 @@ const BrandList = () => {
     {
       id: 'name',
       label: '브랜드명',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['name'] ?? "---"
       }
     },
     {
       id: 'dns',
       label: 'DNS',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['dns'] ?? "---"
       }
     },
     {
       id: 'logo_img',
       label: 'LOGO',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row['logo_img'] ?? "---"
+        }
         return <LazyLoadImage src={row['logo_img']} style={{ height: '56px' }} />
       }
     },
     {
       id: 'favicon_img',
       label: 'FAVICON',
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return row['favicon_img'] ?? "---"
+        }
         return <LazyLoadImage src={row['favicon_img']} style={{ height: '56px' }} />
       }
     },
     {
       id: 'company_name',
       label: '법인상호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['company_name'] ?? "---"
       }
     },
     {
       id: 'ceo_name',
       label: '대표자명',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['ceo_name'] ?? "---"
       }
     },
     {
       id: 'business_num',
       label: '사업자번호',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['business_num'] ?? "---"
       }
     },
     {
       id: 'created_at',
       label: '생성시간',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       }
     },
     {
       id: 'updated_at',
       label: '최종수정시간',
-      action: (row) => {
+      action: (row, is_excel) => {
         return row['updated_at'] ?? "---"
       }
     },
     {
       id: 'edit',
       label: `수정${user?.level >= 50 ? '/삭제' : ''}`,
-      action: (row) => {
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---"
+        }
         return (
           <>
             <IconButton>
@@ -205,6 +214,8 @@ const BrandList = () => {
             onChangePage={onChangePage}
             add_button_text={'브랜드 추가'}
             head_columns={[]}
+            table={'brands'}
+            excel_name={'브랜드'}
           />
         </Card>
       </Stack>
