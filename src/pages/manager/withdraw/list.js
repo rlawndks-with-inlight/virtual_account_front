@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -10,11 +10,13 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { bankCodeList, payTypeList, withdrawStatusList } from "src/utils/format";
+import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
+import { useSettingsContext } from "src/components/settings";
 const WithdrawList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
       id: 'trx_id',
@@ -110,6 +112,7 @@ const WithdrawList = () => {
   const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
+  const [operUserList, setOperUserList] = useState([]);
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 10,
@@ -131,7 +134,14 @@ const WithdrawList = () => {
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
+    getAllOperUser();
     onChangePage({ ...searchObj, page: 1 });
+  }
+  const getAllOperUser = async () => {
+    let data = await apiManager('users', 'list', {
+      level_list: [10, ...operatorLevelList.map(itm => { return itm.value })],
+    });
+    setOperUserList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
     setData({
@@ -154,7 +164,36 @@ const WithdrawList = () => {
   return (
     <>
       <Stack spacing={3}>
+
         <Card>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            {(themeDnsData?.operator_list ?? []).map(operator => {
+              return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                <InputLabel>{operator?.label}</InputLabel>
+                <Select label={operator?.label} value={searchObj[`sales${operator?.num}_id`]}
+                  onChange={(e) => {
+                    onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value })
+                  }}>
+                  <MenuItem value={null}>{operator?.label} 전체</MenuItem>
+                  {operUserList.filter(el => el?.level == operator?.value).map(oper => {
+                    return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                  })}
+                </Select>
+              </FormControl>
+            })}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>가맹점</InputLabel>
+              <Select label='가맹점' value={searchObj[`mcht_id`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
+                }}>
+                <MenuItem value={null}>가맹점 전체</MenuItem>
+                {operUserList.filter(el => el?.level == 10).map(oper => {
+                  return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+          </Row>
           <ManagerTable
             data={data}
             columns={columns}
