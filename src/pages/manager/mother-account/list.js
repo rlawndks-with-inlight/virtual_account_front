@@ -51,7 +51,17 @@ const MotherAccountList = () => {
       id: 'amount',
       label: '금액',
       action: (row) => {
-        return (row['amount'] > 0 ? '+' : '') + commarNumber(row['amount'])
+        let amount = 0;
+        if (row['pay_type'] == 0) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 5) {
+          amount = row['amount'] + row['withdraw_fee'];
+        } else if (row['pay_type'] == 10) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 15) {
+          amount = row['amount'];
+        }
+        return (amount > 0 ? '+' : '') + commarNumber(amount)
       }
     },
     {
