@@ -193,7 +193,7 @@ export default function ManagerTable(props) {
                       <TableRow sx={{ padding: '1rem 0' }}>
                         {zHeadColumn.map((head, idx) => (
                           <>
-                            <TableCell colSpan={head.count} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}>
+                            <TableCell colSpan={head.count} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0', }}>
                               <div style={{ borderRight: `1px solid #ccc` }}>
                                 {head.title}
                               </div>
@@ -210,7 +210,7 @@ export default function ManagerTable(props) {
                     <CustomTableRow key={index}>
                       {zColumn && zColumn.map((col, idx) => (
                         <>
-                          <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}) }}>{col.action(row, idx)}</TableCell>
+                          <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.8rem' }}>{col.action(row, idx)}</TableCell>
                         </>
                       ))}
                     </CustomTableRow>
