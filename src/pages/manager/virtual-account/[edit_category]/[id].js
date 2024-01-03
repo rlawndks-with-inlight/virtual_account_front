@@ -105,17 +105,25 @@ const VirtualAccountEdit = () => {
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
+                  <FormControl variant='outlined'  >
+                    <InputLabel>가맹점선택</InputLabel>
+                    <Select label='가맹점선택' value={item?.mid}
+                      onChange={(e) => {
+                        setItem({
+                          ...item,
+                          mid: e.target.value,
+                        })
+                      }}>
+                      {mchtList.map(mcht => {
+                        return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
                   <TextField
                     label='MID'
                     value={item.mid}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['mid']: e.target.value
-                        }
-                      )
-                    }} />
+                    disabled={true}
+                  />
                   <TextField
                     label='생년월일'
                     value={item.birth}
