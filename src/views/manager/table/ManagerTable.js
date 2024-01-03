@@ -260,9 +260,11 @@ export default function ManagerTable(props) {
                       {zColumn && zColumn.map((col, idx) => (
                         <>
                           <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.8rem', padding: '16px 0' }}>
-                            <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, padding: '0 16px' }}>
+                            <Row style={{ alignItems: 'center' }}>
+                              <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
                               {col.action(row)}
-                            </div>
+                              <div style={{ paddingLeft: '16px' }} />
+                            </Row>
                           </TableCell>
                         </>
                       ))}
