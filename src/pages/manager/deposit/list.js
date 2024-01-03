@@ -257,7 +257,6 @@ const DepositList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             //add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
-            width={'150%'}
             head_columns={defaultHeadColumns}
             table={'deposits'}
             excel_name={'출금'}

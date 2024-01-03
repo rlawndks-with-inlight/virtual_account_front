@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -43,13 +44,17 @@ const VirtualAccountEdit = () => {
     let mcht_list = await apiManager(`users`, 'list', {
       level: 10,
     })
+    let data = item;
     setMchtList(mcht_list?.content ?? []);
+    let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
+    data.mid = mid;
     if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('virtual-accounts', 'get', {
+      data = await apiManager('virtual-accounts', 'get', {
         id: router.query.id
       })
-      setItem(data);
     }
+    setItem(data);
+
     setLoading(false);
   }
   const onSave = async () => {
@@ -129,13 +134,7 @@ const VirtualAccountEdit = () => {
                   <TextField
                     label='MID'
                     value={item.mid}
-                    disabled={user?.level >= 40}
-                    onChange={(e) => {
-                      setItem({
-                        ...item,
-                        mid: e.target.value
-                      })
-                    }}
+                    disabled={true}
                   />
                   <TextField
                     label='생년월일'
