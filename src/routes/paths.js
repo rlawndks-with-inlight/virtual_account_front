@@ -44,6 +44,10 @@ export const PATH_MANAGER = {
     request: path(ROOTS_MANAGER, '/withdraw/request'),
     return: path(ROOTS_MANAGER, '/withdraw/return'),
   },
+  settle: {
+    root: path(ROOTS_MANAGER, '/settle'),
+    list: path(ROOTS_MANAGER, '/settle/list'),
+  },
   virtualAccount: {
     root: path(ROOTS_MANAGER, '/virtual-account'),
     list: path(ROOTS_MANAGER, '/virtual-account/list'),

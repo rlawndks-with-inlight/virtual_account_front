@@ -281,8 +281,8 @@ export default function ManagerTable(props) {
         <Divider />
         <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
           <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
-            <InputLabel>페이지사이즈</InputLabel>
-            <Select label='페이지사이즈' value={page_size}
+            <InputLabel>조회개수</InputLabel>
+            <Select label='조회개수' value={page_size}
               onChange={(e) => {
                 onChangePage({ ...searchObj, page_size: e.target.value })
               }}>

@@ -93,6 +93,20 @@ const navConfig = () => {
         },
       ],
     },
+    /*
+    {
+      items: [
+        {
+          title: '보유정산금관리',
+          path: PATH_MANAGER.settle.root,
+          icon: <Icon icon='mdi:graph-line' style={{ fontSize: '1.5rem' }} />,
+          children: [
+            { title: '보유정산금내역', path: PATH_MANAGER.settle.list },
+          ],
+        },
+      ],
+    },
+    */
     ...((operatorList && operatorList?.length > 0 && isManager()) ? [{
       items: [
         {
