@@ -1,25 +1,25 @@
-
-import { Button, Card, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { themeObj } from "src/components/elements/styled-components";
+import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
-import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
-import styled from "styled-components";
-import { react_quill_data } from "src/data/manager-data";
-import { axiosIns } from "src/utils/axios";
+import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
+import { bankCodeList } from "src/utils/format";
+import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
 })
 
 const WithdrawReturn = () => {
+
+    const { user } = useAuthContext();
     const { setModal } = useModal()
     const { themeMode } = useSettingsContext();
 
@@ -27,37 +27,27 @@ const WithdrawReturn = () => {
 
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({
-        profile_file: undefined,
-        user_name: '',
-        phone_num: '',
-        nickname: '',
-        name: '',
-        parent_id: -1,
-        parent_user_name: '',
-        level: 10,
-        user_pw: '',
-        note: '',
+        withdraw_amount: 0,
     })
 
     useEffect(() => {
         settingPage();
     }, [])
     const settingPage = async () => {
-        if (router.query?.edit_category == 'edit') {
-            let data = await apiManager('users', 'get', {
-                id: router.query.id
-            })
-            setItem(data);
-        }
+        let data = await apiManager('auth/deposit', 'get',);
+        setItem({
+            ...item,
+            ...data,
+        });
         setLoading(false);
     }
     const onSave = async () => {
         let result = undefined
-        if (item?.id) {//수정
-            result = await apiManager('users', 'update', item);
-        } else {//추가
-            result = await apiManager('users', 'create', item);
-        }
+
+        result = await apiManager('withdraws', 'create', {
+            withdraw_amount: item?.withdraw_amount,
+            user_id: user?.id,
+        });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
             router.push('/manager/withdraw');
@@ -73,30 +63,43 @@ const WithdrawReturn = () => {
                                 <Stack spacing={3}>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            프로필사진
+                                            현재 보유정산금
                                         </Typography>
-                                        <Upload file={item.profile_file || item.profile_img} onDrop={(acceptedFiles) => {
-                                            const newFile = acceptedFiles[0];
-                                            if (newFile) {
-                                                setItem(
-                                                    {
-                                                        ...item,
-                                                        ['profile_file']: Object.assign(newFile, {
-                                                            preview: URL.createObjectURL(newFile),
-                                                        })
-                                                    }
-                                                );
-                                            }
-                                        }} onDelete={() => {
-                                            setItem(
-                                                {
-                                                    ...item,
-                                                    ['profile_img']: '',
-                                                    ['profile_file']: undefined,
-                                                }
-                                            )
-                                        }}
-                                        />
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.settle_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            출금 수수료
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.withdraw_fee)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            차감 보유정산금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.withdraw_amount + item?.withdraw_fee)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            출금후 보유정산금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.settle_amount - item?.withdraw_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            출금 가능 금액
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.settle_amount - item?.withdraw_fee)} 원
+                                        </Typography>
                                     </Stack>
                                 </Stack>
                             </Card>
@@ -105,84 +108,31 @@ const WithdrawReturn = () => {
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <TextField
-                                        label='아이디'
-                                        value={item.user_name}
-                                        disabled={router.query?.edit_category == 'edit'}
-                                        onChange={(e) => {
-                                            setItem(
-                                                {
-                                                    ...item,
-                                                    ['user_name']: e.target.value
-                                                }
-                                            )
-                                        }} />
-                                    {router.query?.edit_category == 'add' &&
-                                        <>
-                                            <TextField
-                                                label='패스워드'
-                                                value={item.user_pw}
-
-                                                type='password'
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['user_pw']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                        </>}
-                                    <TextField
-                                        label='닉네임'
-                                        value={item.nickname}
-                                        onChange={(e) => {
-                                            setItem(
-                                                {
-                                                    ...item,
-                                                    ['nickname']: e.target.value
-                                                }
-                                            )
-                                        }} />
-                                    <TextField
-                                        label='이름'
-                                        value={item.name}
+                                        label='출금 요청금'
+                                        type="number"
+                                        value={item?.withdraw_amount}
                                         placeholder=""
                                         onChange={(e) => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['name']: e.target.value
+                                                    ['withdraw_amount']: parseInt(e.target.value)
                                                 }
                                             )
                                         }} />
                                     <TextField
-                                        label='전화번호'
-                                        value={item.phone_num}
-                                        placeholder="하이픈(-) 제외 입력"
+                                        label='출금 요청금'
+                                        type="number"
+                                        value={item?.withdraw_amount}
+                                        placeholder=""
                                         onChange={(e) => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['phone_num']: e.target.value
+                                                    ['withdraw_amount']: parseInt(e.target.value)
                                                 }
                                             )
                                         }} />
-                                    {router.query?.edit_category == 'add' &&
-                                        <>
-                                            <TextField
-                                                label='상위영업자아이디'
-                                                value={item.parent_user_name}
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['parent_user_name']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                        </>}
-                                    <Stack spacing={1}>
-                                    </Stack>
                                 </Stack>
                             </Card>
                         </Grid>
@@ -195,10 +145,10 @@ const WithdrawReturn = () => {
                                         setModal({
                                             func: () => { onSave() },
                                             icon: 'material-symbols:edit-outline',
-                                            title: '저장 하시겠습니까?'
+                                            title: '출금요청 하시겠습니까?'
                                         })
                                     }}>
-                                        저장
+                                        출금 요청하기
                                     </Button>
                                 </Stack>
                             </Card>

@@ -3,12 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
-import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
-import styled from "styled-components";
-import { react_quill_data } from "src/data/manager-data";
-import { axiosIns } from "src/utils/axios";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -52,7 +48,6 @@ const WithdrawRequest = () => {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
         });
-
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
             router.push('/manager/withdraw');
@@ -107,7 +102,7 @@ const WithdrawRequest = () => {
                                             출금후 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_amount)} 원
+                                            {commarNumber(item?.settle_amount - item?.withdraw_amount - item?.withdraw_fee)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>

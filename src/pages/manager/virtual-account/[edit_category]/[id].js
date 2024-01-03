@@ -128,9 +128,7 @@ const VirtualAccountEdit = () => {
                           })}
                         </Select>
                       </FormControl>
-
                     </>}
-
                   <TextField
                     label='MID'
                     value={item.mid}
