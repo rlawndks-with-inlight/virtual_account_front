@@ -16,6 +16,7 @@ import { StyledContent, StyledSection, StyledSectionBg } from 'src/layouts/login
 import Image from 'src/components/image/Image';
 import dynamic from 'next/dynamic';
 import { PATH_MANAGER } from 'src/routes/paths';
+import { Row } from 'src/components/elements/styled-components';
 const Tour = dynamic(
   () => import('reactour'),
   { ssr: false },
@@ -69,21 +70,8 @@ const Login = () => {
   };
   return (
     <>
-      <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 520, textAlign: 'center' }}>
-          {themeDnsData?.name} 에 오신것을 환영합니다!
-        </Typography>
-        <Image
-          disabledEffect
-          visibleByDefault
-          alt="auth"
-          src={'/assets/illustrations/illustration_dashboard.png'}
-          sx={{ maxWidth: 720 }}
-        />
-        <StyledSectionBg />
-      </StyledSection>
-      <StyledContent style={{ minHeight: '90vh' }}>
-        <Stack sx={{ width: 1 }}>
+      <Row style={{ height: '100vh', width: '100vw' }}>
+        <Stack sx={{ margin: 'auto', maxWidth: '450px', width: '90%' }}>
           <img src={logoSrc()} style={{ maxWidth: '200px', margin: '1rem auto' }} />
           <Stack spacing={3}>
             <TextField
@@ -144,7 +132,8 @@ const Login = () => {
             로그인
           </LoadingButton>
         </Stack>
-      </StyledContent>
+      </Row>
+
       <Tour
         steps={tourSteps}
         isOpen={tourOpen}
