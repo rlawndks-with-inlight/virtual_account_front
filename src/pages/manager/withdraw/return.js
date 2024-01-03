@@ -81,7 +81,7 @@ const WithdrawReturn = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금 수수료
+                                            반환 수수료
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.withdraw_fee)} 원
@@ -97,7 +97,7 @@ const WithdrawReturn = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금후 보유정산금
+                                            반환후 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.settle_amount - item?.withdraw_amount)} 원
@@ -105,7 +105,7 @@ const WithdrawReturn = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금 가능 금액
+                                            반환 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.settle_amount - item?.withdraw_fee)} 원
@@ -162,7 +162,7 @@ const WithdrawReturn = () => {
                                         setModal({
                                             func: () => { onSave() },
                                             icon: 'material-symbols:edit-outline',
-                                            title: '출금요청 하시겠습니까?'
+                                            title: '반환요청 하시겠습니까?'
                                         })
                                     }}>
                                         반환 요청하기
