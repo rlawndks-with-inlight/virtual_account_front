@@ -75,6 +75,7 @@ const VirtualAccountEdit = () => {
       phone_num: item?.phone_num,
       guid: item?.guid,
       api_key: themeDnsData?.api_key,
+      user_id: user?.id
     });
     let data = item;
     data.guid = result?.guid;
