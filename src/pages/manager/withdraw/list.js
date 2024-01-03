@@ -171,34 +171,37 @@ const WithdrawList = () => {
       <Stack spacing={3}>
 
         <Card>
-          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
-            {(themeDnsData?.operator_list ?? []).map(operator => {
-              return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
-                <InputLabel>{operator?.label}</InputLabel>
-                <Select label={operator?.label} value={searchObj[`sales${operator?.num}_id`]}
-                  onChange={(e) => {
-                    onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value })
-                  }}>
-                  <MenuItem value={null}>{operator?.label} 전체</MenuItem>
-                  {operUserList.filter(el => el?.level == operator?.value).map(oper => {
-                    return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
-                  })}
-                </Select>
-              </FormControl>
-            })}
-            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
-              <InputLabel>가맹점</InputLabel>
-              <Select label='가맹점' value={searchObj[`mcht_id`]}
-                onChange={(e) => {
-                  onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
-                }}>
-                <MenuItem value={null}>가맹점 전체</MenuItem>
-                {operUserList.filter(el => el?.level == 10).map(oper => {
-                  return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+          {user?.level >= 40 &&
+            <>
+              <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+                {(themeDnsData?.operator_list ?? []).map(operator => {
+                  return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                    <InputLabel>{operator?.label}</InputLabel>
+                    <Select label={operator?.label} value={searchObj[`sales${operator?.num}_id`]}
+                      onChange={(e) => {
+                        onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value })
+                      }}>
+                      <MenuItem value={null}>{operator?.label} 전체</MenuItem>
+                      {operUserList.filter(el => el?.level == operator?.value).map(oper => {
+                        return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
                 })}
-              </Select>
-            </FormControl>
-          </Row>
+                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                  <InputLabel>가맹점</InputLabel>
+                  <Select label='가맹점' value={searchObj[`mcht_id`]}
+                    onChange={(e) => {
+                      onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
+                    }}>
+                    <MenuItem value={null}>가맹점 전체</MenuItem>
+                    {operUserList.filter(el => el?.level == 10).map(oper => {
+                      return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                    })}
+                  </Select>
+                </FormControl>
+              </Row>
+            </>}
           <ManagerTable
             data={data}
             columns={columns}

@@ -74,6 +74,8 @@ export const payTypeList = [
     { value: 10, label: '모계좌출금', color: 'info' },
     { value: 15, label: '가맹점 -> 모계좌이체', color: 'warning' },
     { value: 20, label: '반환', color: 'warning' },
+    { value: 25, label: '관리자 지급', color: 'info' },
+    { value: 30, label: '관리자 차감', color: 'warning' },
 ]
 export const withdrawStatusList = [
     { value: 0, label: '출금완료', color: 'success' },

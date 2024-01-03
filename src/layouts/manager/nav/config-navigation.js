@@ -93,7 +93,6 @@ const navConfig = () => {
         },
       ],
     },
-    /*
     {
       items: [
         {
@@ -106,7 +105,6 @@ const navConfig = () => {
         },
       ],
     },
-    */
     ...((operatorList && operatorList?.length > 0 && isManager()) ? [{
       items: [
         {
