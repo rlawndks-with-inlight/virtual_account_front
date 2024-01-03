@@ -29,6 +29,7 @@ const WithdrawReturn = () => {
     const [virtualAccounts, setVirtualAccounts] = useState([]);
     const [item, setItem] = useState({
         withdraw_amount: 0,
+        note: '',
     })
 
     useEffect(() => {
@@ -57,6 +58,7 @@ const WithdrawReturn = () => {
             user_id: user?.id,
             virtual_account_id: item?.virtual_account_id,
             pay_type: 20,
+            note: item?.note,
         });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
@@ -147,6 +149,20 @@ const WithdrawReturn = () => {
                                                 {
                                                     ...item,
                                                     ['withdraw_amount']: parseInt(e.target.value)
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        multiline
+                                        rows={5}
+                                        label='메모'
+                                        value={item?.note}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['note']: e.target.value
                                                 }
                                             )
                                         }} />

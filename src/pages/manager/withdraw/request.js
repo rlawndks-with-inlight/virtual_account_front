@@ -28,6 +28,7 @@ const WithdrawRequest = () => {
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({
         withdraw_amount: 0,
+        note: '',
     })
 
     useEffect(() => {
@@ -47,6 +48,8 @@ const WithdrawRequest = () => {
         result = await apiManager('withdraws', 'create', {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
+            note: item?.note,
+            pay_type: 5,
         });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
@@ -129,6 +132,20 @@ const WithdrawRequest = () => {
                                                 {
                                                     ...item,
                                                     ['withdraw_amount']: parseInt(e.target.value)
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        multiline
+                                        rows={5}
+                                        label='메모'
+                                        value={item?.note}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['note']: e.target.value
                                                 }
                                             )
                                         }} />
