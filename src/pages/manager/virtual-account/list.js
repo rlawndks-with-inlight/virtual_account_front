@@ -212,6 +212,16 @@ const VirtualAccountList = () => {
                 })}
               </Select>
             </FormControl>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>삭제여부</InputLabel>
+              <Select label='삭제여부' value={searchObj[`is_delete`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`is_delete`]: e.target.value })
+                }}>
+                <MenuItem value={0}>삭제안됨</MenuItem>
+                <MenuItem value={1}>삭제됨</MenuItem>
+              </Select>
+            </FormControl>
           </Row>
 
           <ManagerTable
