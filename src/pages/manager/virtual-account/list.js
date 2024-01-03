@@ -108,8 +108,7 @@ const VirtualAccountList = () => {
         </> : "---"
       }
     },
-    /*
-     {
+    {
       id: 'delete',
       label: '삭제',
       action: (row, is_excel) => {
@@ -128,7 +127,6 @@ const VirtualAccountList = () => {
         )
       }
     },
-    */
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
