@@ -11,6 +11,7 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
+import { useAuthContext } from "src/auth/useAuthContext";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -18,6 +19,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const VirtualAccountEdit = () => {
   const { setModal } = useModal()
+  const { user } = useAuthContext();
   const { themeMode, themeDnsData } = useSettingsContext();
 
   const router = useRouter();
@@ -105,24 +107,35 @@ const VirtualAccountEdit = () => {
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
-                  <FormControl variant='outlined'  >
-                    <InputLabel>가맹점선택</InputLabel>
-                    <Select label='가맹점선택' value={item?.mid}
-                      onChange={(e) => {
-                        setItem({
-                          ...item,
-                          mid: e.target.value,
-                        })
-                      }}>
-                      {mchtList.map(mcht => {
-                        return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
-                      })}
-                    </Select>
-                  </FormControl>
+                  {user?.level >= 40 &&
+                    <>
+                      <FormControl variant='outlined'  >
+                        <InputLabel>가맹점선택</InputLabel>
+                        <Select label='가맹점선택' value={item?.mid}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              mid: e.target.value,
+                            })
+                          }}>
+                          {mchtList.map(mcht => {
+                            return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+
+                    </>}
+
                   <TextField
                     label='MID'
                     value={item.mid}
-                    disabled={true}
+                    disabled={user?.level >= 40}
+                    onChange={(e) => {
+                      setItem({
+                        ...item,
+                        mid: e.target.value
+                      })
+                    }}
                   />
                   <TextField
                     label='생년월일'
