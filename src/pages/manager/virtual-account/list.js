@@ -113,6 +113,12 @@ const VirtualAccountList = () => {
         id: 'delete',
         label: '삭제',
         action: (row, is_excel) => {
+          if (is_excel) {
+            return `---`
+          }
+          if (row?.is_delete == 1) {
+            return "---";
+          }
           return (
             <>
               <IconButton onClick={() => {
