@@ -190,6 +190,7 @@ export default function ManagerTable(props) {
                 size='small'
                 label=''
                 value={keyword}
+                sx={{ maxWidth: '180px' }}
                 endAdornment={<>
                   <Tooltip title='해당 텍스트로 검색하시려면 엔터 또는 돋보기 버튼을 클릭해주세요.'>
                     <IconButton position="end" sx={{ transform: 'translateX(14px)' }} onClick={() => onChangePage({ ...searchObj, search: keyword })}>
