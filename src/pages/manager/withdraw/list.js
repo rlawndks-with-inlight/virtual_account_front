@@ -79,6 +79,9 @@ const WithdrawList = () => {
       label: '출금구분',
       action: (row, is_excel) => {
         let pay_type = _.find(payTypeList, { value: row?.pay_type });
+        if (is_excel) {
+          return pay_type?.label
+        }
         return <Chip variant="soft" label={pay_type.label} color={pay_type.color} />
       }
     },
