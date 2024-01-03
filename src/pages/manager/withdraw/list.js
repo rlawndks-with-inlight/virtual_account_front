@@ -67,17 +67,19 @@ const WithdrawList = () => {
       id: 'status',
       label: '상태',
       action: (row, is_excel) => {
+        let status = _.find(withdrawStatusList, { value: row?.withdraw_status });
         if (is_excel) {
-          return _.find(withdrawStatusList, { value: row?.withdraw_status })?.label
+          return status?.label
         }
-        return <Chip variant="soft" label={_.find(withdrawStatusList, { value: row?.withdraw_status })?.label} color={_.find(withdrawStatusList, { value: row?.withdraw_status })?.color} />
+        return <Chip variant="soft" label={status?.label} color={status?.color} />
       }
     },
     {
-      id: 'user_name',
+      id: 'pay_type',
       label: '출금구분',
       action: (row, is_excel) => {
-        return _.find(payTypeList, { value: row?.pay_type }).label
+        let pay_type = _.find(payTypeList, { value: row?.pay_type });
+        return <Chip variant="soft" label={pay_type.label} color={pay_type.color} />
       }
     },
     {
