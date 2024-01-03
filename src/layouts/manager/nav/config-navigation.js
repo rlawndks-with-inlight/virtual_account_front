@@ -88,7 +88,7 @@ const navConfig = () => {
           children: [
             { title: '출금내역', path: PATH_MANAGER.withdraw.list },
             ...(!isManager() ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
-            { title: '반환요청', path: PATH_MANAGER.withdraw.return },
+            ...(!isManager() ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
           ],
         },
       ],

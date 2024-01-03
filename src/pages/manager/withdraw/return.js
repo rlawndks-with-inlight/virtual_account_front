@@ -1,7 +1,7 @@
-import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Row, themeObj } from "src/components/elements/styled-components";
+import { Col, Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
@@ -26,6 +26,7 @@ const WithdrawReturn = () => {
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
+    const [virtualAccounts, setVirtualAccounts] = useState([]);
     const [item, setItem] = useState({
         withdraw_amount: 0,
     })
@@ -39,14 +40,23 @@ const WithdrawReturn = () => {
             ...item,
             ...data,
         });
+        let virtual_accounts = await apiManager('virtual-accounts', 'list', {
+            mcht_id: user?.id,
+            status: 0,
+        });
+        setVirtualAccounts(virtual_accounts?.content ?? []);
         setLoading(false);
     }
     const onSave = async () => {
         let result = undefined
-
+        if (!item?.virtual_account_id) {
+            return toast.error('유저를 선택해 주세요.');
+        }
         result = await apiManager('withdraws', 'create', {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
+            virtual_account_id: item?.virtual_account_id,
+            pay_type: 20,
         });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
@@ -107,21 +117,28 @@ const WithdrawReturn = () => {
                         <Grid item xs={12} md={6}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
-                                    <TextField
-                                        label='출금 요청금'
-                                        type="number"
-                                        value={item?.withdraw_amount}
-                                        placeholder=""
-                                        onChange={(e) => {
-                                            setItem(
-                                                {
+                                    <FormControl variant='outlined'>
+                                        <InputLabel>{'유저선택'}</InputLabel>
+                                        <Select label={'유저선택'} value={item?.virtual_account_id}
+                                            sx={{ fontSize: '0.8rem' }}
+                                            onChange={(e) => {
+                                                setItem({
                                                     ...item,
-                                                    ['withdraw_amount']: parseInt(e.target.value)
-                                                }
-                                            )
-                                        }} />
+                                                    virtual_account_id: e.target.value
+                                                })
+                                            }}>
+                                            {virtualAccounts.map(virtual_account => {
+                                                return <MenuItem value={virtual_account?.id} sx={{ fontSize: '0.8rem' }}>
+                                                    <Col>
+                                                        <div>{`${_.find(bankCodeList(), { value: virtual_account?.virtual_bank_code })?.label} ${virtual_account?.virtual_acct_num} (${virtual_account?.virtual_acct_name})`}</div>
+                                                        <div style={{ color: '#aaa' }}>{`${_.find(bankCodeList(), { value: virtual_account?.deposit_bank_code })?.label} ${virtual_account?.deposit_acct_num} (${virtual_account?.deposit_acct_name})`}</div>
+                                                    </Col>
+                                                </MenuItem>
+                                            })}
+                                        </Select>
+                                    </FormControl>
                                     <TextField
-                                        label='출금 요청금'
+                                        label='반환 요청금'
                                         type="number"
                                         value={item?.withdraw_amount}
                                         placeholder=""
@@ -148,7 +165,7 @@ const WithdrawReturn = () => {
                                             title: '출금요청 하시겠습니까?'
                                         })
                                     }}>
-                                        출금 요청하기
+                                        반환 요청하기
                                     </Button>
                                 </Stack>
                             </Card>
