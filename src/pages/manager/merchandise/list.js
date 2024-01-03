@@ -36,6 +36,24 @@ const UserList = () => {
       }
     },
     {
+      id: 'update_user_deposit',
+      label: '정산금 수정',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return "---";
+        }
+        return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+          onClick={() => {
+            setDialogObj({ changeUserDeposit: true })
+            setChangeUserDepositObj({
+              amount: '',
+              user_id: row?.id,
+            })
+          }}
+        >정산금 수정</Button>
+      }
+    },
+    {
       id: 'mid',
       label: 'MID',
       action: (row, is_excel) => {
@@ -190,7 +208,7 @@ const UserList = () => {
         return (
           <>
             <IconButton onClick={() => {
-              setDialogObj({ ...dialogObj, changePassword: true })
+              setDialogObj({ changePassword: true })
               setChangePasswordObj({
                 user_pw: '',
                 id: row?.id
@@ -248,6 +266,9 @@ const UserList = () => {
     id: '',
     user_pw: ''
   })
+  const [changeUserDepositObj, setChangeUserDepositObj] = useState({
+    amount: 0,
+  })
   useEffect(() => {
     pageSetting();
   }, [])
@@ -285,6 +306,21 @@ const UserList = () => {
         user_pw: ''
       })
       toast.success("성공적으로 변경 되었습니다.");
+    }
+  }
+  const onChangeUserDeposit = async (pay_type) => {
+    setDialogObj({})
+    setChangeUserDepositObj({})
+    let result = await apiManager(`users/change-deposit`, 'create', {
+      amount: changeUserDepositObj.amount,
+      pay_type,
+      user_id: changeUserDepositObj?.user_id,
+      note: changeUserDepositObj?.note
+    })
+    if (result) {
+
+      toast.success("성공적으로 저장 되었습니다.");
+      onChangePage(searchObj);
     }
   }
   return (
@@ -329,6 +365,59 @@ const UserList = () => {
             })
           }}>
             취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.changeUserDeposit}
+        onClose={() => {
+          setDialogObj({
+            ...dialogObj,
+            changeUserDeposit: false
+          })
+        }}
+      >
+        <DialogTitle>{`정산금 관리자 수정`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            수정할 금액을 입력해 주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={changeUserDepositObj.amount}
+            margin="dense"
+            label="금액"
+            type="number"
+            onChange={(e) => {
+              setChangeUserDepositObj({
+                ...changeUserDepositObj,
+                amount: e.target.value
+              })
+            }}
+          />
+          <TextField
+            autoFocus
+            fullWidth
+            multiline
+            rows={4}
+            value={changeUserDepositObj.note}
+            margin="dense"
+            label="메모"
+            onChange={(e) => {
+              setChangeUserDepositObj({
+                ...changeUserDepositObj,
+                note: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => onChangeUserDeposit(25)}>
+            적립하기
+          </Button>
+          <Button variant="outlined" onClick={() => onChangeUserDeposit(30)}>
+            차감하기
           </Button>
         </DialogActions>
       </Dialog>

@@ -98,28 +98,6 @@ const UserEdit = () => {
       router.push('/manager/merchandise');
     }
   }
-  const oneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification`, 'create', item);
-    if (result) {
-      toast.success('성공적으로 발송 되었습니다.');
-      setItem({
-        ...item,
-        is_send_one_won_check: true,
-        tid: result?.tid
-      })
-    }
-  }
-  const checkOneWonCertification = async () => {
-    let result = await apiManager(`users/one-won-certification/check`, 'create', item);
-    console.log(result)
-    if (result?.tid) {
-      toast.success('성공적으로 인증 되었습니다.');
-      setItem({
-        ...item,
-        is_check_bank: true
-      })
-    }
-  }
   return (
     <>
       {!loading &&
