@@ -108,25 +108,27 @@ const VirtualAccountList = () => {
         </> : "---"
       }
     },
-    {
-      id: 'delete',
-      label: '삭제',
-      action: (row, is_excel) => {
-        return (
-          <>
-            <IconButton onClick={() => {
-              setModal({
-                func: () => { deleteUser(row?.id) },
-                icon: 'material-symbols:delete-outline',
-                title: '정말 삭제하시겠습니까?'
-              })
-            }}>
-              <Icon icon='material-symbols:delete-outline' />
-            </IconButton>
-          </>
-        )
-      }
-    },
+    ...(user?.level >= 40 ? [
+      {
+        id: 'delete',
+        label: '삭제',
+        action: (row, is_excel) => {
+          return (
+            <>
+              <IconButton onClick={() => {
+                setModal({
+                  func: () => { deleteUser(row?.id) },
+                  icon: 'material-symbols:delete-outline',
+                  title: '정말 삭제하시겠습니까?'
+                })
+              }}>
+                <Icon icon='material-symbols:delete-outline' />
+              </IconButton>
+            </>
+          )
+        }
+      },
+    ] : []),
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
