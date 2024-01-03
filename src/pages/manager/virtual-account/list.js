@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -11,11 +11,13 @@ import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
-import { bankCodeList, virtualAccountStatusList } from "src/utils/format";
+import { bankCodeList, operatorLevelList, virtualAccountStatusList } from "src/utils/format";
+import { useSettingsContext } from "src/components/settings";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
       id: 'user_name',
@@ -131,6 +133,7 @@ const VirtualAccountList = () => {
   const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
+  const [operUserList, setOperUserList] = useState([]);
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 10,
@@ -148,11 +151,19 @@ const VirtualAccountList = () => {
   })
   useEffect(() => {
     pageSetting();
+
   }, [])
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
-    onChangePage({ ...searchObj, page: 1, level: 10, });
+    getAllOperUser();
+    onChangePage({ ...searchObj, page: 1, });
+  }
+  const getAllOperUser = async () => {
+    let data = await apiManager('users', 'list', {
+      level: 10,
+    });
+    setOperUserList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
     setData({
@@ -176,6 +187,33 @@ const VirtualAccountList = () => {
     <>
       <Stack spacing={3}>
         <Card>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>가맹점</InputLabel>
+              <Select label='가맹점' value={searchObj[`mcht_id`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
+                }}>
+                <MenuItem value={null}>가맹점 전체</MenuItem>
+                {operUserList.filter(el => el?.level == 10).map(oper => {
+                  return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>상태</InputLabel>
+              <Select label='상태' value={searchObj[`status`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`status`]: e.target.value })
+                }}>
+                <MenuItem value={null}>상태 전체</MenuItem>
+                {virtualAccountStatusList.map(status => {
+                  return <MenuItem value={status?.value}>{status.label}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+          </Row>
+
           <ManagerTable
             data={data}
             columns={columns}

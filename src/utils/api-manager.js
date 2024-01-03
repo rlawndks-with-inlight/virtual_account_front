@@ -118,7 +118,6 @@ export const apiManager = (table, type, params) => {
         dns_data = JSON.parse(dns_data);
         obj['brand_id'] = dns_data?.id;
     }
-
     let base_url = '/api';
     if (type == 'get') {
         return get(`${base_url}/${table}/${params?.id ?? ""}`);
@@ -191,7 +190,7 @@ export const settingParams = (table, type, params) => {
     let keys = Object.keys(obj);
     for (var i = 0; i < keys.length; i++) {
         let key = keys[i];
-        if (!obj[key]) {
+        if (!obj[key] && typeof obj[key] != 'number') {
             delete obj[key];
         }
     }
