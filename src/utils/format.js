@@ -73,6 +73,7 @@ export const payTypeList = [
     { value: 5, label: '출금', color: 'error' },
     { value: 10, label: '모계좌출금', color: 'info' },
     { value: 15, label: '가맹점 -> 모계좌이체', color: 'warning' },
+    { value: 20, label: '반환', color: 'warning' },
 ]
 export const withdrawStatusList = [
     { value: 0, label: '출금완료', color: 'success' },
