@@ -343,7 +343,6 @@ const OperatorList = () => {
             }}
           />
           <TextField
-            autoFocus
             fullWidth
             multiline
             rows={4}

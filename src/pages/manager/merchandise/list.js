@@ -383,7 +383,6 @@ const UserList = () => {
             수정할 금액을 입력해 주세요.
           </DialogContentText>
           <TextField
-            autoFocus
             fullWidth
             value={changeUserDepositObj.amount}
             margin="dense"
