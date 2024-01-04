@@ -20,7 +20,7 @@ const DepositList = () => {
   const defaultHeadColumns = [
     {
       title: '기본정보',
-      count: 7,
+      count: 6,
     },
     {
       title: '유저정보',
@@ -28,8 +28,8 @@ const DepositList = () => {
     },
 
     {
-      title: '영업자정보',
-      count: 2 + (themeDnsData?.operator_list.length ?? 0) * 3
+      title: (user?.level >= 40 ? 2 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 3 > 0 ? '영업자정보' : '',
+      count: (user?.level >= 40 ? 2 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 3
     },
   ]
   const defaultColumns = [
@@ -61,13 +61,13 @@ const DepositList = () => {
         return row['virtual_acct_num'] ?? "---"
       }
     },
-    {
-      id: 'user_name',
-      label: '상태',
-      action: (row, is_excel) => {
-        return row['user_name'] ?? "---"
-      }
-    },
+    // {
+    //   id: 'user_name',
+    //   label: '상태',
+    //   action: (row, is_excel) => {
+    //     return row['user_name'] ?? "---"
+    //   }
+    // },
     {
       id: 'amount_ago',
       label: '입금예정금액',
@@ -123,54 +123,61 @@ const DepositList = () => {
         return row['mcht_fee'] + '%'
       }
     },
-    {
-      id: 'head_office_fee',
-      label: '본사 수수료율',
-      action: (row, is_excel) => {
-        return row['head_office_fee'] + '%'
-      }
-    },
-    {
-      id: 'head_office_amount',
-      label: '본사 수수료',
-      action: (row, is_excel) => {
-        return row['head_office_amount']
-      },
-      sx: (row) => {
-        return {
-          color: '#a52a2a'
+    ...(user?.level >= 40 ? [
+      {
+        id: 'head_office_fee',
+        label: '본사 수수료율',
+        action: (row, is_excel) => {
+          return row['head_office_fee'] + '%'
         }
       },
-    },
-    ...(themeDnsData?.operator_list ?? []).map(operator => {
-      return [
-        {
-          id: `sales${operator?.num}_id`,
-          label: operator?.label,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
+      {
+        id: 'head_office_amount',
+        label: '본사 수수료',
+        action: (row, is_excel) => {
+          return row['head_office_amount']
+        },
+        sx: (row) => {
+          return {
+            color: '#a52a2a'
           }
         },
-        {
-          id: `sales${operator?.num}_amount`,
-          label: `${operator?.label} 수수료`,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
-          },
-          sx: (row) => {
-            return {
-              color: '#a52a2a'
+      },
+    ] : []),
+    ...(themeDnsData?.operator_list ?? []).map(operator => {
+      if (user?.level >= operator?.value) {
+        return [
+          {
+            id: `sales${operator?.num}_id`,
+            label: operator?.label,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
           },
-        },
-        {
-          id: `sales${operator?.num}_fee`,
-          label: `${operator?.label} 수수료율`,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
-          }
-        },
-      ]
+          {
+            id: `sales${operator?.num}_amount`,
+            label: `${operator?.label} 수수료`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
+            },
+            sx: (row) => {
+              return {
+                color: '#a52a2a'
+              }
+            },
+          },
+          {
+            id: `sales${operator?.num}_fee`,
+            label: `${operator?.label} 수수료율`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
+            }
+          },
+        ]
+      } else {
+        return []
+      }
+
     }).flat(),
     {
       id: 'created_at',
