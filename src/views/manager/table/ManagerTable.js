@@ -78,25 +78,38 @@ export default function ManagerTable(props) {
     )
   }
   const onClickDateButton = (num) => {
-    let cir_num = 0;
-    if (num < 0) {
-      cir_num = num;
-    } else {
-      cir_num = (-1) * num;
+    let s_dt = 0;
+    let e_dt = 0;
+
+    if (num == 1) {
+      s_dt = returnMoment().substring(0, 10);
+      e_dt = returnMoment().substring(0, 10);
+    } else if (num == -1) {
+      s_dt = returnMoment(-1).substring(0, 10);
+      e_dt = returnMoment(-1).substring(0, 10);
+    } else if (num == 3) {
+      s_dt = returnMoment(-3).substring(0, 10);
+      e_dt = returnMoment(-1).substring(0, 10);
+    } else if (num == 30) {
+      let moment = returnMoment().substring(0, 10);
+      moment = moment.split('-');
+      if (moment[1] == '01') {
+        moment[1] = '12';
+        moment[0] = moment[0] - 1;
+      } else {
+        moment[1] = moment[1] - 1;
+      }
+      s_dt = `${moment[0]}-${moment[1] >= 10 ? moment[1] : `0${moment[1]}`}-01`;
+      e_dt = returnMoment(undefined, new Date(moment[0], moment[1], 0)).substring(0, 10);
     }
-    if (num == 30) {
-      let return_moment = returnMoment().split(' ')[0];
-      let return_moment_list = return_moment.split('-');
-      let date = parseInt(return_moment_list[2]);
-      cir_num = (date - 1) * (-1);
-    }
-    setSDt(new Date(returnMoment(cir_num)));
-    setEDt(new Date(returnMoment()));
+
+    setSDt(new Date(s_dt));
+    setEDt(new Date(e_dt));
 
     onChangePage({
       ...searchObj,
-      s_dt: returnMoment(cir_num).substring(0, 10),
-      e_dt: returnMoment().substring(0, 10),
+      s_dt: s_dt,
+      e_dt: e_dt,
     })
   }
   const exportExcel = async () => {
@@ -175,7 +188,7 @@ export default function ManagerTable(props) {
               </>}
             <Row style={{ columnGap: '0.5rem' }}>
               <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(-1)}>어제</Button>
-              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(0)}>당일</Button>
+              <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(1)}>당일</Button>
               <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(3)}>3일전</Button>
               <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(30)}>1개월</Button>
             </Row>
