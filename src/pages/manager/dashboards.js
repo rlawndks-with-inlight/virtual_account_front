@@ -40,6 +40,7 @@ import { useEffect, useState } from 'react';
 import { commarNumber, returnMoment } from 'src/utils/function';
 import { apiManager } from 'src/utils/api-manager';
 import _ from 'lodash';
+import { TableHeadCustom } from 'src/components/table';
 // ----------------------------------------------------------------------
 
 
@@ -100,21 +101,138 @@ const Dashboards = () => {
             value: 0,
             label: '기간별(가맹점)',
             title: '가맹점별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '가맹점상호',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: 'MID',
+                    action: (row, idx) => {
+                        return row['mid'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    }
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+                {
+                    label: '가맹점 정산금',
+                    action: (row, idx) => {
+                        return commarNumber(row['mcht_amount'])
+                    }
+                },
+
+            ],
         },
         {
             value: 1,
             label: '시간별',
             title: '시간별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '시간',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    }
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
         },
         {
             value: 2,
             label: '일별',
             title: '일별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '일자',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    }
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
         },
         {
             value: 3,
             label: '월별',
             title: '월별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '월별',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    }
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
         },
     ]
     const series = [
@@ -259,7 +377,31 @@ const Dashboards = () => {
                             </CardContent>
                         </Card>
                     </Grid>
-
+                    <Grid item xs={12} md={12}>
+                        <Card>
+                            <Table>
+                                <TableHeadCustom headLabel={_.find(tab_list, { value: currentTab })?.columns} />
+                                <TableBody>
+                                    {deposits.map((row, index) => {
+                                        let columns = _.find(tab_list, { value: currentTab })?.columns;
+                                        return <TableRow key={index}>
+                                            {columns.map((col, idx) => (
+                                                <>
+                                                    <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.8rem', padding: '16px 0' }}>
+                                                        <Row style={{ alignItems: 'center' }}>
+                                                            <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
+                                                            {col.action(row, index)}
+                                                            <div style={{ paddingLeft: '16px' }} />
+                                                        </Row>
+                                                    </TableCell>
+                                                </>
+                                            ))}
+                                        </TableRow>
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </Card>
+                    </Grid>
                 </Grid>
             </Container>
         </>
