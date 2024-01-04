@@ -366,17 +366,17 @@ export const getUserFee = (item, user_level, operator_list = [], head_office_fee
   for (var i = 0; i < operator_list.length; i++) {
     if (item[`sales${operator_list[i].num}_id`] > 0) {
       if (user_level == level) {
-        return (parseFloat(item[`sales${operator_list[i].num}_fee`] ?? 0) - parseFloat(top_fee)).toFixed(2);
+        return Math.round(parseFloat(item[`sales${operator_list[i].num}_fee`] ?? 0) - parseFloat(top_fee)).toFixed(2);
       }
       top_fee = item[`sales${operator_list[i].num}_fee`];
       level = operator_list[i].value;
     }
   }
   if (user_level == level) {
-    return (parseFloat(item[`mcht_fee`] ?? 0) - parseFloat(top_fee)).toFixed(2);
+    return Math.round(parseFloat(item[`mcht_fee`] ?? 0) - parseFloat(top_fee)).toFixed(2);
   }
   if (user_level == 10) {
-    return (100 - parseFloat(item[`mcht_fee`] ?? 0)).toFixed(2);
+    return Math.round(100 - parseFloat(item[`mcht_fee`] ?? 0)).toFixed(2);
   }
   return result;
 }
