@@ -107,6 +107,13 @@ const WithdrawList = () => {
       }
     },
     {
+      id: 'note',
+      label: '메모',
+      action: (row, is_excel) => {
+        return row['note']
+      }
+    },
+    {
       id: 'created_at',
       label: '생성일',
       action: (row, is_excel) => {
