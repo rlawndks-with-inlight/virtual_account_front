@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -117,7 +117,7 @@ const MotherAccountList = () => {
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
-    onChangePage({ ...searchObj, page: 1, is_mother: 1, });
+    onChangePage({ ...searchObj, page: 1 });
   }
   const onChangePage = async (obj) => {
     setData({
@@ -136,6 +136,21 @@ const MotherAccountList = () => {
     <>
       <Stack spacing={3}>
         <Card>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>거래구분</InputLabel>
+              <Select label='거래구분' value={searchObj[`pay_type`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`pay_type`]: e.target.value })
+                }}>
+                <MenuItem value={null}>거래구분 전체</MenuItem>
+                <MenuItem value={0}>입금</MenuItem>
+                <MenuItem value={5}>출금</MenuItem>
+                <MenuItem value={10}>모계좌출금</MenuItem>
+                <MenuItem value={15}>가맹점{'>'}모계좌이체</MenuItem>
+              </Select>
+            </FormControl>
+          </Row>
           <ManagerTable
             data={data}
             columns={columns}
