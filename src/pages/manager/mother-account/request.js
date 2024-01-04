@@ -48,12 +48,11 @@ const MotherAccountRequest = () => {
     const onSave = async () => {
         let result = undefined
 
-        result = await apiManager('withdraws', 'create', {
+        result = await apiManager('withdraws/mother', 'create', {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
             pay_type: 10,
             note: item?.note,
-            virtual_account_id: themeDnsData?.virtual_account_id
         });
 
         if (result) {
