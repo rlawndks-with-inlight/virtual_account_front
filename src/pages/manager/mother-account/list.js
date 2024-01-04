@@ -38,14 +38,19 @@ const MotherAccountList = () => {
       id: 'nickname',
       label: '상호',
       action: (row, is_excel) => {
-        return `${row[`nickname`]}\n(${row['user_name']})`
+        let text = row['user_name'] ? `${row[`nickname`]}\n(${row['user_name']})` : "---";
+        return text;
       }
     },
     {
       id: 'pay_type',
       label: '거래구분',
       action: (row, is_excel) => {
-        return <Chip variant="soft" label={_.find(payTypeList, { value: row['pay_type'] })?.label} color={_.find(payTypeList, { value: row['pay_type'] })?.color} />
+        let pay_type = _.find(payTypeList, { value: row['pay_type'] });
+        if (is_excel) {
+          return pay_type;
+        }
+        return <Chip variant="soft" label={pay_type?.label} color={pay_type?.color} />
       }
     },
     {
@@ -79,6 +84,13 @@ const MotherAccountList = () => {
           color: `${amount > 0 ? 'blue' : 'red'}`
         }
       },
+    },
+    {
+      id: 'note',
+      label: '메모',
+      action: (row, is_excel) => {
+        return row['note']
+      }
     },
     {
       id: 'created_at',
