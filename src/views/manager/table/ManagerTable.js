@@ -36,7 +36,7 @@ const CustomTableRow = muiStyled(TableRow)(({ theme }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name, between_content } = props;
   const { page, page_size } = props?.searchObj;
 
   const router = useRouter();
@@ -226,6 +226,7 @@ export default function ManagerTable(props) {
               </>}
           </Row>
         </TableHeaderContainer>
+        {between_content}
         <div style={{ width: '100%', overflow: 'auto' }}>
           {!data.content ?
             <>

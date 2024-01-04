@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -291,6 +291,44 @@ const DepositList = () => {
             head_columns={defaultHeadColumns}
             table={'deposits'}
             excel_name={'출금'}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">조회건수</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.total)}</Typography>
+              </Row>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">입금예정금액</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.chart?.expect_amount)}원</Typography>
+              </Row>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">실제입금금액</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.chart?.amount)}원</Typography>
+              </Row>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">가맹점정산금액</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.chart?.mcht_amount)}원</Typography>
+              </Row>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">본사수수료</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.chart?.head_office_amount)}원</Typography>
+              </Row>
+              {themeDnsData?.operator_list.map(oper => {
+                return <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                  <Typography variant="body2">{oper?.label}수수료</Typography>
+                  <Typography variant="subtitle2">{commarNumber(data?.chart[`sales${oper?.num}_amount`])}원</Typography>
+                </Row>
+              })}
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">총 영업자 수수료</Typography>
+                <Typography variant="subtitle2">{commarNumber(_.sum(themeDnsData?.operator_list.map(oper => {
+                  return data?.chart[`sales${oper?.num}_amount`]
+                })))}원</Typography>
+              </Row>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">입금수수료</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.chart?.deposit_fee)}원</Typography>
+              </Row>
+            </Row>}
           />
         </Card>
       </Stack>
