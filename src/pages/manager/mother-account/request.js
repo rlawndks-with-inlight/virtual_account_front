@@ -25,8 +25,7 @@ const MotherAccountRequest = () => {
 
     const { user } = useAuthContext();
     const { setModal } = useModal()
-    const { themeMode } = useSettingsContext();
-
+    const { themeMode, themeDnsData } = useSettingsContext();
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
@@ -52,6 +51,9 @@ const MotherAccountRequest = () => {
         result = await apiManager('withdraws', 'create', {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
+            pay_type: 10,
+            note: item?.note,
+            virtual_account_id: themeDnsData?.virtual_account_id
         });
 
         if (result) {
@@ -152,6 +154,20 @@ const MotherAccountRequest = () => {
                                                 {
                                                     ...item,
                                                     ['withdraw_amount']: parseInt(e.target.value)
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        multiline
+                                        rows={5}
+                                        label='메모'
+                                        value={item?.note}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['note']: e.target.value
                                                 }
                                             )
                                         }} />
