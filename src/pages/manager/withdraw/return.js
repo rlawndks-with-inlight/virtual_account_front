@@ -102,7 +102,7 @@ const WithdrawReturn = () => {
                                             반환후 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_amount)} 원
+                                            {commarNumber(item?.settle_amount - item?.withdraw_amount - item?.withdraw_fee)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
