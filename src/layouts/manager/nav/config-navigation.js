@@ -54,11 +54,13 @@ const navConfig = () => {
   return [
     // GENERAL
     // ----------------------------------------------------------------------
-    {
-      items: [
-        { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
-      ],
-    },
+    ...(isManager() ? [
+      {
+        items: [
+          { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
+        ],
+      },
+    ] : []),
     {
       items: [
         { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: <Icon icon='iconamoon:history-fill' style={{ fontSize: '1.5rem' }} /> },
