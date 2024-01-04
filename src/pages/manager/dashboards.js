@@ -124,7 +124,12 @@ const Dashboards = () => {
                     label: '입금액',
                     action: (row, idx) => {
                         return commarNumber(row['amount'])
-                    }
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
                 },
                 {
                     label: '입금건',
@@ -136,7 +141,12 @@ const Dashboards = () => {
                     label: '가맹점 정산금',
                     action: (row, idx) => {
                         return commarNumber(row['mcht_amount'])
-                    }
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'red'
+                        }
+                    },
                 },
 
             ],
@@ -162,7 +172,12 @@ const Dashboards = () => {
                     label: '입금액',
                     action: (row, idx) => {
                         return commarNumber(row['amount'])
-                    }
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
                 },
                 {
                     label: '입금건',
@@ -193,7 +208,12 @@ const Dashboards = () => {
                     label: '입금액',
                     action: (row, idx) => {
                         return commarNumber(row['amount'])
-                    }
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
                 },
                 {
                     label: '입금건',
@@ -224,7 +244,12 @@ const Dashboards = () => {
                     label: '입금액',
                     action: (row, idx) => {
                         return commarNumber(row['amount'])
-                    }
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
                 },
                 {
                     label: '입금건',
