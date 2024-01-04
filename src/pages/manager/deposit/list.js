@@ -118,7 +118,7 @@ const DepositList = () => {
     },
     {
       id: 'mcht_fee',
-      label: '가맹점 수수료율',
+      label: '가맹점 요율',
       action: (row, is_excel) => {
         return row['mcht_fee'] + '%'
       }
@@ -126,7 +126,7 @@ const DepositList = () => {
     ...(user?.level >= 40 ? [
       {
         id: 'head_office_fee',
-        label: '본사 수수료율',
+        label: '본사 요율',
         action: (row, is_excel) => {
           return row['head_office_fee'] + '%'
         }
@@ -168,7 +168,7 @@ const DepositList = () => {
           },
           {
             id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 수수료율`,
+            label: `${operator?.label} 요율`,
             action: (row, is_excel) => {
               return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
             }
