@@ -357,3 +357,26 @@ export const excelDownload = async (excelData, columns = [], param_table) => {
   const excelFile = new Blob([excelButter], { type: excelFileType });
   FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
 }
+
+export const getUserFee = (item, user_level, operator_list = [], head_office_fee) => {
+  let top_fee = head_office_fee;
+  let level = 40;
+  let result = 0;
+
+  for (var i = 0; i < operator_list.length; i++) {
+    if (item[`sales${operator_list[i].num}_id`] > 0) {
+      if (user_level == level) {
+        return parseFloat(item[`sales${operator_list[i].num}_fee`]) - parseFloat(top_fee);
+      }
+      top_fee = item[`sales${operator_list[i].num}_fee`];
+      level = operator_list[i].value;
+    }
+  }
+  if (user_level == level) {
+    return parseFloat(item[`mcht_fee`]) - parseFloat(top_fee);
+  }
+  if (user_level == 10) {
+    return 100 - parseFloat(item[`mcht_fee`]);
+  }
+  return result;
+}

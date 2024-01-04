@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserFee, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
@@ -24,12 +24,12 @@ const DepositList = () => {
     },
     {
       title: '유저정보',
-      count: 3
+      count: 4
     },
 
     {
-      title: (user?.level >= 40 ? 2 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 3 > 0 ? '영업자정보' : '',
-      count: (user?.level >= 40 ? 2 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 3
+      title: (user?.level >= 40 ? 3 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 4 > 0 ? '영업자정보' : '',
+      count: (user?.level >= 40 ? 3 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 4
     },
   ]
   const defaultColumns = [
@@ -123,12 +123,26 @@ const DepositList = () => {
         return row['mcht_fee'] + '%'
       }
     },
+    {
+      id: 'mcht_fee',
+      label: '가맹점 획득 요율',
+      action: (row, is_excel) => {
+        return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%'
+      }
+    },
     ...(user?.level >= 40 ? [
       {
         id: 'head_office_fee',
         label: '본사 요율',
         action: (row, is_excel) => {
           return row['head_office_fee'] + '%'
+        }
+      },
+      {
+        id: `head_office_fee`,
+        label: `본사 획득 요율`,
+        action: (row, is_excel) => {
+          return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
         }
       },
       {
@@ -155,6 +169,20 @@ const DepositList = () => {
             }
           },
           {
+            id: `sales${operator?.num}_fee`,
+            label: `${operator?.label} 요율`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+            }
+          },
+          {
+            id: `sales${operator?.num}_fee`,
+            label: `${operator?.label} 획득 요율`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+            }
+          },
+          {
             id: `sales${operator?.num}_amount`,
             label: `${operator?.label} 수수료`,
             action: (row, is_excel) => {
@@ -165,13 +193,6 @@ const DepositList = () => {
                 color: '#a52a2a'
               }
             },
-          },
-          {
-            id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 요율`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] : "---"
-            }
           },
         ]
       } else {

@@ -9,8 +9,8 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList, operatorLevelList } from "src/utils/format";
+import { apiManager } from "src/utils/api-manager";
+import { getUserFee } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -98,6 +98,7 @@ const UserEdit = () => {
       router.push('/manager/merchandise');
     }
   }
+
   return (
     <>
       {!loading &&
@@ -248,62 +249,86 @@ const UserEdit = () => {
                 <Grid item xs={12} md={12}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <TextField
-                        type="number"
-                        label={`본사요율`}
-                        disabled={true}
-                        value={themeDnsData?.head_office_fee}
-                        InputProps={{
-                          endAdornment: <div>%</div>
-                        }}
-                      />
-                      {operatorLevelList.map((itm, idx) => {
-                        if (themeDnsData?.level_obj[`is_use_sales${5 - idx}`] == 1) {
-                          return <Row style={{ columnGap: '1rem' }}>
-                            <FormControl style={{ width: '50%' }}>
-                              <InputLabel>{`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}</InputLabel>
-                              <Select
-                                label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 선택`}
-                                value={item[`sales${5 - idx}_id`] ?? 0}
-                                onChange={e => {
-                                  let obj = {
-                                    ...item,
-                                    [`sales${5 - idx}_id`]: e.target.value
-                                  }
-                                  if (!e.target.value) {
-                                    obj[`sales${5 - idx}_fee`] = 0;
-                                  }
-                                  setItem(obj);
-                                }}
-                              >
-                                <MenuItem value={0}>선택안함</MenuItem>
-                                {operatorList && operatorList.map((operator, idx) => {
-                                  if (operator?.level == itm?.value) {
-                                    return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
-                                  }
-                                })}
-                              </Select>
-                            </FormControl>
-                            <TextField
-                              style={{ width: '50%' }}
-                              type="number"
-                              label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 요율`}
-                              value={item[`sales${5 - idx}_fee`]}
-                              placeholder=""
-                              onChange={(e) => {
-                                setItem(
-                                  {
-                                    ...item,
-                                    [`sales${5 - idx}_fee`]: e.target.value
-                                  }
-                                )
+                      <Row style={{ columnGap: '1rem' }}>
+                        <TextField
+                          style={{ width: 'calc(50% - 8px)' }}
+                          type="number"
+                          label={`본사요율`}
+                          disabled={true}
+                          value={themeDnsData?.head_office_fee}
+                          InputProps={{
+                            endAdornment: <div>%</div>
+                          }}
+                        />
+                        <TextField
+                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
+                          type="number"
+                          label={`본사획득요율`}
+                          disabled={true}
+                          value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                          InputProps={{
+                            endAdornment: <div>%</div>
+                          }}
+                        />
+                      </Row>
+                      {themeDnsData?.operator_list.map((itm, idx) => {
+                        console.log(itm)
+                        return <Row style={{ columnGap: '1rem' }}>
+                          <FormControl style={{ width: '50%' }}>
+                            <InputLabel>{`${itm?.label} 선택`}</InputLabel>
+                            <Select
+                              label={`${itm?.label} 선택`}
+                              value={item[`sales${itm?.num}_id`] ?? 0}
+                              onChange={e => {
+                                let obj = {
+                                  ...item,
+                                  [`sales${itm?.num}_id`]: e.target.value
+                                }
+                                if (!e.target.value) {
+                                  obj[`sales${itm?.num}_fee`] = 0;
+                                }
+                                setItem(obj);
                               }}
-                              InputProps={{
-                                endAdornment: <div>%</div>
-                              }}
-                            />
-                          </Row>
-                        }
+                            >
+                              <MenuItem value={0}>선택안함</MenuItem>
+                              {operatorList && operatorList.map((operator, idx) => {
+                                if (operator?.level == itm?.value) {
+                                  return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
+                                }
+                              })}
+                            </Select>
+                          </FormControl>
+                          <TextField
+                            style={{ width: '50%' }}
+                            type="number"
+                            label={`${itm?.label} 요율`}
+                            value={item[`sales${itm?.num}_fee`]}
+                            disabled={!(item[`sales${itm?.num}_id`] > 0)}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  [`sales${itm?.num}_fee`]: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: <div>%</div>
+                            }}
+                          />
+                          <TextField
+                            style={{ width: '50%' }}
+                            type="number"
+                            label={`${itm?.label} 획득 요율`}
+                            value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                            disabled={true}
+                            placeholder=""
+                            InputProps={{
+                              endAdornment: <div>%</div>
+                            }}
+                          />
+                        </Row>
                       })}
                       <Row style={{ columnGap: '1rem' }}>
                         <TextField
@@ -320,6 +345,17 @@ const UserEdit = () => {
                               }
                             )
                           }}
+                          InputProps={{
+                            endAdornment: <div>%</div>
+                          }}
+                        />
+                        <TextField
+                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
+                          type="number"
+                          label={`가맹점 획득 요율`}
+                          disabled={true}
+                          value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                          placeholder=""
                           InputProps={{
                             endAdornment: <div>%</div>
                           }}

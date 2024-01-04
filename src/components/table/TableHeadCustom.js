@@ -58,7 +58,13 @@ export default function TableHeadCustom({
             key={headCell.id}
             align={headCell.align || 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ width: headCell.width, minWidth: headCell.minWidth, fontSize: '0.8rem', padding: '16px 0' }}
+            sx={{
+              width: headCell.width,
+              minWidth: headCell.minWidth,
+              fontSize: '0.8rem',
+              padding: '16px 0',
+              whiteSpace: 'nowrap'
+            }}
           >
             <Row style={{ alignItems: 'center' }}>
               <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />

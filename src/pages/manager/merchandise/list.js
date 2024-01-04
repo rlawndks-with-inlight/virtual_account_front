@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber, getUserStatusByNum } from "src/utils/function";
+import { commarNumber, getUserFee, getUserLevelByNumber, getUserStatusByNum } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -150,6 +150,13 @@ const UserList = () => {
           label: `${operator?.label} 요율`,
           action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+          }
+        },
+        {
+          id: `sales${operator?.num}_fee`,
+          label: `${operator?.label} 획득 요율`,
+          action: (row, is_excel) => {
+            return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
           }
         },
       ]
