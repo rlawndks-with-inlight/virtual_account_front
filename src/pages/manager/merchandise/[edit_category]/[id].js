@@ -85,7 +85,7 @@ const UserEdit = () => {
   }
   const onSave = async () => {
     if (!item?.mcht_fee) {
-      return toast.error('가맹점 수수료는 필수값입니다.');
+      return toast.error('가맹점 요율은 필수값입니다.');
     }
     let result = undefined
     if (item?.id) {//수정
@@ -250,7 +250,7 @@ const UserEdit = () => {
                     <Stack spacing={3}>
                       <TextField
                         type="number"
-                        label={`본사수수료`}
+                        label={`본사요율`}
                         disabled={true}
                         value={themeDnsData?.head_office_fee}
                         InputProps={{
@@ -287,7 +287,7 @@ const UserEdit = () => {
                             <TextField
                               style={{ width: '50%' }}
                               type="number"
-                              label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 수수료`}
+                              label={`${themeDnsData?.level_obj[`sales${5 - idx}_name`]} 요율`}
                               value={item[`sales${5 - idx}_fee`]}
                               placeholder=""
                               onChange={(e) => {
@@ -309,7 +309,7 @@ const UserEdit = () => {
                         <TextField
                           style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
                           type="number"
-                          label={`가맹점 수수료`}
+                          label={`가맹점 요율`}
                           value={item[`mcht_fee`]}
                           placeholder=""
                           onChange={(e) => {

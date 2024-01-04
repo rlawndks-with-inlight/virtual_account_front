@@ -147,7 +147,7 @@ const UserList = () => {
         },
         {
           id: `sales${operator?.num}_fee`,
-          label: `${operator?.label} 수수료`,
+          label: `${operator?.label} 요율`,
           action: (row, is_excel) => {
             return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
           }
