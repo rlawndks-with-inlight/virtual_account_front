@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
@@ -89,21 +89,21 @@ const WithdrawList = () => {
       id: 'amount',
       label: '이체금',
       action: (row, is_excel) => {
-        return row['amount'] * (-1) - row['withdraw_fee']
+        return commarNumber(row['amount'] * (-1) - row['withdraw_fee'])
       }
     },
     {
       id: 'withdraw_fee',
       label: '이체 수수료',
       action: (row, is_excel) => {
-        return row['withdraw_fee'] ?? "---"
+        return commarNumber(row['withdraw_fee'] ?? "---")
       }
     },
     {
       id: 'minus_amount',
       label: '차감 보유정산금',
       action: (row, is_excel) => {
-        return row['amount'] * (-1)
+        return commarNumber(row['amount'] * (-1))
       }
     },
     {
