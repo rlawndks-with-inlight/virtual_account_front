@@ -298,7 +298,7 @@ export default function ManagerTable(props) {
             <InputLabel>조회개수</InputLabel>
             <Select label='조회개수' value={page_size}
               onChange={(e) => {
-                onChangePage({ ...searchObj, page_size: e.target.value })
+                onChangePage({ ...searchObj, page_size: e.target.value, page: 1, })
               }}>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={20}>20</MenuItem>

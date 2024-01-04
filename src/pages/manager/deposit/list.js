@@ -326,12 +326,15 @@ const DepositList = () => {
                     }
 
                   })}
-                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
-                    <Typography variant="body2">총 영업자 수수료</Typography>
-                    <Typography variant="subtitle2">{commarNumber(_.sum(themeDnsData?.operator_list.map(oper => {
-                      return data?.chart[`sales${oper?.num}_amount`]
-                    })))}원</Typography>
-                  </Row>
+                  {user?.level >= 40 &&
+                    <>
+                      <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                        <Typography variant="body2">총 영업자 수수료</Typography>
+                        <Typography variant="subtitle2">{commarNumber(_.sum(themeDnsData?.operator_list.map(oper => {
+                          return data?.chart[`sales${oper?.num}_amount`]
+                        })))}원</Typography>
+                      </Row>
+                    </>}
                   <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
                     <Typography variant="body2">입금수수료</Typography>
                     <Typography variant="subtitle2">{commarNumber(data?.chart?.deposit_fee)}원</Typography>

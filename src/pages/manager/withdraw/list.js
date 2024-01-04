@@ -101,11 +101,39 @@ const WithdrawList = () => {
     },
     {
       id: 'minus_amount',
+      label: '차감예정 보유정산금',
+      action: (row, is_excel) => {
+        return commarNumber(row['expect_amount'] * (-1))
+      }
+    },
+    {
+      id: 'minus_amount',
       label: '차감 보유정산금',
       action: (row, is_excel) => {
         return commarNumber(row['amount'] * (-1))
       }
     },
+    ...(user?.level >= 40 ? [
+      {
+        id: 'minus_amount',
+        label: '출금허용하기',
+        action: (row, is_excel) => {
+          if (row?.is_withdraw_hold == 1) {
+            return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                setModal({
+                  func: () => { onConfirmWithdraw(row?.id) },
+                  icon: 'bx:money-withdraw',
+                  title: '출금을 허용 하시겠습니까?'
+                })
+              }}
+            >출금허용</Button>
+          } else {
+            return "---";
+          }
+        }
+      },
+    ] : []),
     {
       id: 'note',
       label: '메모',
@@ -166,10 +194,14 @@ const WithdrawList = () => {
     }
     setSearchObj(obj);
   }
-  const deleteUser = async (id) => {
-    let data = await apiManager('withdraws', 'delete', { id });
-    if (data) {
-      onChangePage(searchObj);
+  const onConfirmWithdraw = async (id) => {
+    let result = undefined
+    result = await apiManager('withdraws/confirm', 'create', {
+      id
+    });
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      onChangePage(searchObj)
     }
   }
 
