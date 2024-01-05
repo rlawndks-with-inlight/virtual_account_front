@@ -22,10 +22,6 @@ const DepositList = () => {
       title: '기본정보',
       count: 6,
     },
-    {
-      title: '유저정보',
-      count: 4
-    },
   ]
   const defaultColumns = [
     {

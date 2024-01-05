@@ -119,7 +119,22 @@ const WithdrawReturn = () => {
                         <Grid item xs={12} md={6}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
-                                    <FormControl variant='outlined'>
+                                    <Autocomplete
+                                        fullWidth
+                                        options={virtualAccounts}
+                                        getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList(), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
+                                        onChange={(e, value) => {
+                                            setItem({
+                                                ...item,
+                                                virtual_account_id: value?.id
+                                            })
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="유저선택" placeholder="유저선택" />
+                                        )}
+                                    />
+
+                                    {/* <FormControl variant='outlined'>
                                         <InputLabel>{'유저선택'}</InputLabel>
                                         <Select label={'유저선택'} value={item?.virtual_account_id}
                                             sx={{ fontSize: '0.8rem' }}
@@ -138,7 +153,7 @@ const WithdrawReturn = () => {
                                                 </MenuItem>
                                             })}
                                         </Select>
-                                    </FormControl>
+                                    </FormControl> */}
                                     <TextField
                                         label='반환 요청금'
                                         type="number"

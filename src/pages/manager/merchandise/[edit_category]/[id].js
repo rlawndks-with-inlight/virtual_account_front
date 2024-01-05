@@ -391,14 +391,26 @@ const UserEdit = () => {
                 <Grid item xs={12} md={12}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <FormControlLabel control={<Switch checked={item.is_withdraw_hold == 1} />} label={`출금보류 여부`}
-                        onChange={(e) => {
-                          setItem({
-                            ...item,
-                            is_withdraw_hold: e.target.checked ? 1 : 0,
-                          })
-                        }}
-                      />
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_withdraw_hold == 1} />} label={`출금보류 여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              is_withdraw_hold: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.can_return_ago_pay == 1} />} label={`결제를 한 회원에게만 반환가능하게 제한함`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              can_return_ago_pay: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                       <TextField
                         label='출금수수료'
                         type="number"
