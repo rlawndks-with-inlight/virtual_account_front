@@ -34,6 +34,9 @@ const navConfig = () => {
   const isManager = () => {
     return user?.level >= 40
   }
+  const isOperator = () => {
+    return user?.level < 40 && user?.level > 10
+  }
   useEffect(() => {
     settingSidebar();
   }, [])
@@ -135,19 +138,21 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    {
-      items: [
-        {
-          title: '가상계좌관리',
-          path: PATH_MANAGER.virtualAccount.root,
-          icon: <Icon icon='mdi:cloud-key-outline' style={{ fontSize: '1.5rem' }} />,
-          children: [
-            { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
-            { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
-          ],
-        },
-      ],
-    },
+    ...(!isOperator() ? [
+      {
+        items: [
+          {
+            title: '가상계좌관리',
+            path: PATH_MANAGER.virtualAccount.root,
+            icon: <Icon icon='mdi:cloud-key-outline' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
+              { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...(isManager() ? [
       {
         items: [
