@@ -26,11 +26,6 @@ const DepositList = () => {
       title: '유저정보',
       count: 4
     },
-
-    {
-      title: (user?.level >= 40 ? 3 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 4 > 0 ? '영업자정보' : '',
-      count: (user?.level >= 40 ? 3 : 0) + (themeDnsData?.operator_list.filter(el => user?.level >= el?.value)?.length ?? 0) * 4
-    },
   ]
   const defaultColumns = [
     {
@@ -116,13 +111,15 @@ const DepositList = () => {
         return commarNumber(row['deposit_fee'])
       }
     },
-    {
-      id: 'mcht_fee',
-      label: '가맹점 요율',
-      action: (row, is_excel) => {
-        return row['mcht_fee'] + '%'
-      }
-    },
+    ...(user?.level >= 40 ? [
+      {
+        id: 'mcht_fee',
+        label: '가맹점 요율',
+        action: (row, is_excel) => {
+          return row['mcht_fee'] + '%'
+        }
+      },
+    ] : []),
     /*
     {
       id: 'mcht_fee',
@@ -170,20 +167,22 @@ const DepositList = () => {
               return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
           },
-          {
-            id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 요율`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
-            }
-          },
-          {
-            id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 획득 요율`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
-            }
-          },
+          ...(user?.level >= 40 ? [
+            {
+              id: `sales${operator?.num}_fee`,
+              label: `${operator?.label} 요율`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+              }
+            },
+            {
+              id: `sales${operator?.num}_fee`,
+              label: `${operator?.label} 획득 요율`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+              }
+            },
+          ] : []),
           {
             id: `sales${operator?.num}_amount`,
             label: `${operator?.label} 수수료`,
