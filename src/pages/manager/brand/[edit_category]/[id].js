@@ -897,6 +897,24 @@ const BrandEdit = () => {
                           )
                         }}
                       />
+                      <TextField
+                        label='최대출금금액'
+                        value={item.default_withdraw_max_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['default_withdraw_max_price']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
