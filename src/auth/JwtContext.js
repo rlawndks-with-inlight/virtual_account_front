@@ -120,21 +120,27 @@ export function AuthProvider({ children }) {
       toast.error('필수값을 입력해 주세요.');
       return false;
     }
-    const { data: response } = await axios.post(`/api/auth/sign-in`, {
-      user_name,
-      user_pw,
-    });
-    if (response?.result < 0) {
-      toast.error(response?.message)
-      return false;
+    try {
+      const { data: response } = await axios.post(`/api/auth/sign-in`, {
+        user_name,
+        user_pw,
+      });
+      const user = response.data;
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user,
+        },
+      });
+    } catch (err) {
+      console.log(err)
+      if (err?.result < 0) {
+        toast.error(err?.message)
+        return false;
+      }
     }
-    const user = response.data;
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user,
-      },
-    });
+
+
   }, []);
 
   // REGISTER
