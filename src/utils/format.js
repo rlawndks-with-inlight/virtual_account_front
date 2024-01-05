@@ -81,3 +81,9 @@ export const withdrawStatusList = [
     { value: 0, label: '출금완료', color: 'success' },
     { value: 5, label: '출금요청완료', color: 'warning' },
 ]
+export const virtualAccountUserTypeList = [
+    { value: 0, label: '개인', color: 'success' },
+    { value: 1, label: '법인', color: 'success' },
+    { value: 2, label: '개인사업자', color: 'success' },
+
+]

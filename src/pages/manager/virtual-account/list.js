@@ -11,7 +11,7 @@ import { apiManager } from "src/utils/api-manager";
 import { getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
-import { bankCodeList, operatorLevelList, virtualAccountStatusList } from "src/utils/format";
+import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 
 const VirtualAccountList = () => {
@@ -84,7 +84,14 @@ const VirtualAccountList = () => {
         </Col>
       }
     },
-
+    {
+      id: 'user_type',
+      label: '사용자구분',
+      action: (row, is_excel) => {
+        let text = `${_.find(virtualAccountUserTypeList, { value: row['user_type'] })?.label ?? "---"}`;
+        return text
+      }
+    },
     {
       id: 'created_at',
       label: '생성일',
@@ -194,23 +201,26 @@ const VirtualAccountList = () => {
       <Stack spacing={3}>
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
-            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
-              <InputLabel>가맹점</InputLabel>
-              <Select label='가맹점' value={searchObj[`mcht_id`]}
-                onChange={(e) => {
-                  onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
-                }}>
-                <MenuItem value={null}>가맹점 전체</MenuItem>
-                {operUserList.filter(el => el?.level == 10).map(oper => {
-                  return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
-                })}
-              </Select>
-            </FormControl>
+            {user?.level >= 40 &&
+              <>
+                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                  <InputLabel>가맹점</InputLabel>
+                  <Select label='가맹점' value={searchObj[`mcht_id`]}
+                    onChange={(e) => {
+                      onChangePage({ ...searchObj, [`mcht_id`]: e.target.value, page: 1, })
+                    }}>
+                    <MenuItem value={null}>가맹점 전체</MenuItem>
+                    {operUserList.filter(el => el?.level == 10).map(oper => {
+                      return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                    })}
+                  </Select>
+                </FormControl>
+              </>}
             <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
               <InputLabel>상태</InputLabel>
               <Select label='상태' value={searchObj[`status`]}
                 onChange={(e) => {
-                  onChangePage({ ...searchObj, [`status`]: e.target.value })
+                  onChangePage({ ...searchObj, [`status`]: e.target.value, page: 1, })
                 }}>
                 <MenuItem value={null}>상태 전체</MenuItem>
                 {virtualAccountStatusList.map(status => {

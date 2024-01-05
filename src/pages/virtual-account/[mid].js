@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiServer } from "src/utils/api-manager";
-import { bankCodeList } from "src/utils/format";
+import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
@@ -29,6 +29,11 @@ const VirtualAccountAddNoneAuth = () => {
         birth: '',
         phone_num: '',
         type: 0,
+        user_type: 0,
+        business_num: '',
+        company_name: '',
+        ceo_name: '',
+        company_phone_num: '',
     })
     const onSave = async () => {
         let result = undefined
@@ -49,6 +54,11 @@ const VirtualAccountAddNoneAuth = () => {
             phone_num: item?.phone_num,
             guid: item?.guid,
             api_key: themeDnsData?.api_key,
+            user_type: item?.user_type,
+            business_num: item?.business_num,
+            company_name: item?.company_name,
+            ceo_name: item?.ceo_name,
+            company_phone_num: item?.company_phone_num,
         });
         let data = item;
         data.guid = result?.guid;
@@ -100,6 +110,82 @@ const VirtualAccountAddNoneAuth = () => {
                 <Grid item xs={12} md={12}>
                     <Card sx={{ p: 2, height: '100%' }}>
                         <Stack spacing={3}>
+                            <FormControl variant='outlined' >
+                                <InputLabel>사용자구분</InputLabel>
+                                <Select label='사용자구분' value={item?.user_type}
+                                    onChange={(e) => {
+                                        let obj = {
+                                            ...item,
+                                            user_type: e.target.value,
+                                        }
+                                        if (e.target.value == 0) {
+                                            obj = {
+                                                ...obj,
+                                                business_num: '',
+                                                company_name: '',
+                                                ceo_name: '',
+                                                company_phone_num: '',
+                                            }
+                                        }
+                                        setItem(obj)
+                                    }}>
+                                    {virtualAccountUserTypeList.map((itm => {
+                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                    }))}
+                                </Select>
+                            </FormControl>
+                            {(item.user_type == 1 || item.user_type == 2) &&
+                                <>
+                                    <TextField
+                                        label='사업자등록번호'
+                                        value={item.business_num}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['business_num']: e.target.value
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        label='회사명(상호)'
+                                        value={item.company_name}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['company_name']: e.target.value
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        label='대표자명'
+                                        value={item.ceo_name}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['ceo_name']: e.target.value
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        label='회사 전화번호'
+                                        value={item.company_phone_num}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['company_phone_num']: e.target.value
+                                                }
+                                            )
+                                        }} />
+
+                                </>}
                             <TextField
                                 label='생년월일'
                                 value={item.birth}

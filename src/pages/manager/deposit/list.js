@@ -259,7 +259,7 @@ const DepositList = () => {
                     <InputLabel>{operator?.label}</InputLabel>
                     <Select label={operator?.label} value={searchObj[`sales${operator?.num}_id`]}
                       onChange={(e) => {
-                        onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value })
+                        onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value, page: 1, })
                       }}>
                       <MenuItem value={null}>{operator?.label} 전체</MenuItem>
                       {operUserList.filter(el => el?.level == operator?.value).map(oper => {
@@ -272,7 +272,7 @@ const DepositList = () => {
                   <InputLabel>가맹점</InputLabel>
                   <Select label='가맹점' value={searchObj[`mcht_id`]}
                     onChange={(e) => {
-                      onChangePage({ ...searchObj, [`mcht_id`]: e.target.value })
+                      onChangePage({ ...searchObj, [`mcht_id`]: e.target.value, page: 1, })
                     }}>
                     <MenuItem value={null}>가맹점 전체</MenuItem>
                     {operUserList.filter(el => el?.level == 10).map(oper => {

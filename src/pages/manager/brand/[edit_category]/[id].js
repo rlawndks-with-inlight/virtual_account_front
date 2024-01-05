@@ -447,7 +447,7 @@ const BrandEdit = () => {
                           )
                         }} />
                       <TextField
-                        label='사업자번호'
+                        label='사업자등록번호'
                         value={item.business_num}
                         onChange={(e) => {
                           setItem(

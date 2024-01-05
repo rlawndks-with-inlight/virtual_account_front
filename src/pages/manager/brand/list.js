@@ -64,7 +64,7 @@ const BrandList = () => {
     },
     {
       id: 'business_num',
-      label: '사업자번호',
+      label: '사업자등록번호',
       action: (row, is_excel) => {
         return row['business_num'] ?? "---"
       }

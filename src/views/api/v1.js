@@ -60,6 +60,12 @@ const ApiV1 = () => {
                 ['name', '이름', 'O', 'String'],
                 ['birth', '생년월일 ex) 19990101', 'O', 'String'],
                 ['phone_num', '휴대폰번호 하이픈(-)제외', 'O', 'String'],
+                ['user_type', '0-개인, 1-법인, 2-개인사업자', 'O', 'Integer'],
+                ['business_num', '사업자등록번호 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
+                ['company_name', '회사명(상호) (user_type이 1 또는 2일시 필수)', 'X', 'String'],
+                ['ceo_name', '대표자명 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
+                ['company_phone_num', '회사 전화번호 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
+
             ],
             res_head: [
                 '키',
