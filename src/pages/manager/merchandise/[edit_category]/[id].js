@@ -37,6 +37,7 @@ const UserEdit = () => {
     withdraw_fee: 0,
     min_withdraw_price: 0,
     min_withdraw_remain_price: 0,
+    min_withdraw_hold_price: 0,
     is_send_one_won_check: false,
     vrf_bank_code: '',
     guid: '',
@@ -459,6 +460,25 @@ const UserEdit = () => {
                             {
                               ...item,
                               ['min_withdraw_remain_price']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='최소 출금보류금액'
+                        type="number"
+                        value={item.min_withdraw_hold_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['min_withdraw_hold_price']: e.target.value
                             }
                           )
                         }}
