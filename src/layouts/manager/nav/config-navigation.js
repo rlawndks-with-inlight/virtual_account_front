@@ -92,8 +92,8 @@ const navConfig = () => {
           icon: <Icon icon='bx:money-withdraw' style={{ fontSize: '1.5rem' }} />,
           children: [
             { title: '출금내역', path: PATH_MANAGER.withdraw.list },
-            ...(!isManager() ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
-            ...(!isManager() ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
+            ...((!isManager()) ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
+            ...((!isManager() && !isOperator()) ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
           ],
         },
       ],
@@ -184,11 +184,13 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    {
-      items: [
-        { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
-      ],
-    },
+    ...(!isOperator() ? [
+      {
+        items: [
+          { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
+        ],
+      },
+    ] : []),
   ];
 }
 

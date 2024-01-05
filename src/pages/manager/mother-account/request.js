@@ -42,7 +42,6 @@ const MotherAccountRequest = () => {
             ...item,
             ...data,
         });
-        console.log(data)
         setLoading(false);
     }
     const onSave = async () => {

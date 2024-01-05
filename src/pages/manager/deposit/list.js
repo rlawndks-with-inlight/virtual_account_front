@@ -123,6 +123,7 @@ const DepositList = () => {
         return row['mcht_fee'] + '%'
       }
     },
+    /*
     {
       id: 'mcht_fee',
       label: '가맹점 획득 요율',
@@ -130,6 +131,7 @@ const DepositList = () => {
         return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%'
       }
     },
+    */
     ...(user?.level >= 40 ? [
       {
         id: 'head_office_fee',

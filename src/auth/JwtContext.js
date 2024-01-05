@@ -133,7 +133,6 @@ export function AuthProvider({ children }) {
         },
       });
     } catch (err) {
-      console.log(err)
       if (err?.result < 0) {
         toast.error(err?.message)
         return false;

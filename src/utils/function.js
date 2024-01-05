@@ -323,7 +323,6 @@ export const excelDownload = async (excelData, columns = [], param_table) => {
   const excelFileExtension = '.xlsx';
   const excelFileName = `${param_table}_${returnMoment().substring(0, 10).replaceAll('-', '')}`;
   let name_list = [];
-  console.log(columns)
   for (var i = 0; i < columns.length; i++) {
     name_list.push(columns[i]?.label)
   }

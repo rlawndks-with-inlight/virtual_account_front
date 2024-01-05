@@ -273,7 +273,6 @@ const UserEdit = () => {
                         />
                       </Row>
                       {themeDnsData?.operator_list.map((itm, idx) => {
-                        console.log(itm)
                         return <Row style={{ columnGap: '1rem' }}>
                           <FormControl style={{ width: '50%' }}>
                             <InputLabel>{`${itm?.label} 선택`}</InputLabel>
