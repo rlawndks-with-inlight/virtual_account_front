@@ -33,7 +33,7 @@ import { store } from '../redux/store'
 import { useRouter } from 'next/router';
 
 const App = (props) => {
-  const { Component, pageProps, head_data, host, host_data } = props;
+  const { Component, pageProps, head_data = {}, host, host_data } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const [headData, setHeadData] = useState({});
