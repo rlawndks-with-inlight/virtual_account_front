@@ -70,68 +70,75 @@ const Login = () => {
   };
   return (
     <>
+
       <Row style={{ height: '100vh', width: '100vw' }}>
-        <Stack sx={{ margin: 'auto', maxWidth: '450px', width: '90%' }}>
-          <img src={logoSrc()} style={{ maxWidth: '200px', margin: '1rem auto' }} />
-          <Stack spacing={3}>
-            <TextField
-              name="username"
-              label="아이디를 입력해 주세요."
-              autoComplete='new-password'
-              onChange={(e) => {
-                setUsername(e.target.value)
-              }}
-              onKeyPress={(e) => {
-                if (e.key == 'Enter') {
-                  $('#id').focus();
-                }
-              }}
-            />
-            <TextField
-              name="password"
-              id="password"
-              label="패스워드를 입력해 주세요."
-              type={showPassword ? 'text' : 'password'}
-              autoComplete='new-password'
-              onKeyPress={(e) => {
-                if (e.key == 'Enter') {
-                  onSubmit();
-                }
-              }}
-              onChange={(e) => {
-                setPassword(e.target.value)
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Stack>
-          <LoadingButton
-            fullWidth
-            color="inherit"
-            size="large"
-            type="submit"
-            variant="contained"
-            sx={{
-              bgcolor: 'text.primary',
-              color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-              '&:hover': {
-                bgcolor: 'text.primary',
-                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-              },
-              margin: '24px 0'
-            }}
-            onClick={onSubmit}
-          >
-            로그인
-          </LoadingButton>
-        </Stack>
+        <Card style={{ margin: 'auto', maxWidth: '450px', width: '90%' }}>
+          <CardContent>
+
+            <Stack>
+              <img src={logoSrc()} style={{ maxWidth: '200px', margin: '1rem auto' }} />
+              <Stack spacing={3}>
+                <TextField
+                  name="username"
+                  label="아이디를 입력해 주세요."
+                  autoComplete='new-password'
+                  onChange={(e) => {
+                    setUsername(e.target.value)
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key == 'Enter') {
+                      $('#id').focus();
+                    }
+                  }}
+                />
+                <TextField
+                  name="password"
+                  id="password"
+                  label="패스워드를 입력해 주세요."
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete='new-password'
+                  onKeyPress={(e) => {
+                    if (e.key == 'Enter') {
+                      onSubmit();
+                    }
+                  }}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
+              <LoadingButton
+                fullWidth
+                color="inherit"
+                size="large"
+                type="submit"
+                variant="contained"
+                sx={{
+                  bgcolor: 'text.primary',
+                  color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+                  '&:hover': {
+                    bgcolor: 'text.primary',
+                    color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+                  },
+                  margin: '24px 0'
+                }}
+                onClick={onSubmit}
+              >
+                로그인
+              </LoadingButton>
+            </Stack>
+          </CardContent>
+        </Card>
+
       </Row>
 
       <Tour
