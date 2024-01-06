@@ -145,7 +145,7 @@ const VirtualAccountEdit = () => {
           <Grid container spacing={3}>
             {currentTab == 0 &&
               <>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       {user?.level >= 40 &&
@@ -270,6 +270,13 @@ const VirtualAccountEdit = () => {
                             }
                           )
                         }} />
+
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                       <Stack spacing={1}>
                         <FormControl>
                           <InputLabel>입금은행</InputLabel>
@@ -331,7 +338,7 @@ const VirtualAccountEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={8}>
                   <Card sx={{ p: 3 }}>
                     <Stack spacing={1} style={{ display: 'flex' }}>
                       <Button variant="contained" style={{
@@ -351,7 +358,7 @@ const VirtualAccountEdit = () => {
               </>}
             {currentTab == 1 &&
               <>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <CardHeader title={`가맹점 정보`} sx={{ padding: '0', marginBottom: '2rem' }} />
                     <Stack spacing={3}>
@@ -370,7 +377,7 @@ const VirtualAccountEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <CardHeader title={`발급 정보`} sx={{ padding: '0', marginBottom: '2rem' }} />
                     <Stack spacing={3}>

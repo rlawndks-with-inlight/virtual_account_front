@@ -64,7 +64,7 @@ const MotherAccountRequest = () => {
             {!loading &&
                 <>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <Stack spacing={1}>
@@ -139,7 +139,7 @@ const MotherAccountRequest = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <TextField
@@ -172,7 +172,7 @@ const MotherAccountRequest = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={8}>
                             <Card sx={{ p: 3 }}>
                                 <Stack spacing={1} style={{ display: 'flex' }}>
                                     <Button variant="contained" style={{

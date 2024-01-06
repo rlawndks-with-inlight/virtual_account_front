@@ -79,7 +79,7 @@ const WithdrawReturn = () => {
             {!loading &&
                 <>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <Stack spacing={1}>
@@ -125,7 +125,7 @@ const WithdrawReturn = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <Autocomplete
@@ -158,8 +158,6 @@ const WithdrawReturn = () => {
                                             } else {//추가할때
                                                 withdraw_list.push(value[value.length - 1]);
                                             }
-
-                                            console.log(withdraw_list)
                                             setWithdraws(withdraw_list);
                                         }}
                                         renderInput={(params) => (
@@ -219,7 +217,7 @@ const WithdrawReturn = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={8}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     {withdraws.map(((vir_acct, idx) => (
@@ -262,7 +260,7 @@ const WithdrawReturn = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={8}>
                             <Card sx={{ p: 3 }}>
                                 <Stack spacing={1} style={{ display: 'flex' }}>
                                     <Button variant="contained" style={{

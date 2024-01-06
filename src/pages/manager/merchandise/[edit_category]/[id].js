@@ -118,7 +118,7 @@ const UserEdit = () => {
           <Grid container spacing={3}>
             {currentTab == 0 &&
               <>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack spacing={1}>
@@ -151,7 +151,7 @@ const UserEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <TextField
@@ -217,6 +217,13 @@ const UserEdit = () => {
                             }
                           )
                         }} />
+
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                       <TextField
                         label='guid'
                         value={item.guid}
@@ -248,34 +255,39 @@ const UserEdit = () => {
               </>}
             {currentTab == 1 &&
               <>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <Row style={{ columnGap: '1rem' }}>
-                        <TextField
-                          style={{ width: 'calc(50% - 8px)' }}
-                          type="number"
-                          label={`본사요율`}
-                          disabled={true}
-                          value={themeDnsData?.head_office_fee}
-                          InputProps={{
-                            endAdornment: <div>%</div>
-                          }}
-                        />
-                        <TextField
-                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
-                          type="number"
-                          label={`본사획득요율`}
-                          disabled={true}
-                          value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
-                          InputProps={{
-                            endAdornment: <div>%</div>
-                          }}
-                        />
-                      </Row>
+                      <TextField
+                        type="number"
+                        label={`본사요율`}
+                        disabled={true}
+                        value={themeDnsData?.head_office_fee}
+                        InputProps={{
+                          endAdornment: <div>%</div>
+                        }}
+                      />
+                      <TextField
+                        type="number"
+                        label={`본사획득요율`}
+                        disabled={true}
+                        value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                        InputProps={{
+                          endAdornment: <div>%</div>
+                        }}
+                      />
+
+
+
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                       {themeDnsData?.operator_list.map((itm, idx) => {
-                        return <Row style={{ columnGap: '1rem' }}>
-                          <FormControl style={{ width: '50%' }}>
+                        return <>
+                          <FormControl>
                             <InputLabel>{`${itm?.label} 선택`}</InputLabel>
                             <Select
                               label={`${itm?.label} 선택`}
@@ -300,7 +312,6 @@ const UserEdit = () => {
                             </Select>
                           </FormControl>
                           <TextField
-                            style={{ width: '50%' }}
                             type="number"
                             label={`${itm?.label} 요율`}
                             value={item[`sales${itm?.num}_fee`]}
@@ -319,7 +330,6 @@ const UserEdit = () => {
                             }}
                           />
                           <TextField
-                            style={{ width: '50%' }}
                             type="number"
                             label={`${itm?.label} 획득 요율`}
                             value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
@@ -329,67 +339,65 @@ const UserEdit = () => {
                               endAdornment: <div>%</div>
                             }}
                           />
-                        </Row>
+                        </>
                       })}
-                      <Row style={{ columnGap: '1rem' }}>
-                        <TextField
-                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
-                          type="number"
-                          label={`가맹점 요율`}
-                          value={item[`mcht_fee`]}
-                          placeholder=""
-                          onChange={(e) => {
-                            setItem(
-                              {
-                                ...item,
-                                [`mcht_fee`]: e.target.value
-                              }
-                            )
-                          }}
-                          InputProps={{
-                            endAdornment: <div>%</div>
-                          }}
-                        />
-                        <TextField
-                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
-                          type="number"
-                          label={`가맹점 획득 요율`}
-                          disabled={true}
-                          value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
-                          placeholder=""
-                          InputProps={{
-                            endAdornment: <div>%</div>
-                          }}
-                        />
-                      </Row>
-                      <Row style={{ columnGap: '1rem' }}>
-                        <TextField
-                          style={{ width: 'calc(50% - 8px)', marginLeft: 'auto' }}
-                          type="number"
-                          label={`입금 수수료`}
-                          value={item[`deposit_fee`]}
-                          placeholder=""
-                          onChange={(e) => {
-                            setItem(
-                              {
-                                ...item,
-                                [`deposit_fee`]: e.target.value
-                              }
-                            )
-                          }}
-                          InputProps={{
-                            endAdornment: <div>원</div>
-                          }}
-                        />
-                      </Row>
-
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        type="number"
+                        label={`가맹점 요율`}
+                        value={item[`mcht_fee`]}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              [`mcht_fee`]: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <div>%</div>
+                        }}
+                      />
+                      <TextField
+                        type="number"
+                        label={`가맹점 획득 요율`}
+                        disabled={true}
+                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                        placeholder=""
+                        InputProps={{
+                          endAdornment: <div>%</div>
+                        }}
+                      />
+                      <TextField
+                        type="number"
+                        label={`입금 수수료`}
+                        value={item[`deposit_fee`]}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              [`deposit_fee`]: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <div>원</div>
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
               </>}
             {currentTab == 2 &&
               <>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
@@ -412,6 +420,13 @@ const UserEdit = () => {
                           }}
                         />
                       </Stack>
+
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                       <TextField
                         label='출금수수료'
                         type="number"
