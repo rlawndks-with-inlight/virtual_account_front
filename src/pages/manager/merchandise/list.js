@@ -94,6 +94,7 @@ const UserList = () => {
         </div>
       }
     },
+
     {
       id: 'virtual_bank_code',
       label: '가상계좌정보',
@@ -136,6 +137,15 @@ const UserList = () => {
         return row['phone_num'] ?? "---"
       }
     },
+    ...(user?.level >= 40 ? [
+      {
+        id: 'mcht_fee',
+        label: '가맹점 요율',
+        action: (row, is_excel) => {
+          return row['mcht_fee'] + '%'
+        }
+      },
+    ] : []),
     ...(themeDnsData?.operator_list ?? []).map(operator => {
       return [
         {
