@@ -144,10 +144,12 @@ const MotherAccountList = () => {
                   onChangePage({ ...searchObj, [`pay_type`]: e.target.value })
                 }}>
                 <MenuItem value={null}>거래구분 전체</MenuItem>
-                <MenuItem value={0}>입금</MenuItem>
-                <MenuItem value={5}>출금</MenuItem>
-                <MenuItem value={10}>모계좌출금</MenuItem>
-                <MenuItem value={15}>가맹점{'>'}모계좌이체</MenuItem>
+                {payTypeList.map((type) => {
+                  let not_use_type = [25, 30,]
+                  if (!not_use_type.includes(type.value)) {
+                    return <MenuItem value={type.value}>{type.label}</MenuItem>
+                  }
+                })}
               </Select>
             </FormControl>
           </Row>
