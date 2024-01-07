@@ -94,7 +94,7 @@ const UserEdit = () => {
     setLoading(false);
   }
   const onSave = async () => {
-    if (!item?.mcht_fee) {
+    if (!item?.mcht_fee && themeDnsData?.is_use_deposit_operator == 1) {
       return toast.error('가맹점 요율은 필수값입니다.');
     }
     let result = undefined
