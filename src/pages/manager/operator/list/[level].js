@@ -12,9 +12,11 @@ import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList } from "src/utils/format";
 import _ from "lodash";
+import { useSettingsContext } from "src/components/settings";
 const OperatorList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
   const defaultColumns = [
     {
       id: 'profile_img',
@@ -65,30 +67,42 @@ const OperatorList = () => {
         return row['name'] ?? "---"
       }
     },
-    {
-      id: 'virtual_bank_code',
-      label: '가상계좌정보',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+    ...(themeDnsData?.withdraw_type == 0 ? [
+      {
+        id: 'virtual_bank_code',
+        label: '가상계좌정보',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
+          </Col>
         }
-        return <Col>
-          <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
-        </Col>
-      }
-    },
+      },
+    ] : []),
     {
       id: 'virtual_bank_code',
       label: '정산계좌정보',
       action: (row, is_excel) => {
-        if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+        if (themeDnsData?.withdraw_type == 0) {
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
+          </Col>
+        } else if (themeDnsData?.withdraw_type == 1) {
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['withdraw_acct_num']} {row['withdraw_acct_name']}</div>
+          </Col>
         }
-        return <Col>
-          <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
-        </Col>
       }
     },
     {

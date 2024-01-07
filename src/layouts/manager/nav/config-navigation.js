@@ -64,12 +64,14 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    {
-      items: [
-        { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: <Icon icon='iconamoon:history-fill' style={{ fontSize: '1.5rem' }} /> },
-      ],
-    },
-    ...(isManager() ? [
+    ...(themeDnsData?.setting_obj?.is_use_deposit == 1 ? [
+      {
+        items: [
+          { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: <Icon icon='iconamoon:history-fill' style={{ fontSize: '1.5rem' }} /> },
+        ],
+      },
+    ] : []),
+    ...(isManager() && themeDnsData?.setting_obj?.is_use_deposit == 1 ? [
       {
         items: [
           {
@@ -138,7 +140,7 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...(!isOperator() ? [
+    ...((!isOperator() && themeDnsData?.withdraw_type == 0) ? [
       {
         items: [
           {
@@ -184,7 +186,7 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...(!isOperator() ? [
+    ...((!isOperator() && themeDnsData?.withdraw_type == 0) ? [
       {
         items: [
           { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },

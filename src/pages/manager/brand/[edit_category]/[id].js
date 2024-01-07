@@ -16,7 +16,7 @@ import axios from "axios";
 import { useAuthContext } from "src/auth/useAuthContext";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { apiCorpList, bankCodeList, operatorLevelList } from "src/utils/format";
+import { apiCorpList, bankCodeList, operatorLevelList, withdrawTypeList } from "src/utils/format";
 import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -93,6 +93,10 @@ const BrandEdit = () => {
     ...(user?.level >= 50 ? [{
       value: 7,
       label: 'api url 설정'
+    },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 8,
+      label: '형식설정'
     },] : []),
   ]
 
@@ -856,13 +860,13 @@ const BrandEdit = () => {
                         <>
                           <TextField
                             label='본사 수수료'
-                            value={item.head_office_fee}
+                            value={item.deposit_head_office_fee}
                             placeholder=""
                             onChange={(e) => {
                               setItem(
                                 {
                                   ...item,
-                                  ['head_office_fee']: e.target.value
+                                  ['deposit_head_office_fee']: e.target.value
                                 }
                               )
                             }}
@@ -976,6 +980,38 @@ const BrandEdit = () => {
                           )
                         }}
                       />
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 8 &&
+              <>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <FormControl>
+                        <InputLabel>출금형식 선택</InputLabel>
+                        <Select
+                          label='출금형식 선택'
+                          value={item.withdraw_type}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['withdraw_type']: e.target.value
+                            })
+                          }}
+                        >
+                          {withdrawTypeList.map((itm) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                     </Stack>
                   </Card>
                 </Grid>

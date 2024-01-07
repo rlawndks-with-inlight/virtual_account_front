@@ -85,5 +85,8 @@ export const virtualAccountUserTypeList = [
     { value: 0, label: '개인', color: 'success' },
     { value: 1, label: '법인', color: 'success' },
     { value: 2, label: '개인사업자', color: 'success' },
-
+]
+export const withdrawTypeList = [
+    { value: 0, label: 'guid 설정 출금방식', color: 'success' },
+    { value: 1, label: '직접설정출금방식', color: 'success' },
 ]

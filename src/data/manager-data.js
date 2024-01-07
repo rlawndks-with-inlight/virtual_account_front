@@ -76,8 +76,9 @@ export const defaultManagerObj = {
     withdraw_fail_noti_url: '',
     default_deposit_fee: 0,
     default_withdraw_fee: 0,
-    head_office_fee: 0,
+    deposit_head_office_fee: 0,
     default_withdraw_max_price: 0,
+    withdraw_type: 0,
     setting_obj: {
       tutorial_num: 0,
       is_use_deposit: 0,

@@ -74,53 +74,65 @@ const UserList = () => {
         return row['name'] ?? "---"
       }
     },
-    {
-      id: 'name',
-      label: '가상계좌발급주소',
-      action: (row, is_excel) => {
-        let link = 'https://' + themeDnsData?.dns + `/virtual-account/${row?.mid}`;
-        if (is_excel) {
-          return link
-        }
-        return <div style={{
-          cursor: 'pointer',
-          color: 'blue',
-        }}
-          onClick={() => {
-            window.open(link)
+    ...(themeDnsData?.withdraw_type == 0 ? [
+      {
+        id: 'name',
+        label: '가상계좌발급주소',
+        action: (row, is_excel) => {
+          let link = 'https://' + themeDnsData?.dns + `/virtual-account/${row?.mid}`;
+          if (is_excel) {
+            return link
+          }
+          return <div style={{
+            cursor: 'pointer',
+            color: 'blue',
           }}
-        >
-          {link}
-        </div>
-      }
-    },
-
-    {
-      id: 'virtual_bank_code',
-      label: '가상계좌정보',
-      action: (row, is_excel) => {
-
-        if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+            onClick={() => {
+              window.open(link)
+            }}
+          >
+            {link}
+          </div>
         }
+      },
 
-        return <Col>
-          <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
-        </Col>
-      }
-    },
+      {
+        id: 'virtual_bank_code',
+        label: '가상계좌정보',
+        action: (row, is_excel) => {
+
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+          }
+
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
+          </Col>
+        }
+      },
+    ] : []),
     {
       id: 'virtual_bank_code',
       label: '정산계좌정보',
       action: (row, is_excel) => {
-        if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+        if (themeDnsData?.withdraw_type == 0) {
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
+          </Col>
+        } else if (themeDnsData?.withdraw_type == 1) {
+          if (is_excel) {
+            return `${_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['withdraw_acct_num']} {row['withdraw_acct_name']}</div>
+          </Col>
         }
-        return <Col>
-          <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
-        </Col>
       }
     },
     {
@@ -166,7 +178,7 @@ const UserList = () => {
           id: `sales${operator?.num}_fee`,
           label: `${operator?.label} 획득 요율`,
           action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+            return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
           }
         },
       ]

@@ -208,18 +208,22 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      <TextField
-                        label='guid'
-                        value={item.guid}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['guid']: e.target.value
-                            }
-                          )
-                        }} />
+                      {themeDnsData?.withdraw_type == 0 &&
+                        <>
+                          <TextField
+                            label='guid'
+                            value={item.guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+
                       <Stack spacing={1}>
                         <FormControl disabled={router.query?.id || router.query?.edit_category != 'add'}>
                           <InputLabel>영업자레벨</InputLabel>
@@ -340,9 +344,56 @@ const UserEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={4}>
-
-                </Grid>
+                {themeDnsData?.withdraw_type == 1 &&
+                  <>
+                    <Grid item xs={12} md={4}>
+                      <Card sx={{ p: 2, height: '100%' }}>
+                        <Stack spacing={3}>
+                          <Stack spacing={1}>
+                            <FormControl>
+                              <InputLabel>출금계좌은행</InputLabel>
+                              <Select
+                                label='출금계좌은행'
+                                value={item.withdraw_bank_code}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    ['withdraw_bank_code']: e.target.value
+                                  })
+                                }}
+                              >
+                                {bankCodeList().map((itm, idx) => {
+                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                })}
+                              </Select>
+                            </FormControl>
+                          </Stack>
+                          <TextField
+                            label='출금계좌번호'
+                            value={item.withdraw_acct_num}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_acct_num']: e.target.value
+                                }
+                              )
+                            }} />
+                          <TextField
+                            label='출금계좌예금주명'
+                            value={item.withdraw_acct_name}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_acct_name']: e.target.value
+                                }
+                              )
+                            }} />
+                        </Stack>
+                      </Card>
+                    </Grid>
+                  </>}
               </>}
             <Grid item xs={12} md={8}>
               <Card sx={{ p: 3 }}>

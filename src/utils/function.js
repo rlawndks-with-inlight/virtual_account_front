@@ -357,8 +357,8 @@ export const excelDownload = async (excelData, columns = [], param_table) => {
   FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
 }
 
-export const getUserFee = (item, user_level, operator_list = [], head_office_fee) => {
-  let top_fee = head_office_fee;
+export const getUserFee = (item, user_level, operator_list = [], deposit_head_office_fee) => {
+  let top_fee = deposit_head_office_fee;
   let level = 40;
   let result = 0;
 

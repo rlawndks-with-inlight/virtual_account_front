@@ -11,6 +11,7 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { getUserFee } from "src/utils/function";
+import { bankCodeList } from "src/utils/format";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -42,6 +43,10 @@ const UserEdit = () => {
     vrf_bank_code: '',
     guid: '',
     is_withdraw_hold: 0,
+    withdraw_bank_code: '',
+    withdraw_acct_num: '',
+    withdraw_acct_name: '',
+
   })
   const tab_list = [
     {
@@ -224,18 +229,21 @@ const UserEdit = () => {
                 <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <TextField
-                        label='guid'
-                        value={item.guid}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['guid']: e.target.value
-                            }
-                          )
-                        }} />
+                      {themeDnsData?.withdraw_type == 0 &&
+                        <>
+                          <TextField
+                            label='guid'
+                            value={item.guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                       <TextField
                         label='mid'
                         value={item.mid}
@@ -262,7 +270,7 @@ const UserEdit = () => {
                         type="number"
                         label={`본사요율`}
                         disabled={true}
-                        value={themeDnsData?.head_office_fee}
+                        value={themeDnsData?.deposit_head_office_fee}
                         InputProps={{
                           endAdornment: <div>%</div>
                         }}
@@ -271,7 +279,7 @@ const UserEdit = () => {
                         type="number"
                         label={`본사획득요율`}
                         disabled={true}
-                        value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                        value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
                         InputProps={{
                           endAdornment: <div>%</div>
                         }}
@@ -329,7 +337,7 @@ const UserEdit = () => {
                           <TextField
                             type="number"
                             label={`${itm?.label} 획득 요율`}
-                            value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                            value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
                             disabled={true}
                             placeholder=""
                             InputProps={{
@@ -365,7 +373,7 @@ const UserEdit = () => {
                         type="number"
                         label={`가맹점 획득 요율`}
                         disabled={true}
-                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
                         placeholder=""
                         InputProps={{
                           endAdornment: <div>%</div>
@@ -503,6 +511,56 @@ const UserEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
+                {themeDnsData?.withdraw_type == 1 &&
+                  <>
+                    <Grid item xs={12} md={4}>
+                      <Card sx={{ p: 2, height: '100%' }}>
+                        <Stack spacing={3}>
+                          <Stack spacing={1}>
+                            <FormControl>
+                              <InputLabel>출금계좌은행</InputLabel>
+                              <Select
+                                label='출금계좌은행'
+                                value={item.withdraw_bank_code}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    ['withdraw_bank_code']: e.target.value
+                                  })
+                                }}
+                              >
+                                {bankCodeList().map((itm, idx) => {
+                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                })}
+                              </Select>
+                            </FormControl>
+                          </Stack>
+                          <TextField
+                            label='출금계좌번호'
+                            value={item.withdraw_acct_num}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_acct_num']: e.target.value
+                                }
+                              )
+                            }} />
+                          <TextField
+                            label='출금계좌예금주명'
+                            value={item.withdraw_acct_name}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_acct_name']: e.target.value
+                                }
+                              )
+                            }} />
+                        </Stack>
+                      </Card>
+                    </Grid>
+                  </>}
               </>}
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 3 }}>
