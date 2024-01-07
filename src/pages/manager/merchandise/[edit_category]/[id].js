@@ -418,17 +418,19 @@ const UserEdit = () => {
                           }}
                         />
                       </Stack>
-                      <Stack>
-                        <FormControlLabel control={<Switch checked={item.can_return_ago_pay == 1} />} label={`결제를 한 회원에게만 반환가능하게 제한함`}
-                          onChange={(e) => {
-                            setItem({
-                              ...item,
-                              can_return_ago_pay: e.target.checked ? 1 : 0,
-                            })
-                          }}
-                        />
-                      </Stack>
-
+                      {themeDnsData?.is_use_deposit_operator == 1 &&
+                        <>
+                          <Stack>
+                            <FormControlLabel control={<Switch checked={item.can_return_ago_pay == 1} />} label={`결제를 한 회원에게만 반환가능하게 제한함`}
+                              onChange={(e) => {
+                                setItem({
+                                  ...item,
+                                  can_return_ago_pay: e.target.checked ? 1 : 0,
+                                })
+                              }}
+                            />
+                          </Stack>
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
