@@ -56,17 +56,11 @@ const UserEdit = () => {
     ...(themeDnsData?.is_use_deposit_operator == 1 ? [
       {
         value: 1,
-        label: '입금수수료정보'
-      },
-    ] : []),
-    ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
-      {
-        value: 2,
-        label: '출금수수료정보'
+        label: '수수료정보'
       },
     ] : []),
     {
-      value: 3,
+      value: 2,
       label: '정산정보'
     },
   ]
@@ -409,7 +403,7 @@ const UserEdit = () => {
                   </Card>
                 </Grid>
               </>}
-            {currentTab == 3 &&
+            {currentTab == 2 &&
               <>
                 <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
