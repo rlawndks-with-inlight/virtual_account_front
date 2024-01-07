@@ -141,7 +141,7 @@ export default function ManagerTable(props) {
                     onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
                   }}
                   renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ width: '180px', height: '32px' }}
+                  sx={{ width: '150px', height: '32px' }}
                   slotProps={{ textField: { size: 'small' } }}
                 />
                 <DesktopDatePicker
@@ -153,7 +153,7 @@ export default function ManagerTable(props) {
                     onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
                   }}
                   renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ width: '180px' }}
+                  sx={{ width: '150px' }}
                   slotProps={{ textField: { size: 'small' } }}
                 />
               </>
