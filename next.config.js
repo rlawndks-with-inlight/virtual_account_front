@@ -16,5 +16,6 @@ module.exports = {
   env: {
     BACK_URL: process.env.BACK_URL,
     API_URL: process.env.API_URL,
+    FRONT_URL: process.env.FRONT_URL,
   }
 };
