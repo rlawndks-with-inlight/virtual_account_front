@@ -113,15 +113,13 @@ const DepositList = () => {
         return commarNumber(row['deposit_fee'])
       }
     },
-    ...(user?.level >= 40 ? [
-      {
-        id: 'mcht_fee',
-        label: '가맹점 요율',
-        action: (row, is_excel) => {
-          return row['mcht_fee'] + '%'
-        }
-      },
-    ] : []),
+    {
+      id: 'mcht_fee',
+      label: '가맹점 요율',
+      action: (row, is_excel) => {
+        return row['mcht_fee'] + '%'
+      }
+    },
     /*
     {
       id: 'mcht_fee',
