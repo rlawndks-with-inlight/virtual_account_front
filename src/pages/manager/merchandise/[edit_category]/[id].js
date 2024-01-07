@@ -53,12 +53,20 @@ const UserEdit = () => {
       value: 0,
       label: '기본정보'
     },
+    ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+      {
+        value: 1,
+        label: '입금수수료정보'
+      },
+    ] : []),
+    ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
+      {
+        value: 2,
+        label: '출금수수료정보'
+      },
+    ] : []),
     {
-      value: 1,
-      label: '수수료정보'
-    },
-    {
-      value: 2,
+      value: 3,
       label: '정산정보'
     },
   ]
@@ -86,6 +94,7 @@ const UserEdit = () => {
     if (router.query?.edit_category == 'add') {
       data['withdraw_fee'] = themeDnsData?.default_withdraw_fee;
       data['deposit_fee'] = themeDnsData?.default_deposit_fee;
+      data['mcht_fee'] = themeDnsData?.deposit_head_office_fee;
     }
     setItem(data);
     setLoading(false);
@@ -400,7 +409,7 @@ const UserEdit = () => {
                   </Card>
                 </Grid>
               </>}
-            {currentTab == 2 &&
+            {currentTab == 3 &&
               <>
                 <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>

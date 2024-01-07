@@ -79,6 +79,8 @@ export const defaultManagerObj = {
     deposit_head_office_fee: 0,
     withdraw_head_office_fee: 0,
     default_withdraw_max_price: 0,
+    is_use_deposit_operator: 1,
+    is_use_withdraw_operator: 0,
     withdraw_type: 0,
     setting_obj: {
       tutorial_num: 0,

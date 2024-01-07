@@ -838,6 +838,16 @@ const BrandEdit = () => {
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_deposit_operator == 1} />} label={`입금시 영업자 수수료 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_deposit_operator']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                       <TextField
                         label='입금수수료 기본값'
                         value={item.default_deposit_fee}
@@ -885,6 +895,16 @@ const BrandEdit = () => {
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_withdraw_operator == 1} />} label={`출금시 영업자 수수료 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_withdraw_operator']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                       <TextField
                         label='출금수수료 기본값'
                         value={item.default_withdraw_fee}
