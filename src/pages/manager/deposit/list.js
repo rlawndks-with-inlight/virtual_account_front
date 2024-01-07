@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { Row } from "src/components/elements/styled-components";
+import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
@@ -40,9 +40,15 @@ const DepositList = () => {
     },
     {
       id: 'deposit_bank_code',
-      label: '입금은행',
+      label: '입금은행정보',
       action: (row, is_excel) => {
-        return _.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+        }
+        return <Col>
+          <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+        </Col>
       }
     },
     {
