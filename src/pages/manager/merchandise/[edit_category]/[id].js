@@ -418,7 +418,7 @@ const UserEdit = () => {
                           }}
                         />
                       </Stack>
-                      {themeDnsData?.is_use_deposit_operator == 1 &&
+                      {themeDnsData?.withdraw_type == 0 &&
                         <>
                           <Stack>
                             <FormControlLabel control={<Switch checked={item.can_return_ago_pay == 1} />} label={`결제를 한 회원에게만 반환가능하게 제한함`}
