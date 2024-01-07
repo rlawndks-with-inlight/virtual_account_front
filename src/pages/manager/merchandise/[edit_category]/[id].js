@@ -276,9 +276,6 @@ const UserEdit = () => {
                           endAdornment: <div>%</div>
                         }}
                       />
-
-
-
                     </Stack>
                   </Card>
                 </Grid>

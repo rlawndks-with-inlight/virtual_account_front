@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -39,6 +39,7 @@ const UserEdit = () => {
     min_withdraw_remain_price: 0,
     min_withdraw_hold_price: 0,
     guid: '',
+    is_withdraw_hold: 0,
   })
   const tab_list = [
     {
@@ -250,7 +251,16 @@ const UserEdit = () => {
                 <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_withdraw_hold == 1} />} label={`출금보류 여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              is_withdraw_hold: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                       <TextField
                         label='출금수수료'
                         type="number"
