@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserFee, getUserLevelByNumber, getUserStatusByNum } from "src/utils/function";
+import { commarNumber, getUserFee, getUserLevelByNumber, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -95,7 +95,6 @@ const UserList = () => {
           </div>
         }
       },
-
       {
         id: 'virtual_bank_code',
         label: '가상계좌정보',
@@ -149,7 +148,7 @@ const UserList = () => {
         return row['phone_num'] ?? "---"
       }
     },
-    ...(user?.level >= 40 ? [
+    ...((user?.level >= 40 && themeDnsData?.is_use_deposit_operator == 1) ? [
       {
         id: 'mcht_fee',
         label: '가맹점 요율',
@@ -167,20 +166,38 @@ const UserList = () => {
             return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
           }
         },
-        {
-          id: `sales${operator?.num}_fee`,
-          label: `${operator?.label} 요율`,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
-          }
-        },
-        {
-          id: `sales${operator?.num}_fee`,
-          label: `${operator?.label} 획득 요율`,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
-          }
-        },
+        ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+          {
+            id: `sales${operator?.num}_fee`,
+            label: `${operator?.label} 요율`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+            }
+          },
+          {
+            id: `sales${operator?.num}_fee`,
+            label: `${operator?.label} 획득 요율`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+            }
+          },
+        ] : []),
+        ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
+          {
+            id: `sales${operator?.num}_withdraw_fee`,
+            label: `${operator?.label} 출금수수료`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_withdraw_fee`] : "---"
+            }
+          },
+          {
+            id: `sales${operator?.num}_withdraw_fee`,
+            label: `${operator?.label} 획득 출금수수료`,
+            action: (row, is_excel) => {
+              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
+            }
+          },
+        ] : []),
       ]
     }).flat(),
     {

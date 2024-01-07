@@ -21,7 +21,7 @@ const WithdrawRequest = () => {
 
     const { user } = useAuthContext();
     const { setModal } = useModal()
-    const { themeMode } = useSettingsContext();
+    const { themeMode, themeDnsData } = useSettingsContext();
 
     const router = useRouter();
 
@@ -69,11 +69,22 @@ const WithdrawRequest = () => {
                                             입금계좌
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            <Row style={{ columnGap: '0.25rem' }}>
-                                                <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
-                                                <div>{item?.settle_acct_num}</div>
-                                                <div>{item?.settle_acct_name}</div>
-                                            </Row>
+                                            {themeDnsData?.withdraw_type == 0 &&
+                                                <>
+                                                    <Row style={{ columnGap: '0.25rem' }}>
+                                                        <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
+                                                        <div>{item?.settle_acct_num}</div>
+                                                        <div>{item?.settle_acct_name}</div>
+                                                    </Row>
+                                                </>}
+                                            {themeDnsData?.withdraw_type == 1 &&
+                                                <>
+                                                    <Row style={{ columnGap: '0.25rem' }}>
+                                                        <div>{_.find(bankCodeList(), { value: item?.withdraw_bank_code })?.label}</div>
+                                                        <div>{item?.withdraw_acct_num}</div>
+                                                        <div>{item?.withdraw_acct_name}</div>
+                                                    </Row>
+                                                </>}
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
