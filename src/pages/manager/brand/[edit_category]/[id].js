@@ -842,6 +842,7 @@ const BrandEdit = () => {
                         label='입금수수료 기본값'
                         value={item.default_deposit_fee}
                         placeholder=""
+                        type="number"
                         onChange={(e) => {
                           setItem(
                             {
@@ -859,9 +860,10 @@ const BrandEdit = () => {
                       {user?.level >= 50 &&
                         <>
                           <TextField
-                            label='본사 수수료'
+                            label='본사 입금수수료'
                             value={item.deposit_head_office_fee}
                             placeholder=""
+                            type="number"
                             onChange={(e) => {
                               setItem(
                                 {
@@ -887,6 +889,7 @@ const BrandEdit = () => {
                         label='출금수수료 기본값'
                         value={item.default_withdraw_fee}
                         placeholder=""
+                        type="number"
                         onChange={(e) => {
                           setItem(
                             {
@@ -904,6 +907,7 @@ const BrandEdit = () => {
                       <TextField
                         label='최대출금금액'
                         value={item.default_withdraw_max_price}
+                        type="number"
                         placeholder=""
                         onChange={(e) => {
                           setItem(
@@ -919,6 +923,28 @@ const BrandEdit = () => {
                           )
                         }}
                       />
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='본사 출금수수료'
+                            value={item.withdraw_head_office_fee}
+                            placeholder=""
+                            type="number"
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_head_office_fee']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>원</div>
+                              )
+                            }}
+                          />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
