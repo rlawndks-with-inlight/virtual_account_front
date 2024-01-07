@@ -8,7 +8,7 @@ import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/func
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
@@ -44,16 +44,24 @@ const WithdrawRequest = () => {
     }
     const onSave = async () => {
         let result = undefined
-
-        result = await apiManager('withdraws', 'create', {
-            withdraw_amount: item?.withdraw_amount,
-            user_id: user?.id,
-            note: item?.note,
-            pay_type: 5,
-        });
+        if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
+            result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
+                api_key: themeDnsData?.api_key,
+                mid: user?.mid,
+                withdraw_amount: item?.withdraw_amount,
+            });
+            console.log(result);
+        } else {
+            result = await apiManager('withdraws', 'create', {
+                withdraw_amount: item?.withdraw_amount,
+                user_id: user?.id,
+                note: item?.note,
+                pay_type: 5,
+            });
+        }
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
-            router.push('/manager/withdraw');
+            // router.push('/manager/withdraw');
         }
     }
     return (

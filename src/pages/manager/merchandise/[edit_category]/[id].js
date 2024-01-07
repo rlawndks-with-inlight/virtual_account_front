@@ -434,6 +434,82 @@ const UserEdit = () => {
                             />
                           </Stack>
                         </>}
+                      <TextField
+                        label='가맹점출금수수료'
+                        type="number"
+                        value={item.withdraw_fee}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['withdraw_fee']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='최소 출금액'
+                        type="number"
+                        value={item.min_withdraw_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['min_withdraw_price']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='최소 출금잔액'
+                        type="number"
+                        value={item.min_withdraw_remain_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['min_withdraw_remain_price']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='최소 출금보류금액'
+                        type="number"
+                        value={item.min_withdraw_hold_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['min_withdraw_hold_price']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
@@ -518,82 +594,7 @@ const UserEdit = () => {
                             </>
                           })}
                         </>}
-                      <TextField
-                        label='가맹점출금수수료'
-                        type="number"
-                        value={item.withdraw_fee}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_fee']: e.target.value
-                            }
-                          )
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <div>원</div>
-                          )
-                        }}
-                      />
-                      <TextField
-                        label='최소 출금액'
-                        type="number"
-                        value={item.min_withdraw_price}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['min_withdraw_price']: e.target.value
-                            }
-                          )
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <div>원</div>
-                          )
-                        }}
-                      />
-                      <TextField
-                        label='최소 출금잔액'
-                        type="number"
-                        value={item.min_withdraw_remain_price}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['min_withdraw_remain_price']: e.target.value
-                            }
-                          )
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <div>원</div>
-                          )
-                        }}
-                      />
-                      <TextField
-                        label='최소 출금보류금액'
-                        type="number"
-                        value={item.min_withdraw_hold_price}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['min_withdraw_hold_price']: e.target.value
-                            }
-                          )
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <div>원</div>
-                          )
-                        }}
-                      />
+
                     </Stack>
                   </Card>
                 </Grid>
