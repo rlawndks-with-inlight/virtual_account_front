@@ -98,6 +98,10 @@ const BrandEdit = () => {
       value: 8,
       label: '형식설정'
     },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 9,
+      label: 'API 버전설정'
+    },] : []),
   ]
 
   useEffect(() => {
@@ -1050,6 +1054,59 @@ const BrandEdit = () => {
                           {withdrawTypeList.map((itm) => {
                             return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                           })}
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 9 &&
+              <>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <FormControl>
+                        <InputLabel>가상계좌버전</InputLabel>
+                        <Select
+                          label='가상계좌버전'
+                          value={item.setting_obj?.api_virtual_account_version}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: e.target.value
+                              }
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>{'선택안함'}</MenuItem>
+                          <MenuItem value={1}>{'v1'}</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>출금버전</InputLabel>
+                        <Select
+                          label='출금버전'
+                          value={item.setting_obj?.api_withdraw_version}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: e.target.value
+                              }
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>{'선택안함'}</MenuItem>
+                          <MenuItem value={1}>{'v1'}</MenuItem>
                         </Select>
                       </FormControl>
                     </Stack>

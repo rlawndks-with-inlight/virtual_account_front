@@ -186,10 +186,10 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...((!isOperator() && themeDnsData?.withdraw_type == 0) ? [
+    ...((!isOperator()) ? [
       {
         items: [
-          { title: '가상계좌API', path: PATH_MANAGER.virtualAccountApi, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
+          { title: 'API', path: PATH_MANAGER.api, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
         ],
       },
     ] : []),

@@ -11,7 +11,7 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
-import ApiV1 from "src/views/api/v1";
+import ApiV1 from "src/views/api/virtual-account/v1";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,

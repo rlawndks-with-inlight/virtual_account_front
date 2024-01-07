@@ -15,7 +15,7 @@ export const PATH_AUTH = {
 export const PATH_MANAGER = {
   root: ROOTS_MANAGER,
   dashboards: path(ROOTS_MANAGER, '/dashboards'),
-  virtualAccountApi: path(ROOTS_MANAGER, '/virtual-account-api'),
+  api: path(ROOTS_MANAGER, '/api'),
   brand: {
     root: path(ROOTS_MANAGER, '/brand'),
     edit: path(ROOTS_MANAGER, '/brand/edit'),

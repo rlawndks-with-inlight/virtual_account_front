@@ -2,16 +2,13 @@
 import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
-import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList } from "src/utils/format";
-import ApiV1 from "src/views/api/v1";
+import VirtualAccountApiV1 from "src/views/api/virtual-account/v1";
+import WithdrawApiV1 from "src/views/api/withdraw/v1";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -56,11 +53,14 @@ const VirtualAccountApi = () => {
         <>
             {!loading &&
                 <>
-                    {themeDnsData?.deposit_corp_type == 1 &&
+                    {themeDnsData?.setting_obj?.api_virtual_account_version == 1 &&
                         <>
-                            <ApiV1 />
+                            <VirtualAccountApiV1 />
                         </>}
-
+                    {themeDnsData?.setting_obj?.api_withdraw_version == 1 &&
+                        <>
+                            <WithdrawApiV1 />
+                        </>}
                 </>}
         </>
     )

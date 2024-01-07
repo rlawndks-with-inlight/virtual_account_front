@@ -86,6 +86,8 @@ export const defaultManagerObj = {
       tutorial_num: 0,
       is_use_deposit: 0,
       is_use_withdraw: 0,
+      api_virtual_account_version: 0,
+      api_withdraw_version: 0,
     },
     theme_css: {
       main_color: '#00ab55'
