@@ -192,12 +192,25 @@ export default function ManagerTable(props) {
               <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(3)}>3일전</Button>
               <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(30)}>1개월</Button>
             </Row>
-          </Row>
-          <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.75rem' }}>
             <Button variant='outlined'
               startIcon={<Icon icon={'icon-park-outline:excel'} />}
               onClick={exportExcel}
             >엑셀추출</Button>
+          </Row>
+          <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.75rem' }}>
+            <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
+              <InputLabel>조회개수</InputLabel>
+              <Select label='조회개수' value={page_size}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, page_size: e.target.value, page: 1, })
+                }}>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+              </Select>
+            </FormControl>
             <FormControl variant="outlined">
               <OutlinedInput
                 size='small'
@@ -294,20 +307,8 @@ export default function ManagerTable(props) {
         </div>
         <Divider />
         <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
-          <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
-            <InputLabel>조회개수</InputLabel>
-            <Select label='조회개수' value={page_size}
-              onChange={(e) => {
-                onChangePage({ ...searchObj, page_size: e.target.value, page: 1, })
-              }}>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={30}>30</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-            </Select>
-          </FormControl>
           <Pagination
+            style={{ marginLeft: 'auto' }}
             size={'medium'}
             count={getMaxPage(data?.total, data?.page_size)}
             page={page}
