@@ -99,7 +99,11 @@ const UserEdit = () => {
       return toast.error('가맹점 요율은 필수값입니다.');
     }
     let result = undefined
-    data['telegram_chat_ids'] = JSON.stringify((data?.telegram_chat_ids ?? "").split(','));
+    if (data?.telegram_chat_ids) {
+      data['telegram_chat_ids'] = JSON.stringify((data?.telegram_chat_ids ?? "").split(','));
+    } else {
+      data['telegram_chat_ids'] = '[]';
+    }
     if (data?.id) {//수정
       result = await apiManager('users', 'update', data);
     } else {//추가
@@ -263,24 +267,27 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      <TextField
-                        label='텔레그램 chat id (,콤마로 구분)'
-                        value={item.telegram_chat_ids}
-                        placeholder=""
-                        helperText={<Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
-                          <div>텔레그램 봇 이름: </div>
-                          <div style={{ color: 'blue', cursor: 'pointer' }} onClick={() => {
-                            window.open(`https://t.me/${themeDnsData?.telegram_bot_id}`)
-                          }}>@{themeDnsData?.telegram_bot_id}</div>
-                        </Row>}
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['telegram_chat_ids']: e.target.value
-                            }
-                          )
-                        }} />
+                      {themeDnsData?.is_use_telegram_bot == 1 &&
+                        <>
+                          <TextField
+                            label='텔레그램 chat id (,콤마로 구분)'
+                            value={item.telegram_chat_ids}
+                            placeholder=""
+                            helperText={<Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                              <div>텔레그램 봇 이름: </div>
+                              <div style={{ color: 'blue', cursor: 'pointer' }} onClick={() => {
+                                window.open(`https://t.me/${themeDnsData?.telegram_bot_id}`)
+                              }}>@{themeDnsData?.telegram_bot_id}</div>
+                            </Row>}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['telegram_chat_ids']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
