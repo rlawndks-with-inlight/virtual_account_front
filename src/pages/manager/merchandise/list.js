@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserFee, getUserLevelByNumber, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
+import { commarNumber, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
