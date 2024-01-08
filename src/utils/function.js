@@ -55,6 +55,9 @@ export const returnMoment = (num, date) => {//num 0: 오늘, num -1: 어제 , da
 }
 
 export const commarNumber = (num) => {
+  if (num > 0 && num < 0.000001) {
+    return "0.00";
+  }
   if (!num) {
     return 0;
   }

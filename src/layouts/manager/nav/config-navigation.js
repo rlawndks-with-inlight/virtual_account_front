@@ -57,13 +57,11 @@ const navConfig = () => {
   return [
     // GENERAL
     // ----------------------------------------------------------------------
-    ...(isManager() ? [
-      {
-        items: [
-          { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
-        ],
-      },
-    ] : []),
+    {
+      items: [
+        { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
+      ],
+    },
     ...(themeDnsData?.setting_obj?.is_use_deposit == 1 ? [
       {
         items: [

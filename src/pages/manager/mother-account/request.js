@@ -125,7 +125,7 @@ const MotherAccountRequest = () => {
                                             차액 (본사 보유정산금)
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.sum?.total_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount + item?.sum?.total_withdraw_fee)} 원
+                                            {commarNumber(item?.real_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount + item?.sum?.total_withdraw_fee)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
