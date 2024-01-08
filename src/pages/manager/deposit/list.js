@@ -131,17 +131,17 @@ const DepositList = () => {
     */
     ...(user?.level >= 40 ? [
       {
-        id: 'deposit_head_office_fee',
+        id: 'head_office_fee',
         label: '본사 요율',
         action: (row, is_excel) => {
-          return row['deposit_head_office_fee'] + '%'
+          return row['head_office_fee'] + '%'
         }
       },
       {
         id: `deposit_head_office_fee`,
         label: `본사 획득 요율`,
         action: (row, is_excel) => {
-          return row[`deposit_head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+          return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
         }
       },
       {
