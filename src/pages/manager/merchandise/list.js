@@ -161,10 +161,14 @@ const UserList = () => {
     ] : []),
     ...(themeDnsData?.operator_list ?? []).map(operator => {
       if (user?.level >= operator?.value) {
+        let label = operator?.label;
+        if (user?.level > 10 && user?.level < 40) {
+          label = (operator?.label ?? "").includes('대리점') ? '대리점' : operator?.label;
+        }
         return [
           {
             id: `sales${operator?.num}_id`,
-            label: operator?.label,
+            label: label,
             action: (row, is_excel) => {
               return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
@@ -172,14 +176,14 @@ const UserList = () => {
           ...(themeDnsData?.is_use_deposit_operator == 1 ? [
             {
               id: `sales${operator?.num}_fee`,
-              label: `${operator?.label} 요율`,
+              label: `${label} 요율`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
               }
             },
             {
               id: `sales${operator?.num}_fee`,
-              label: `${operator?.label} 획득 요율`,
+              label: `$label} 획득 요율`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
               }
@@ -188,14 +192,14 @@ const UserList = () => {
           ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
             {
               id: `sales${operator?.num}_withdraw_fee`,
-              label: `${operator?.label} 출금수수료`,
+              label: `${label} 출금수수료`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_withdraw_fee`] : "---"
               }
             },
             {
               id: `sales${operator?.num}_withdraw_fee`,
-              label: `${operator?.label} 획득 출금수수료`,
+              label: `${label} 획득 출금수수료`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
               }
