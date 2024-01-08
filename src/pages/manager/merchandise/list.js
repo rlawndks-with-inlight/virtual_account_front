@@ -35,24 +35,26 @@ const UserList = () => {
         return row['user_name'] ?? "---"
       }
     },
-    {
-      id: 'update_user_deposit',
-      label: '정산금 수정',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return "---";
+    ...(user?.level >= 40 ? [
+      {
+        id: 'update_user_deposit',
+        label: '정산금 수정',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setDialogObj({ changeUserDeposit: true })
+              setChangeUserDepositObj({
+                amount: '',
+                user_id: row?.id,
+              })
+            }}
+          >정산금 수정</Button>
         }
-        return <Button variant="outlined" size="small" sx={{ width: '100px' }}
-          onClick={() => {
-            setDialogObj({ changeUserDeposit: true })
-            setChangeUserDepositObj({
-              amount: '',
-              user_id: row?.id,
-            })
-          }}
-        >정산금 수정</Button>
-      }
-    },
+      },
+    ] : []),
     {
       id: 'mid',
       label: 'MID',
@@ -158,47 +160,51 @@ const UserList = () => {
       },
     ] : []),
     ...(themeDnsData?.operator_list ?? []).map(operator => {
-      return [
-        {
-          id: `sales${operator?.num}_id`,
-          label: operator?.label,
-          action: (row, is_excel) => {
-            return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
-          }
-        },
-        ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+      if (user?.level >= operator?.value) {
+        return [
           {
-            id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 요율`,
+            id: `sales${operator?.num}_id`,
+            label: operator?.label,
             action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+              return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
           },
-          {
-            id: `sales${operator?.num}_fee`,
-            label: `${operator?.label} 획득 요율`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
-            }
-          },
-        ] : []),
-        ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
-          {
-            id: `sales${operator?.num}_withdraw_fee`,
-            label: `${operator?.label} 출금수수료`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_withdraw_fee`] : "---"
-            }
-          },
-          {
-            id: `sales${operator?.num}_withdraw_fee`,
-            label: `${operator?.label} 획득 출금수수료`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
-            }
-          },
-        ] : []),
-      ]
+          ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+            {
+              id: `sales${operator?.num}_fee`,
+              label: `${operator?.label} 요율`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+              }
+            },
+            {
+              id: `sales${operator?.num}_fee`,
+              label: `${operator?.label} 획득 요율`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+              }
+            },
+          ] : []),
+          ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
+            {
+              id: `sales${operator?.num}_withdraw_fee`,
+              label: `${operator?.label} 출금수수료`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_withdraw_fee`] : "---"
+              }
+            },
+            {
+              id: `sales${operator?.num}_withdraw_fee`,
+              label: `${operator?.label} 획득 출금수수료`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
+              }
+            },
+          ] : []),
+        ]
+      } else {
+        return []
+      }
     }).flat(),
     {
       id: 'created_at',
@@ -241,58 +247,60 @@ const UserList = () => {
         </Select>
       }
     },
-    {
-      id: 'edit_password',
-      label: '비밀번호 변경',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return "---"
+    ...(user?.level >= 40 ? [
+      {
+        id: 'edit_password',
+        label: '비밀번호 변경',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---"
+          }
+          if (user?.level < row?.level) {
+            return "---"
+          }
+          return (
+            <>
+              <IconButton onClick={() => {
+                setDialogObj({ changePassword: true })
+                setChangePasswordObj({
+                  user_pw: '',
+                  id: row?.id
+                })
+              }}>
+                <Icon icon='material-symbols:lock-outline' />
+              </IconButton>
+            </>
+          )
         }
-        if (user?.level < row?.level) {
-          return "---"
+      },
+      {
+        id: 'edit',
+        label: '수정/삭제',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---"
+          }
+          return (
+            <>
+              <IconButton>
+                <Icon icon='material-symbols:edit-outline' onClick={() => {
+                  router.push(`edit/${row?.id}`)
+                }} />
+              </IconButton>
+              <IconButton onClick={() => {
+                setModal({
+                  func: () => { deleteUser(row?.id) },
+                  icon: 'material-symbols:delete-outline',
+                  title: '정말 삭제하시겠습니까?'
+                })
+              }}>
+                <Icon icon='material-symbols:delete-outline' />
+              </IconButton>
+            </>
+          )
         }
-        return (
-          <>
-            <IconButton onClick={() => {
-              setDialogObj({ changePassword: true })
-              setChangePasswordObj({
-                user_pw: '',
-                id: row?.id
-              })
-            }}>
-              <Icon icon='material-symbols:lock-outline' />
-            </IconButton>
-          </>
-        )
-      }
-    },
-    {
-      id: 'edit',
-      label: '수정/삭제',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return "---"
-        }
-        return (
-          <>
-            <IconButton>
-              <Icon icon='material-symbols:edit-outline' onClick={() => {
-                router.push(`edit/${row?.id}`)
-              }} />
-            </IconButton>
-            <IconButton onClick={() => {
-              setModal({
-                func: () => { deleteUser(row?.id) },
-                icon: 'material-symbols:delete-outline',
-                title: '정말 삭제하시겠습니까?'
-              })
-            }}>
-              <Icon icon='material-symbols:delete-outline' />
-            </IconButton>
-          </>
-        )
-      }
-    },
+      },
+    ] : []),
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
