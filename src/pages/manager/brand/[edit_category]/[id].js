@@ -102,6 +102,10 @@ const BrandEdit = () => {
       value: 9,
       label: 'API 버전설정'
     },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 10,
+      label: '옵션설정'
+    },] : []),
   ]
 
   useEffect(() => {
@@ -1115,6 +1119,51 @@ const BrandEdit = () => {
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 10 &&
+              <>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_telegram_bot == 1} />} label={`텔레봇사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_telegram_bot']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <TextField
+                        label='TELEGRAM BOT TOKEN'
+                        value={item.telegram_bot_token}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['telegram_bot_token']: e.target.value
+                            }
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='텔레그램봇아이디'
+                        value={item.telegram_bot_id}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['telegram_bot_id']: e.target.value
+                            }
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>

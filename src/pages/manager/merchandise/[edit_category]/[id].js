@@ -94,14 +94,16 @@ const UserEdit = () => {
     setLoading(false);
   }
   const onSave = async () => {
-    if (!item?.mcht_fee && themeDnsData?.is_use_deposit_operator == 1) {
+    let data = item;
+    if (!data?.mcht_fee && themeDnsData?.is_use_deposit_operator == 1) {
       return toast.error('가맹점 요율은 필수값입니다.');
     }
     let result = undefined
-    if (item?.id) {//수정
-      result = await apiManager('users', 'update', item);
+    data['telegram_chat_ids'] = JSON.stringify((data?.telegram_chat_ids ?? "").split(','));
+    if (data?.id) {//수정
+      result = await apiManager('users', 'update', data);
     } else {//추가
-      result = await apiManager('users', 'create', item);
+      result = await apiManager('users', 'create', data);
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
@@ -217,6 +219,7 @@ const UserEdit = () => {
                         label='전화번호'
                         value={item.phone_num}
                         placeholder="하이픈(-) 제외 입력"
+
                         onChange={(e) => {
                           setItem(
                             {
@@ -257,6 +260,24 @@ const UserEdit = () => {
                             {
                               ...item,
                               ['mid']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='텔레그램 chat id (,콤마로 구분)'
+                        value={item.telegram_chat_ids}
+                        placeholder=""
+                        helperText={<Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                          <div>텔레그램 봇 이름: </div>
+                          <div style={{ color: 'blue', cursor: 'pointer' }} onClick={() => {
+                            window.open(`https://t.me/${themeDnsData?.telegram_bot_id}`)
+                          }}>@{themeDnsData?.telegram_bot_id}</div>
+                        </Row>}
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['telegram_chat_ids']: e.target.value
                             }
                           )
                         }} />
