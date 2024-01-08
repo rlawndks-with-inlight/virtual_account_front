@@ -150,7 +150,7 @@ const UserList = () => {
         return row['phone_num'] ?? "---"
       }
     },
-    ...((user?.level >= 40 && themeDnsData?.is_use_deposit_operator == 1) ? [
+    ...((user?.level >= 10 && themeDnsData?.is_use_deposit_operator == 1) ? [
       {
         id: 'mcht_fee',
         label: '가맹점 요율',
