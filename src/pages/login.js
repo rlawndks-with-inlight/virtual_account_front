@@ -32,7 +32,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (user?.level >= 10) {
-      router.push(PATH_MANAGER.deposit.list);
+      router.push(PATH_MANAGER.dashboards);
     }
     setLoading(false);
   }, [user])
@@ -49,7 +49,7 @@ const Login = () => {
   const onSubmit = async () => {
     let user = await login(username, password);
     if (user) {
-      router.push(PATH_MANAGER.deposit.list)
+      router.push(PATH_MANAGER.dashboards)
     }
   };
   const [tourOpen, setTourOpen] = useState(false);

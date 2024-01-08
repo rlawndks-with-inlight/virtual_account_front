@@ -80,6 +80,8 @@ export const payTypeList = [
 export const withdrawStatusList = [
     { value: 0, label: '출금완료', color: 'success' },
     { value: 5, label: '출금요청완료', color: 'warning' },
+    { value: 10, label: '출금실패', color: 'error' },
+    { value: 15, label: '출금반려', color: 'error' },
 ]
 export const virtualAccountUserTypeList = [
     { value: 0, label: '개인', color: 'success' },
