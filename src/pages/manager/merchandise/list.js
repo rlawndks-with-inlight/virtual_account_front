@@ -473,7 +473,7 @@ const UserList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'가맹점 추가'}
+            add_button_text={user?.level >= 40 ? '가맹점 추가' : ''}
             head_columns={[]}
             table={'users'}
             excel_name={'가맹점'}

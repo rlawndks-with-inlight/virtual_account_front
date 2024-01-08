@@ -123,7 +123,7 @@ const navConfig = () => {
         },
       ],
     }] : []),
-    ...(isManager() ? [
+    ...((isManager() || isOperator()) ? [
       {
         items: [
           {
@@ -132,7 +132,9 @@ const navConfig = () => {
             icon: <Icon icon='tabler:map-pin' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '가맹점관리', path: PATH_MANAGER.merchandise.list },
-              { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
+              ...(isManager() ? [
+                { title: '가맹점추가', path: PATH_MANAGER.merchandise.add },
+              ] : []),
             ],
           },
         ],
