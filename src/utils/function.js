@@ -103,6 +103,9 @@ export const getUserLevelByNumber = (num) => {
 
   for (var i = 0; i < operatorLevelList.length; i++) {
     if (num == operatorLevelList[i].value) {
+      if (dns_data?.level_obj[`sales${5 - i}_name`]?.includes('가맹점')) {
+        return '가맹점';
+      }
       return dns_data?.level_obj[`sales${5 - i}_name`]
     }
   }
