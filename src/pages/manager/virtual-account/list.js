@@ -75,11 +75,11 @@ const VirtualAccountList = () => {
       label: '입금은행정보',
       action: (row, is_excel) => {
         if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']} ${row['birth']}`
         }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+          <div>{row['deposit_acct_num']} {row['deposit_acct_name']} {row['birth']}</div>
         </Col>
       }
     },
