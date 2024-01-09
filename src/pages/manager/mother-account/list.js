@@ -54,6 +54,14 @@ const MotherAccountList = () => {
       }
     },
     {
+      id: 'ago_amount',
+      label: '기존 모계좌잔액',
+      action: (row, is_excel) => {
+        let amount = row['new_amount'] - row['amount'];
+        return commarNumber(amount)
+      }
+    },
+    {
       id: 'amount',
       label: '금액',
       action: (row, is_excel) => {
@@ -84,6 +92,14 @@ const MotherAccountList = () => {
           color: `${amount > 0 ? 'blue' : 'red'}`
         }
       },
+    },
+    {
+      id: 'new_amount',
+      label: '이후 모계좌잔액',
+      action: (row, is_excel) => {
+        let amount = row['new_amount']
+        return commarNumber(amount)
+      }
     },
     {
       id: 'note',
