@@ -144,6 +144,13 @@ const UserList = () => {
       }
     },
     {
+      id: 'settle_amount',
+      label: '출금액',
+      action: (row, is_excel) => {
+        return commarNumber(row['withdraw_amount'] + row['withdraw_fee_amount'])
+      }
+    },
+    {
       id: 'phone_num',
       label: '전화번호',
       action: (row, is_excel) => {

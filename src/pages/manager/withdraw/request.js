@@ -49,6 +49,7 @@ const WithdrawRequest = () => {
                 api_key: themeDnsData?.api_key,
                 mid: user?.mid,
                 withdraw_amount: item?.withdraw_amount,
+                note: item?.note,
             });
             console.log(result);
         } else {
