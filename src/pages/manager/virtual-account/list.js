@@ -12,6 +12,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
+import { commarNumber } from "src/utils/function";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
@@ -83,6 +84,22 @@ const VirtualAccountList = () => {
         </Col>
       }
     },
+    ...(user?.level >= 50 ? [
+      {
+        id: 'balance',
+        label: '잔액확인',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              getBalance(row?.id)
+            }}
+          >잔액확인</Button>
+        }
+      },
+    ] : []),
     {
       id: 'user_type',
       label: '사용자구분',
@@ -194,7 +211,12 @@ const VirtualAccountList = () => {
       onChangePage(searchObj);
     }
   }
-
+  const getBalance = async (id) => {
+    let result = await apiManager('virtual-accounts/balance', 'get', {
+      id: id
+    })
+    toast.success(`${commarNumber(result?.amount)}원`)
+  }
   return (
     <>
       <Stack spacing={3}>
