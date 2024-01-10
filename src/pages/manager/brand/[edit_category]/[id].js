@@ -777,66 +777,138 @@ const BrandEdit = () => {
                         </Select>
                       </FormControl>
 
-                      <TextField
-                        label='GUID'
-                        value={item.withdraw_guid}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_guid']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='API ID'
-                        value={item.withdraw_api_id}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_api_id']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='API 서명키'
-                        value={item.withdraw_sign_key}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_sign_key']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='암호화키'
-                        value={item.withdraw_encr_key}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_encr_key']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='IV'
-                        value={item.withdraw_iv}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_iv']: e.target.value
-                            }
-                          )
-                        }} />
+
+
+
+
+                      {[1].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='GUID'
+                            value={item.withdraw_guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='API ID'
+                            value={item.withdraw_api_id}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_api_id']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1, 2].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='API 서명키'
+                            value={item.withdraw_sign_key}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_sign_key']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='암호화키'
+                            value={item.withdraw_encr_key}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_encr_key']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='IV'
+                            value={item.withdraw_iv}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_iv']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+
+                      {[2].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='취급기관코드'
+                            value={item.withdraw_trt_inst_code}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_trt_inst_code']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[2].includes(item.withdraw_corp_type) &&
+                        <>
+                          <Stack spacing={1}>
+                            <FormControl>
+                              <InputLabel>출금가상계좌은행</InputLabel>
+                              <Select
+                                label='출금가상계좌은행'
+                                value={item.withdraw_virtual_bank_code}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    ['withdraw_virtual_bank_code']: e.target.value
+                                  })
+                                }}
+                              >
+                                {bankCodeList().map((itm, idx) => {
+                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                })}
+                              </Select>
+                            </FormControl>
+                          </Stack>
+                        </>}
+                      {[2].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='출금가상계좌번호'
+                            value={item.withdraw_virtual_acct_num}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_virtual_acct_num']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
