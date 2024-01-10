@@ -114,7 +114,7 @@ const VirtualAccountList = () => {
         </> : "---"
       }
     },
-    ...(user?.level >= 40 ? [
+    ...(user?.level >= 10 ? [
       {
         id: 'delete',
         label: '삭제',
