@@ -314,6 +314,39 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                      {item?.setting_obj?.is_use_withdraw == 1 &&
+                        <>
+                          <TextField
+                            label='출금불가시작시간'
+                            type="time"
+                            value={item.setting_obj?.not_withdraw_s_time}
+                            placeholder=""
+                            onChange={e => {
+                              setItem({
+                                ...item,
+                                ['setting_obj']: {
+                                  ...item.setting_obj,
+                                  [`not_withdraw_s_time`]: e.target.value
+                                }
+                              })
+                            }}
+                          />
+                          <TextField
+                            label='출금불가종료시간'
+                            type="time"
+                            value={item.setting_obj?.not_withdraw_e_time}
+                            placeholder=""
+                            onChange={e => {
+                              setItem({
+                                ...item,
+                                ['setting_obj']: {
+                                  ...item.setting_obj,
+                                  [`not_withdraw_e_time`]: e.target.value
+                                }
+                              })
+                            }}
+                          />
+                        </>}
                       <Stack spacing={1}>
                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                           비고
@@ -1242,36 +1275,7 @@ const BrandEdit = () => {
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
-                      <TextField
-                        label='출금불가시작시간'
-                        type="time"
-                        value={item.setting_obj?.not_withdraw_s_time}
-                        placeholder=""
-                        onChange={e => {
-                          setItem({
-                            ...item,
-                            ['setting_obj']: {
-                              ...item.setting_obj,
-                              [`not_withdraw_s_time`]: e.target.value
-                            }
-                          })
-                        }}
-                      />
-                      <TextField
-                        label='출금불가종료시간'
-                        type="time"
-                        value={item.setting_obj?.not_withdraw_e_time}
-                        placeholder=""
-                        onChange={e => {
-                          setItem({
-                            ...item,
-                            ['setting_obj']: {
-                              ...item.setting_obj,
-                              [`not_withdraw_e_time`]: e.target.value
-                            }
-                          })
-                        }}
-                      />
+
                     </Stack>
                   </Card>
                 </Grid>
