@@ -302,18 +302,21 @@ const BrandEdit = () => {
                             disabled={true}
                           />
                         </>}
-                      <TextField
-                        label='guid'
-                        value={item.guid}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['guid']: e.target.value
-                            }
-                          )
-                        }} />
+                      {item?.withdraw_type == 0 &&
+                        <>
+                          <TextField
+                            label='guid'
+                            value={item.guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                       {item?.setting_obj?.is_use_withdraw == 1 &&
                         <>
                           <TextField
