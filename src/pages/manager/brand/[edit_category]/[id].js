@@ -1197,7 +1197,7 @@ const BrandEdit = () => {
               </>}
             {currentTab == 10 &&
               <>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
@@ -1234,6 +1234,42 @@ const BrandEdit = () => {
                               ['telegram_bot_id']: e.target.value
                             }
                           )
+                        }}
+                      />
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        label='출금불가시작시간'
+                        type="time"
+                        value={item.setting_obj?.not_withdraw_s_time}
+                        placeholder=""
+                        onChange={e => {
+                          setItem({
+                            ...item,
+                            ['setting_obj']: {
+                              ...item.setting_obj,
+                              [`not_withdraw_s_time`]: e.target.value
+                            }
+                          })
+                        }}
+                      />
+                      <TextField
+                        label='출금불가종료시간'
+                        type="time"
+                        value={item.setting_obj?.not_withdraw_e_time}
+                        placeholder=""
+                        onChange={e => {
+                          setItem({
+                            ...item,
+                            ['setting_obj']: {
+                              ...item.setting_obj,
+                              [`not_withdraw_e_time`]: e.target.value
+                            }
+                          })
                         }}
                       />
                     </Stack>
