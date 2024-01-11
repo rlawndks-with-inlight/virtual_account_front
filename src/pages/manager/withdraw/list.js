@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { Row } from "src/components/elements/styled-components";
+import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
@@ -116,15 +116,51 @@ const WithdrawList = () => {
     ...(user?.level >= 40 ? [
       {
         id: 'minus_amount',
-        label: '출금허용하기',
+        label: '출금상태관리',
         action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
           if (row?.is_withdraw_hold == 1) {
+            return <Col style={{ rowGap: '0.5rem' }}>
+              <Button variant="outlined" size="small" sx={{ width: '100px' }}
+                onClick={() => {
+                  setModal({
+                    func: () => { onConfirmWithdraw(row?.id) },
+                    icon: 'bx:money-withdraw',
+                    title: '출금을 허용 하시겠습니까?'
+                  })
+                }}
+              >출금허용</Button>
+              <Button variant="contained" size="small" sx={{ width: '100px' }}
+                onClick={() => {
+                  setModal({
+                    func: () => { onRefuseWithdraw(row?.id) },
+                    icon: 'bx:money-withdraw',
+                    title: '출금을 반려 하시겠습니까?'
+                  })
+                }}
+              >출금반려</Button>
+            </Col>
+          } else {
+            return "---";
+          }
+        }
+      },
+      {
+        id: 'withdraw_fail',
+        label: '출금 실패처리',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          if (row?.is_move_mother == 1 && row?.withdraw_status == 5) {
             return <Button variant="outlined" size="small" sx={{ width: '100px' }}
               onClick={() => {
                 setModal({
-                  func: () => { onConfirmWithdraw(row?.id) },
+                  func: () => { onFailWithdraw(row?.id) },
                   icon: 'bx:money-withdraw',
-                  title: '출금을 허용 하시겠습니까?'
+                  title: '출금을 실패처리 하시겠습니까?'
                 })
               }}
             >출금허용</Button>
@@ -204,15 +240,35 @@ const WithdrawList = () => {
       onChangePage(searchObj)
     }
   }
-
+  const onRefuseWithdraw = async (id) => {
+    let result = undefined
+    result = await apiManager('withdraws/refuse', 'create', {
+      id
+    });
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      onChangePage(searchObj)
+    }
+  }
+  const onFailWithdraw = async (id) => {
+    let result = undefined
+    result = await apiManager('withdraws/fail', 'create', {
+      id
+    });
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      onChangePage(searchObj)
+    }
+  }
   return (
     <>
       <Stack spacing={3}>
 
         <Card>
-          {user?.level >= 40 &&
-            <>
-              <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            {user?.level >= 40 &&
+              <>
+
                 {(themeDnsData?.operator_list ?? []).map(operator => {
                   return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
                     <InputLabel>{operator?.label}</InputLabel>
@@ -239,8 +295,20 @@ const WithdrawList = () => {
                     })}
                   </Select>
                 </FormControl>
-              </Row>
-            </>}
+              </>}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>출금상태</InputLabel>
+              <Select label='출금상태' value={searchObj[`withdraw_status`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`withdraw_status`]: e.target.value })
+                }}>
+                <MenuItem value={null}>상태 전체</MenuItem>
+                {withdrawStatusList.map(status => {
+                  return <MenuItem value={status.value}>{`${status.label}`}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+          </Row>
           <ManagerTable
             data={data}
             columns={columns}
