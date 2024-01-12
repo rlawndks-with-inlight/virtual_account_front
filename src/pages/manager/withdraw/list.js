@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -317,6 +317,27 @@ const WithdrawList = () => {
             head_columns={[]}
             table={'withdraws'}
             excel_name={'출금'}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              {data?.content &&
+                <>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">조회건수</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.total)}</Typography>
+                  </Row>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">출금예정금액</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.chart?.expect_amount + data?.chart?.withdraw_fee)}원</Typography>
+                  </Row>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">실제출금금액</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.chart?.amount + data?.chart?.withdraw_fee)}원</Typography>
+                  </Row>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">출금수수료</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.chart?.withdraw_fee)}원</Typography>
+                  </Row>
+                </>}
+            </Row>}
           />
         </Card>
       </Stack>

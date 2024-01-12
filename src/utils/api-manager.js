@@ -135,6 +135,22 @@ export const apiManager = (table, type, params) => {
         return deleteItem(`${base_url}/${table}/${params?.id}`);
     }
 }
+export const apiUtil = async (table, type, params) => {
+    let obj = await settingParams(table, type, params);
+    if (!(obj?.brand_id > 0)) {
+        let dns_data = getLocalStorage('themeDnsData');
+        dns_data = JSON.parse(dns_data);
+        obj['brand_id'] = dns_data?.id;
+        obj['root_id'] = dns_data?.root_id;
+    }
+    let base_url = '/api/util';
+    if (type == 'get') {
+        return get(`${base_url}/${table}`, obj);
+    }
+    if (type == 'update') {
+        return post(`${base_url}/${table}`, obj);
+    }
+}
 export const apiServer = (url, type, params) => {
     let obj = settingParams("", type, params);
     if (!(obj?.brand_id > 0)) {

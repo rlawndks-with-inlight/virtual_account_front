@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -7,7 +7,7 @@ import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiUtil } from "src/utils/api-manager";
 import { commarNumber, getUserFee, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
@@ -20,10 +20,23 @@ const DepositList = () => {
   const defaultHeadColumns = [
     {
       title: '기본정보',
-      count: 6,
+      count: 7,
     },
   ]
   const defaultColumns = [
+    {
+      id: 'check',
+      label: '확인체크',
+      action: (row, is_excel) => {
+
+        return <Checkbox defaultChecked={row?.is_check_user == 1} onChange={async (e) => {
+          let result = await apiUtil(`deposits/is_check_user`, 'update', {
+            id: row?.id,
+            value: e.target.checked ? 1 : 0,
+          })
+        }} />
+      }
+    },
     {
       id: 'trx_id',
       label: '거래번호',
