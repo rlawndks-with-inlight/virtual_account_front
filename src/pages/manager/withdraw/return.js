@@ -22,7 +22,7 @@ const WithdrawReturn = () => {
 
     const { user } = useAuthContext();
     const { setModal } = useModal()
-    const { themeMode } = useSettingsContext();
+    const { themeDnsData } = useSettingsContext();
 
     const router = useRouter();
 
@@ -103,7 +103,7 @@ const WithdrawReturn = () => {
                                             차감 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_amount + item?.withdraw_fee)} 원
+                                            {commarNumber(_.sum(withdraws.map(itm => { return (itm?.withdraw_amount ?? 0) })) + (item?.withdraw_fee) * withdraws.length)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -111,7 +111,7 @@ const WithdrawReturn = () => {
                                             반환후 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_amount - item?.withdraw_fee)} 원
+                                            {commarNumber(item?.settle_amount - (_.sum(withdraws.map(itm => { return (itm?.withdraw_amount ?? 0) })) + (item?.withdraw_fee) * withdraws.length))} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -119,7 +119,7 @@ const WithdrawReturn = () => {
                                             반환 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_fee)} 원
+                                            {commarNumber(item?.settle_amount - item?.withdraw_fee * withdraws.length)} 원
                                         </Typography>
                                     </Stack>
                                 </Stack>
@@ -128,43 +128,44 @@ const WithdrawReturn = () => {
                         <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
-                                    <Autocomplete
-                                        fullWidth
-                                        multiple={true}
-                                        autoComplete='new-password'
-                                        options={virtualAccounts}
-                                        style={{
-                                            whiteSpace: 'pre'
-                                        }}
-                                        getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList(), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
-                                        value={withdraws}
-
-                                        onChange={(e, value) => {
-                                            let withdraw_list = [...withdraws];
-                                            if (withdraw_list.length > value.length) {//줄어들때
-                                                for (var i = 0; i < withdraw_list.length; i++) {
-                                                    let is_exist_item = false;
-                                                    for (var j = 0; j < value.length; j++) {
-                                                        if (value[j]?.id == withdraw_list[i]?.id) {
-                                                            is_exist_item = true;
-                                                            break;
+                                    {themeDnsData?.withdraw_type == 0 &&
+                                        <>
+                                            <Autocomplete
+                                                fullWidth
+                                                multiple={true}
+                                                autoComplete='new-password'
+                                                options={virtualAccounts}
+                                                style={{
+                                                    whiteSpace: 'pre'
+                                                }}
+                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList(), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
+                                                value={withdraws}
+                                                onChange={(e, value) => {
+                                                    let withdraw_list = [...withdraws];
+                                                    if (withdraw_list.length > value.length) {//줄어들때
+                                                        for (var i = 0; i < withdraw_list.length; i++) {
+                                                            let is_exist_item = false;
+                                                            for (var j = 0; j < value.length; j++) {
+                                                                if (value[j]?.id == withdraw_list[i]?.id) {
+                                                                    is_exist_item = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (!is_exist_item) {
+                                                                withdraw_list.splice(i, 1);
+                                                                break;
+                                                            }
                                                         }
+                                                    } else {//추가할때
+                                                        withdraw_list.push(value[value.length - 1]);
                                                     }
-                                                    if (!is_exist_item) {
-                                                        withdraw_list.splice(i, 1);
-                                                        break;
-                                                    }
-                                                }
-                                            } else {//추가할때
-                                                withdraw_list.push(value[value.length - 1]);
-                                            }
-                                            setWithdraws(withdraw_list);
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="유저선택" placeholder="유저선택" autoComplete='new-password' />
-                                        )}
-                                    />
-
+                                                    setWithdraws(withdraw_list);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField {...params} label="유저선택" placeholder="유저선택" autoComplete='new-password' />
+                                                )}
+                                            />
+                                        </>}
                                     {/* <FormControl variant='outlined'>
                                         <InputLabel>{'유저선택'}</InputLabel>
                                         <Select label={'유저선택'} value={item?.virtual_account_id}

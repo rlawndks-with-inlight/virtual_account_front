@@ -812,11 +812,6 @@ const BrandEdit = () => {
                           })}
                         </Select>
                       </FormControl>
-
-
-
-
-
                       {[1].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField

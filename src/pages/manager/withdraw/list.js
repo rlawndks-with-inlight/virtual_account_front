@@ -30,7 +30,7 @@ const WithdrawList = () => {
       label: '유저레벨',
       action: (row, is_excel) => {
         return getUserLevelByNumber(row['level'])
-      }
+      },
     },
     {
       id: 'nickname',

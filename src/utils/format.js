@@ -21,7 +21,7 @@ export const operatorLevelList = [
     { value: 15, label: '' },
     { value: 13, label: '' },
 ]
-export const bankCodeList = () => {
+export const bankCodeList = (pay_type) => {
     let dns_data = getLocalStorage('themeDnsData');
     dns_data = JSON.parse(dns_data);
     if (dns_data?.bank_list) {
