@@ -319,13 +319,15 @@ const WithdrawReturn = () => {
                                 {themeDnsData?.withdraw_type == 1 &&
                                     <>
                                         <Button style={{ width: '100%', height: '48px', marginTop: '1rem' }} variant="outlined" onClick={() => {
-                                            setWithdraws([...withdraws, {
+                                            let withdraw_list = [...withdraws];
+                                            withdraw_list.push({
                                                 withdraw_amount: 0,
                                                 note: '',
                                                 withdraw_bank_code: '',
                                                 withdraw_acct_num: '',
                                                 withdraw_acct_name: '',
-                                            }])
+                                            })
+                                            setWithdraws(withdraw_list)
                                         }}>출금회원추가</Button>
                                     </>}
                             </Card>
