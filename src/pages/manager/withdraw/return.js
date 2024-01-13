@@ -291,7 +291,7 @@ const WithdrawReturn = () => {
                                                     error={vir_acct?.is_error == 1}
                                                     onChange={(e) => {
                                                         let withdraw_list = [...withdraws];
-                                                        withdraw_list[idx].withdraw_amount = parseFloat(e.target.value);
+                                                        withdraw_list[idx].withdraw_amount = e.target.value;
                                                         setWithdraws(withdraw_list);
                                                     }} />
                                                 <TextField
