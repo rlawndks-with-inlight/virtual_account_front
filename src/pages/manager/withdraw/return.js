@@ -61,7 +61,7 @@ const WithdrawReturn = () => {
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
                     api_key: themeDnsData?.api_key,
                     mid: user?.mid,
-                    withdraw_amount: item?.withdraw_amount,
+                    withdraw_amount: withdraws[i]?.withdraw_amount,
                     note: item?.note,
                     withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
                     withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
