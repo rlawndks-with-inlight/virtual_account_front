@@ -56,6 +56,7 @@ const WithdrawReturn = () => {
             if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
                 return toast.error('유저를 선택해 주세요.');
             }
+            console.log(user)
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
                     api_key: themeDnsData?.api_key,
