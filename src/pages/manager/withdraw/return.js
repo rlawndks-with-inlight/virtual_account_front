@@ -8,7 +8,7 @@ import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/func
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
@@ -53,16 +53,29 @@ const WithdrawReturn = () => {
     const onSave = async () => {
         for (var i = 0; i < withdraws.length; i++) {
             let result = undefined;
-            if (!item?.virtual_account_id) {
+            if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
                 return toast.error('유저를 선택해 주세요.');
             }
-            result = await apiManager('withdraws', 'create', {
-                withdraw_amount: withdraws[i]?.withdraw_amount,
-                user_id: user?.id,
-                virtual_account_id: withdraws[i]?.id,
-                pay_type: 20,
-                note: withdraws[i]?.note,
-            });
+            if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
+                result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
+                    api_key: themeDnsData?.api_key,
+                    mid: user?.mid,
+                    withdraw_amount: item?.withdraw_amount,
+                    note: item?.note,
+                    withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
+                    withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
+                    withdraw_acct_name: withdraws[i]?.withdraw_acct_name,
+                });
+            } else {
+                result = await apiManager('withdraws', 'create', {
+                    withdraw_amount: withdraws[i]?.withdraw_amount,
+                    user_id: user?.id,
+                    virtual_account_id: withdraws[i]?.id,
+                    pay_type: 20,
+                    note: withdraws[i]?.note,
+                });
+            }
+
             let withdraw_list = [...withdraws];
             if (result) {
                 withdraw_list[i].is_error = 0;
@@ -218,13 +231,53 @@ const WithdrawReturn = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={8}>
+                        <Grid item xs={12} md={12}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     {withdraws.map(((vir_acct, idx) => (
                                         <>
                                             <Row style={{ columnGap: '1rem' }}>
-                                                <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
+                                                {themeDnsData?.withdraw_type == 0 &&
+                                                    <>
+                                                        <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
+                                                    </>}
+                                                {themeDnsData?.withdraw_type == 1 &&
+                                                    <>
+                                                        <FormControl style={{ width: '50%' }}>
+                                                            <InputLabel>출금계좌은행</InputLabel>
+                                                            <Select
+                                                                label='출금계좌은행'
+                                                                value={vir_acct.withdraw_bank_code}
+                                                                onChange={e => {
+                                                                    let withdraw_list = [...withdraws];
+                                                                    withdraw_list[idx].withdraw_bank_code = e.target.value;
+                                                                    setWithdraws(withdraw_list);
+                                                                }}
+                                                            >
+                                                                {bankCodeList().map((itm, idx) => {
+                                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                })}
+                                                            </Select>
+                                                        </FormControl>
+                                                        <TextField
+                                                            style={{ width: '50%' }}
+                                                            label='출금계좌번호'
+                                                            value={vir_acct.withdraw_acct_num}
+                                                            onChange={(e) => {
+                                                                let withdraw_list = [...withdraws];
+                                                                withdraw_list[idx].withdraw_acct_num = e.target.value;
+                                                                setWithdraws(withdraw_list);
+                                                            }} />
+                                                        <TextField
+                                                            style={{ width: '50%' }}
+                                                            label='출금계좌예금주명'
+                                                            value={vir_acct.withdraw_acct_name}
+                                                            onChange={(e) => {
+                                                                let withdraw_list = [...withdraws];
+                                                                withdraw_list[idx].withdraw_acct_name = e.target.value;
+                                                                setWithdraws(withdraw_list);
+                                                            }} />
+                                                    </>}
                                                 <TextField
                                                     style={{ width: '50%' }}
                                                     label='반환 요청금'
@@ -253,15 +306,27 @@ const WithdrawReturn = () => {
                                                     withdraw_list.splice(idx, 1);
                                                     setWithdraws(withdraw_list);
                                                 }}>
-                                                    <Icon />
+                                                    <Icon icon='material-symbols:delete-outline' />
                                                 </IconButton>
                                             </Row>
                                         </>
                                     )))}
                                 </Stack>
+                                {themeDnsData?.withdraw_type == 1 &&
+                                    <>
+                                        <Button style={{ width: '100%', height: '48px', marginTop: '1rem' }} variant="outlined" onClick={() => {
+                                            setWithdraws([...withdraws, {
+                                                withdraw_amount: 0,
+                                                note: '',
+                                                withdraw_bank_code: '',
+                                                withdraw_acct_num: '',
+                                                withdraw_acct_name: '',
+                                            }])
+                                        }}>출금회원추가</Button>
+                                    </>}
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={8}>
+                        <Grid item xs={12} md={12}>
                             <Card sx={{ p: 3 }}>
                                 <Stack spacing={1} style={{ display: 'flex' }}>
                                     <Button variant="contained" style={{

@@ -50,8 +50,10 @@ const WithdrawRequest = () => {
                 mid: user?.mid,
                 withdraw_amount: item?.withdraw_amount,
                 note: item?.note,
+                withdraw_bank_code: user?.withdraw_bank_code,
+                withdraw_acct_num: user?.withdraw_acct_num,
+                withdraw_acct_name: user?.withdraw_acct_name,
             });
-            console.log(result);
         } else {
             result = await apiManager('withdraws', 'create', {
                 withdraw_amount: item?.withdraw_amount,
