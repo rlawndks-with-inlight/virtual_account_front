@@ -62,7 +62,7 @@ const WithdrawReturn = () => {
                     api_key: themeDnsData?.api_key,
                     mid: user?.mid,
                     withdraw_amount: withdraws[i]?.withdraw_amount,
-                    note: item?.note,
+                    note: withdraws[i]?.note,
                     withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
                     withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
                     withdraw_acct_name: withdraws[i]?.withdraw_acct_name,
