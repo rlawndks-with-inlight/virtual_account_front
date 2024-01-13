@@ -51,12 +51,12 @@ const WithdrawReturn = () => {
         setLoading(false);
     }
     const onSave = async () => {
+        console.log(withdraws)
         for (var i = 0; i < withdraws.length; i++) {
             let result = undefined;
             if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
                 return toast.error('유저를 선택해 주세요.');
             }
-            console.log(user)
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
                     api_key: themeDnsData?.api_key,
@@ -249,6 +249,7 @@ const WithdrawReturn = () => {
                                                             <Select
                                                                 label='출금계좌은행'
                                                                 value={vir_acct.withdraw_bank_code}
+                                                                error={vir_acct?.is_error == 1}
                                                                 onChange={e => {
                                                                     let withdraw_list = [...withdraws];
                                                                     withdraw_list[idx].withdraw_bank_code = e.target.value;
@@ -264,6 +265,7 @@ const WithdrawReturn = () => {
                                                             style={{ width: '50%' }}
                                                             label='출금계좌번호'
                                                             value={vir_acct.withdraw_acct_num}
+                                                            error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {
                                                                 let withdraw_list = [...withdraws];
                                                                 withdraw_list[idx].withdraw_acct_num = e.target.value;
@@ -273,6 +275,7 @@ const WithdrawReturn = () => {
                                                             style={{ width: '50%' }}
                                                             label='출금계좌예금주명'
                                                             value={vir_acct.withdraw_acct_name}
+                                                            error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {
                                                                 let withdraw_list = [...withdraws];
                                                                 withdraw_list[idx].withdraw_acct_name = e.target.value;
