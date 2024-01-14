@@ -53,7 +53,8 @@ const WithdrawRequest = () => {
                 withdraw_bank_code: item?.withdraw_bank_code,
                 withdraw_acct_num: item?.withdraw_acct_num,
                 withdraw_acct_name: item?.withdraw_acct_name,
-                pay_type: 'withdraw'
+                pay_type: 'withdraw',
+                otp_num: item?.otp_num,
             });
         } else {
             result = await apiManager('withdraws', 'create', {
@@ -172,6 +173,21 @@ const WithdrawRequest = () => {
                                                 }
                                             )
                                         }} />
+                                    {themeDnsData?.is_use_otp == 1 &&
+                                        <>
+                                            <TextField
+                                                label='OTP번호'
+                                                value={item?.otp_num}
+                                                placeholder=""
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['otp_num']: e.target.value
+                                                        }
+                                                    )
+                                                }} />
+                                        </>}
                                 </Stack>
                             </Card>
                         </Grid>

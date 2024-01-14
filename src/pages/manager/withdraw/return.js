@@ -68,7 +68,8 @@ const WithdrawReturn = () => {
                     withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
                     withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
                     withdraw_acct_name: withdraws[i]?.withdraw_acct_name,
-                    pay_type: 'return'
+                    pay_type: 'return',
+                    otp_num: item?.otp_num,
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
@@ -94,7 +95,6 @@ const WithdrawReturn = () => {
             }
             setWithdraws(withdraw_list);
         }
-
     }
     return (
         <>
@@ -187,6 +187,21 @@ const WithdrawReturn = () => {
                                                     <TextField {...params} label="유저선택" placeholder="유저선택" autoComplete='new-password' />
                                                 )}
                                             />
+                                        </>}
+                                    {themeDnsData?.is_use_otp == 1 &&
+                                        <>
+                                            <TextField
+                                                label='OTP번호'
+                                                value={item?.otp_num}
+                                                placeholder=""
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['otp_num']: e.target.value
+                                                        }
+                                                    )
+                                                }} />
                                         </>}
                                     {/* <FormControl variant='outlined'>
                                         <InputLabel>{'유저선택'}</InputLabel>
