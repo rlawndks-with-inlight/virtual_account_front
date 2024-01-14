@@ -51,7 +51,6 @@ const WithdrawReturn = () => {
         setLoading(false);
     }
     const onSave = async () => {
-        console.log(withdraws)
         for (var i = 0; i < withdraws.length; i++) {
             let result = undefined;
             if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
@@ -66,6 +65,7 @@ const WithdrawReturn = () => {
                     withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
                     withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
                     withdraw_acct_name: withdraws[i]?.withdraw_acct_name,
+                    pay_type: 'return'
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
@@ -80,7 +80,11 @@ const WithdrawReturn = () => {
             let withdraw_list = [...withdraws];
             if (result) {
                 withdraw_list[i].is_error = 0;
-                toast.success("성공적으로 반환요청 되었습니다." + `${_.find(bankCodeList(), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList(), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
+                if (themeDnsData?.withdraw_type == 0) {
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList(), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList(), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
+                } else if (themeDnsData?.withdraw_type == 1) {
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList(), { value: withdraws[i]?.withdraw_bank_code })?.label} ${withdraws[i]?.withdraw_acct_num} (${withdraws[i]?.withdraw_acct_name})`);
+                }
             } else {
                 withdraw_list[i].is_error = 1;
             }
