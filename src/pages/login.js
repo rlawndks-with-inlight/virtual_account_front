@@ -17,6 +17,7 @@ import Image from 'src/components/image/Image';
 import dynamic from 'next/dynamic';
 import { PATH_MANAGER } from 'src/routes/paths';
 import { Row } from 'src/components/elements/styled-components';
+import { apiManager } from 'src/utils/api-manager';
 const Tour = dynamic(
   () => import('reactour'),
   { ssr: false },
@@ -29,6 +30,7 @@ const Login = () => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [optNum, setOptNum] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (user?.level >= 10) {
@@ -36,20 +38,16 @@ const Login = () => {
     }
     setLoading(false);
   }, [user])
-  useEffect(() => {
-    if (router.query?.is_first && !user) {
 
-    }
-  }, [router.query?.is_first])
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
   });
 
   const onSubmit = async () => {
-    let user = await login(username, password);
+    let user = await login(username, password, optNum);
     if (user) {
-      router.push(PATH_MANAGER.dashboards)
+      router.push(PATH_MANAGER.dashboards);
     }
   };
   const [tourOpen, setTourOpen] = useState(false);
@@ -115,6 +113,22 @@ const Login = () => {
                     ),
                   }}
                 />
+                {themeDnsData?.is_use_otp == 1 &&
+                  <>
+                    <TextField
+                      name="otp"
+                      label="OTP번호"
+                      autoComplete='new-password'
+                      onChange={(e) => {
+                        setOptNum(e.target.value)
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key == 'Enter') {
+                          onSubmit();
+                        }
+                      }}
+                    />
+                  </>}
               </Stack>
               <LoadingButton
                 fullWidth

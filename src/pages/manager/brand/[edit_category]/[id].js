@@ -1,5 +1,5 @@
 
-import { Avatar, Button, Card, CardHeader, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, Tab, Tabs, TextField, TextareaAutosize, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardHeader, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, Tab, Tabs, TextField, TextareaAutosize, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -18,6 +18,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { apiCorpList, bankCodeList, operatorLevelList, withdrawFeeTypeList, withdrawTypeList } from "src/utils/format";
 import _ from "lodash";
+import { Icon } from "@iconify/react";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -1282,6 +1283,42 @@ const BrandEdit = () => {
                               ['telegram_bot_id']: e.target.value
                             }
                           )
+                        }}
+                      />
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_otp == 1} />} label={`OTP 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_otp']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <TextField
+                        label='OTP 키'
+                        value={item.otp_token}
+                        placeholder=""
+                        disabled={true}
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['otp_token']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <IconButton onClick={async () => {
+                            let result = await apiManager(`brands/otp`, 'create');
+                            console.log(result);
+                            setItem({
+                              ...item,
+                              ['otp_token']: result?.base32,
+                            })
+                          }}>
+                            <Icon icon='gg:redo' />
+                          </IconButton>
                         }}
                       />
                     </Stack>
