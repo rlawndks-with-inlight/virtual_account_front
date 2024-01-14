@@ -94,12 +94,8 @@ App.getInitialProps = async (context) => {
   try {
     let head_data = {}
     let host = '';
-    if (process.env.FRONT_URL) {
-      host = process.env.FRONT_URL.split(':')[0];
-    } else if (ctx?.req?.headers?.host) {
-      host = ctx?.req?.headers.host.split(':')[0];
-    }
-    if (host) {
+    host = ctx?.req?.headers.host.split(':')[0];
+    if (host && host != '127.0.0.1') {
       const url = `${process.env.BACK_URL}/api/domain?dns=${host}`;
       const res = await fetch(url);
       head_data = await res.json();
