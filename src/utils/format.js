@@ -92,3 +92,7 @@ export const withdrawTypeList = [
     { value: 0, label: 'guid 설정 출금방식', color: 'success' },
     { value: 1, label: '직접설정출금방식', color: 'success' },
 ]
+export const withdrawFeeTypeList = [
+    { value: 0, label: '추가형식 (감소정산금: 출금액 + 출금수수료)', color: 'success' },
+    { value: 1, label: '감소형식 (감소정산금: 출금액)', color: 'success' },
+]

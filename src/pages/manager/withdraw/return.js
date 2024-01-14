@@ -52,6 +52,9 @@ const WithdrawReturn = () => {
     }
     const onSave = async () => {
         for (var i = 0; i < withdraws.length; i++) {
+            if (withdraws[i]?.is_confirm == 1) {
+                continue;
+            }
             let result = undefined;
             if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
                 return toast.error('유저를 선택해 주세요.');
@@ -80,6 +83,7 @@ const WithdrawReturn = () => {
             let withdraw_list = [...withdraws];
             if (result) {
                 withdraw_list[i].is_error = 0;
+                withdraw_list[i].is_confirm = 1;
                 if (themeDnsData?.withdraw_type == 0) {
                     toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList(), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList(), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
                 } else if (themeDnsData?.withdraw_type == 1) {
@@ -241,82 +245,85 @@ const WithdrawReturn = () => {
                                 <Stack spacing={3}>
                                     {withdraws.map(((vir_acct, idx) => (
                                         <>
-                                            <Row style={{ columnGap: '1rem' }}>
-                                                {themeDnsData?.withdraw_type == 0 &&
-                                                    <>
-                                                        <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
-                                                    </>}
-                                                {themeDnsData?.withdraw_type == 1 &&
-                                                    <>
-                                                        <FormControl style={{ width: '50%' }}>
-                                                            <InputLabel>출금계좌은행</InputLabel>
-                                                            <Select
-                                                                label='출금계좌은행'
-                                                                value={vir_acct.withdraw_bank_code}
-                                                                error={vir_acct?.is_error == 1}
-                                                                onChange={e => {
-                                                                    let withdraw_list = [...withdraws];
-                                                                    withdraw_list[idx].withdraw_bank_code = e.target.value;
-                                                                    setWithdraws(withdraw_list);
-                                                                }}
-                                                            >
-                                                                {bankCodeList().map((itm, idx) => {
-                                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                                })}
-                                                            </Select>
-                                                        </FormControl>
+                                            {vir_acct?.is_confirm != 1 &&
+                                                <>
+                                                    <Row style={{ columnGap: '1rem' }}>
+                                                        {themeDnsData?.withdraw_type == 0 &&
+                                                            <>
+                                                                <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
+                                                            </>}
+                                                        {themeDnsData?.withdraw_type == 1 &&
+                                                            <>
+                                                                <FormControl style={{ width: '50%' }}>
+                                                                    <InputLabel>출금계좌은행</InputLabel>
+                                                                    <Select
+                                                                        label='출금계좌은행'
+                                                                        value={vir_acct.withdraw_bank_code}
+                                                                        error={vir_acct?.is_error == 1}
+                                                                        onChange={e => {
+                                                                            let withdraw_list = [...withdraws];
+                                                                            withdraw_list[idx].withdraw_bank_code = e.target.value;
+                                                                            setWithdraws(withdraw_list);
+                                                                        }}
+                                                                    >
+                                                                        {bankCodeList().map((itm, idx) => {
+                                                                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                        })}
+                                                                    </Select>
+                                                                </FormControl>
+                                                                <TextField
+                                                                    style={{ width: '50%' }}
+                                                                    label='출금계좌번호'
+                                                                    value={vir_acct.withdraw_acct_num}
+                                                                    error={vir_acct?.is_error == 1}
+                                                                    onChange={(e) => {
+                                                                        let withdraw_list = [...withdraws];
+                                                                        withdraw_list[idx].withdraw_acct_num = e.target.value;
+                                                                        setWithdraws(withdraw_list);
+                                                                    }} />
+                                                                <TextField
+                                                                    style={{ width: '50%' }}
+                                                                    label='출금계좌예금주명'
+                                                                    value={vir_acct.withdraw_acct_name}
+                                                                    error={vir_acct?.is_error == 1}
+                                                                    onChange={(e) => {
+                                                                        let withdraw_list = [...withdraws];
+                                                                        withdraw_list[idx].withdraw_acct_name = e.target.value;
+                                                                        setWithdraws(withdraw_list);
+                                                                    }} />
+                                                            </>}
                                                         <TextField
                                                             style={{ width: '50%' }}
-                                                            label='출금계좌번호'
-                                                            value={vir_acct.withdraw_acct_num}
+                                                            label='반환 요청금'
+                                                            type="number"
+                                                            value={vir_acct?.withdraw_amount}
+                                                            placeholder=""
                                                             error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {
                                                                 let withdraw_list = [...withdraws];
-                                                                withdraw_list[idx].withdraw_acct_num = e.target.value;
+                                                                withdraw_list[idx].withdraw_amount = e.target.value;
                                                                 setWithdraws(withdraw_list);
                                                             }} />
                                                         <TextField
                                                             style={{ width: '50%' }}
-                                                            label='출금계좌예금주명'
-                                                            value={vir_acct.withdraw_acct_name}
+                                                            label='메모'
+                                                            value={vir_acct?.note}
+                                                            placeholder=""
                                                             error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {
                                                                 let withdraw_list = [...withdraws];
-                                                                withdraw_list[idx].withdraw_acct_name = e.target.value;
+                                                                withdraw_list[idx].note = e.target.value;
                                                                 setWithdraws(withdraw_list);
                                                             }} />
-                                                    </>}
-                                                <TextField
-                                                    style={{ width: '50%' }}
-                                                    label='반환 요청금'
-                                                    type="number"
-                                                    value={vir_acct?.withdraw_amount}
-                                                    placeholder=""
-                                                    error={vir_acct?.is_error == 1}
-                                                    onChange={(e) => {
-                                                        let withdraw_list = [...withdraws];
-                                                        withdraw_list[idx].withdraw_amount = e.target.value;
-                                                        setWithdraws(withdraw_list);
-                                                    }} />
-                                                <TextField
-                                                    style={{ width: '50%' }}
-                                                    label='메모'
-                                                    value={vir_acct?.note}
-                                                    placeholder=""
-                                                    error={vir_acct?.is_error == 1}
-                                                    onChange={(e) => {
-                                                        let withdraw_list = [...withdraws];
-                                                        withdraw_list[idx].note = e.target.value;
-                                                        setWithdraws(withdraw_list);
-                                                    }} />
-                                                <IconButton onClick={() => {
-                                                    let withdraw_list = [...withdraws];
-                                                    withdraw_list.splice(idx, 1);
-                                                    setWithdraws(withdraw_list);
-                                                }}>
-                                                    <Icon icon='material-symbols:delete-outline' />
-                                                </IconButton>
-                                            </Row>
+                                                        <IconButton onClick={() => {
+                                                            let withdraw_list = [...withdraws];
+                                                            withdraw_list.splice(idx, 1);
+                                                            setWithdraws(withdraw_list);
+                                                        }}>
+                                                            <Icon icon='material-symbols:delete-outline' />
+                                                        </IconButton>
+                                                    </Row>
+                                                </>}
                                         </>
                                     )))}
                                 </Stack>

@@ -44,28 +44,13 @@ const WithdrawRequest = () => {
     }
     const onSave = async () => {
         let result = undefined
-        if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
-            result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
-                api_key: themeDnsData?.api_key,
-                mid: user?.mid,
-                withdraw_amount: item?.withdraw_amount,
-                note: item?.note,
-                withdraw_bank_code: item?.withdraw_bank_code,
-                withdraw_acct_num: item?.withdraw_acct_num,
-                withdraw_acct_name: item?.withdraw_acct_name,
-                pay_type: 'withdraw'
-            });
-        } else {
-            result = await apiManager('withdraws', 'create', {
-                withdraw_amount: item?.withdraw_amount,
-                user_id: user?.id,
-                note: item?.note,
-                pay_type: 5,
-            });
-        }
+        result = await apiManager('deposit-requests', 'create', {
+            amount: item?.amount,
+            note: item?.note,
+        });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
-            // router.push('/manager/withdraw');
+            router.push('/manager/request-list');
         }
     }
     return (
@@ -78,57 +63,10 @@ const WithdrawRequest = () => {
                                 <Stack spacing={3}>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            입금계좌
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {themeDnsData?.withdraw_type == 0 &&
-                                                <>
-                                                    <Row style={{ columnGap: '0.25rem' }}>
-                                                        <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
-                                                        <div>{item?.settle_acct_num}</div>
-                                                        <div>{item?.settle_acct_name}</div>
-                                                    </Row>
-                                                </>}
-                                            {themeDnsData?.withdraw_type == 1 &&
-                                                <>
-                                                    <Row style={{ columnGap: '0.25rem' }}>
-                                                        <div>{_.find(bankCodeList(), { value: item?.withdraw_bank_code })?.label}</div>
-                                                        <div>{item?.withdraw_acct_num}</div>
-                                                        <div>{item?.withdraw_acct_name}</div>
-                                                    </Row>
-                                                </>}
-                                        </Typography>
-                                    </Stack>
-                                    <Stack spacing={1}>
-                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             현재 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.settle_amount)} 원
-                                        </Typography>
-                                    </Stack>
-                                    <Stack spacing={1}>
-                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금 수수료
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_fee)} 원
-                                        </Typography>
-                                    </Stack>
-                                    <Stack spacing={1}>
-                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            차감 보유정산금
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_amount + (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0))} 원
-                                        </Typography>
-                                    </Stack>
-                                    <Stack spacing={1}>
-                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            출금후 보유정산금
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_amount - (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0))} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -146,15 +84,15 @@ const WithdrawRequest = () => {
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     <TextField
-                                        label='출금 요청금'
+                                        label='충전 요청금'
                                         type="number"
-                                        value={item?.withdraw_amount}
+                                        value={item?.amount}
                                         placeholder=""
                                         onChange={(e) => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['withdraw_amount']: parseInt(e.target.value)
+                                                    ['amount']: parseInt(e.target.value)
                                                 }
                                             )
                                         }} />
@@ -184,10 +122,10 @@ const WithdrawRequest = () => {
                                         setModal({
                                             func: () => { onSave() },
                                             icon: 'material-symbols:edit-outline',
-                                            title: '출금요청 하시겠습니까?'
+                                            title: '충전요청 하시겠습니까?'
                                         })
                                     }}>
-                                        출금 요청하기
+                                        충전 요청하기
                                     </Button>
                                 </Stack>
                             </Card>

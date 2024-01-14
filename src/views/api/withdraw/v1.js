@@ -54,7 +54,6 @@ const WithdrawApiV1 = () => {
                 ['withdraw_acct_name', '출금예금주명', 'O', 'String'],
                 ['pay_type', '출금타입 (withdraw=정산, return=회원들에게 출금 기본값 withdraw)', 'X', 'String'],
                 ['note', '메모사항', 'X', 'String'],
-
             ],
             res_head: [
                 '키',

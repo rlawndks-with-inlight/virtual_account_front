@@ -106,6 +106,8 @@ const navConfig = () => {
           icon: <Icon icon='mdi:graph-line' style={{ fontSize: '1.5rem' }} />,
           children: [
             { title: '보유정산금내역', path: PATH_MANAGER.settle.list },
+            ...((!isManager()) ? [{ title: '보유정산금요청', path: PATH_MANAGER.settle.request },] : []),
+            { title: '보유정산금요청내역', path: PATH_MANAGER.settle.requestList },
           ],
         },
       ],

@@ -82,6 +82,7 @@ export const defaultManagerObj = {
     is_use_deposit_operator: 1,
     is_use_withdraw_operator: 0,
     withdraw_type: 0,
+    withdraw_fee_type: 0,
     setting_obj: {
       tutorial_num: 0,
       is_use_deposit: 0,

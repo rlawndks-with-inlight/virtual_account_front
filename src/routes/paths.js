@@ -47,6 +47,8 @@ export const PATH_MANAGER = {
   settle: {
     root: path(ROOTS_MANAGER, '/settle'),
     list: path(ROOTS_MANAGER, '/settle/list'),
+    request: path(ROOTS_MANAGER, '/settle/request'),
+    requestList: path(ROOTS_MANAGER, '/settle/request-list'),
   },
   virtualAccount: {
     root: path(ROOTS_MANAGER, '/virtual-account'),

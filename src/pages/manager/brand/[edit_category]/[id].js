@@ -16,7 +16,7 @@ import axios from "axios";
 import { useAuthContext } from "src/auth/useAuthContext";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { apiCorpList, bankCodeList, operatorLevelList, withdrawTypeList } from "src/utils/format";
+import { apiCorpList, bankCodeList, operatorLevelList, withdrawFeeTypeList, withdrawTypeList } from "src/utils/format";
 import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -1159,6 +1159,23 @@ const BrandEdit = () => {
                           }}
                         >
                           {withdrawTypeList.map((itm) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>출금수수료형식 선택</InputLabel>
+                        <Select
+                          label='출금수수료형식 선택'
+                          value={item.withdraw_fee_type}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['withdraw_fee_type']: e.target.value
+                            })
+                          }}
+                        >
+                          {withdrawFeeTypeList.map((itm) => {
                             return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                           })}
                         </Select>
