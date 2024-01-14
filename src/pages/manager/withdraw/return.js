@@ -125,7 +125,7 @@ const WithdrawReturn = () => {
                                             차감 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(_.sum(withdraws.map(itm => { return parseInt(itm?.withdraw_amount ?? 0) })) + (item?.withdraw_fee) * withdraws.length)} 원
+                                            {commarNumber(_.sum(withdraws.map(itm => { return parseInt(itm?.withdraw_amount ?? 0) })) + (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0) * withdraws.length)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -133,7 +133,7 @@ const WithdrawReturn = () => {
                                             반환후 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - (_.sum(withdraws.map(itm => { return parseInt(itm?.withdraw_amount ?? 0) })) + (item?.withdraw_fee) * withdraws.length))} 원
+                                            {commarNumber(item?.settle_amount - (_.sum(withdraws.map(itm => { return parseInt(itm?.withdraw_amount ?? 0) })) + (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0) * withdraws.length))} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
