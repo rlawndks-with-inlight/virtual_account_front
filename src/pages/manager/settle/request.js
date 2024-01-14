@@ -50,7 +50,7 @@ const WithdrawRequest = () => {
         });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
-            router.push('/manager/request-list');
+            router.push('/manager/settle/request-list');
         }
     }
     return (
