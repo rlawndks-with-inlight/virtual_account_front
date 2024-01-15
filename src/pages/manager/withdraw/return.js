@@ -60,6 +60,9 @@ const WithdrawReturn = () => {
                 return toast.error('유저를 선택해 주세요.');
             }
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
+                if (!withdraws[i]?.withdraw_bank_code) {
+                    continue;
+                }
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
                     api_key: themeDnsData?.api_key,
                     mid: user?.mid,
