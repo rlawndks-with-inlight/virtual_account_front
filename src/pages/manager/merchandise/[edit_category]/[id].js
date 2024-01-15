@@ -290,7 +290,7 @@ const UserEdit = () => {
                               )
                             }} />
                         </>}
-                      {(themeDnsData?.is_use_otp && user?.level >= 40) &&
+                      {(themeDnsData?.is_use_otp && user?.level >= 40) ?
                         <>
                           <TextField
                             label='OTP 키'
@@ -317,6 +317,9 @@ const UserEdit = () => {
                               </IconButton>
                             }}
                           />
+                        </>
+                        :
+                        <>
                         </>}
                     </Stack>
                   </Card>
