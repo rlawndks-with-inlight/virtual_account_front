@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
-import { getUserFee, getUserWithDrawFee } from "src/utils/function";
+import { getMaxPage, getUserFee, getUserWithDrawFee } from "src/utils/function";
 import { bankCodeList } from "src/utils/format";
 import { Icon } from "@iconify/react";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -28,6 +28,7 @@ const UserEdit = () => {
   const [loading, setLoading] = useState(true);
   const [operatorList, setOperatorList] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
+  const [ipPage, setIpPage] = useState(1);
   const [item, setItem] = useState({
     profile_file: undefined,
     user_name: '',
@@ -335,7 +336,7 @@ const UserEdit = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {item?.ip_logs && item?.ip_logs.map((itm, idx) => (
+                          {item?.ip_logs && item?.ip_logs.splice((ipPage - 1) * 10, ipPage * 10).map((itm, idx) => (
                             <>
                               <TableRow sx={{ padding: '1rem 0' }}>
                                 <TableCell style={{ textAlign: 'center' }}>{itm?.created_at}</TableCell>
@@ -345,6 +346,18 @@ const UserEdit = () => {
                           ))}
                         </TableBody>
                       </Table>
+                      <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
+                        <Pagination
+                          style={{ margin: 'auto' }}
+                          size={'medium'}
+                          count={getMaxPage(item?.ip_logs.length, 10)}
+                          page={ipPage}
+                          variant='outlined' shape='rounded'
+                          color='primary'
+                          onChange={(_, num) => {
+                            setIpPage(num)
+                          }} />
+                      </Box>
                     </Stack>
                   </Card>
                 </Grid>

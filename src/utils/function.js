@@ -410,3 +410,14 @@ export const getUserWithDrawFee = (item, user_level, operator_list = [], withdra
   // }
   return result;
 }
+
+export const getMaxPage = (total = 0, page_size = 1) => {
+  if (total == 0) {
+    return 1;
+  }
+  if (total % parseInt(page_size) == 0) {
+    return parseInt(total / parseInt(page_size));
+  } else {
+    return parseInt(total / parseInt(page_size)) + 1;
+  }
+}
