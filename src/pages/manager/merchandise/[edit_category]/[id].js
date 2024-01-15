@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -12,6 +12,8 @@ import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { getUserFee, getUserWithDrawFee } from "src/utils/function";
 import { bankCodeList } from "src/utils/format";
+import { Icon } from "@iconify/react";
+import { useAuthContext } from "src/auth/useAuthContext";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -20,7 +22,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 const UserEdit = () => {
   const { setModal } = useModal()
   const { themeMode, themeDnsData } = useSettingsContext();
-
+  const { user } = useAuthContext();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -287,6 +289,34 @@ const UserEdit = () => {
                                 }
                               )
                             }} />
+                        </>}
+                      {(themeDnsData?.is_use_otp && user?.level >= 40) &&
+                        <>
+                          <TextField
+                            label='OTP 키'
+                            value={item.otp_token}
+                            placeholder="OTP 키"
+                            disabled={true}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['otp_token']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: <IconButton onClick={async () => {
+                                let result = await apiManager(`brands/otp`, 'create');
+                                setItem({
+                                  ...item,
+                                  ['otp_token']: result?.base32,
+                                })
+                              }}>
+                                <Icon icon='gg:redo' />
+                              </IconButton>
+                            }}
+                          />
                         </>}
                     </Stack>
                   </Card>

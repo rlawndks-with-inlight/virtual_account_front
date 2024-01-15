@@ -1311,7 +1311,6 @@ const BrandEdit = () => {
                         InputProps={{
                           endAdornment: <IconButton onClick={async () => {
                             let result = await apiManager(`brands/otp`, 'create');
-                            console.log(result);
                             setItem({
                               ...item,
                               ['otp_token']: result?.base32,
