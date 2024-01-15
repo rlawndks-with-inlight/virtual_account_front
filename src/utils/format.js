@@ -63,6 +63,7 @@ export const bankCodeList = (pay_type) => {
 export const apiCorpList = [
     { value: 1, label: '뱅크너스' },
     { value: 2, label: '쿠콘' },
+    { value: 3, label: '페이투스' },
 ]
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
