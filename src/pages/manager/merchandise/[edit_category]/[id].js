@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -321,6 +321,30 @@ const UserEdit = () => {
                         :
                         <>
                         </>}
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Table>
+                        <TableHead>
+                          <TableRow sx={{ padding: '1rem 0' }}>
+                            <TableCell style={{ textAlign: 'center' }}>접속시간</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>접속 아이피</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {item?.ip_logs && item?.ip_logs.map((itm, idx) => (
+                            <>
+                              <TableRow sx={{ padding: '1rem 0' }}>
+                                <TableCell style={{ textAlign: 'center' }}>{itm?.created_at}</TableCell>
+                                <TableCell style={{ textAlign: 'center' }}>{itm?.ip}</TableCell>
+                              </TableRow>
+                            </>
+                          ))}
+                        </TableBody>
+                      </Table>
                     </Stack>
                   </Card>
                 </Grid>
