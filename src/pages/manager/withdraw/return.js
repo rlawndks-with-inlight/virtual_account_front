@@ -96,6 +96,25 @@ const WithdrawReturn = () => {
             setWithdraws(withdraw_list);
         }
     }
+    const onCheckAcct = async (data, idx) => {
+        let {
+            withdraw_bank_code,
+            withdraw_acct_num,
+            withdraw_acct_name,
+        } = data;
+        let result = undefined;
+        result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/check`, 'create', {
+            api_key: themeDnsData?.api_key,
+            mid: user?.mid,
+            withdraw_bank_code: withdraw_bank_code,
+            withdraw_acct_num: withdraw_acct_num,
+            withdraw_acct_name: withdraw_acct_name,
+        });
+        let withdraw_list = [...withdraws];
+        withdraw_list[idx].withdraw_acct_name = result ? result?.withdraw_acct_name : '';
+        setWithdraws(withdraw_list);
+        return result;
+    }
     return (
         <>
             {!loading &&
@@ -269,23 +288,21 @@ const WithdrawReturn = () => {
                                                             </>}
                                                         {themeDnsData?.withdraw_type == 1 &&
                                                             <>
-                                                                <FormControl style={{ width: '50%' }}>
-                                                                    <InputLabel>출금계좌은행</InputLabel>
-                                                                    <Select
-                                                                        label='출금계좌은행'
-                                                                        value={vir_acct.withdraw_bank_code}
-                                                                        error={vir_acct?.is_error == 1}
-                                                                        onChange={e => {
-                                                                            let withdraw_list = [...withdraws];
-                                                                            withdraw_list[idx].withdraw_bank_code = e.target.value;
-                                                                            setWithdraws(withdraw_list);
-                                                                        }}
-                                                                    >
-                                                                        {bankCodeList().map((itm, idx) => {
-                                                                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                                        })}
-                                                                    </Select>
-                                                                </FormControl>
+                                                                <Autocomplete
+                                                                    style={{ width: '50%' }}
+                                                                    autoComplete='new-password'
+                                                                    options={bankCodeList()}
+                                                                    getOptionLabel={(option) => `${option?.label}`}
+                                                                    value={_.find(bankCodeList(), { value: vir_acct.withdraw_bank_code })}
+                                                                    onChange={(e, value) => {
+                                                                        let withdraw_list = [...withdraws];
+                                                                        withdraw_list[idx].withdraw_bank_code = value?.value;
+                                                                        setWithdraws(withdraw_list);
+                                                                    }}
+                                                                    renderInput={(params) => (
+                                                                        <TextField {...params} label="출금계좌은행" placeholder="출금계좌은행" autoComplete='new-password' />
+                                                                    )}
+                                                                />
                                                                 <TextField
                                                                     style={{ width: '50%' }}
                                                                     label='출금계좌번호'
@@ -296,9 +313,23 @@ const WithdrawReturn = () => {
                                                                         withdraw_list[idx].withdraw_acct_num = e.target.value;
                                                                         setWithdraws(withdraw_list);
                                                                     }} />
-                                                                <TextField
+                                                                {/* <TextField
                                                                     style={{ width: '50%' }}
                                                                     label='출금계좌예금주명'
+                                                                    value={vir_acct.withdraw_acct_name}
+                                                                    error={vir_acct?.is_error == 1}
+                                                                    onChange={(e) => {
+                                                                        let withdraw_list = [...withdraws];
+                                                                        withdraw_list[idx].withdraw_acct_name = e.target.value;
+                                                                        setWithdraws(withdraw_list);
+                                                                    }} /> */}
+                                                                <Button variant="outlined" onClick={() => {
+                                                                    onCheckAcct(vir_acct, idx)
+                                                                }}>조회</Button>
+                                                                <TextField
+                                                                    style={{ width: '50%' }}
+                                                                    label='예금주확인'
+                                                                    disabled={true}
                                                                     value={vir_acct.withdraw_acct_name}
                                                                     error={vir_acct?.is_error == 1}
                                                                     onChange={(e) => {
