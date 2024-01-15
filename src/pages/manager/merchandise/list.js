@@ -232,6 +232,13 @@ const UserList = () => {
       }
     },
     {
+      id: 'connected_ip',
+      label: '접속아이피',
+      action: (row, is_excel) => {
+        return row['connected_ip'] ?? "---"
+      }
+    },
+    {
       id: 'status',
       label: '유저상태',
       action: (row, is_excel) => {
