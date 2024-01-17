@@ -67,7 +67,7 @@ const MotherAccountList = () => {
         } else if (row['pay_type'] == 15) {
           amount = row['amount'];
         } else if (row['pay_type'] == 20) {
-          amount = row['amount'];
+          amount = row['amount'] + row['withdraw_fee'];
         }
         return (amount > 0 ? '+' : '') + commarNumber(amount)
       },
@@ -82,7 +82,7 @@ const MotherAccountList = () => {
         } else if (row['pay_type'] == 15) {
           amount = row['amount'];
         } else if (row['pay_type'] == 20) {
-          amount = row['amount'];
+          amount = row['amount'] + row['withdraw_fee'];
         }
         return {
           color: `${amount > 0 ? 'blue' : 'red'}`

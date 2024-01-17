@@ -24,6 +24,7 @@ export const operatorLevelList = [
 export const bankCodeList = (pay_type) => {
     let dns_data = getLocalStorage('themeDnsData');
     dns_data = JSON.parse(dns_data);
+    console.log(dns_data)
     if (dns_data?.bank_list) {
         return dns_data?.bank_list;
     } else {
