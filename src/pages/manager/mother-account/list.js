@@ -66,6 +66,8 @@ const MotherAccountList = () => {
           amount = row['amount'];
         } else if (row['pay_type'] == 15) {
           amount = row['amount'];
+        } else if (row['pay_type'] == 20) {
+          amount = row['amount'];
         }
         return (amount > 0 ? '+' : '') + commarNumber(amount)
       },
@@ -78,6 +80,8 @@ const MotherAccountList = () => {
         } else if (row['pay_type'] == 10) {
           amount = row['amount'];
         } else if (row['pay_type'] == 15) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 20) {
           amount = row['amount'];
         }
         return {

@@ -13,7 +13,7 @@ import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 
-const VirtualAccountList = () => {
+const CorpAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
@@ -244,5 +244,5 @@ const VirtualAccountList = () => {
     </>
   )
 }
-VirtualAccountList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
-export default VirtualAccountList
+CorpAccountList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default CorpAccountList
