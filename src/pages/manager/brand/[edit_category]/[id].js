@@ -1234,6 +1234,25 @@ const BrandEdit = () => {
                           <MenuItem value={1}>{'v1'}</MenuItem>
                         </Select>
                       </FormControl>
+                      <FormControl>
+                        <InputLabel>입금버전</InputLabel>
+                        <Select
+                          label='출금버전'
+                          value={item.setting_obj?.api_deposit_version}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`api_deposit_version`]: e.target.value
+                              }
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>{'선택안함'}</MenuItem>
+                          <MenuItem value={1}>{'v1'}</MenuItem>
+                        </Select>
+                      </FormControl>
                     </Stack>
                   </Card>
                 </Grid>
