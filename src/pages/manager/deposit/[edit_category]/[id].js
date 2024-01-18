@@ -9,9 +9,10 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -19,7 +20,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const DepositEdit = () => {
   const { setModal } = useModal()
-  const { themeMode } = useSettingsContext();
+  const { themeMode, themeDnsData } = useSettingsContext();
   const { user } = useAuthContext();
   const router = useRouter();
 
@@ -48,12 +49,10 @@ const DepositEdit = () => {
     setLoading(false);
   }
   const onSave = async () => {
-    let result = undefined
-    if (item?.id) {//수정
-      result = await apiManager('deposits', 'update', item);
-    } else {//추가
-      result = await apiManager('deposits', 'create', { ...item });
-    }
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v1`, 'create', {
+      ...item,
+      api_key: themeDnsData?.api_key
+    });
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       router.push('/manager/deposit');
