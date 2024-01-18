@@ -10,6 +10,7 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import VirtualAccountApiV1 from "src/views/api/virtual-account/v1";
 import WithdrawApiV1 from "src/views/api/withdraw/v1";
 import DepositApiV1 from "src/views/api/deposit/v1";
+import BlankLayout from "src/layouts/BlankLayout";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
