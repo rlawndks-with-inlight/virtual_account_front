@@ -270,6 +270,18 @@ const UserEdit = () => {
                             }
                           )
                         }} />
+                      <TextField
+                        label='입금노티url'
+                        value={item.deposit_noti_url}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['deposit_noti_url']: e.target.value
+                            }
+                          )
+                        }} />
                       {themeDnsData?.is_use_telegram_bot == 1 &&
                         <>
                           <TextField
@@ -291,6 +303,7 @@ const UserEdit = () => {
                               )
                             }} />
                         </>}
+
                       {(themeDnsData?.is_use_otp && user?.level >= 40) ?
                         <>
                           <TextField
