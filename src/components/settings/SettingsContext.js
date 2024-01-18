@@ -137,9 +137,12 @@ export function SettingsProvider({ children }) {
   }
   const getSettingData = async () => {
     let bank_list_result = await apiManager('util', 'get');
-
+    console.log(bank_list_result)
     return {
-      bank_list: bank_list_result
+      bank_list: {
+        deposit: bank_list_result?.deposit ?? [],
+        withdraw: bank_list_result?.withdraw ?? [],
+      }
     }
   }
   // Mode

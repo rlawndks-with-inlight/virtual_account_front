@@ -89,9 +89,9 @@ const WithdrawReturn = () => {
                 withdraw_list[i].is_error = 0;
                 withdraw_list[i].is_confirm = 1;
                 if (themeDnsData?.withdraw_type == 0) {
-                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList(), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList(), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
                 } else if (themeDnsData?.withdraw_type == 1) {
-                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList(), { value: withdraws[i]?.withdraw_bank_code })?.label} ${withdraws[i]?.withdraw_acct_num} (${withdraws[i]?.withdraw_acct_name})`);
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.withdraw_bank_code })?.label} ${withdraws[i]?.withdraw_acct_num} (${withdraws[i]?.withdraw_acct_name})`);
                 }
             } else {
                 withdraw_list[i].is_error = 1;
@@ -182,7 +182,7 @@ const WithdrawReturn = () => {
                                                 style={{
                                                     whiteSpace: 'pre'
                                                 }}
-                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList(), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
+                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
                                                 value={withdraws}
                                                 onChange={(e, value) => {
                                                     let withdraw_list = [...withdraws];
@@ -294,9 +294,9 @@ const WithdrawReturn = () => {
                                                                 <Autocomplete
                                                                     style={{ width: '50%' }}
                                                                     autoComplete='new-password'
-                                                                    options={bankCodeList()}
+                                                                    options={bankCodeList('withdraw')}
                                                                     getOptionLabel={(option) => `${option?.label}`}
-                                                                    value={_.find(bankCodeList(), { value: vir_acct.withdraw_bank_code })}
+                                                                    value={_.find(bankCodeList('withdraw'), { value: vir_acct.withdraw_bank_code })}
                                                                     onChange={(e, value) => {
                                                                         let withdraw_list = [...withdraws];
                                                                         withdraw_list[idx].withdraw_bank_code = value?.value;

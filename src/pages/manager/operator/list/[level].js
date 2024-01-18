@@ -88,18 +88,18 @@ const OperatorList = () => {
       action: (row, is_excel) => {
         if (themeDnsData?.withdraw_type == 0) {
           if (is_excel) {
-            return `${_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+            return `${_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
           }
           return <Col>
-            <div>{_.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
+            <div>{_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
             <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
           </Col>
         } else if (themeDnsData?.withdraw_type == 1) {
           if (is_excel) {
-            return `${_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
+            return `${_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
           }
           return <Col>
-            <div>{_.find(bankCodeList(), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
+            <div>{_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
             <div>{row['withdraw_acct_num']} {row['withdraw_acct_name']}</div>
           </Col>
         }

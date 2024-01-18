@@ -717,7 +717,7 @@ const UserEdit = () => {
                                   })
                                 }}
                               >
-                                {bankCodeList().map((itm, idx) => {
+                                {bankCodeList('withdraw').map((itm, idx) => {
                                   return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                                 })}
                               </Select>

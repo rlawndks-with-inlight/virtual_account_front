@@ -919,7 +919,7 @@ const BrandEdit = () => {
                                   })
                                 }}
                               >
-                                {bankCodeList().map((itm, idx) => {
+                                {bankCodeList('withdraw').map((itm, idx) => {
                                   return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                                 })}
                               </Select>
@@ -1320,13 +1320,55 @@ const BrandEdit = () => {
                           </IconButton>
                         }}
                       />
+
                     </Stack>
                   </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_corp_account == 1} />} label={`법인통장사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_corp_account']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
+                      {item.is_use_corp_account == 1 &&
+                        <>
+                          <FormControl>
+                            <InputLabel>상위사 선택</InputLabel>
+                            <Select
+                              label='상위사 선택'
+                              value={item.corp_account_corp_type}
+                              onChange={e => {
+                                setItem({
+                                  ...item,
+                                  ['corp_account_corp_type']: e.target.value
+                                })
+                              }}
+                            >
+                              <MenuItem value={0}>선택안함</MenuItem>
+                              {apiCorpList.map((itm, idx) => {
+                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                              })}
+                            </Select>
+                          </FormControl>
+                        </>}
 
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_can_add_deposit == 1} />} label={`입금추가여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_can_add_deposit']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>

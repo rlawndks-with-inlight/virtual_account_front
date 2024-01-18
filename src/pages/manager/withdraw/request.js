@@ -85,7 +85,7 @@ const WithdrawRequest = () => {
                                             {themeDnsData?.withdraw_type == 0 &&
                                                 <>
                                                     <Row style={{ columnGap: '0.25rem' }}>
-                                                        <div>{_.find(bankCodeList(), { value: item?.settle_bank_code })?.label}</div>
+                                                        <div>{_.find(bankCodeList('withdraw'), { value: item?.settle_bank_code })?.label}</div>
                                                         <div>{item?.settle_acct_num}</div>
                                                         <div>{item?.settle_acct_name}</div>
                                                     </Row>
@@ -93,7 +93,7 @@ const WithdrawRequest = () => {
                                             {themeDnsData?.withdraw_type == 1 &&
                                                 <>
                                                     <Row style={{ columnGap: '0.25rem' }}>
-                                                        <div>{_.find(bankCodeList(), { value: item?.withdraw_bank_code })?.label}</div>
+                                                        <div>{_.find(bankCodeList('withdraw'), { value: item?.withdraw_bank_code })?.label}</div>
                                                         <div>{item?.withdraw_acct_num}</div>
                                                         <div>{item?.withdraw_acct_name}</div>
                                                     </Row>

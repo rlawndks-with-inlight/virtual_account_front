@@ -11,6 +11,7 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
+import { useAuthContext } from "src/auth/useAuthContext";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -19,7 +20,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 const DepositEdit = () => {
   const { setModal } = useModal()
   const { themeMode } = useSettingsContext();
-
+  const { user } = useAuthContext();
   const router = useRouter();
 
   const [mchtList, setMchtList] = useState([]);
@@ -39,13 +40,11 @@ const DepositEdit = () => {
     let mcht_list = await apiManager(`users`, 'list', {
       level: 10,
     })
+    let data = item;
     setMchtList(mcht_list?.content ?? []);
-    if (router.query?.edit_category == 'edit') {
-      let data = await apiManager('deposits', 'get', {
-        id: router.query.id
-      })
-      setItem(data);
-    }
+    let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
+    data.mid = mid;
+
     setLoading(false);
   }
   const onSave = async () => {
@@ -53,7 +52,7 @@ const DepositEdit = () => {
     if (item?.id) {//수정
       result = await apiManager('deposits', 'update', item);
     } else {//추가
-      result = await apiManager('deposits', 'create', item);
+      result = await apiManager('deposits', 'create', { ...item });
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
@@ -68,18 +67,23 @@ const DepositEdit = () => {
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 2, height: '100%' }}>
                 <Stack spacing={3}>
-                  <TextField
-                    label='가상계좌번호'
-                    value={item.virtual_acct_num}
-                    placeholder="가상계좌번호"
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['virtual_acct_num']: e.target.value
-                        }
-                      )
-                    }} />
+                  {user?.level >= 40 &&
+                    <>
+                      <FormControl variant='outlined'  >
+                        <InputLabel>가맹점선택</InputLabel>
+                        <Select label='가맹점선택' value={item?.mid}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              mid: e.target.value,
+                            })
+                          }}>
+                          {mchtList.map(mcht => {
+                            return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                    </>}
                   <TextField
                     label='결제금액'
                     value={item.amount}

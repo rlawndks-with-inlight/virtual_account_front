@@ -79,10 +79,10 @@ const DepositList = () => {
     //   }
     // },
     {
-      id: 'amount_ago',
+      id: 'expect_amount',
       label: '입금예정금액',
       action: (row, is_excel) => {
-        return commarNumber(row['amount'])
+        return commarNumber(row['expect_amount'])
       },
       sx: (row) => {
         return {
@@ -305,7 +305,7 @@ const DepositList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            //add_button_text={user?.level >= 40 ? '결제내역추가' : ''}
+            add_button_text={themeDnsData?.is_use_corp_account == 1 ? '결제내역추가' : ''}
             head_columns={defaultHeadColumns}
             table={'deposits'}
             excel_name={'출금'}

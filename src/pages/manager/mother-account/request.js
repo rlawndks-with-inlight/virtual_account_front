@@ -73,7 +73,7 @@ const MotherAccountRequest = () => {
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             <Row style={{ columnGap: '0.25rem' }}>
-                                                <div>{_.find(bankCodeList(), { value: item?.brand?.settle_bank_code })?.label}</div>
+                                                <div>{_.find(bankCodeList('withdraw'), { value: item?.brand?.settle_bank_code })?.label}</div>
                                                 <div>{item?.brand?.settle_acct_num}</div>
                                                 <div>{item?.brand?.settle_acct_name}</div>
                                             </Row>

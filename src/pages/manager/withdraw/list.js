@@ -46,7 +46,7 @@ const WithdrawList = () => {
       id: 'settle_bank_code',
       label: '은행',
       action: (row, is_excel) => {
-        return _.find(bankCodeList(), { value: row['settle_bank_code'] })?.label ?? "---"
+        return _.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"
       }
     },
     {
