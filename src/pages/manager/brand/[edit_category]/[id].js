@@ -714,67 +714,81 @@ const BrandEdit = () => {
                           })}
                         </Select>
                       </FormControl>
-
-                      <TextField
-                        label='GUID'
-                        value={item.deposit_guid}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['deposit_guid']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='API ID'
-                        value={item.deposit_api_id}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['deposit_api_id']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='API 서명키'
-                        value={item.deposit_sign_key}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['deposit_sign_key']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='암호화키'
-                        value={item.deposit_encr_key}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['deposit_encr_key']: e.target.value
-                            }
-                          )
-                        }} />
-                      <TextField
-                        label='IV'
-                        value={item.deposit_iv}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['deposit_iv']: e.target.value
-                            }
-                          )
-                        }} />
+                      {[1, 3].includes(item.deposit_corp_type) &&
+                        <>
+                          <TextField
+                            label='GUID'
+                            value={item.deposit_guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.deposit_corp_type) &&
+                        <>
+                          <TextField
+                            label='API ID'
+                            value={item.deposit_api_id}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_api_id']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.deposit_corp_type) &&
+                        <>
+                          <TextField
+                            label='API 서명키'
+                            value={item.deposit_sign_key}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_sign_key']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.deposit_corp_type) &&
+                        <>
+                          <TextField
+                            label='암호화키'
+                            value={item.deposit_encr_key}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_encr_key']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1].includes(item.deposit_corp_type) &&
+                        <>
+                          <TextField
+                            label='IV'
+                            value={item.deposit_iv}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_iv']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
