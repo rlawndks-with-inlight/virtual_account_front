@@ -20,7 +20,7 @@ const DepositList = () => {
   const defaultHeadColumns = [
     {
       title: '기본정보',
-      count: 7,
+      count: 8,
     },
   ]
   const defaultColumns = [
@@ -168,6 +168,22 @@ const DepositList = () => {
         }
       },
     },
+    ...(themeDnsData?.is_use_corp_account == 1 ? [
+      {
+        id: 'amount',
+        label: '법인통장잔액',
+        action: (row, is_excel) => {
+          return commarNumber(row['corp_account_balance'])
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
     {
       id: 'mcht_amount',
       label: '가맹점 정산금액',
