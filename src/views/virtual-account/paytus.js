@@ -186,6 +186,71 @@ const VirtualAccountPaytus = () => {
                                         value={item.mid}
                                         disabled={true}
                                     />
+                                    <Stack spacing={1}>
+                                        <FormControl>
+                                            <InputLabel>입금은행</InputLabel>
+                                            <Select
+                                                label='입금은행'
+                                                value={item.deposit_bank_code}
+                                                onChange={e => {
+                                                    setItem({
+                                                        ...item,
+                                                        ['deposit_bank_code']: e.target.value
+                                                    })
+                                                }}
+                                            >
+                                                {bankCodeList().map((itm, idx) => {
+                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                })}
+                                            </Select>
+                                        </FormControl>
+                                    </Stack>
+                                    <TextField
+                                        label='입금계좌번호'
+                                        value={item.deposit_acct_num}
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['deposit_acct_num']: e.target.value
+                                                }
+                                            )
+                                        }} />
+                                    <TextField
+                                        label='입금자명'
+                                        value={item.deposit_acct_name}
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['deposit_acct_name']: e.target.value
+                                                }
+                                            )
+                                        }} />
+                                    <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                                    {item.is_send_one_won_check &&
+                                        <>
+                                            <TextField
+                                                label='인증번호'
+                                                value={item.vrf_word}
+                                                placeholder=""
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['vrf_word']: e.target.value
+                                                        }
+                                                    )
+                                                }} />
+                                            <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                                        </>}
+                                </Stack>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card sx={{ p: 2, height: '100%' }}>
+                                <Stack spacing={3}>
+
                                     <FormControl variant='outlined' >
                                         <InputLabel>사용자구분</InputLabel>
                                         <Select label='사용자구분' value={item?.user_type}
@@ -290,70 +355,7 @@ const VirtualAccountPaytus = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Card sx={{ p: 2, height: '100%' }}>
-                                <Stack spacing={3}>
-                                    <Stack spacing={1}>
-                                        <FormControl>
-                                            <InputLabel>입금은행</InputLabel>
-                                            <Select
-                                                label='입금은행'
-                                                value={item.deposit_bank_code}
-                                                onChange={e => {
-                                                    setItem({
-                                                        ...item,
-                                                        ['deposit_bank_code']: e.target.value
-                                                    })
-                                                }}
-                                            >
-                                                {bankCodeList().map((itm, idx) => {
-                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                })}
-                                            </Select>
-                                        </FormControl>
-                                    </Stack>
-                                    <TextField
-                                        label='입금계좌번호'
-                                        value={item.deposit_acct_num}
-                                        onChange={(e) => {
-                                            setItem(
-                                                {
-                                                    ...item,
-                                                    ['deposit_acct_num']: e.target.value
-                                                }
-                                            )
-                                        }} />
-                                    <TextField
-                                        label='입금자명'
-                                        value={item.deposit_acct_name}
-                                        onChange={(e) => {
-                                            setItem(
-                                                {
-                                                    ...item,
-                                                    ['deposit_acct_name']: e.target.value
-                                                }
-                                            )
-                                        }} />
-                                    <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
-                                    {item.is_send_one_won_check &&
-                                        <>
-                                            <TextField
-                                                label='인증번호'
-                                                value={item.vrf_word}
-                                                placeholder=""
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['vrf_word']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                            <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
-                                        </>}
-                                </Stack>
-                            </Card>
-                        </Grid>
+
                     </>}
                 {currentTab == 1 &&
                     <>

@@ -9,6 +9,7 @@ import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import VirtualAccountBankners from "src/views/virtual-account/bankners";
+import VirtualAccountAddNoneAuth from "src/pages/virtual-account/[mid]";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -21,11 +22,7 @@ const VirtualAccountEdit = () => {
 
   return (
     <>
-      {themeDnsData?.deposit_corp_type == 1 &&
-        <>
-          <VirtualAccountBankners />
-        </>}
-
+      <VirtualAccountAddNoneAuth />
     </>
   )
 }

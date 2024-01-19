@@ -61,6 +61,11 @@ export const PATH_MANAGER = {
     add: path(ROOTS_MANAGER, '/mother-account/add'),
     request: path(ROOTS_MANAGER, '/mother-account/request'),
   },
+  corpAccount: {
+    root: path(ROOTS_MANAGER, '/corp-account'),
+    list: path(ROOTS_MANAGER, '/corp-account/list'),
+    add: path(ROOTS_MANAGER, '/corp-account/add'),
+  },
   log: {
     root: path(ROOTS_MANAGER, '/log'),
     list: path(ROOTS_MANAGER, '/log/list'),

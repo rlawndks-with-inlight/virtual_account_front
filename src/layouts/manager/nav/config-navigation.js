@@ -157,6 +157,21 @@ const navConfig = () => {
         ],
       },
     ] : []),
+    ...((isManager() && themeDnsData?.is_use_corp_account == 1) ? [
+      {
+        items: [
+          {
+            title: '법인통장관리',
+            path: PATH_MANAGER.corpAccount.root,
+            icon: <Icon icon='ic:baseline-corporate-fare' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '법인통장관리', path: PATH_MANAGER.corpAccount.list },
+              { title: '법인통장추가', path: PATH_MANAGER.corpAccount.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...(isManager() ? [
       {
         items: [

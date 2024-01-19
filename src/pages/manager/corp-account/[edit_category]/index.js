@@ -1,2 +1,2 @@
-import VirtualAccountEdit from "./[id]";
-export default VirtualAccountEdit
+import CorpAccountEdit from "./[id]";
+export default CorpAccountEdit
