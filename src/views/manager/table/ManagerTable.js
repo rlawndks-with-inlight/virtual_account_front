@@ -29,9 +29,10 @@ justify-content:space-between;
   row-gap:0.75rem;
 }
 `
-const CustomTableRow = muiStyled(TableRow)(({ theme }) => ({
+const CustomTableRow = muiStyled(TableRow)(({ theme, index }) => ({
+  background: `${index % 2 == 1 && theme.palette.mode == 'light' ? theme.palette.grey[200] : ''}`,
   '&:hover': {
-    background: `${theme.palette.mode == 'dark' ? '' : theme.palette.grey[100]}`,
+    background: `${theme.palette.mode == 'dark' ? '' : theme.palette.grey[300]}`,
   },
 }));
 
@@ -40,6 +41,7 @@ export default function ManagerTable(props) {
   const { page, page_size } = props?.searchObj;
 
   const router = useRouter();
+  const theme = useTheme();
   const [sDt, setSDt] = useState(undefined);
   const [eDt, setEDt] = useState(undefined);
   const [keyword, setKeyWord] = useState("");
@@ -283,7 +285,7 @@ export default function ManagerTable(props) {
                 <TableHeadCustom headLabel={zColumn} />
                 <TableBody>
                   {data.content && data.content.map((row, index) => (
-                    <CustomTableRow key={index}>
+                    <CustomTableRow key={index} index={index} style={{}}>
                       {zColumn && zColumn.map((col, idx) => (
                         <>
                           <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '16px 0' }}>

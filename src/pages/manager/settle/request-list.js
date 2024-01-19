@@ -83,6 +83,28 @@ const SettleRequestList = () => {
                 return row['created_at'] ?? "---"
             }
         },
+        {
+            id: 'edit',
+            label: '삭제',
+            action: (row, is_excel) => {
+                if (is_excel) {
+                    return "---"
+                }
+                return (
+                    <>
+                        <IconButton onClick={() => {
+                            setModal({
+                                func: () => { deleteItem(row?.id) },
+                                icon: 'material-symbols:delete-outline',
+                                title: '정말 삭제하시겠습니까?'
+                            })
+                        }}>
+                            <Icon icon='material-symbols:delete-outline' />
+                        </IconButton>
+                    </>
+                )
+            }
+        },
     ]
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState({});
@@ -121,6 +143,12 @@ const SettleRequestList = () => {
             setData(data_);
         }
         setSearchObj(obj);
+    }
+    const deleteItem = async (id) => {
+        let data = await apiManager('deposit-requests', 'delete', { id });
+        if (data) {
+            onChangePage(searchObj);
+        }
     }
     return (
         <>
