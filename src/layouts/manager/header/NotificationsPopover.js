@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { noCase } from 'change-case';
 import { useEffect, useState } from 'react';
 // @mui
 import {
@@ -14,13 +13,9 @@ import {
   IconButton,
   Typography,
   ListItemText,
-  ListSubheader,
-  ListItemAvatar,
   ListItemButton,
-  Alert,
 } from '@mui/material';
 // utils
-import { fToNow } from '../../../utils/formatTime';
 // _mock_
 import { _notifications } from '../../../_mock/arrays';
 // components
@@ -33,6 +28,7 @@ import styled from 'styled-components';
 import { apiManager } from 'src/utils/api-manager';
 import { useRouter } from 'next/router';
 import { useSettingsContext } from 'src/components/settings';
+import { useSnackbar } from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -41,8 +37,10 @@ display: none;
 `
 export default function NotificationsPopover() {
 
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const { themeReadNotifications, onChangeReadNotifications } = useSettingsContext();
+
+  const { themeReadNotifications, onChangeReadNotifications, themeDnsData } = useSettingsContext();
   const [openPopover, setOpenPopover] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isPlayMp3, setIsPlayMp3] = useState(false);
@@ -51,17 +49,25 @@ export default function NotificationsPopover() {
   const [splitCount, setSplitCount] = useState(4);
   useEffect(() => {
     socket.on('message', (msg) => {
-      let { method, data, brand_id } = msg;
+      let { method, data, brand_id, title } = msg;
       getBellContent(true);
-      if (method == 'deposit') {
-        setIsPlayMp3(true);
-        setTimeout(() => {
-          setIsPlayMp3(false);
-        }, 2000)
+      if (brand_id == themeDnsData?.id) {
+        if (method == 'deposit') {
+          setIsPlayMp3(true);
+          enqueueSnackbar(title, {
+            variant: 'success',
+          })
+          setTimeout(() => {
+            setIsPlayMp3(false);
+          }, 2000)
+        }
       }
+
     });
     getBellContent();
   }, [])
+
+
   const getBellContent = async (is_new) => {
     let result = await apiManager(`bell-contents`, 'list');
     let notification_list = [...notifications];
@@ -86,7 +92,6 @@ export default function NotificationsPopover() {
       onChangeReadNotifications({ ...themeReadNotifications, [notifications[idx]?.id]: 1, });
     }
   };
-
 
 
   return (

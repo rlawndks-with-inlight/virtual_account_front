@@ -31,6 +31,7 @@ import { ModalProvider } from 'src/components/dialog/ModalProvider';
 import { useState } from 'react';
 import { store } from '../redux/store'
 import { useRouter } from 'next/router';
+import SnackbarProvider from 'src/components/snackbar';
 
 const App = (props) => {
   const { Component, pageProps, head_data = {}, host, host_data } = props;
@@ -75,7 +76,9 @@ const App = (props) => {
                   <MotionLazyContainer>
                     <ThemeProvider>
                       <ModalProvider>
-                        {getLayout(<Component {...pageProps} key={router.asPath} />)}
+                        <SnackbarProvider>
+                          {getLayout(<Component {...pageProps} key={router.asPath} />)}
+                        </SnackbarProvider>
                       </ModalProvider>
                       <Toaster position={'right-top'} toastOptions={{ className: 'react-hot-toast' }} />
                     </ThemeProvider>
