@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
+import io from 'socket.io-client';
 
 export const backUrl = process.env.BACK_URL;
 export const logoSrc = () => {
@@ -9,6 +10,8 @@ export const logoSrc = () => {
 
   return themeDnsData[`${themeMode == 'dark' ? 'dark_' : ''}logo_img`]
 };
+export const socket = io(process.env.SOCKET_URL);
+
 export const KAKAO_OBJ = {
   BACKGROUND: '#F9E000',
   FONT_COLOR: '#371C1D'

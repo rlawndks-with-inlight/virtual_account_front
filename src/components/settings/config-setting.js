@@ -18,4 +18,5 @@ export const defaultSettings = {
   themePostCategoryList: [], // 게시물 카테고리
   themeSellerList: [], // 셀러리스트
   themeShopSetting: {},//쇼핑몰 불러올시 자동으로 불러오는거
+  themeReadNotifications: {},
 };

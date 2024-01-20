@@ -36,6 +36,7 @@ const initialState = {
   // dns data
   onChangeDnsData: () => { },
   onChangeShopSetting: () => { },
+  onChangeReadNotifications: () => { },
   // cart data
   onChangeCartData: () => { },
   // wish data
@@ -86,6 +87,7 @@ export function SettingsProvider({ children }) {
   const [themePostCategoryList, setThemePostCategoryList] = useState(defaultSettings.themePostCategoryList);
   const [themeSellerList, setThemeSellerList] = useState(defaultSettings.themeSellerList);
   const [themeShopSetting, setThemeShopSetting] = useState(defaultSettings.themeShopSetting);
+  const [themeReadNotifications, setThemeReadNotifications] = useState(defaultSettings.themeReadNotifications);
   const isArabic = false;
   const theme = useTheme();
   useEffect(() => {
@@ -106,6 +108,7 @@ export function SettingsProvider({ children }) {
       const currentPageObj = getCookie('themeCurrentPageObj') || defaultSettings.themeCurrentPageObj;
       const cartData = JSON.parse(getLocalStorage('themeCartData') ?? '[]') || defaultSettings.themeCartData;
       const wishData = JSON.parse(getLocalStorage('themeWishData') ?? '[]') || defaultSettings.themeWishData;
+      const readNotifications = JSON.parse(getLocalStorage('themeReadNotifications') ?? '[]') || defaultSettings.themeReadNotifications;
       //const auth = getCookie('themeAuth') || defaultSettings.themeAuth;
       //const categoryList = getCookie('themeCategoryList') || defaultSettings.themeCategoryList;
       setThemeMode(mode);
@@ -117,6 +120,7 @@ export function SettingsProvider({ children }) {
       setThemeCurrentPageObj(currentPageObj);
       setThemeCartData(cartData);
       setThemeWishData(wishData);
+      setThemeReadNotifications(readNotifications);
       getDnsData();
     }
   }, []);
@@ -137,7 +141,6 @@ export function SettingsProvider({ children }) {
   }
   const getSettingData = async () => {
     let bank_list_result = await apiManager('util', 'get');
-    console.log(bank_list_result)
     return {
       bank_list: {
         deposit: bank_list_result?.deposit ?? [],
@@ -230,6 +233,10 @@ export function SettingsProvider({ children }) {
     setThemeShopSetting(setting);
     setLocalStorage('themeShopSetting', JSON.stringify(setting));
   }, [])
+  const onChangeReadNotifications = useCallback((obj) => {
+    setThemeReadNotifications(obj);
+    setLocalStorage('themeReadNotifications', JSON.stringify(obj));
+  }, [])
   // wish data
   const onChangeWishData = useCallback((wish_data) => {
     setThemeWishData(wish_data);
@@ -275,6 +282,7 @@ export function SettingsProvider({ children }) {
     setThemeColorPresets(defaultSettings.themeColorPresets);
     setThemeDnsData(defaultSettings.themeDnsData);
     setThemeShopSetting(defaultSettings.themeShopSetting);
+    setThemeReadNotifications(defaultSettings.themeReadNotifications);
     setThemeCartData(defaultSettings.themeCartData);
     setThemeWishData(defaultSettings.themeWishData);
     setThemeCurrentPageObj(defaultSettings.themeCurrentPageObj);
@@ -292,6 +300,7 @@ export function SettingsProvider({ children }) {
     removeCookie('themeCurrentPageObj');
     removeCookie('themeAuth');
     deleteLocalStorage('themeShopSetting');
+    deleteLocalStorage('themeReadNotifications');
     deleteLocalStorage('themeDnsData')
     deleteLocalStorage('themeCartData')
     deleteLocalStorage('themeWishData')
@@ -354,6 +363,8 @@ export function SettingsProvider({ children }) {
       onChangeSellerList,
       themeShopSetting,
       onChangeShopSetting,
+      themeReadNotifications,
+      onChangeReadNotifications,
     }),
     [
       // Mode
@@ -405,6 +416,8 @@ export function SettingsProvider({ children }) {
       onChangeSellerList,
       themeShopSetting,
       onChangeShopSetting,
+      themeReadNotifications,
+      onChangeReadNotifications,
     ]
   );
 
