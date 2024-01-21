@@ -29,6 +29,7 @@ import { apiManager } from 'src/utils/api-manager';
 import { useRouter } from 'next/router';
 import { useSettingsContext } from 'src/components/settings';
 import { useSnackbar } from '../../../components/snackbar';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ display: none;
 export default function NotificationsPopover() {
 
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
   const router = useRouter();
 
   const { themeReadNotifications, onChangeReadNotifications, themeDnsData } = useSettingsContext();
@@ -51,7 +53,7 @@ export default function NotificationsPopover() {
     socket.on('message', (msg) => {
       let { method, data, brand_id, title } = msg;
       getBellContent(true);
-      if (brand_id == themeDnsData?.id) {
+      if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
         if (method == 'deposit') {
           setIsPlayMp3(true);
           enqueueSnackbar(title, {
