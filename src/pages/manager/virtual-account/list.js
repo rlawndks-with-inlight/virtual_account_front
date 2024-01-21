@@ -139,9 +139,6 @@ const VirtualAccountList = () => {
           if (is_excel) {
             return `---`
           }
-          if (row?.is_delete == 1) {
-            return "---";
-          }
           return (
             <>
               <IconButton onClick={() => {
