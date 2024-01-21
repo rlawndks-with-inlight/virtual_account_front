@@ -11,6 +11,7 @@ import VirtualAccountApiV1 from "src/views/api/virtual-account/v1";
 import WithdrawApiV1 from "src/views/api/withdraw/v1";
 import DepositApiV1 from "src/views/api/deposit/v1";
 import BlankLayout from "src/layouts/BlankLayout";
+import VirtualAccountApiV2 from "src/views/api/virtual-account/v2";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -58,6 +59,10 @@ const ApiDocs = () => {
                         {themeDnsData?.setting_obj?.api_virtual_account_version == 1 &&
                             <>
                                 <VirtualAccountApiV1 />
+                            </>}
+                        {themeDnsData?.setting_obj?.api_virtual_account_version == 2 &&
+                            <>
+                                <VirtualAccountApiV2 />
                             </>}
                         {themeDnsData?.setting_obj?.api_withdraw_version == 1 &&
                             <>

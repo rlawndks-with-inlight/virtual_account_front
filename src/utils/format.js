@@ -65,3 +65,20 @@ export const withdrawFeeTypeList = [
     { value: 0, label: '추가형식 (감소정산금: 출금액 + 출금수수료)', color: 'success' },
     { value: 1, label: '감소형식 (감소정산금: 출금액)', color: 'success' },
 ]
+export const genderList = [
+    { label: '남자', value: 'M' },
+    { label: '여자', value: 'F' },
+]
+export const ntvFrnrList = [
+    { label: '내국인', value: 'L' },
+    { label: '외국인', value: 'F' },
+
+]
+export const telComList = [
+    { label: 'SKT', value: '01' },
+    { label: 'KT', value: '02' },
+    { label: 'LGU+', value: '03' },
+    { label: '알뜰폰SKT', value: '04' },
+    { label: '알뜰폰KT', value: '05' },
+    { label: '알뜰폰LGU', value: '06' },
+]

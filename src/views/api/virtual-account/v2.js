@@ -23,7 +23,7 @@ white-space: pre;
 }
 `
 
-const VirtualAccountApiV1 = () => {
+const VirtualAccountApiV2 = () => {
 
     const { themeDnsData } = useSettingsContext();
     const [currentTab, setCurrentTab] = useState(0);
@@ -38,17 +38,21 @@ const VirtualAccountApiV1 = () => {
         },
         {
             value: 2,
-            label: '가상계좌발급'
+            label: '문자인증요청'
         },
         {
             value: 3,
-            label: '입금데이터노티'
+            label: '문자인증확인'
+        },
+        {
+            value: 4,
+            label: '가상계좌발급'
         },
     ]
 
     const table_obj = {
         0: {
-            uri: '/api/acct/v1',
+            uri: '/api/acct/v2/account',
             explain: `입금계좌 인증 요청 api 입니다.`,
             req_head: [
                 '키',
@@ -61,14 +65,7 @@ const VirtualAccountApiV1 = () => {
                 ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
                 ['bank_code', '입금은행코드', 'O', 'String'],
                 ['account', '입금계좌번호', 'O', 'String'],
-                ['name', '이름', 'O', 'String'],
-                ['birth', '생년월일 ex) 19990101', 'O', 'String'],
-                ['phone_num', '휴대폰번호 하이픈(-)제외', 'O', 'String'],
-                ['user_type', '0-개인, 1-법인, 2-개인사업자', 'O', 'Integer'],
-                ['business_num', '사업자등록번호 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
-                ['company_name', '회사명(상호) (user_type이 1 또는 2일시 필수)', 'X', 'String'],
-                ['ceo_name', '대표자명 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
-                ['company_phone_num', '회사 전화번호 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
+                ['name', '예금주명', 'O', 'String'],
 
             ],
             res_head: [
@@ -82,12 +79,12 @@ const VirtualAccountApiV1 = () => {
                 ['data', '리턴값', 'Object'],
             ],
             data_res_body: [
-                ['guid', '생성된유저 guid', 'String'],
-                ['tid', '입금은행 1원인증 요청 tid', 'String'],
+                ['verify_tr_no', '발급된 거래번호', 'String'],
+                ['verify_tr_dt', '발급된 거래날짜', 'String'],
             ],
         },
         1: {
-            uri: '/api/acct/v1/check',
+            uri: '/api/acct/v2/account/check',
             explain: `입금계좌 인증 확인 api 입니다.`,
             req_head: [
                 '키',
@@ -98,9 +95,9 @@ const VirtualAccountApiV1 = () => {
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
                 ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
-                ['tid', '입금은행 1원인증 요청 tid', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
-                ['guid', '생성된유저 guid', 'O', 'String'],
+                ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
+                ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
             ],
             res_head: [
                 '키',
@@ -113,12 +110,12 @@ const VirtualAccountApiV1 = () => {
                 ['data', '리턴값', 'Object'],
             ],
             data_res_body: [
-                ['tid', '1원인증완료 tid', 'String'],
+                ['is_check', '완료일시 1', 'String'],
             ],
         },
         2: {
-            uri: '/api/acct/v1/issuance',
-            explain: `가상계좌 요청 api 입니다.\n입금계좌인증 완료 후 이용 가능합니다.`,
+            uri: '/api/acct/v2/sms',
+            explain: `문자 인증 요청 api 입니다.`,
             req_head: [
                 '키',
                 '설명',
@@ -128,7 +125,13 @@ const VirtualAccountApiV1 = () => {
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
                 ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
-                ['guid', '생성된유저 guid', 'O', 'String'],
+                ['gender', '성별 (M-남자,F-여자)', 'O', 'String'],
+                ['ntv_frnr', '내외국인 (L-내국인,F-외국인)', 'O', 'String'],
+                ['birth', '생년월일 ex) 19990101', 'O', 'String'],
+                ['tel_com', '통신사 (01-SKT, 02-KT, 03-LGU+, 04-알뜰폰SKT, 05-알뜰폰KT, 06-알뜰폰LGU)', 'O', 'String'],
+                ['phone_num', '휴대폰번호 하이픈(-)제외', 'O', 'String'],
+                ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
+                ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
             ],
             res_head: [
                 '키',
@@ -141,28 +144,69 @@ const VirtualAccountApiV1 = () => {
                 ['data', '리턴값', 'Object'],
             ],
             data_res_body: [
-                ['bank_id', '가상계좌 은행코드', 'String'],
-                ['virtual_acct_num', '가상계좌번호', 'String'],
-                ['virtual_acct_name', '가상계좌명', 'String'],
-                ['tid', '가상계좌발급 tid', 'String'],
+                ['tx_seq_no', '문자인증에 사용될 거래번호', 'String'],
             ],
         },
         3: {
-            uri: '',
-            explain: `입금데이터노티 입니다.`,
+            uri: '/api/acct/v2/sms/check',
+            explain: `문자 인증 확인 api 입니다.`,
+            req_head: [
+                '키',
+                '설명',
+                '필수',
+                '타입',
+            ],
+            req_body: [
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['tx_seq_no', '문자인증에 사용될 거래번호', 'O', 'String'],
+                ['phone_vrf_word', '문자인증번호', 'O', 'String'],
+                ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
+                ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
+            ],
             res_head: [
                 '키',
                 '설명',
                 '타입',
             ],
             res_body: [
-                ['amount', '입금액', 'Integer'],
-                ['bank_code', '입금은행코드', 'String'],
-                ['acct_num', '입금계좌번호', 'String'],
-                ['acct_name', '입금자명', 'String'],
-                ['tid', '거래번호', 'String'],
+                ['result', '결과코드 (100 이외 에러)', 'Integer'],
+                ['message', '결과 메시지', 'String'],
+                ['data', '리턴값', 'Object'],
             ],
-
+            data_res_body: [
+                ['is_check', '완료일시 1', 'String'],
+            ],
+        },
+        4: {
+            uri: '/api/acct/v2/issuance',
+            explain: `가상계좌발급 api 입니다.\n앞에 4개를 순서대로 진행후 이용 가능합니다.`,
+            req_head: [
+                '키',
+                '설명',
+                '필수',
+                '타입',
+            ],
+            req_body: [
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
+                ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
+            ],
+            res_head: [
+                '키',
+                '설명',
+                '타입',
+            ],
+            res_body: [
+                ['result', '결과코드 (100 이외 에러)', 'Integer'],
+                ['message', '결과 메시지', 'String'],
+                ['data', '리턴값', 'Object'],
+            ],
+            data_res_body: [
+                ['bank_code', '가상계좌 은행코드', 'String'],
+                ['virtual_acct_num', '가상계좌번호', 'String'],
+            ],
         },
     }
     const returnTable = (table_head = [], table_body = []) => {
@@ -269,4 +313,4 @@ const VirtualAccountApiV1 = () => {
         </>
     )
 }
-export default VirtualAccountApiV1;
+export default VirtualAccountApiV2;

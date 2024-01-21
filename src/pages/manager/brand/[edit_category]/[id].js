@@ -691,7 +691,7 @@ const BrandEdit = () => {
                               ['setting_obj']: {
                                 ...item.setting_obj,
                                 [`is_use_deposit`]: e.target.checked ? 1 : 0
-                              }
+                              },
                             })
                           }}
                         />
@@ -702,10 +702,27 @@ const BrandEdit = () => {
                           label='상위사 선택'
                           value={item.deposit_corp_type}
                           onChange={e => {
-                            setItem({
+                            let data = {
                               ...item,
                               ['deposit_corp_type']: e.target.value
-                            })
+                            };
+                            if (e.target.value == 1) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 1,
+                              }
+                            } else if (e.target.value == 3) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 2,
+                              }
+                            } else {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 0,
+                              }
+                            }
+                            setItem(data)
                           }}
                         >
                           <MenuItem value={0}>선택안함</MenuItem>
@@ -815,10 +832,22 @@ const BrandEdit = () => {
                           label='상위사 선택'
                           value={item.withdraw_corp_type}
                           onChange={e => {
-                            setItem({
+                            let data = {
                               ...item,
                               ['withdraw_corp_type']: e.target.value
-                            })
+                            };
+                            if (e.target.value == 2) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 1,
+                              }
+                            } else {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 0,
+                              }
+                            }
+                            setItem(data)
                           }}
                         >
                           <MenuItem value={0}>선택안함</MenuItem>
@@ -1227,6 +1256,7 @@ const BrandEdit = () => {
                         >
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
+                          <MenuItem value={2}>{'v2'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>
@@ -1378,10 +1408,22 @@ const BrandEdit = () => {
                               label='상위사 선택'
                               value={item.corp_account_corp_type}
                               onChange={e => {
-                                setItem({
+                                let data = {
                                   ...item,
                                   ['corp_account_corp_type']: e.target.value
-                                })
+                                };
+                                if (e.target.value == 1) {
+                                  data['setting_obj'] = {
+                                    ...item.setting_obj,
+                                    [`api_deposit_version`]: 1,
+                                  }
+                                } else {
+                                  data['setting_obj'] = {
+                                    ...item.setting_obj,
+                                    [`api_deposit_version`]: 0,
+                                  }
+                                }
+                                setItem(data);
                               }}
                             >
                               <MenuItem value={0}>선택안함</MenuItem>

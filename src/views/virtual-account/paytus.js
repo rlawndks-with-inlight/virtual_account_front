@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
+import { bankCodeList, genderList, ntvFrnrList, telComList, virtualAccountUserTypeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
@@ -72,8 +72,13 @@ const VirtualAccountPaytus = () => {
     }
     const onSave = async () => {
         let result = undefined
-        result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: router.query?.mid, });
-        if (result?.tid) {
+        result = await apiServer(`${process.env.API_URL}/api/acct/v2/issuance`, 'create', {
+            api_key: themeDnsData?.api_key,
+            mid: item?.mid,
+            verify_tr_no: item?.verify_tr_no,
+            verify_tr_dt: item?.verify_tr_dt,
+        });
+        if (result?.is_issuance) {
             toast.success("성공적으로 발급 되었습니다.");
             if (router.asPath.split('/')[1] == 'manager') {
                 router.push('/manager/virtual-account');
@@ -84,43 +89,35 @@ const VirtualAccountPaytus = () => {
     }
     const oneWonCertification = async () => {
         setLoading(true);
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v1`, 'create', {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v2/account`, 'create', {
+            api_key: themeDnsData?.api_key,
             mid: item?.mid,
             bank_code: item?.deposit_bank_code,
             account: item?.deposit_acct_num,
             name: item?.deposit_acct_name,
-            birth: item?.birth,
-            phone_num: item?.phone_num,
-            guid: item?.guid,
-            api_key: themeDnsData?.api_key,
-            user_type: item?.user_type,
-            business_num: item?.business_num,
-            company_name: item?.company_name,
-            ceo_name: item?.ceo_name,
-            company_phone_num: item?.company_phone_num,
         });
         let data = item;
-        data.guid = result?.guid;
-        if (result?.tid) {
+        if (result?.verify_tr_no) {
             toast.success('성공적으로 발송 되었습니다.');
             data = {
                 ...data,
                 is_send_one_won_check: true,
-                tid: result?.tid,
+                verify_tr_no: result?.verify_tr_no,
+                verify_tr_dt: result?.verify_tr_dt,
             }
         }
         setItem(data);
         setLoading(false);
     }
     const checkOneWonCertification = async () => {
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v1/check`, 'create', {
-            mid: item?.mid,
-            tid: item?.tid,
-            vrf_word: item?.vrf_word,
-            guid: item?.guid,
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v2/account/check`, 'create', {
             api_key: themeDnsData?.api_key,
+            mid: item?.mid,
+            vrf_word: item?.vrf_word,
+            verify_tr_no: item?.verify_tr_no,
+            verify_tr_dt: item?.verify_tr_dt,
         });
-        if (result?.tid) {
+        if (result?.is_check) {
             toast.success('성공적으로 인증 되었습니다.');
             setItem({
                 ...item,
@@ -128,7 +125,48 @@ const VirtualAccountPaytus = () => {
             })
         }
     }
-
+    const sendSmsPushVirtualAccount = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v2/sms`, 'create', {
+            api_key: themeDnsData?.api_key,
+            mid: item?.mid,
+            gender: item?.gender,
+            ntv_frnr: item?.ntv_frnr,
+            birth: item?.birth,
+            tel_com: item?.tel_com,
+            phone_num: item?.phone_num,
+            verify_tr_no: item?.verify_tr_no,
+            verify_tr_dt: item?.verify_tr_dt,
+        });
+        if (result?.tx_seq_no) {
+            toast.success('성공적으로 발송 되었습니다.');
+            setItem({
+                ...item,
+                tx_seq_no: result?.tx_seq_no,
+            })
+        }
+    }
+    const checkSmsVerityCodeVirtualAccount = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v2/sms/check`, 'create', {
+            api_key: themeDnsData?.api_key,
+            mid: item?.mid,
+            phone_vrf_word: item?.phone_vrf_word,
+            verify_tr_no: item?.verify_tr_no,
+            verify_tr_dt: item?.verify_tr_dt,
+            tx_seq_no: item?.tx_seq_no,
+        });
+        if (result?.is_check) {
+            toast.success('성공적으로 인증 되었습니다.');
+            setItem({
+                ...item,
+                is_check_all: true
+            })
+        }
+    }
+    //1원인증 발송
+    //1원인증 확인
+    //인증번호발송
+    //인증번호확인
+    //발급하기
     return (
         <>
             <Dialog
@@ -192,6 +230,7 @@ const VirtualAccountPaytus = () => {
                                             <Select
                                                 label='입금은행'
                                                 value={item.deposit_bank_code}
+                                                disabled={(item?.is_check_bank || item?.deposit_acct_check == 1)}
                                                 onChange={e => {
                                                     setItem({
                                                         ...item,
@@ -208,6 +247,7 @@ const VirtualAccountPaytus = () => {
                                     <TextField
                                         label='입금계좌번호'
                                         value={item.deposit_acct_num}
+                                        disabled={(item?.is_check_bank || item?.deposit_acct_check == 1)}
                                         onChange={(e) => {
                                             setItem(
                                                 {
@@ -219,6 +259,7 @@ const VirtualAccountPaytus = () => {
                                     <TextField
                                         label='입금자명'
                                         value={item.deposit_acct_name}
+                                        disabled={(item?.is_check_bank || item?.deposit_acct_check == 1)}
                                         onChange={(e) => {
                                             setItem(
                                                 {
@@ -227,7 +268,9 @@ const VirtualAccountPaytus = () => {
                                                 }
                                             )
                                         }} />
-                                    <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                                    <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}
+                                        disabled={item?.is_check_bank || item?.deposit_acct_check == 1}
+                                    >{(item?.is_check_bank || item?.deposit_acct_check == 1) ? "확인완료" : '1원인증 발송'}</Button>
                                     {item.is_send_one_won_check &&
                                         <>
                                             <TextField
@@ -242,7 +285,7 @@ const VirtualAccountPaytus = () => {
                                                         }
                                                     )
                                                 }} />
-                                            <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                                            <Button disabled={item?.is_check_bank || item?.deposit_acct_check == 1} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{(item?.is_check_bank || item?.deposit_acct_check == 1) ? '확인완료' : '인증확인'}</Button>
                                         </>}
                                 </Stack>
                             </Card>
@@ -250,83 +293,53 @@ const VirtualAccountPaytus = () => {
                         <Grid item xs={12} md={6}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
-
-                                    <FormControl variant='outlined' >
-                                        <InputLabel>사용자구분</InputLabel>
-                                        <Select label='사용자구분' value={item?.user_type}
+                                    {/* <FormControl variant='outlined' >
+                                        <InputLabel>계좌구분</InputLabel>
+                                        <Select label='계좌구분' value={item?.expire_type ?? 0}
                                             onChange={(e) => {
                                                 let obj = {
                                                     ...item,
-                                                    user_type: e.target.value,
+                                                    expire_type: e.target.value,
                                                 }
-                                                if (e.target.value == 0) {
-                                                    obj = {
-                                                        ...obj,
-                                                        business_num: '',
-                                                        company_name: '',
-                                                        ceo_name: '',
-                                                        company_phone_num: '',
-                                                    }
-                                                }
+
                                                 setItem(obj)
                                             }}>
-                                            {virtualAccountUserTypeList.map((itm => {
+                                            <MenuItem value={0}>전용계좌</MenuItem>
+                                            <MenuItem value={1}>임시계좌</MenuItem>
+                                        </Select>
+                                    </FormControl> */}
+                                    <FormControl >
+                                        <InputLabel>성별</InputLabel>
+                                        <Select label='성별' value={item?.gender}
+                                            onChange={(e) => {
+                                                setItem(
+                                                    {
+                                                        ...item,
+                                                        ['gender']: e.target.value,
+                                                    }
+                                                )
+                                            }}>
+                                            {genderList.map((itm) => {
                                                 return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                            }))}
+                                            })}
                                         </Select>
                                     </FormControl>
-                                    {(item.user_type == 1 || item.user_type == 2) &&
-                                        <>
-                                            <TextField
-                                                label='사업자등록번호'
-                                                value={item.business_num}
-                                                placeholder=""
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['business_num']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                            <TextField
-                                                label='회사명(상호)'
-                                                value={item.company_name}
-                                                placeholder=""
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['company_name']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                            <TextField
-                                                label='대표자명'
-                                                value={item.ceo_name}
-                                                placeholder=""
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['ceo_name']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-                                            <TextField
-                                                label='회사 전화번호'
-                                                value={item.company_phone_num}
-                                                placeholder=""
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['company_phone_num']: e.target.value
-                                                        }
-                                                    )
-                                                }} />
-
-                                        </>}
+                                    <FormControl>
+                                        <InputLabel>내외국인</InputLabel>
+                                        <Select label='내외국인' value={item?.ntv_frnr}
+                                            onChange={(e) => {
+                                                setItem(
+                                                    {
+                                                        ...item,
+                                                        ['ntv_frnr']: e.target.value,
+                                                    }
+                                                )
+                                            }}>
+                                            {ntvFrnrList.map((itm) => {
+                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </FormControl>
                                     <TextField
                                         label='생년월일'
                                         value={item.birth}
@@ -339,6 +352,22 @@ const VirtualAccountPaytus = () => {
                                                 }
                                             )
                                         }} />
+                                    <FormControl>
+                                        <InputLabel>통신사</InputLabel>
+                                        <Select label='통신사' value={item?.tel_com}
+                                            onChange={(e) => {
+                                                setItem(
+                                                    {
+                                                        ...item,
+                                                        ['tel_com']: e.target.value,
+                                                    }
+                                                )
+                                            }}>
+                                            {telComList.map((itm) => {
+                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </FormControl>
                                     <TextField
                                         label='휴대폰번호'
                                         value={item.phone_num}
@@ -350,8 +379,31 @@ const VirtualAccountPaytus = () => {
                                                     ['phone_num']: e.target.value
                                                 }
                                             )
-                                        }} />
-
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                disabled={!(item?.is_check_bank || item?.deposit_acct_check == 1)}
+                                                onClick={sendSmsPushVirtualAccount}>{'인증번호 발송'}</Button>
+                                        }}
+                                    />
+                                    <TextField
+                                        label='인증번호'
+                                        value={item.phone_vrf_word}
+                                        placeholder=""
+                                        onChange={(e) => {
+                                            setItem(
+                                                {
+                                                    ...item,
+                                                    ['phone_vrf_word']: e.target.value
+                                                }
+                                            )
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                disabled={!item?.tx_seq_no}
+                                                onClick={checkSmsVerityCodeVirtualAccount}>{'인증번호 확인'}</Button>
+                                        }}
+                                    />
                                 </Stack>
                             </Card>
                         </Grid>
@@ -401,7 +453,7 @@ const VirtualAccountPaytus = () => {
                         <Stack spacing={1} style={{ display: 'flex' }}>
 
                             <Button variant="contained"
-                                disabled={!item?.is_check_bank}
+                                disabled={!item?.is_check_all}
                                 style={{
                                     height: '48px', width: '120px', marginLeft: 'auto'
                                 }} onClick={() => {
