@@ -40,6 +40,10 @@ const VirtualAccountApiV1 = () => {
             value: 2,
             label: '가상계좌발급'
         },
+        {
+            value: 3,
+            label: '입금데이터노티'
+        },
     ]
 
     const table_obj = {
@@ -143,36 +147,55 @@ const VirtualAccountApiV1 = () => {
                 ['tid', '가상계좌발급 tid', 'String'],
             ],
         },
+        3: {
+            uri: '',
+            explain: `입금데이터노티 api 입니다.`,
+            res_head: [
+                '키',
+                '설명',
+                '타입',
+            ],
+            res_body: [
+                ['amount', '입금액', 'Integer'],
+                ['bank_code', '입금은행코드', 'String'],
+                ['acct_num', '입금계좌번호', 'String'],
+                ['acct_name', '입금자명', 'String'],
+                ['tid', '거래번호', 'String'],
+            ],
+
+        },
     }
-    const returnTable = (table_head, table_body) => {
-        return <Table style={{ border: '1px solid #ccc' }}>
-            <TableHead>
-                <TableRow sx={{ padding: '1rem 0' }}>
-                    {table_head.map(text => (
+    const returnTable = (table_head = [], table_body = []) => {
+        if (table_head.length > 0 && table_body.length > 0) {
+            return <Table style={{ border: '1px solid #ccc' }}>
+                <TableHead>
+                    <TableRow sx={{ padding: '1rem 0' }}>
+                        {table_head.map(text => (
+                            <>
+                                <TableCell style={{ textAlign: 'center' }}>
+                                    {text}
+                                </TableCell>
+                            </>
+                        ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {table_body.map(col => (
                         <>
-                            <TableCell style={{ textAlign: 'center' }}>
-                                {text}
-                            </TableCell>
+                            <TableRow sx={{ padding: '1rem 0' }}>
+                                {col && col.map(row => (
+                                    <>
+                                        <TableCell style={{ textAlign: 'center' }}>
+                                            {row}
+                                        </TableCell>
+                                    </>
+                                ))}
+                            </TableRow>
                         </>
                     ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {table_body.map(col => (
-                    <>
-                        <TableRow sx={{ padding: '1rem 0' }}>
-                            {col && col.map(row => (
-                                <>
-                                    <TableCell style={{ textAlign: 'center' }}>
-                                        {row}
-                                    </TableCell>
-                                </>
-                            ))}
-                        </TableRow>
-                    </>
-                ))}
-            </TableBody>
-        </Table>
+                </TableBody>
+            </Table>
+        }
     }
     return (
         <>
