@@ -319,7 +319,7 @@ const VirtualAccountBankners = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['deposit_acct_num']: e.target.value
+                                                    ['deposit_acct_num']: e.target.value.replaceAll('-', ''),
                                                 }
                                             )
                                         }} />
