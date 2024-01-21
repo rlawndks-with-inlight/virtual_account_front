@@ -162,11 +162,7 @@ const VirtualAccountPaytus = () => {
             })
         }
     }
-    //1원인증 발송
-    //1원인증 확인
-    //인증번호발송
-    //인증번호확인
-    //발급하기
+
     return (
         <>
             <Dialog
