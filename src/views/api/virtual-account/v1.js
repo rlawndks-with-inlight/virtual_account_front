@@ -220,28 +220,34 @@ const VirtualAccountApiV1 = () => {
                                             <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
                                                 {table_obj[itm.value].explain}
                                             </Title3>
-                                            <Title3>
-                                                [ Request ]
-                                            </Title3>
-                                            <Col style={{ padding: '2rem', background: '#222', rowGap: '0.5rem' }}>
-                                                <Row style={{ columnGap: '0.5rem' }}>
-                                                    <div style={{ color: '#fff' }}>POST</div>
-                                                    <div style={{ color: 'yellow' }}>{process.env.API_URL}{table_obj[itm.value].uri}</div>
-                                                    <div style={{ color: '#fff' }}>HTTP/1.1</div>
-                                                </Row>
-                                                <Row style={{ columnGap: '0.5rem' }}>
-                                                    <div style={{ color: '#fff' }}>Host:</div>
-                                                    <div style={{ color: 'orange' }}>{process.env.API_URL}</div>
-                                                </Row>
-                                                <Row style={{ columnGap: '0.5rem' }}>
-                                                    <div style={{ color: '#fff' }}>Service Port:</div>
-                                                    <div style={{ color: 'orange' }}>443</div>
-                                                </Row>
-                                            </Col>
-                                            <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
-                                                요청 바디는 JSON 객체로 구성됩니다.
-                                            </Title3>
-                                            {returnTable(table_obj[itm.value].req_head, table_obj[itm.value].req_body,)}
+                                            {table_obj[itm.value].uri &&
+                                                <>
+                                                    <Title3>
+                                                        [ Request ]
+                                                    </Title3>
+                                                    <Col style={{ padding: '2rem', background: '#222', rowGap: '0.5rem' }}>
+                                                        <Row style={{ columnGap: '0.5rem' }}>
+                                                            <div style={{ color: '#fff' }}>POST</div>
+                                                            <div style={{ color: 'yellow' }}>{process.env.API_URL}{table_obj[itm.value].uri}</div>
+                                                            <div style={{ color: '#fff' }}>HTTP/1.1</div>
+                                                        </Row>
+                                                        <Row style={{ columnGap: '0.5rem' }}>
+                                                            <div style={{ color: '#fff' }}>Host:</div>
+                                                            <div style={{ color: 'orange' }}>{process.env.API_URL}</div>
+                                                        </Row>
+                                                        <Row style={{ columnGap: '0.5rem' }}>
+                                                            <div style={{ color: '#fff' }}>Service Port:</div>
+                                                            <div style={{ color: 'orange' }}>443</div>
+                                                        </Row>
+                                                    </Col>
+                                                </>}
+                                            {table_obj[itm.value].req_head?.length > 0 && table_obj[itm.value].req_body?.length > 0 &&
+                                                <>
+                                                    <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
+                                                        요청 바디는 JSON 객체로 구성됩니다.
+                                                    </Title3>
+                                                    {returnTable(table_obj[itm.value].req_head, table_obj[itm.value].req_body,)}
+                                                </>}
                                             <Title3>
                                                 [ Response ]
                                             </Title3>
