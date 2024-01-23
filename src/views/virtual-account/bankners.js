@@ -52,7 +52,6 @@ const VirtualAccountBankners = () => {
     ]
     useEffect(() => {
         settingPage();
-        console.log(router.asPath.split('/')[1])
     }, [])
     const settingPage = async () => {
         let mcht_list = await apiManager(`users`, 'list', {
