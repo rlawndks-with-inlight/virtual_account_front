@@ -277,6 +277,20 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='상위도메인'
+                            value={item.parent_dns}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['parent_dns']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                       <TextField
                         label='메인색상'
                         value={item.theme_css?.main_color}

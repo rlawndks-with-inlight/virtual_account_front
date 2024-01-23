@@ -66,7 +66,6 @@ const VirtualAccountPaytus = () => {
             })
         }
         setItem(data);
-
         setLoading(false);
     }
     const onSave = async () => {

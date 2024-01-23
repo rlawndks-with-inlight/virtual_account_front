@@ -51,6 +51,12 @@ const UserEdit = () => {
     withdraw_acct_name: '',
 
   })
+  const [ipData, setIpData] = useState({});
+  const [ipSearchObj, setIpSearchObj] = useState({
+    page: 1,
+    page_size: 10,
+    id: router.query?.id
+  })
   const tab_list = [
     {
       value: 0,
@@ -74,7 +80,6 @@ const UserEdit = () => {
     settingPage();
   }, [])
   const settingPage = async () => {
-
     let operator_list = await apiManager(`users`, 'list', {
       level_list: themeDnsData?.operator_list.map(itm => {
         return itm?.value
@@ -94,7 +99,20 @@ const UserEdit = () => {
       data['mcht_fee'] = themeDnsData?.deposit_head_office_fee;
     }
     setItem(data);
+    onChangePage(ipSearchObj)
     setLoading(false);
+
+  }
+  const onChangePage = async (obj) => {
+    setIpData({
+      ...ipData,
+      content: undefined
+    })
+    let data_ = await apiManager('users/ip-logs', 'list', obj);
+    if (data_) {
+      setIpData(data_);
+    }
+    setIpSearchObj(obj);
   }
   const onSave = async () => {
     let data = item;
@@ -235,7 +253,21 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='하위브랜드도메인'
+                            value={item.children_brand_dns}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['children_brand_dns']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
@@ -351,7 +383,7 @@ const UserEdit = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {item?.ip_logs && item?.ip_logs.splice((ipPage - 1) * 10, ipPage * 10).map((itm, idx) => (
+                              {ipData?.content && ipData?.content.map((itm, idx) => (
                                 <>
                                   <TableRow sx={{ padding: '1rem 0' }}>
                                     <TableCell style={{ textAlign: 'center' }}>{itm?.created_at}</TableCell>
@@ -365,12 +397,12 @@ const UserEdit = () => {
                             <Pagination
                               style={{ margin: 'auto' }}
                               size={'medium'}
-                              count={getMaxPage(item?.ip_logs.length, 10)}
+                              count={getMaxPage(ipData?.total, 10)}
                               page={ipPage}
                               variant='outlined' shape='rounded'
                               color='primary'
                               onChange={(_, num) => {
-                                setIpPage(num)
+                                onChangePage({ ...ipSearchObj, page: num })
                               }} />
                           </Box>
                         </Stack>
