@@ -267,6 +267,26 @@ const UserList = () => {
     },
     ...(user?.level >= 40 ? [
       {
+        id: 'update_user_deposit',
+        label: '해당 유저로 로그인',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setModal({
+                func: () => { onSignInAnotherUser(row?.id) },
+                icon: 'material-symbols:lock-outline',
+                title: '해당 유저로 로그인 하시겠습니까?'
+              })
+            }}
+          >유저 로그인</Button>
+        }
+      },
+    ] : []),
+    ...(user?.level >= 40 ? [
+      {
         id: 'edit_password',
         label: '비밀번호 변경',
         action: (row, is_excel) => {
@@ -393,6 +413,14 @@ const UserList = () => {
 
       toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj);
+    }
+  }
+  const onSignInAnotherUser = async (user_id) => {
+    const result = await apiManager(`auth/sign-in-another-user`, 'create', {
+      user_id,
+    })
+    if (result?.id) {
+      window.location.href = `/manager/dashboards`;
     }
   }
   return (
