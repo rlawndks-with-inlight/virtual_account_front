@@ -191,9 +191,10 @@ function NotificationItem({ notification, router, handleClosePopover, idx }) {
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
+        ...(notification.is_read && {
           bgcolor: 'action.selected',
         }),
+
       }}
       onClick={() => {
         router.push(notification?.link)
