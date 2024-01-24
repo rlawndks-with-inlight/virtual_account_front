@@ -96,7 +96,7 @@ const UserEdit = () => {
     if (router.query?.edit_category == 'add') {
       data['withdraw_fee'] = themeDnsData?.default_withdraw_fee;
       data['deposit_fee'] = themeDnsData?.default_deposit_fee;
-      data['mcht_fee'] = themeDnsData?.deposit_head_office_fee;
+      data['mcht_fee'] = themeDnsData?.head_office_fee;
     }
     setItem(data);
     onChangePage(ipSearchObj)
@@ -419,7 +419,7 @@ const UserEdit = () => {
                         type="number"
                         label={`본사요율`}
                         disabled={true}
-                        value={themeDnsData?.deposit_head_office_fee}
+                        value={themeDnsData?.head_office_fee}
                         InputProps={{
                           endAdornment: <div>%</div>
                         }}
@@ -428,7 +428,7 @@ const UserEdit = () => {
                         type="number"
                         label={`본사획득요율`}
                         disabled={true}
-                        value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                        value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
                         InputProps={{
                           endAdornment: <div>%</div>
                         }}
@@ -488,7 +488,7 @@ const UserEdit = () => {
                               <TextField
                                 type="number"
                                 label={`${itm?.label} 획득 요율`}
-                                value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                                value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
                                 disabled={true}
                                 placeholder=""
                                 InputProps={{
@@ -525,7 +525,7 @@ const UserEdit = () => {
                         type="number"
                         label={`가맹점 획득 요율`}
                         disabled={true}
-                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
                         placeholder=""
                         InputProps={{
                           endAdornment: <div>%</div>

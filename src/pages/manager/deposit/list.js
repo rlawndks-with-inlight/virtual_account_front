@@ -45,13 +45,13 @@ const DepositList = () => {
       },
     },
     {
-      id: 'comment',
+      id: 'note',
       label: '비고',
       action: (row, is_excel) => {
         if (row?.deposit_status == 10) {
           return "오입금 주의";
         }
-        return "---"
+        return row?.note;
       },
       sx: (row) => {
         if (row?.deposit_status == 10) {
@@ -255,7 +255,7 @@ const DepositList = () => {
         id: 'mcht_fee',
         label: '가맹점 획득 요율',
         action: (row, is_excel) => {
-          return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%'
+          return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%'
         }
       },
       */
@@ -275,10 +275,10 @@ const DepositList = () => {
           },
         },
         {
-          id: `deposit_head_office_fee`,
+          id: `head_office_fee`,
           label: `본사 획득 요율`,
           action: (row, is_excel) => {
-            return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+            return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
           },
           sx: (row) => {
             if (row?.deposit_status == 10) {
@@ -346,7 +346,7 @@ const DepositList = () => {
                 id: `sales${operator?.num}_fee`,
                 label: `${label} 획득 요율`,
                 action: (row, is_excel) => {
-                  return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+                  return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
                 },
                 sx: (row) => {
                   if (row?.deposit_status == 10) {

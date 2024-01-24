@@ -1040,14 +1040,14 @@ const BrandEdit = () => {
                         <>
                           <TextField
                             label='본사 입금수수료'
-                            value={item.deposit_head_office_fee}
+                            value={item.head_office_fee}
                             placeholder=""
                             type="number"
                             onChange={(e) => {
                               setItem(
                                 {
                                   ...item,
-                                  ['deposit_head_office_fee']: e.target.value
+                                  ['head_office_fee']: e.target.value
                                 }
                               )
                             }}
