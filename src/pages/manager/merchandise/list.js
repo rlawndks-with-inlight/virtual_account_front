@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControlLabel, IconButton, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
+import { commarNumber, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -43,15 +43,29 @@ const UserList = () => {
           if (is_excel) {
             return "---";
           }
-          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
-            onClick={() => {
-              setDialogObj({ changeUserDeposit: true })
-              setChangeUserDepositObj({
-                amount: '',
-                user_id: row?.id,
-              })
-            }}
-          >정산금 수정</Button>
+          return <Col style={{ alignItems: 'center', rowGap: '0.5rem' }}>
+            <Button variant="contained" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                setDialogObj({ changeUserDeposit: true })
+                setChangeUserDepositObj({
+                  amount: '',
+                  user_id: row?.id,
+                  pay_type: 25,
+                  deposit_fee: row?.deposit_fee,
+                })
+              }}
+            >정산금 지급</Button>
+            <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                setDialogObj({ changeUserDeposit: true })
+                setChangeUserDepositObj({
+                  amount: '',
+                  user_id: row?.id,
+                  pay_type: 30,
+                })
+              }}
+            >정산금 차감</Button>
+          </Col>
         }
       },
     ] : []),
@@ -182,30 +196,46 @@ const UserList = () => {
           },
           ...(themeDnsData?.is_use_fee_operator == 1 ? [
             {
-              id: `sales${operator?.num}_fee`,
+              id: `sales${operator?.num}_fee_1`,
               label: `${label} 요율`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
               }
             },
             {
-              id: `sales${operator?.num}_fee`,
+              id: `sales${operator?.num}_fee_2`,
               label: `${label} 획득 요율`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
               }
             },
           ] : []),
+          ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+            {
+              id: `sales${operator?.num}_deposit_fee_1`,
+              label: `${label} 입금수수료`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_deposit_fee`] : "---"
+              }
+            },
+            {
+              id: `sales${operator?.num}_deposit_fee_2`,
+              label: `${label} 획득 입금수수료`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserDepositFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) : "---"
+              }
+            },
+          ] : []),
           ...(themeDnsData?.is_use_withdraw_operator == 1 ? [
             {
-              id: `sales${operator?.num}_withdraw_fee`,
+              id: `sales${operator?.num}_withdraw_fee_1`,
               label: `${label} 출금수수료`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_withdraw_fee`] : "---"
               }
             },
             {
-              id: `sales${operator?.num}_withdraw_fee`,
+              id: `sales${operator?.num}_withdraw_fee_2`,
               label: `${label} 획득 출금수수료`,
               action: (row, is_excel) => {
                 return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
@@ -400,17 +430,11 @@ const UserList = () => {
       toast.success("성공적으로 변경 되었습니다.");
     }
   }
-  const onChangeUserDeposit = async (pay_type) => {
+  const onChangeUserDeposit = async () => {
     setDialogObj({})
-    setChangeUserDepositObj({})
-    let result = await apiManager(`users/change-deposit`, 'create', {
-      amount: changeUserDepositObj.amount,
-      pay_type,
-      user_id: changeUserDepositObj?.user_id,
-      note: changeUserDepositObj?.note
-    })
+    let result = await apiManager(`users/change-deposit`, 'create', changeUserDepositObj)
     if (result) {
-
+      setChangeUserDepositObj({})
       toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj);
     }
@@ -477,12 +501,13 @@ const UserList = () => {
           })
         }}
       >
-        <DialogTitle>{`정산금 관리자 수정`}</DialogTitle>
+        <DialogTitle>{`정산금 관리자 ${changeUserDepositObj?.type == 25 ? '지급' : '차감'}`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            수정할 금액을 입력해 주세요.
+            {changeUserDepositObj?.pay_type == 25 ? '지급' : '차감'}할 금액을 입력해 주세요.
           </DialogContentText>
           <TextField
+            autoFocus
             fullWidth
             value={changeUserDepositObj.amount}
             margin="dense"
@@ -495,8 +520,26 @@ const UserList = () => {
               })
             }}
           />
+          {(changeUserDepositObj?.pay_type == 25 && themeDnsData?.is_use_deposit_operator == 1) &&
+            <>
+              <TextField
+                fullWidth
+                disabled={true}
+                value={changeUserDepositObj.deposit_fee}
+                margin="dense"
+                label="입금 수수료"
+                type="number"
+              />
+              <TextField
+                fullWidth
+                disabled={true}
+                value={changeUserDepositObj.amount - changeUserDepositObj.deposit_fee}
+                margin="dense"
+                label="적립 예정 금액"
+                type="number"
+              />
+            </>}
           <TextField
-            autoFocus
             fullWidth
             multiline
             rows={4}
@@ -512,12 +555,31 @@ const UserList = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={() => onChangeUserDeposit(25)}>
-            적립하기
-          </Button>
-          <Button variant="outlined" onClick={() => onChangeUserDeposit(30)}>
-            차감하기
-          </Button>
+          {changeUserDepositObj?.pay_type == 25 &&
+            <>
+              {themeDnsData?.is_use_deposit_operator == 1 &&
+                <>
+                  <FormControlLabel
+                    label={<Typography>입금 수수료 적용</Typography>}
+                    control={<Checkbox checked={changeUserDepositObj?.is_use_deposit_fee} />}
+                    onChange={(e) => {
+                      setChangeUserDepositObj({
+                        ...changeUserDepositObj,
+                        is_use_deposit_fee: e.target.checked ? 1 : 0,
+                      })
+                    }}
+                  />
+                </>}
+              <Button variant="contained" onClick={() => onChangeUserDeposit(25)}>
+                지급하기
+              </Button>
+            </>}
+          {changeUserDepositObj?.pay_type == 30 &&
+            <>
+              <Button variant="contained" onClick={() => onChangeUserDeposit(30)}>
+                차감하기
+              </Button>
+            </>}
         </DialogActions>
       </Dialog>
       <Stack spacing={3}>

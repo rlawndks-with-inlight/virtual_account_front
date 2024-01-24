@@ -1008,11 +1008,49 @@ const BrandEdit = () => {
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
-                        <FormControlLabel control={<Switch checked={item.is_use_fee_operator == 1} />} label={`입금시 영업자 수수료 사용여부`}
+                        <FormControlLabel control={<Switch checked={item.is_use_fee_operator == 1} />} label={`입금시 영업자 요율 사용여부`}
                           onChange={(e) => {
                             setItem({
                               ...item,
                               ['is_use_fee_operator']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='본사 입금요율'
+                            value={item.head_office_fee}
+                            placeholder=""
+                            type="number"
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['head_office_fee']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>%</div>
+                              )
+                            }}
+                          />
+                        </>}
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_deposit_operator == 1} />} label={`입금시 영업자 입금 수수료 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_deposit_operator']: e.target.checked ? 1 : 0,
                             })
                           }}
                         />
@@ -1040,20 +1078,20 @@ const BrandEdit = () => {
                         <>
                           <TextField
                             label='본사 입금수수료'
-                            value={item.head_office_fee}
+                            value={item.deposit_head_office_fee}
                             placeholder=""
                             type="number"
                             onChange={(e) => {
                               setItem(
                                 {
                                   ...item,
-                                  ['head_office_fee']: e.target.value
+                                  ['deposit_head_office_fee']: e.target.value
                                 }
                               )
                             }}
                             InputProps={{
                               endAdornment: (
-                                <div>%</div>
+                                <div>원</div>
                               )
                             }}
                           />
