@@ -188,6 +188,22 @@ const DepositList = () => {
         },
       },
     ] : []),
+    ...(themeDnsData?.withdraw_corp_type == 2 ? [
+      {
+        id: 'virtual_acct_balance',
+        label: '가상계좌잔액',
+        action: (row, is_excel) => {
+          return commarNumber(row['virtual_acct_balance'])
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
     {
       id: 'mcht_amount',
       label: '가맹점 정산금액',
