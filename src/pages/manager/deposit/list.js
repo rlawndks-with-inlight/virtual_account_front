@@ -96,11 +96,15 @@ const DepositList = () => {
       id: 'deposit_bank_code',
       label: '입금은행정보',
       action: (row, is_excel) => {
+        let bank_list = bankCodeList();
+        if (row?.is_type_withdraw_acct == 1) {
+          bank_list = bankCodeList('withdraw');
+        }
         if (is_excel) {
-          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+          return `${_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
         }
         return <Col>
-          <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+          <div>{_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
           <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
         </Col>
       },
