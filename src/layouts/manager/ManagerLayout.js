@@ -43,7 +43,7 @@ export default function ManagerLayout({ children }) {
     let result = await initialize();
 
     if (result?.level < 10 || !result) {
-      router.push('/manager')
+      window.location.href = ('/manager')
     }
   }
   const handleOpen = () => {
