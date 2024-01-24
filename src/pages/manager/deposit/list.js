@@ -219,150 +219,152 @@ const DepositList = () => {
         }
       },
     },
-    {
-      id: 'mcht_fee',
-      label: '가맹점 요율',
-      action: (row, is_excel) => {
-        return row['mcht_fee'] + '%'
-      },
-      sx: (row) => {
-        if (row?.deposit_status == 10) {
-          return {
-            color: 'red'
+    ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+      {
+        id: 'mcht_fee',
+        label: '가맹점 요율',
+        action: (row, is_excel) => {
+          return row['mcht_fee'] + '%'
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
           }
+        },
+      },
+      /*
+      {
+        id: 'mcht_fee',
+        label: '가맹점 획득 요율',
+        action: (row, is_excel) => {
+          return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%'
         }
       },
-    },
-    /*
-    {
-      id: 'mcht_fee',
-      label: '가맹점 획득 요율',
-      action: (row, is_excel) => {
-        return parseFloat(getUserFee(row, 10, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%'
-      }
-    },
-    */
-    ...(user?.level >= 40 ? [
-      {
-        id: 'head_office_fee',
-        label: '본사 요율',
-        action: (row, is_excel) => {
-          return row['head_office_fee'] + '%'
-        },
-        sx: (row) => {
-          if (row?.deposit_status == 10) {
-            return {
-              color: 'red'
-            }
-          }
-        },
-      },
-      {
-        id: `deposit_head_office_fee`,
-        label: `본사 획득 요율`,
-        action: (row, is_excel) => {
-          return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
-        },
-        sx: (row) => {
-          if (row?.deposit_status == 10) {
-            return {
-              color: 'red'
-            }
-          }
-        },
-      },
-      {
-        id: 'head_office_amount',
-        label: '본사 수수료',
-        action: (row, is_excel) => {
-          return row['head_office_amount']
-        },
-        sx: (row) => {
-          if (row?.deposit_status == 10) {
-            return {
-              color: 'red'
-            }
-          }
-          return {
-            color: '#a52a2a'
-          }
-        },
-      },
-    ] : []),
-    ...(themeDnsData?.operator_list ?? []).map(operator => {
-      if (user?.level >= operator?.value) {
-        let label = operator?.label;
-        if (user?.level > 10 && user?.level < 40) {
-          label = (operator?.label ?? "").includes('대리점') ? '대리점' : operator?.label;
-        }
-        return [
-          {
-            id: `sales${operator?.num}_id`,
-            label: label,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
-            },
-            sx: (row) => {
-              if (row?.deposit_status == 10) {
-                return {
-                  color: 'red'
-                }
-              }
-            },
+      */
+      ...(user?.level >= 40 ? [
+        {
+          id: 'head_office_fee',
+          label: '본사 요율',
+          action: (row, is_excel) => {
+            return row['head_office_fee'] + '%'
           },
-          ...(user?.level >= 40 ? [
-            {
-              id: `sales${operator?.num}_fee`,
-              label: `${label} 요율`,
-              action: (row, is_excel) => {
-                return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
-              },
-              sx: (row) => {
-                if (row?.deposit_status == 10) {
-                  return {
-                    color: 'red'
-                  }
-                }
-              },
-            },
-            {
-              id: `sales${operator?.num}_fee`,
-              label: `${label} 획득 요율`,
-              action: (row, is_excel) => {
-                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
-              },
-              sx: (row) => {
-                if (row?.deposit_status == 10) {
-                  return {
-                    color: 'red'
-                  }
-                }
-              },
-            },
-          ] : []),
-          {
-            id: `sales${operator?.num}_amount`,
-            label: `${label} 수수료`,
-            action: (row, is_excel) => {
-              return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
-            },
-            sx: (row) => {
-              if (row?.deposit_status == 10) {
-                return {
-                  color: 'red'
-                }
-              }
+          sx: (row) => {
+            if (row?.deposit_status == 10) {
               return {
-                color: '#a52a2a'
+                color: 'red'
               }
-            },
+            }
           },
-        ]
-      } else {
-        return []
-      }
+        },
+        {
+          id: `deposit_head_office_fee`,
+          label: `본사 획득 요율`,
+          action: (row, is_excel) => {
+            return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+          },
+          sx: (row) => {
+            if (row?.deposit_status == 10) {
+              return {
+                color: 'red'
+              }
+            }
+          },
+        },
+        {
+          id: 'head_office_amount',
+          label: '본사 수수료',
+          action: (row, is_excel) => {
+            return row['head_office_amount']
+          },
+          sx: (row) => {
+            if (row?.deposit_status == 10) {
+              return {
+                color: 'red'
+              }
+            }
+            return {
+              color: '#a52a2a'
+            }
+          },
+        },
+      ] : []),
+      ...(themeDnsData?.operator_list ?? []).map(operator => {
+        if (user?.level >= operator?.value) {
+          let label = operator?.label;
+          if (user?.level > 10 && user?.level < 40) {
+            label = (operator?.label ?? "").includes('대리점') ? '대리점' : operator?.label;
+          }
+          return [
+            {
+              id: `sales${operator?.num}_id`,
+              label: label,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
+              },
+              sx: (row) => {
+                if (row?.deposit_status == 10) {
+                  return {
+                    color: 'red'
+                  }
+                }
+              },
+            },
+            ...(user?.level >= 40 ? [
+              {
+                id: `sales${operator?.num}_fee`,
+                label: `${label} 요율`,
+                action: (row, is_excel) => {
+                  return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
+                },
+                sx: (row) => {
+                  if (row?.deposit_status == 10) {
+                    return {
+                      color: 'red'
+                    }
+                  }
+                },
+              },
+              {
+                id: `sales${operator?.num}_fee`,
+                label: `${label} 획득 요율`,
+                action: (row, is_excel) => {
+                  return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) + '%' : "---"
+                },
+                sx: (row) => {
+                  if (row?.deposit_status == 10) {
+                    return {
+                      color: 'red'
+                    }
+                  }
+                },
+              },
+            ] : []),
+            {
+              id: `sales${operator?.num}_amount`,
+              label: `${label} 수수료`,
+              action: (row, is_excel) => {
+                return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
+              },
+              sx: (row) => {
+                if (row?.deposit_status == 10) {
+                  return {
+                    color: 'red'
+                  }
+                }
+                return {
+                  color: '#a52a2a'
+                }
+              },
+            },
+          ]
+        } else {
+          return []
+        }
 
-    }).flat(),
+      }).flat(),
+    ] : []),
     {
       id: 'created_at',
       label: '생성일',
