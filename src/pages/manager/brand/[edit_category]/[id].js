@@ -1004,15 +1004,15 @@ const BrandEdit = () => {
               </>}
             {currentTab == 6 &&
               <>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
-                        <FormControlLabel control={<Switch checked={item.is_use_deposit_operator == 1} />} label={`입금시 영업자 수수료 사용여부`}
+                        <FormControlLabel control={<Switch checked={item.is_use_fee_operator == 1} />} label={`입금시 영업자 수수료 사용여부`}
                           onChange={(e) => {
                             setItem({
                               ...item,
-                              ['is_use_deposit_operator']: e.target.checked ? 1 : 0,
+                              ['is_use_fee_operator']: e.target.checked ? 1 : 0,
                             })
                           }}
                         />
@@ -1061,7 +1061,7 @@ const BrandEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>

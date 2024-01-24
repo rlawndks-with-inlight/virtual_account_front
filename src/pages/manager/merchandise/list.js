@@ -157,7 +157,7 @@ const UserList = () => {
         return row['phone_num'] ?? "---"
       }
     },
-    ...((user?.level >= 10 && themeDnsData?.is_use_deposit_operator == 1) ? [
+    ...((user?.level >= 10 && themeDnsData?.is_use_fee_operator == 1) ? [
       {
         id: 'mcht_fee',
         label: '가맹점 요율',
@@ -180,7 +180,7 @@ const UserList = () => {
               return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
           },
-          ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+          ...(themeDnsData?.is_use_fee_operator == 1 ? [
             {
               id: `sales${operator?.num}_fee`,
               label: `${label} 요율`,

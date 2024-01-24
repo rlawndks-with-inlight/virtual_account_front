@@ -235,7 +235,7 @@ const DepositList = () => {
         }
       },
     },
-    ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+    ...(themeDnsData?.is_use_fee_operator == 1 ? [
       {
         id: 'mcht_fee',
         label: '가맹점 요율',
@@ -292,7 +292,7 @@ const DepositList = () => {
           id: 'head_office_amount',
           label: '본사 수수료',
           action: (row, is_excel) => {
-            return row['head_office_amount']
+            return commarNumber(row['head_office_amount'])
           },
           sx: (row) => {
             if (row?.deposit_status == 10) {

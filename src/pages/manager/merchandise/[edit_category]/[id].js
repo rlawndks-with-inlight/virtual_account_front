@@ -62,7 +62,7 @@ const UserEdit = () => {
       value: 0,
       label: '기본정보'
     },
-    ...(themeDnsData?.is_use_deposit_operator == 1 ? [
+    ...(themeDnsData?.is_use_fee_operator == 1 ? [
       {
         value: 1,
         label: '수수료정보'
@@ -116,7 +116,7 @@ const UserEdit = () => {
   }
   const onSave = async () => {
     let data = item;
-    if (!data?.mcht_fee && themeDnsData?.is_use_deposit_operator == 1) {
+    if (!data?.mcht_fee && themeDnsData?.is_use_fee_operator == 1) {
       return toast.error('가맹점 요율은 필수값입니다.');
     }
     let result = undefined
@@ -436,7 +436,7 @@ const UserEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                {themeDnsData?.is_use_deposit_operator == 1 &&
+                {themeDnsData?.is_use_fee_operator == 1 &&
                   <>
                     <Grid item xs={12} md={4}>
                       <Card sx={{ p: 2, height: '100%' }}>
