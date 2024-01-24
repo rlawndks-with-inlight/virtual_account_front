@@ -48,10 +48,29 @@ const DepositList = () => {
       id: 'note',
       label: '비고',
       action: (row, is_excel) => {
+        let text = row?.note ?? "---";
         if (row?.deposit_status == 10) {
-          return "오입금 주의";
+          text = "오입금 주의";
         }
-        return row?.note;
+        return text;
+      },
+      sx: (row) => {
+        if (row?.deposit_status == 10) {
+          return {
+            color: 'red'
+          }
+        }
+      },
+    },
+    {
+      id: 'note',
+      label: '비고',
+      action: (row, is_excel) => {
+        let text = row?.note ?? "---";
+        if (row?.deposit_status == 10) {
+          text = "오입금 주의";
+        }
+        return text;
       },
       sx: (row) => {
         if (row?.deposit_status == 10) {

@@ -522,18 +522,21 @@ const UserList = () => {
           />
           {(changeUserDepositObj?.pay_type == 25 && themeDnsData?.is_use_deposit_operator == 1) &&
             <>
+              {changeUserDepositObj?.is_use_deposit_fee == 1 &&
+                <>
+                  <TextField
+                    fullWidth
+                    disabled={true}
+                    value={changeUserDepositObj.deposit_fee}
+                    margin="dense"
+                    label="입금 수수료"
+                    type="number"
+                  />
+                </>}
               <TextField
                 fullWidth
                 disabled={true}
-                value={changeUserDepositObj.deposit_fee}
-                margin="dense"
-                label="입금 수수료"
-                type="number"
-              />
-              <TextField
-                fullWidth
-                disabled={true}
-                value={changeUserDepositObj.amount - changeUserDepositObj.deposit_fee}
+                value={changeUserDepositObj.amount - (changeUserDepositObj?.is_use_deposit_fee == 1 ? changeUserDepositObj.deposit_fee : 0)}
                 margin="dense"
                 label="적립 예정 금액"
                 type="number"
@@ -563,6 +566,7 @@ const UserList = () => {
                     label={<Typography>입금 수수료 적용</Typography>}
                     control={<Checkbox checked={changeUserDepositObj?.is_use_deposit_fee} />}
                     onChange={(e) => {
+                      console.log(e.target.checked)
                       setChangeUserDepositObj({
                         ...changeUserDepositObj,
                         is_use_deposit_fee: e.target.checked ? 1 : 0,
