@@ -20,7 +20,7 @@ const DepositList = () => {
   const defaultHeadColumns = [
     {
       title: '기본정보',
-      count: 8,
+      count: user?.level >= 40 ? 9 : 8,
     },
   ]
   const defaultColumns = [
@@ -62,24 +62,22 @@ const DepositList = () => {
         }
       },
     },
-    {
-      id: 'note',
-      label: '비고',
-      action: (row, is_excel) => {
-        let text = row?.note ?? "---";
-        if (row?.deposit_status == 10) {
-          text = "오입금 주의";
-        }
-        return text;
-      },
-      sx: (row) => {
-        if (row?.deposit_status == 10) {
-          return {
-            color: 'red'
+    ...(user?.level >= 40 ? [
+      {
+        id: 'note',
+        label: '비고수정',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
           }
-        }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setDialogObj({ changeNote: true, deposit_id: row?.id })
+            }}
+          >비고수정</Button>;
+        },
       },
-    },
+    ] : []),
     {
       id: 'trx_id',
       label: '거래번호',
@@ -418,6 +416,9 @@ const DepositList = () => {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
+  const [dialogObj, setDialogObj] = useState({
+    changeNote: false,
+  })
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 10,
@@ -453,9 +454,53 @@ const DepositList = () => {
     }
     setSearchObj(obj);
   }
-
+  const onChagneNote = async () => {
+    let result = await apiManager('deposits/change-note', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
+      <Dialog
+        open={dialogObj.changeNote}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`비고 수정`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            비고내용을 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            value={dialogObj.note}
+            margin="dense"
+            label="메모"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                note: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onChagneNote}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={3}>
         <Card>
           {user?.level >= 40 &&
