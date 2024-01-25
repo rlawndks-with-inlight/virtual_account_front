@@ -205,7 +205,7 @@ const DepositList = () => {
         },
       },
     ] : []),
-    ...(themeDnsData?.withdraw_corp_type == 2 ? [
+    ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
       {
         id: 'virtual_acct_balance',
         label: '가상계좌잔액',
