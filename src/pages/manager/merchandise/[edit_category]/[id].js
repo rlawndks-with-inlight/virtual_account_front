@@ -371,6 +371,28 @@ const UserEdit = () => {
                         :
                         <>
                         </>}
+                      {themeDnsData?.setting_obj?.is_use_daily_withdraw == 1 &&
+                        <>
+                          <TextField
+                            label='일일 이체한도'
+                            type="number"
+                            value={item.daily_withdraw_amount}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['daily_withdraw_amount']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>원</div>
+                              )
+                            }}
+                          />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
@@ -697,28 +719,7 @@ const UserEdit = () => {
                           )
                         }}
                       />
-                      {themeDnsData?.setting_obj?.is_use_daily_withdraw == 1 &&
-                        <>
-                          <TextField
-                            label='일일 이체한도'
-                            type="number"
-                            value={item.daily_withdraw_amount}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['daily_withdraw_amount']: e.target.value
-                                }
-                              )
-                            }}
-                            InputProps={{
-                              endAdornment: (
-                                <div>원</div>
-                              )
-                            }}
-                          />
-                        </>}
+
                       <TextField
                         label='최소 출금액'
                         type="number"
