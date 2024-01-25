@@ -30,6 +30,9 @@ import { useRouter } from 'next/router';
 import { useSettingsContext } from 'src/components/settings';
 import { useSnackbar } from '../../../components/snackbar';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import { Col, Row } from 'src/components/elements/styled-components';
+import { commarNumber } from 'src/utils/function';
+import { Icon } from '@iconify/react';
 
 // ----------------------------------------------------------------------
 
@@ -42,12 +45,12 @@ export default function NotificationsPopover() {
   const { user } = useAuthContext();
   const router = useRouter();
 
-  const { themeReadNotifications, onChangeReadNotifications, themeDnsData } = useSettingsContext();
+
+  const { themeReadNotifications, onChangeReadNotifications, themeDnsData, themeMode } = useSettingsContext();
   const [openPopover, setOpenPopover] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isPlayMp3, setIsPlayMp3] = useState(false);
   const totalUnRead = notifications.filter((item) => !(themeReadNotifications[item?.id])).length;
-
   const [splitCount, setSplitCount] = useState(4);
   useEffect(() => {
     socket.on('message', (msg) => {
@@ -65,11 +68,9 @@ export default function NotificationsPopover() {
           }, 2000)
         }
       }
-
     });
     getBellContent();
   }, [])
-
 
   const getBellContent = async (is_new) => {
     let result = await apiManager(`bell-contents`, 'list');
@@ -95,10 +96,17 @@ export default function NotificationsPopover() {
       onChangeReadNotifications({ ...themeReadNotifications, [notifications[idx]?.id]: 1, });
     }
   };
+  const deleteItem = async (idx) => {
+    let notification_list = [...notifications];
+    notification_list.splice(idx, 1);
+    setNotifications(notification_list);
+    let data = await apiManager('bell-contents', 'delete', { id: notifications[idx]?.id });
 
+  }
 
   return (
     <>
+
       {isPlayMp3 &&
         <>
           <BellMp3 src={'/bell'} />
@@ -138,7 +146,7 @@ export default function NotificationsPopover() {
             disablePadding
           >
             {notifications.slice(0, splitCount).map((notification, idx) => (
-              <NotificationItem key={notification.id} notification={notification} router={router} handleClosePopover={handleClosePopover} idx={idx} />
+              <NotificationItem key={notification.id} notification={notification} router={router} handleClosePopover={handleClosePopover} idx={idx} deleteItem={deleteItem} />
             ))}
           </List>
         </div>
@@ -183,9 +191,13 @@ NotificationItem.propTypes = {
   }),
 };
 
-function NotificationItem({ notification, router, handleClosePopover, idx }) {
+function NotificationItem({ notification, router, handleClosePopover, idx, deleteItem }) {
   const { avatar, title } = renderContent(notification);
 
+  const onClickEvent = () => {
+    router.push(notification?.link)
+    handleClosePopover(idx);
+  }
   return (
     <ListItemButton
       sx={{
@@ -197,19 +209,22 @@ function NotificationItem({ notification, router, handleClosePopover, idx }) {
         }),
 
       }}
-      onClick={() => {
-        router.push(notification?.link)
-        handleClosePopover(idx);
-      }}
     >
       <ListItemText
         disableTypography
         primary={title}
         secondary={
-          <Stack direction="row" sx={{ mt: 0.5, typography: 'caption', color: 'text.disabled' }}>
+          <Stack direction="row" style={{ position: 'relative' }} sx={{ mt: 0.5, typography: 'caption', color: 'text.disabled' }} onClick={onClickEvent}>
             <Iconify icon="eva:clock-fill" width={16} sx={{ mr: 0.5 }} />
             <Typography variant="caption" sx={{ mr: 0.5 }}>{notification.created_at}</Typography>
             <Typography variant="caption">{notification.is_read ? '읽음' : ''}</Typography>
+            <IconButton
+              style={{ marginLeft: 'auto', position: 'absolute', right: '0', bottom: '0.5rem' }}
+              onClick={() => {
+                deleteItem(idx);
+              }}>
+              <Icon icon='material-symbols:delete-outline' />
+            </IconButton>
           </Stack>
         }
       />

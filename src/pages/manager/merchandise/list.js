@@ -29,10 +29,24 @@ const UserList = () => {
       }
     },
     {
-      id: 'user_name',
-      label: '유저아이디',
+      id: 'nickname',
+      label: '닉네임',
       action: (row, is_excel) => {
-        return row['user_name'] ?? "---"
+        if (is_excel) {
+          return row['nickname']
+        }
+        return <div style={{ cursor: 'pointer' }} onClick={() => {
+          router.push(`edit/${row?.id}`)
+        }}>
+          {row['nickname'] ?? "---"}
+        </div>
+      }
+    },
+    {
+      id: 'name',
+      label: '이름',
+      action: (row, is_excel) => {
+        return row['name'] ?? "---"
       }
     },
     ...(user?.level >= 40 ? [
@@ -52,6 +66,7 @@ const UserList = () => {
                   user_id: row?.id,
                   pay_type: 25,
                   deposit_fee: row?.deposit_fee,
+                  is_use_deposit_fee: 1,
                 })
               }}
             >정산금 지급</Button>
@@ -74,20 +89,6 @@ const UserList = () => {
       label: 'MID',
       action: (row, is_excel) => {
         return row['mid'] ?? "---"
-      }
-    },
-    {
-      id: 'nickname',
-      label: '닉네임',
-      action: (row, is_excel) => {
-        return row['nickname'] ?? "---"
-      }
-    },
-    {
-      id: 'name',
-      label: '이름',
-      action: (row, is_excel) => {
-        return row['name'] ?? "---"
       }
     },
     ...(themeDnsData?.withdraw_type == 0 ? [

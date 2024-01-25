@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // next
 import { useRouter } from 'next/router';
 // @mui
@@ -13,8 +13,12 @@ import { CustomAvatar } from '../../../components/custom-avatar';
 import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
-import { getUserLevelByNumber } from 'src/utils/function';
+import { commarNumber, getUserLevelByNumber } from 'src/utils/function';
 import { deleteCookie } from 'src/utils/react-cookie';
+import { socket } from 'src/data/data';
+import { useSettingsContext } from 'src/components/settings';
+import { apiManager } from 'src/utils/api-manager';
+import { Col, Row } from 'src/components/elements/styled-components';
 
 // ----------------------------------------------------------------------
 
@@ -40,16 +44,33 @@ export default function AccountPopover() {
   const router = useRouter();
   const { replace, push } = useRouter();
 
+  const { themeDnsData, themeMode } = useSettingsContext();
   const { user, logout } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [openPopover, setOpenPopover] = useState(null);
+  const [userDeposit, setUserDeposit] = useState({});
+  useEffect(() => {
+    getUserDeposit();
+    socket.on('message', (msg) => {
+      let { method, data, brand_id, title } = msg;
+      if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
+        getUserDeposit();
+      }
 
+    });
+  }, [])
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
   };
-
+  const getUserDeposit = async () => {
+    if (user?.level < 40) {
+      let data = await apiManager('auth/deposit', 'get',);
+      console.log(data)
+      setUserDeposit(data);
+    }
+  }
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
@@ -102,6 +123,23 @@ export default function AccountPopover() {
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {getUserLevelByNumber(user?.level)}
           </Typography>
+          {user?.level < 40 &&
+            <>
+              <Col>
+                <Row style={{ color: (themeMode == 'dark' ? '#fff' : '#333'), columnGap: '0.2rem', alignItems: 'center' }}>
+                  <Typography variant='body2'>보유정산금:</Typography>
+                  <Typography variant='body2'>{commarNumber(userDeposit?.settle_amount)}원</Typography>
+                </Row>
+                <Row style={{ color: (themeMode == 'dark' ? '#fff' : '#333'), columnGap: '0.2rem', alignItems: 'center' }}>
+                  <Typography variant='body2'>지급보류금액:</Typography>
+                  <Typography variant='body2'>{commarNumber(userDeposit?.min_withdraw_hold_price)}원</Typography>
+                </Row>
+                <Row style={{ color: (themeMode == 'dark' ? '#fff' : '#333'), columnGap: '0.2rem', alignItems: 'center' }}>
+                  <Typography variant='body2'>출금가능금액:</Typography>
+                  <Typography variant='body2'>{commarNumber(userDeposit?.settle_amount - userDeposit?.min_withdraw_hold_price)}원</Typography>
+                </Row>
+              </Col>
+            </>}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
