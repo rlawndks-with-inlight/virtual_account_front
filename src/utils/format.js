@@ -2,8 +2,8 @@ import { getLocalStorage } from "./local-storage"
 
 export const userLevelList = [
     { value: 50, label: '개발사' },
+    { value: 45, label: '상위사' },
     { value: 40, label: '본사' },
-
     { value: 30, label: '' },
     { value: 25, label: '' },
     { value: 20, label: '' },
