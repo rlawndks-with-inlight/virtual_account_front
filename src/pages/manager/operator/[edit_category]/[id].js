@@ -11,6 +11,7 @@ import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
+import { useAuthContext } from "src/auth/useAuthContext";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -19,7 +20,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 const UserEdit = () => {
   const { setModal } = useModal()
   const { themeMode, themeDnsData } = useSettingsContext();
-
+  const { user } = useAuthContext();
   const router = useRouter();
 
   const [currentTab, setCurrentTab] = useState(0);
@@ -223,7 +224,21 @@ const UserEdit = () => {
                               )
                             }} />
                         </>}
-
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='하위브랜드도메인'
+                            value={item.children_brand_dns}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['children_brand_dns']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
                       <Stack spacing={1}>
                         <FormControl disabled={router.query?.id || router.query?.edit_category != 'add'}>
                           <InputLabel>영업자레벨</InputLabel>

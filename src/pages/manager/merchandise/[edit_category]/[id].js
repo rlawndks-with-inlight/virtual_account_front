@@ -257,21 +257,7 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      {user?.level >= 50 &&
-                        <>
-                          <TextField
-                            label='하위브랜드도메인'
-                            value={item.children_brand_dns}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['children_brand_dns']: e.target.value
-                                }
-                              )
-                            }} />
-                        </>}
+
                     </Stack>
                   </Card>
                 </Grid>
