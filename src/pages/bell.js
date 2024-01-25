@@ -2,7 +2,7 @@
 const Bell = () => {
     return (
         <>
-            <audio autoPlay={true} src={'/assets/sound/bell.wav'} />
+            <audio autoPlay={true} src={'/assets/sound/bell.mp3'} />
         </>
     )
 }

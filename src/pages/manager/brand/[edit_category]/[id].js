@@ -1150,6 +1150,17 @@ const BrandEdit = () => {
                           )
                         }}
                       />
+                      <FormControlLabel control={<Switch checked={item.setting_obj.is_use_daily_withdraw == 1} />} label={`일일 출금금액 설정`}
+                        onChange={(e) => {
+                          setItem({
+                            ...item,
+                            ['setting_obj']: {
+                              ...item.setting_obj,
+                              [`is_use_daily_withdraw`]: e.target.checked ? 1 : 0
+                            },
+                          })
+                        }}
+                      />
                       {user?.level >= 50 &&
                         <>
                           <TextField
