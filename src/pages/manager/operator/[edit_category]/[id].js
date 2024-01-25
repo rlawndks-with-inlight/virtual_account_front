@@ -395,7 +395,7 @@ const UserEdit = () => {
                     </Grid>
                   </>}
               </>}
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ p: 3 }}>
                 <Stack spacing={1} style={{ display: 'flex' }}>
                   <Button variant="contained" style={{
