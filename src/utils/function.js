@@ -118,6 +118,8 @@ export const getUserLevelByNumber = (num) => {
     return '가맹점'
   else if (num == 40)
     return '본사'
+  else if (num == 45)
+    return '상위사'
   else if (num == 50)
     return '개발사'
   else
