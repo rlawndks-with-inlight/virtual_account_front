@@ -54,7 +54,8 @@ export default function NotificationsPopover() {
       let { method, data, brand_id, title } = msg;
       getBellContent(true);
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
-        if (method == 'deposit') {
+        let method_list = [`deposit`, 'settle_request']
+        if (method_list.includes(method)) {
           setIsPlayMp3(true);
           enqueueSnackbar(title, {
             variant: 'success',
