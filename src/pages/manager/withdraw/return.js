@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Card, CircularProgress, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Col, Row, themeObj } from "src/components/elements/styled-components";
@@ -27,6 +27,7 @@ const WithdrawReturn = () => {
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
+    const [pageLoading, setPageLoading] = useState(false);
     const [withdraws, setWithdraws] = useState([]);
     const [virtualAccounts, setVirtualAccounts] = useState([]);
     const [item, setItem] = useState({
@@ -51,6 +52,7 @@ const WithdrawReturn = () => {
         setLoading(false);
     }
     const onSave = async () => {
+        setPageLoading(true);
         for (var i = 0; i < withdraws.length; i++) {
             if (withdraws[i]?.is_confirm == 1) {
                 continue;
@@ -98,6 +100,7 @@ const WithdrawReturn = () => {
             }
             setWithdraws(withdraw_list);
         }
+        setPageLoading(false);
     }
     const onCheckAcct = async (data, idx) => {
         let {
@@ -120,6 +123,19 @@ const WithdrawReturn = () => {
     }
     return (
         <>
+            <Dialog open={pageLoading}
+                onClose={() => {
+                    setPageLoading(false);
+                }}
+                PaperProps={{
+                    style: {
+                        background: 'transparent',
+                        overflow: 'hidden'
+                    }
+                }}
+            >
+                <CircularProgress />
+            </Dialog>
             {!loading &&
                 <>
                     <Grid container spacing={3}>
