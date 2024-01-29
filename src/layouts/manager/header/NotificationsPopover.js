@@ -33,6 +33,7 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 import { Col, Row } from 'src/components/elements/styled-components';
 import { commarNumber } from 'src/utils/function';
 import { Icon } from '@iconify/react';
+import { useModal } from 'src/components/dialog/ModalProvider';
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +41,7 @@ const BellMp3 = styled.iframe`
 display: none;
 `
 export default function NotificationsPopover() {
-
+  const { setModal } = useModal()
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const router = useRouter();
@@ -109,9 +110,14 @@ export default function NotificationsPopover() {
     notification_list.splice(idx, 1);
     setNotifications(notification_list);
     let data = await apiManager('bell-contents', 'delete', { id: notifications[idx]?.id });
-
   }
-
+  const deleteAllItem = async () => {
+    let data = await apiManager('bell-contents/all', 'delete', {
+      id: ''
+    });
+    onChangeReadNotifications({});
+    getBellContent();
+  }
   return (
     <>
 
@@ -137,6 +143,17 @@ export default function NotificationsPopover() {
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {notifications.length} 개 메세지가 있습니다.
             </Typography>
+            <Row>
+              <Button variant='outlined' startIcon={<Icon icon='material-symbols:delete-outline' />} style={{ margin: "0 0 auto auto" }}
+                onClick={() => {
+                  setModal({
+                    func: () => { deleteAllItem() },
+                    icon: 'material-symbols:delete-outline',
+                    title: '정말 삭제하시겠습니까?'
+                  })
+                }}
+              >전체지우기</Button>
+            </Row>
           </Box>
 
           {/* {notifications.length - Object.keys(themeReadNotifications).length > 0 && (
