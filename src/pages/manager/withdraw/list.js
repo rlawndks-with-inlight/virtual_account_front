@@ -7,7 +7,7 @@ import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiServer } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
@@ -89,11 +89,7 @@ const WithdrawList = () => {
       id: 'amount',
       label: '이체금',
       action: (row, is_excel) => {
-        if (row?.withdraw_status != 0) {
-          return 0;
-        } else {
-          return commarNumber(row['amount'] * (-1) - row['withdraw_fee'])
-        }
+        return commarNumber(row['amount'] * (-1) - row['withdraw_fee'])
       }
     },
     {
@@ -151,6 +147,27 @@ const WithdrawList = () => {
           }
         }
       },
+      ...(themeDnsData?.withdraw_corp_type == 2 ? [
+        {
+          id: 'minus_amount',
+          label: '출금체크',
+          action: (row, is_excel) => {
+            if (is_excel) {
+              return "---";
+            }
+            return <Col style={{ rowGap: '0.5rem' }}>
+              <Button variant="outlined" size="small" sx={{ width: '100px' }}
+                onClick={() => {
+                  onProcessWithdraw({
+                    mid: row?.mid,
+                    tid: row?.trx_id,
+                  })
+                }}
+              >출금여부확인</Button>
+            </Col>
+          }
+        },
+      ] : []),
       {
         id: 'withdraw_fail',
         label: '출금 실패처리',
@@ -262,6 +279,17 @@ const WithdrawList = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj)
+    }
+  }
+  const onProcessWithdraw = async (data = {}) => {
+    let { mid, tid } = data;
+    let result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/withdraw/check`, 'create', {
+      api_key: themeDnsData?.api_key,
+      mid,
+      tid,
+    });
+    if (result) {
+      onChangePage(searchObj);
     }
   }
   return (
