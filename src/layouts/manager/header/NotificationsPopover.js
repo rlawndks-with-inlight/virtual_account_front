@@ -71,7 +71,15 @@ export default function NotificationsPopover() {
     });
     getBellContent();
   }, [])
-
+  useEffect(() => {
+    if (openPopover) {
+      let read_notifications = { ...themeReadNotifications };
+      for (var i = 0; i < notifications.length; i++) {
+        read_notifications[notifications[i]?.id] = 1;
+      }
+      onChangeReadNotifications(read_notifications);
+    }
+  }, [openPopover])
   const getBellContent = async (is_new) => {
     let result = await apiManager(`bell-contents`, 'list');
     let notification_list = [...notifications];
