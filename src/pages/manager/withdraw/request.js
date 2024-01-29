@@ -27,10 +27,8 @@ const WithdrawRequest = () => {
 
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({
-        withdraw_amount: 0,
         note: '',
     })
-
     useEffect(() => {
         settingPage();
     }, [])

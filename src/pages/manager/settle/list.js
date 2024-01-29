@@ -206,8 +206,8 @@ const SettleList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             head_columns={[]}
-            table={'withdraws'}
-            excel_name={'출금'}
+            table={'settles'}
+            excel_name={'보유정산금'}
           />
         </Card>
       </Stack>

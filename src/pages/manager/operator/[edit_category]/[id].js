@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
+import { onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -205,7 +206,7 @@ const UserEdit = () => {
                           setItem(
                             {
                               ...item,
-                              ['phone_num']: e.target.value
+                              ['phone_num']: onlyNumberText(e.target.value)
                             }
                           )
                         }} />
@@ -390,7 +391,7 @@ const UserEdit = () => {
                               setItem(
                                 {
                                   ...item,
-                                  ['withdraw_acct_num']: e.target.value
+                                  ['withdraw_acct_num']: onlyNumberText(e.target.value)
                                 }
                               )
                             }} />

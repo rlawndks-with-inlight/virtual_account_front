@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Col, Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
+import { base64toFile, commarNumber, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -31,7 +31,6 @@ const WithdrawReturn = () => {
     const [withdraws, setWithdraws] = useState([]);
     const [virtualAccounts, setVirtualAccounts] = useState([]);
     const [item, setItem] = useState({
-        withdraw_amount: 0,
         note: '',
     })
 
@@ -327,7 +326,7 @@ const WithdrawReturn = () => {
                                                                     error={vir_acct?.is_error == 1}
                                                                     onChange={(e) => {
                                                                         let withdraw_list = [...withdraws];
-                                                                        withdraw_list[idx].withdraw_acct_num = e.target.value;
+                                                                        withdraw_list[idx].withdraw_acct_num = onlyNumberText(e.target.value);
                                                                         setWithdraws(withdraw_list);
                                                                     }} />
                                                                 {/* <TextField

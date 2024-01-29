@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
-import { getMaxPage, getUserDepositFee, getUserFee, getUserWithDrawFee } from "src/utils/function";
+import { getMaxPage, getUserDepositFee, getUserFee, getUserWithDrawFee, onlyNumberText } from "src/utils/function";
 import { bankCodeList } from "src/utils/format";
 import { Icon } from "@iconify/react";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -253,7 +253,7 @@ const UserEdit = () => {
                           setItem(
                             {
                               ...item,
-                              ['phone_num']: e.target.value
+                              ['phone_num']: onlyNumberText(e.target.value)
                             }
                           )
                         }} />
@@ -882,7 +882,7 @@ const UserEdit = () => {
                               setItem(
                                 {
                                   ...item,
-                                  ['withdraw_acct_num']: e.target.value
+                                  ['withdraw_acct_num']: onlyNumberText(e.target.value)
                                 }
                               )
                             }} />

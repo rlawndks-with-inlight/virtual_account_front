@@ -13,6 +13,7 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
+import { onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -128,7 +129,7 @@ const DepositEdit = () => {
                       setItem(
                         {
                           ...item,
-                          ['deposit_acct_num']: e.target.value
+                          ['deposit_acct_num']: onlyNumberText(e.target.value)
                         }
                       )
                     }} />

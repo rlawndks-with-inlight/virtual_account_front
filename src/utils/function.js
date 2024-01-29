@@ -443,3 +443,16 @@ export const getMaxPage = (total = 0, page_size = 1) => {
     return parseInt(total / parseInt(page_size)) + 1;
   }
 }
+export const onlyNumberText = (text_ = "") => {
+  let text = text_;
+  if (!text) {
+    return "";
+  }
+  let str = "";
+  for (var i = 0; i < text.length; i++) {
+    if (!isNaN(parseInt(text[i]))) {
+      str += text[i];
+    }
+  }
+  return str;
+}

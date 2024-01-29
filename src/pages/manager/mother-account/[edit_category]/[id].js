@@ -6,7 +6,7 @@ import { themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
+import { base64toFile, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import styled from "styled-components";
 import { react_quill_data } from "src/data/manager-data";
 import { axiosIns } from "src/utils/axios";
@@ -163,7 +163,7 @@ const MotherAccountEdit = () => {
                       setItem(
                         {
                           ...item,
-                          ['phone_num']: e.target.value
+                          ['phone_num']: onlyNumberText(e.target.value)
                         }
                       )
                     }} />

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
-import { base64toFile, getAllIdsWithParents } from "src/utils/function";
+import { base64toFile, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import styled from "styled-components";
 import { defaultManagerObj, react_quill_data } from "src/data/manager-data";
 import { axiosIns } from "src/utils/axios";
@@ -577,7 +577,7 @@ const BrandEdit = () => {
                           setItem(
                             {
                               ...item,
-                              ['phone_num']: e.target.value
+                              ['phone_num']: onlyNumberText(e.target.value)
                             }
                           )
                         }} />
@@ -997,7 +997,7 @@ const BrandEdit = () => {
                               setItem(
                                 {
                                   ...item,
-                                  ['withdraw_virtual_acct_num']: e.target.value
+                                  ['withdraw_virtual_acct_num']: onlyNumberText(e.target.value)
                                 }
                               )
                             }} />
