@@ -58,9 +58,6 @@ const WithdrawReturn = () => {
                 continue;
             }
             let result = undefined;
-            if (!item?.virtual_account_id && themeDnsData?.withdraw_type == 0) {
-                return toast.error('유저를 선택해 주세요.');
-            }
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
                 if (!withdraws[i]?.withdraw_bank_code && !withdraws[i]?.deposit_bank_code) {
                     continue;
