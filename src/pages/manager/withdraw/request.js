@@ -55,6 +55,7 @@ const WithdrawRequest = () => {
                 withdraw_acct_name: item?.withdraw_acct_name,
                 pay_type: 'withdraw',
                 otp_num: item?.otp_num,
+                guid: item?.guid,
             });
         } else {
             result = await apiManager('withdraws', 'create', {

@@ -153,9 +153,12 @@ const WithdrawApiV1 = () => {
                                                 응답 바디는 JSON 객체로 구성됩니다.
                                             </Title3>
                                             {returnTable(table_obj[itm.value].res_head, table_obj[itm.value].res_body,)}
-                                            <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
-                                                data 구성요소 입니다.
-                                            </Title3>
+                                            {table_obj[itm.value]?.res_head && table_obj[itm.value]?.data_res_body &&
+                                                <>
+                                                    <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
+                                                        data 구성요소 입니다.
+                                                    </Title3>
+                                                </>}
                                             {returnTable(table_obj[itm.value].res_head, table_obj[itm.value].data_res_body,)}
                                         </>}
                                 </>

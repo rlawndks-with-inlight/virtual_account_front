@@ -62,7 +62,7 @@ const WithdrawReturn = () => {
                 return toast.error('유저를 선택해 주세요.');
             }
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
-                if (!withdraws[i]?.withdraw_bank_code) {
+                if (!withdraws[i]?.withdraw_bank_code && !withdraws[i]?.deposit_bank_code) {
                     continue;
                 }
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
@@ -70,9 +70,10 @@ const WithdrawReturn = () => {
                     mid: user?.mid,
                     withdraw_amount: withdraws[i]?.withdraw_amount,
                     note: withdraws[i]?.note,
-                    withdraw_bank_code: withdraws[i]?.withdraw_bank_code,
-                    withdraw_acct_num: withdraws[i]?.withdraw_acct_num,
-                    withdraw_acct_name: withdraws[i]?.withdraw_acct_name,
+                    withdraw_bank_code: withdraws[i]?.withdraw_bank_code || withdraws[i]?.deposit_bank_code,
+                    withdraw_acct_num: withdraws[i]?.withdraw_acct_num || withdraws[i]?.deposit_acct_num,
+                    withdraw_acct_name: withdraws[i]?.withdraw_acct_name || withdraws[i]?.deposit_acct_name,
+                    guid: withdraws[i]?.guid,
                     pay_type: 'return',
                     otp_num: item?.otp_num,
                 });

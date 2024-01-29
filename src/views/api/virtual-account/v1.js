@@ -42,6 +42,10 @@ const VirtualAccountApiV1 = () => {
         },
         {
             value: 3,
+            label: '출금요청'
+        },
+        {
+            value: 4,
             label: '입금데이터노티'
         },
     ]
@@ -148,6 +152,34 @@ const VirtualAccountApiV1 = () => {
             ],
         },
         3: {
+            uri: '/api/withdraw/v2',
+            explain: `출금 요청 api 입니다.\n입금계좌인증 완료 후 이용 가능합니다.`,
+            req_head: [
+                '키',
+                '설명',
+                '필수',
+                '타입',
+            ],
+            req_body: [
+                ['api_key', themeDnsData?.api_key, 'O', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
+                ['guid', '출금할 가상계좌 guid', 'O', 'String'],
+                ['withdraw_amount', '출금액', 'O', 'Integer'],
+                ['pay_type', '출금타입 (가맹점출금-5, 유저출금-20)', 'O', 'Integer'],
+                ['note', '메모', 'X', 'String'],
+            ],
+            res_head: [
+                '키',
+                '설명',
+                '타입',
+            ],
+            res_body: [
+                ['result', '결과코드 (100 이외 에러)', 'Integer'],
+                ['message', '결과 메시지', 'String'],
+                ['data', '리턴값', 'Object'],
+            ],
+        },
+        4: {
             uri: '',
             explain: `입금데이터노티 입니다.`,
             res_head: [
@@ -218,9 +250,9 @@ const VirtualAccountApiV1 = () => {
                                     {currentTab == itm.value &&
                                         <>
                                             <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
-                                                {table_obj[itm.value].explain}
+                                                {table_obj[itm.value]?.explain}
                                             </Title3>
-                                            {table_obj[itm.value].uri &&
+                                            {table_obj[itm.value]?.uri &&
                                                 <>
                                                     <Title3>
                                                         [ Request ]
@@ -241,12 +273,12 @@ const VirtualAccountApiV1 = () => {
                                                         </Row>
                                                     </Col>
                                                 </>}
-                                            {table_obj[itm.value].req_head?.length > 0 && table_obj[itm.value].req_body?.length > 0 &&
+                                            {table_obj[itm.value]?.req_head?.length > 0 && table_obj[itm.value]?.req_body?.length > 0 &&
                                                 <>
                                                     <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
                                                         요청 바디는 JSON 객체로 구성됩니다.
                                                     </Title3>
-                                                    {returnTable(table_obj[itm.value].req_head, table_obj[itm.value].req_body,)}
+                                                    {returnTable(table_obj[itm.value]?.req_head, table_obj[itm.value]?.req_body,)}
                                                 </>}
                                             <Title3>
                                                 [ Response ]
@@ -254,11 +286,14 @@ const VirtualAccountApiV1 = () => {
                                             <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
                                                 응답 바디는 JSON 객체로 구성됩니다.
                                             </Title3>
-                                            {returnTable(table_obj[itm.value].res_head, table_obj[itm.value].res_body,)}
-                                            <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
-                                                data 구성요소 입니다.
-                                            </Title3>
-                                            {returnTable(table_obj[itm.value].res_head, table_obj[itm.value].data_res_body,)}
+                                            {returnTable(table_obj[itm.value]?.res_head, table_obj[itm.value]?.res_body,)}
+                                            {table_obj[itm.value]?.res_head && table_obj[itm.value]?.data_res_body &&
+                                                <>
+                                                    <Title3 style={{ fontWeight: 'normal', color: '#777' }}>
+                                                        data 구성요소 입니다.
+                                                    </Title3>
+                                                </>}
+                                            {returnTable(table_obj[itm.value]?.res_head, table_obj[itm.value]?.data_res_body,)}
                                         </>}
                                 </>
                             ))}

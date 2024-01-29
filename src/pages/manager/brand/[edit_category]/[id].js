@@ -835,7 +835,6 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`is_use_withdraw`]: e.target.checked ? 1 : 0,
                               },
-
                             })
                           }}
                         />
@@ -850,7 +849,12 @@ const BrandEdit = () => {
                               ...item,
                               ['withdraw_corp_type']: e.target.value
                             };
-                            if (e.target.value == 2) {
+                            if (e.target.value == 1) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 2,
+                              }
+                            } else if (e.target.value == 2) {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 1,
@@ -1339,12 +1343,13 @@ const BrandEdit = () => {
                         >
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
+                          <MenuItem value={2}>{'v2'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>
                         <InputLabel>입금버전</InputLabel>
                         <Select
-                          label='출금버전'
+                          label='입금버전'
                           value={item.setting_obj?.api_deposit_version}
                           onChange={e => {
                             setItem({
@@ -1358,6 +1363,7 @@ const BrandEdit = () => {
                         >
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
+                          <MenuItem value={2}>{'v2'}</MenuItem>
                         </Select>
                       </FormControl>
                     </Stack>
