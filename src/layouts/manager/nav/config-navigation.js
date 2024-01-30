@@ -22,7 +22,7 @@ const ICONS = {
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
 };
-const navConfig = () => {
+const navConfig = (is_show_all) => {
 
   const { themeDnsData } = useSettingsContext();
   const { user } = useAuthContext();
@@ -54,23 +54,37 @@ const navConfig = () => {
     setOperatorList(operator_list);
 
   }
+  const isShowTab = (id) => {
+    if (is_show_all) {
+      return true;
+    }
+    if (themeDnsData?.setting_obj[`is_not_show_tab_${id}`] == 1) {
+      return false;
+    }
+    return true;
+  }
   return [
     // GENERAL
     // ----------------------------------------------------------------------
-    {
-      items: [
-        { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
-      ],
-    },
-    ...(themeDnsData?.setting_obj?.is_use_deposit == 1 ? [
+    ...(isShowTab('dashboards') ? [
       {
+        id: 'dashboards',
+        items: [
+          { title: '대시보드', path: PATH_MANAGER.dashboards, icon: ICONS.dashboard },
+        ],
+      },
+    ] : []),
+    ...((themeDnsData?.setting_obj?.is_use_deposit == 1 && isShowTab('deposit')) ? [
+      {
+        id: 'deposit',
         items: [
           { title: '결제내역', path: PATH_MANAGER.deposit.list, icon: <Icon icon='iconamoon:history-fill' style={{ fontSize: '1.5rem' }} /> },
         ],
       },
     ] : []),
-    ...(isManager() && themeDnsData?.setting_obj?.is_use_deposit == 1 ? [
+    ...((isManager() && themeDnsData?.setting_obj?.is_use_deposit == 1 && isShowTab('motherAccount')) ? [
       {
+        id: 'motherAccount',
         items: [
           {
             title: '모계좌관리',
@@ -84,35 +98,42 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    {
-      items: [
-        {
-          title: '출금관리',
-          path: PATH_MANAGER.withdraw.root,
-          icon: <Icon icon='bx:money-withdraw' style={{ fontSize: '1.5rem' }} />,
-          children: [
-            { title: '출금내역', path: PATH_MANAGER.withdraw.list },
-            ...((!isManager()) ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
-            ...((!isManager() && !isOperator()) ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
-          ],
-        },
-      ],
-    },
-    {
-      items: [
-        {
-          title: '보유정산금관리',
-          path: PATH_MANAGER.settle.root,
-          icon: <Icon icon='mdi:graph-line' style={{ fontSize: '1.5rem' }} />,
-          children: [
-            { title: '보유정산금내역', path: PATH_MANAGER.settle.list },
-            ...((!isManager()) ? [{ title: '보유정산금요청', path: PATH_MANAGER.settle.request },] : []),
-            { title: '보유정산금요청내역', path: PATH_MANAGER.settle.requestList },
-          ],
-        },
-      ],
-    },
-    ...((operatorList && operatorList?.length > 0 && isManager()) ? [{
+    ...(isShowTab('withdraw') ? [
+      {
+        id: 'withdraw',
+        items: [
+          {
+            title: '출금관리',
+            path: PATH_MANAGER.withdraw.root,
+            icon: <Icon icon='bx:money-withdraw' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '출금내역', path: PATH_MANAGER.withdraw.list },
+              ...((!isManager()) ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
+              ...((!isManager() && !isOperator()) ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
+            ],
+          },
+        ],
+      },
+    ] : []),
+    ...(isShowTab('settle') ? [
+      {
+        id: 'settle',
+        items: [
+          {
+            title: '보유정산금관리',
+            path: PATH_MANAGER.settle.root,
+            icon: <Icon icon='mdi:graph-line' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '보유정산금내역', path: PATH_MANAGER.settle.list },
+              ...((!isManager()) ? [{ title: '보유정산금요청', path: PATH_MANAGER.settle.request },] : []),
+              { title: '보유정산금요청내역', path: PATH_MANAGER.settle.requestList },
+            ],
+          },
+        ],
+      },
+    ] : []),
+    ...((operatorList && operatorList?.length > 0 && isManager() && isShowTab('operator')) ? [{
+      id: 'operator',
       items: [
         {
           title: '영업자관리',
@@ -125,8 +146,9 @@ const navConfig = () => {
         },
       ],
     }] : []),
-    ...((isManager() || isOperator()) ? [
+    ...(((isManager() || isOperator()) && isShowTab('merchandise')) ? [
       {
+        id: 'merchandise',
         items: [
           {
             title: '가맹점관리',
@@ -142,8 +164,9 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...((!isOperator() && themeDnsData?.withdraw_type == 0) ? [
+    ...((!isOperator() && themeDnsData?.withdraw_type == 0 && isShowTab('virtualAccount')) ? [
       {
+        id: 'virtualAccount',
         items: [
           {
             title: '가상계좌관리',
@@ -157,8 +180,9 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...((isManager() && themeDnsData?.is_use_corp_account == 1) ? [
+    ...((isManager() && themeDnsData?.is_use_corp_account == 1 && isShowTab('corpAccount')) ? [
       {
+        id: 'corpAccount',
         items: [
           {
             title: '법인통장관리',
@@ -172,8 +196,9 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...(isManager() ? [
+    ...((isManager() && isShowTab('brand')) ? [
       {
+        id: 'brand',
         items: [
           {
             title: '설정관리',
@@ -189,8 +214,9 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...(isDeveloper() ? [
+    ...((isDeveloper() && isShowTab('log')) ? [
       {
+        id: 'log',
         items: [
           {
             title: '로그관리',
@@ -203,8 +229,9 @@ const navConfig = () => {
         ],
       },
     ] : []),
-    ...((!isOperator()) ? [
+    ...((!isOperator() && isShowTab('api')) ? [
       {
+        id: 'api',
         items: [
           { title: 'API', path: PATH_MANAGER.api, icon: <Icon icon='ant-design:api-outlined' style={{ fontSize: '1.5rem' }} /> },
         ],

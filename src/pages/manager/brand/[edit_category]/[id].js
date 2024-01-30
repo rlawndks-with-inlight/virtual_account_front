@@ -19,6 +19,7 @@ import { apiManager } from "src/utils/api-manager";
 import { apiCorpList, bankCodeList, operatorLevelList, withdrawFeeTypeList, withdrawTypeList } from "src/utils/format";
 import _ from "lodash";
 import { Icon } from "@iconify/react";
+import navConfig from "src/layouts/manager/nav/config-navigation";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -57,6 +58,7 @@ const BrandEdit = () => {
   const { setModal } = useModal()
   const { themeMode, themeDnsData } = useSettingsContext();
   const { user } = useAuthContext();
+  const navList = navConfig(true);
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -106,6 +108,10 @@ const BrandEdit = () => {
     ...(user?.level >= 50 ? [{
       value: 10,
       label: '옵션설정'
+    },] : []),
+    ...(user?.level >= 50 ? [{
+      value: 11,
+      label: '탭노출설정'
     },] : []),
   ]
 
@@ -1514,6 +1520,32 @@ const BrandEdit = () => {
                           }}
                         />
                       </Stack>
+                    </Stack>
+                  </Card>
+                </Grid>
+              </>}
+            {currentTab == 11 &&
+              <>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      {navList && navList.map((tab) => (
+                        <>
+                          <Stack>
+                            <FormControlLabel control={<Switch checked={item.setting_obj[`is_not_show_tab_${tab.id}`] != 1} />} label={tab.items[0]?.title}
+                              onChange={(e) => {
+                                setItem({
+                                  ...item,
+                                  ['setting_obj']: {
+                                    ...item.setting_obj,
+                                    [`is_not_show_tab_${tab.id}`]: e.target.checked ? 0 : 1
+                                  },
+                                })
+                              }}
+                            />
+                          </Stack>
+                        </>
+                      ))}
                     </Stack>
                   </Card>
                 </Grid>
