@@ -361,13 +361,12 @@ const WithdrawReturn = () => {
                                                         <TextField
                                                             style={{ width: '50%' }}
                                                             label='반환 요청금'
-                                                            type="number"
                                                             value={vir_acct?.withdraw_amount}
                                                             placeholder=""
                                                             error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {
                                                                 let withdraw_list = [...withdraws];
-                                                                withdraw_list[idx].withdraw_amount = e.target.value;
+                                                                withdraw_list[idx].withdraw_amount = onlyNumberText(e.target.value);
                                                                 setWithdraws(withdraw_list);
                                                             }} />
                                                         <TextField
