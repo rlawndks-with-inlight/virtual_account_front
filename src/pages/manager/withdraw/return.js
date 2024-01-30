@@ -52,52 +52,59 @@ const WithdrawReturn = () => {
     }
     const onSave = async () => {
         setPageLoading(true);
-        for (var i = 0; i < withdraws.length; i++) {
-            if (withdraws[i]?.is_confirm == 1) {
+        let withdraw_list = [...withdraws];
+        for (var i = 0; i < withdraw_list.length; i++) {
+            if (withdraw_list[i]?.is_confirm == 1) {
                 continue;
             }
             let result = undefined;
             if (themeDnsData?.setting_obj?.api_withdraw_version > 0) {
-                if (!withdraws[i]?.withdraw_bank_code && !withdraws[i]?.deposit_bank_code) {
+                if (!withdraw_list[i]?.withdraw_bank_code && !withdraw_list[i]?.deposit_bank_code) {
                     continue;
                 }
                 result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
                     api_key: themeDnsData?.api_key,
                     mid: user?.mid,
-                    withdraw_amount: withdraws[i]?.withdraw_amount,
-                    note: withdraws[i]?.note,
-                    withdraw_bank_code: withdraws[i]?.withdraw_bank_code || withdraws[i]?.deposit_bank_code,
-                    withdraw_acct_num: withdraws[i]?.withdraw_acct_num || withdraws[i]?.deposit_acct_num,
-                    withdraw_acct_name: withdraws[i]?.withdraw_acct_name || withdraws[i]?.deposit_acct_name,
-                    guid: withdraws[i]?.guid,
+                    withdraw_amount: withdraw_list[i]?.withdraw_amount,
+                    note: withdraw_list[i]?.note,
+                    withdraw_bank_code: withdraw_list[i]?.withdraw_bank_code || withdraw_list[i]?.deposit_bank_code,
+                    withdraw_acct_num: withdraw_list[i]?.withdraw_acct_num || withdraw_list[i]?.deposit_acct_num,
+                    withdraw_acct_name: withdraw_list[i]?.withdraw_acct_name || withdraw_list[i]?.deposit_acct_name,
+                    guid: withdraw_list[i]?.guid,
                     pay_type: 'return',
                     otp_num: item?.otp_num,
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
-                    withdraw_amount: withdraws[i]?.withdraw_amount,
+                    withdraw_amount: withdraw_list[i]?.withdraw_amount,
                     user_id: user?.id,
-                    virtual_account_id: withdraws[i]?.id,
+                    virtual_account_id: withdraw_list[i]?.id,
                     pay_type: 20,
-                    note: withdraws[i]?.note,
+                    note: withdraw_list[i]?.note,
                 });
             }
-
-            let withdraw_list = [...withdraws];
             if (result) {
                 withdraw_list[i].is_error = 0;
                 withdraw_list[i].is_confirm = 1;
                 if (themeDnsData?.withdraw_type == 0) {
-                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.virtual_bank_code })?.label} ${withdraws[i]?.virtual_acct_num} (${withdraws[i]?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.deposit_bank_code })?.label} ${withdraws[i]?.deposit_acct_num} (${withdraws[i]?.deposit_acct_name})`);
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.virtual_bank_code })?.label} ${withdraw_list[i]?.virtual_acct_num} (${withdraw_list[i]?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.deposit_bank_code })?.label} ${withdraw_list[i]?.deposit_acct_num} (${withdraw_list[i]?.deposit_acct_name})`);
                 } else if (themeDnsData?.withdraw_type == 1) {
-                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraws[i]?.withdraw_bank_code })?.label} ${withdraws[i]?.withdraw_acct_num} (${withdraws[i]?.withdraw_acct_name})`);
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.withdraw_bank_code })?.label} ${withdraw_list[i]?.withdraw_acct_num} (${withdraw_list[i]?.withdraw_acct_name})`);
                 }
             } else {
                 withdraw_list[i].is_error = 1;
             }
-            setWithdraws(withdraw_list);
         }
-        setPageLoading(false);
+        let withdraw_result_list = [];
+        for (var i = 0; i < withdraw_list.length; i++) {
+            if (withdraw_list[i]?.is_confirm != 1) {
+                withdraw_result_list.push(withdraw_list[i]);
+            }
+        }
+        setWithdraws(withdraw_result_list);
+        setTimeout(() => {
+            setPageLoading(false);
+        }, 1000);
     }
     const onCheckAcct = async (data, idx) => {
         let {
@@ -121,9 +128,6 @@ const WithdrawReturn = () => {
     return (
         <>
             <Dialog open={pageLoading}
-                onClose={() => {
-                    setPageLoading(false);
-                }}
                 PaperProps={{
                     style: {
                         background: 'transparent',

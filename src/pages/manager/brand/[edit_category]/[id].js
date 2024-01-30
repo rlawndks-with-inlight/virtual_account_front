@@ -859,6 +859,7 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 1,
                               }
+                              data['withdraw_type'] = 1;
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
