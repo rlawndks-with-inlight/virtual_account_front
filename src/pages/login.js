@@ -18,6 +18,7 @@ import dynamic from 'next/dynamic';
 import { PATH_MANAGER } from 'src/routes/paths';
 import { Row } from 'src/components/elements/styled-components';
 import { apiManager } from 'src/utils/api-manager';
+import navConfig from 'src/layouts/manager/nav/config-navigation';
 const Tour = dynamic(
   () => import('reactour'),
   { ssr: false },
@@ -26,15 +27,23 @@ const Login = () => {
   const { login, user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
   const router = useRouter();
-
+  const navList = navConfig();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [optNum, setOptNum] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const getReturnUri = () => {
+    for (var i = 0; i < navList.length; i++) {
+      if (themeDnsData?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
+        return navList[i].items[0].path
+      }
+    }
+  }
   useEffect(() => {
     if (user?.level >= 10) {
-      router.push(PATH_MANAGER.dashboards);
+      router.push(getReturnUri());
     }
     setLoading(false);
   }, [user])
@@ -47,7 +56,7 @@ const Login = () => {
   const onSubmit = async () => {
     let user = await login(username, password, optNum);
     if (user) {
-      router.push(PATH_MANAGER.dashboards);
+      router.push(getReturnUri());
     }
   };
   const [tourOpen, setTourOpen] = useState(false);
