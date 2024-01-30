@@ -42,6 +42,7 @@ export const postReturn = async (url, obj) => {
             }
         };
         const { data: response } = await axios.post(url, formData, config);
+        console.log(response)
         if (response?.result > 0) {
             return response?.data;
         } else {
