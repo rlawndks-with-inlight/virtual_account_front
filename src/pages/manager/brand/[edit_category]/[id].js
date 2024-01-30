@@ -1531,19 +1531,23 @@ const BrandEdit = () => {
                     <Stack spacing={3}>
                       {navList && navList.map((tab) => (
                         <>
-                          <Stack>
-                            <FormControlLabel control={<Switch checked={item.setting_obj[`is_not_show_tab_${tab.id}`] != 1} />} label={tab.items[0]?.title}
-                              onChange={(e) => {
-                                setItem({
-                                  ...item,
-                                  ['setting_obj']: {
-                                    ...item.setting_obj,
-                                    [`is_not_show_tab_${tab.id}`]: e.target.checked ? 0 : 1
-                                  },
-                                })
-                              }}
-                            />
-                          </Stack>
+                          {tab.id != 'brand' &&
+                            <>
+                              <Stack>
+                                <FormControlLabel control={<Switch checked={item.setting_obj[`is_not_show_tab_${tab.id}`] != 1} />} label={tab.items[0]?.title}
+                                  onChange={(e) => {
+                                    setItem({
+                                      ...item,
+                                      ['setting_obj']: {
+                                        ...item.setting_obj,
+                                        [`is_not_show_tab_${tab.id}`]: e.target.checked ? 0 : 1
+                                      },
+                                    })
+                                  }}
+                                />
+                              </Stack>
+                            </>}
+
                         </>
                       ))}
                     </Stack>
