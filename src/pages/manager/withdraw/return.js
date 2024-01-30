@@ -83,7 +83,6 @@ const WithdrawReturn = () => {
                     note: withdraw_list[i]?.note,
                 });
             }
-            console.log(result)
             if (result) {
                 withdraw_list[i].is_error = 0;
                 withdraw_list[i].is_confirm = 1;

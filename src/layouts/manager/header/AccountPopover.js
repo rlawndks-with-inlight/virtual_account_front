@@ -67,7 +67,6 @@ export default function AccountPopover() {
   const getUserDeposit = async () => {
     if (user?.level < 40) {
       let data = await apiManager('auth/deposit', 'get',);
-      console.log(data)
       setUserDeposit(data);
     }
   }

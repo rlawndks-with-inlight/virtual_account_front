@@ -567,7 +567,6 @@ const UserList = () => {
                     label={<Typography>입금 수수료 적용</Typography>}
                     control={<Checkbox checked={changeUserDepositObj?.is_use_deposit_fee} />}
                     onChange={(e) => {
-                      console.log(e.target.checked)
                       setChangeUserDepositObj({
                         ...changeUserDepositObj,
                         is_use_deposit_fee: e.target.checked ? 1 : 0,
