@@ -246,7 +246,7 @@ const VirtualAccountPaytus = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['deposit_acct_num']: e.target.value.replaceAll('-', ''),
+                                                    ['deposit_acct_num']: onlyNumberText(e.target.value),
                                                 }
                                             )
                                         }} />

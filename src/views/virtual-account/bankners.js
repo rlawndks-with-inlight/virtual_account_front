@@ -12,6 +12,7 @@ import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
 import _ from "lodash";
+import { onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -219,7 +220,7 @@ const VirtualAccountBankners = () => {
                                                     setItem(
                                                         {
                                                             ...item,
-                                                            ['business_num']: e.target.value
+                                                            ['business_num']: onlyNumberText(e.target.value)
                                                         }
                                                     )
                                                 }} />
@@ -255,7 +256,7 @@ const VirtualAccountBankners = () => {
                                                     setItem(
                                                         {
                                                             ...item,
-                                                            ['company_phone_num']: e.target.value
+                                                            ['company_phone_num']: onlyNumberText(e.target.value)
                                                         }
                                                     )
                                                 }} />
@@ -269,7 +270,7 @@ const VirtualAccountBankners = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['birth']: e.target.value
+                                                    ['birth']: onlyNumberText(e.target.value)
                                                 }
                                             )
                                         }} />
@@ -281,7 +282,7 @@ const VirtualAccountBankners = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['phone_num']: e.target.value
+                                                    ['phone_num']: onlyNumberText(e.target.value)
                                                 }
                                             )
                                         }} />
@@ -318,7 +319,7 @@ const VirtualAccountBankners = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['deposit_acct_num']: e.target.value.replaceAll('-', ''),
+                                                    ['deposit_acct_num']: onlyNumberText(e.target.value),
                                                 }
                                             )
                                         }} />
