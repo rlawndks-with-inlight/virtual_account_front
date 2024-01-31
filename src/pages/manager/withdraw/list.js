@@ -117,6 +117,22 @@ const WithdrawList = () => {
         return commarNumber(row['amount'] * (-1))
       }
     },
+    ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
+      {
+        id: 'virtual_acct_balance',
+        label: '가상계좌잔액',
+        action: (row, is_excel) => {
+          return commarNumber(row['virtual_acct_balance'])
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
     ...(user?.level >= 40 ? [
       {
         id: 'minus_amount',
