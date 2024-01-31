@@ -92,11 +92,18 @@ const VirtualAccountList = () => {
           if (is_excel) {
             return "---";
           }
-          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
-            onClick={() => {
-              getBalance(row?.id)
-            }}
-          >잔액확인</Button>
+          return <Col style={{ alignItems: 'center', rowGap: '0.5rem' }}>
+            <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                getBalance(row?.id)
+              }}
+            >잔액확인</Button>
+            <Button variant="contained" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                moveToMother(row?.id)
+              }}
+            >모계좌이동</Button>
+          </Col>
         }
       },
     ] : []),
@@ -210,9 +217,17 @@ const VirtualAccountList = () => {
   }
   const getBalance = async (id) => {
     let result = await apiManager('virtual-accounts/balance', 'get', {
-      id: id
+      id: id,
     })
     toast.success(`${commarNumber(result?.amount)}원`)
+  }
+  const moveToMother = async (id) => {
+    let result = await apiManager('virtual-accounts/mother', 'create', {
+      id: id,
+    })
+    if (result) {
+      toast.success(`성공적으로 이동 되었습니다.`);
+    }
   }
   return (
     <>

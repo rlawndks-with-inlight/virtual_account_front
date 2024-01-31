@@ -13,6 +13,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 import _ from "lodash";
+import navConfig from "src/layouts/manager/nav/config-navigation";
 const UserList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -371,6 +372,7 @@ const UserList = () => {
       },
     ] : []),
   ]
+  const navList = navConfig();
   const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
@@ -392,6 +394,14 @@ const UserList = () => {
   const [changeUserDepositObj, setChangeUserDepositObj] = useState({
     amount: 0,
   })
+
+  const getReturnUri = () => {
+    for (var i = 0; i < navList.length; i++) {
+      if (themeDnsData?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
+        return navList[i].items[0].path
+      }
+    }
+  }
   useEffect(() => {
     pageSetting();
   }, [])
@@ -445,7 +455,7 @@ const UserList = () => {
       user_id,
     })
     if (result?.id) {
-      window.location.href = `/manager/dashboards`;
+      window.location.href = getReturnUri();
     }
   }
   return (
