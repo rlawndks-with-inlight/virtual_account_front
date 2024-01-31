@@ -399,7 +399,7 @@ const VirtualAccountBankners = () => {
                         <Stack spacing={1} style={{ display: 'flex' }}>
 
                             <Button variant="contained"
-                                disabled={!item?.is_check_bank}
+                                disabled={!item?.is_check_bank && (item?.deposit_acct_check != 1)}
                                 style={{
                                     height: '48px', width: '120px', marginLeft: 'auto'
                                 }} onClick={() => {
