@@ -49,10 +49,10 @@ import { TableHeadCustom } from 'src/components/table';
 
 const Dashboards = () => {
     const { user } = useAuthContext();
-    const { themeStretch } = useSettingsContext();
+    const { themeStretch, themeDnsData } = useSettingsContext();
     const router = useRouter();
     const theme = useTheme();
-    const [currentTab, setCurrentTab] = useState(0);
+    const [currentTab, setCurrentTab] = useState(undefined);
     const [searchObj, setSearchObj] = useState({
         s_dt: returnMoment().substring(0, 10),
         e_dt: returnMoment().substring(0, 10),
@@ -97,60 +97,62 @@ const Dashboards = () => {
 
     }
     const tab_list = [
-        {
-            value: 0,
-            label: '기간별(가맹점)',
-            title: '가맹점별 입금액',
-            columns: [
-                {
-                    label: 'No.',
-                    action: (row, idx) => {
-                        return idx + 1
-                    }
-                },
-                {
-                    label: '가맹점상호',
-                    action: (row, idx) => {
-                        return row['label'] ?? "---"
-                    }
-                },
-                {
-                    label: 'MID',
-                    action: (row, idx) => {
-                        return row['mid'] ?? "---"
-                    }
-                },
-                {
-                    label: '입금액',
-                    action: (row, idx) => {
-                        return commarNumber(row['amount'])
-                    },
-                    sx: (row) => {
-                        return {
-                            color: 'blue'
+        ...(themeDnsData?.withdraw_corp_type == 1 ? [
+            {
+                value: 0,
+                label: '기간별(가맹점)',
+                title: '가맹점별 입금액',
+                columns: [
+                    {
+                        label: 'No.',
+                        action: (row, idx) => {
+                            return idx + 1
                         }
                     },
-                },
-                {
-                    label: '입금건',
-                    action: (row, idx) => {
-                        return commarNumber(row['count'])
-                    }
-                },
-                {
-                    label: '가맹점 정산금',
-                    action: (row, idx) => {
-                        return commarNumber(row['mcht_amount'])
-                    },
-                    sx: (row) => {
-                        return {
-                            color: 'red'
+                    {
+                        label: '가맹점상호',
+                        action: (row, idx) => {
+                            return row['label'] ?? "---"
                         }
                     },
-                },
+                    {
+                        label: 'MID',
+                        action: (row, idx) => {
+                            return row['mid'] ?? "---"
+                        }
+                    },
+                    {
+                        label: '입금액',
+                        action: (row, idx) => {
+                            return commarNumber(row['amount'])
+                        },
+                        sx: (row) => {
+                            return {
+                                color: 'blue'
+                            }
+                        },
+                    },
+                    {
+                        label: '입금건',
+                        action: (row, idx) => {
+                            return commarNumber(row['count'])
+                        }
+                    },
+                    {
+                        label: '가맹점 정산금',
+                        action: (row, idx) => {
+                            return commarNumber(row['mcht_amount'])
+                        },
+                        sx: (row) => {
+                            return {
+                                color: 'red'
+                            }
+                        },
+                    },
 
-            ],
-        },
+                ],
+            },
+        ] : []),
         {
             value: 1,
             label: '시간별',
@@ -260,6 +262,10 @@ const Dashboards = () => {
             ],
         },
     ]
+
+    useEffect(() => {
+        setCurrentTab(tab_list[0].value)
+    }, [])
     const series = [
         {
             data: deposits.map(i => { return i?.amount }),

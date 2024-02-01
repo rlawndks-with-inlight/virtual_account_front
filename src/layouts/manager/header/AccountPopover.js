@@ -58,7 +58,6 @@ export default function AccountPopover() {
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
         getUserDeposit();
       }
-
     });
   }, [])
   const handleOpenPopover = (event) => {
