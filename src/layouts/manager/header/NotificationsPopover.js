@@ -56,8 +56,8 @@ export default function NotificationsPopover() {
   useEffect(() => {
     socket.on('message', (msg) => {
       let { method, data, brand_id, title } = msg;
-      getBellContent(true);
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
+        getBellContent(true);
         let method_list = [`deposit`, 'settle_request']
         if (method_list.includes(method)) {
           setIsPlayMp3(true);
