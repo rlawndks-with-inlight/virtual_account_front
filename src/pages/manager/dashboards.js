@@ -155,7 +155,7 @@ const Dashboards = () => {
         ] : []),
         {
             value: 1,
-            label: '시간별',
+            label: '시간별입금액',
             title: '시간별 입금액',
             columns: [
                 {
@@ -191,7 +191,7 @@ const Dashboards = () => {
         },
         {
             value: 2,
-            label: '일별',
+            label: '일별입금액',
             title: '일별 입금액',
             columns: [
                 {
@@ -227,7 +227,7 @@ const Dashboards = () => {
         },
         {
             value: 3,
-            label: '월별',
+            label: '월별입금액',
             title: '월별 입금액',
             columns: [
                 {
@@ -255,6 +255,114 @@ const Dashboards = () => {
                 },
                 {
                     label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 4,
+            label: '시간별출금액',
+            title: '시간별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '시간',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 5,
+            label: '일별출금액',
+            title: '일별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '일자',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 6,
+            label: '월별출금액',
+            title: '월별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '월별',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
                     action: (row, idx) => {
                         return commarNumber(row['count'])
                     }
@@ -307,17 +415,33 @@ const Dashboards = () => {
         let result = await apiManager('dashboard/amount', 'list', { ...search_obj, time_type });
         setDeposits(result ?? []);
     }
-    const onChangePage = (search_obj) => {
+    const onChangePage = (search_obj_ = {}) => {
+        let search_obj = search_obj_;
         if (currentTab == 0) {
             getDepositByMcht(search_obj);
         }
         if (currentTab == 1) {
+            search_obj['pay_type'] = 'deposit';
             getDepositByTime('time', search_obj);
         }
         if (currentTab == 2) {
+            search_obj['pay_type'] = 'deposit';
             getDepositByTime('date', search_obj);
         }
         if (currentTab == 3) {
+            search_obj['pay_type'] = 'deposit';
+            getDepositByTime('month', search_obj);
+        }
+        if (currentTab == 4) {
+            search_obj['pay_type'] = 'withdraw';
+            getDepositByTime('time', search_obj);
+        }
+        if (currentTab == 5) {
+            search_obj['pay_type'] = 'withdraw';
+            getDepositByTime('date', search_obj);
+        }
+        if (currentTab == 6) {
+            search_obj['pay_type'] = 'withdraw';
             getDepositByTime('month', search_obj);
         }
     }

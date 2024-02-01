@@ -57,7 +57,6 @@ export default function NotificationsPopover() {
     socket.on('message', (msg) => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
-        getBellContent(true);
         let notification_list = [...notifications];
         notification_list.unshift(data);
         let method_list = [`deposit`, 'settle_request']
