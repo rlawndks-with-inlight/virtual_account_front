@@ -512,7 +512,7 @@ const UserList = () => {
           })
         }}
       >
-        <DialogTitle>{`정산금 관리자 ${changeUserDepositObj?.type == 25 ? '지급' : '차감'}`}</DialogTitle>
+        <DialogTitle>{`정산금 관리자 ${changeUserDepositObj?.pay_type == 25 ? '지급' : '차감'}`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {changeUserDepositObj?.pay_type == 25 ? '지급' : '차감'}할 금액을 입력해 주세요.
