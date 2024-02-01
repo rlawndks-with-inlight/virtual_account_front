@@ -50,7 +50,7 @@ const DepositEdit = () => {
     setLoading(false);
   }
   const onSave = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/deposit/v1`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
