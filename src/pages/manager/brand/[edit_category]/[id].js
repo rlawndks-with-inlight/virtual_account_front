@@ -161,7 +161,7 @@ const BrandEdit = () => {
     <>
       {!loading &&
         <>
-          <Row style={{ margin: '0 0 1rem 0', columnGap: '0.5rem' }}>
+          <Row style={{ margin: '0 0 1rem 0', columnGap: '0.5rem', overflow: 'auto' }}>
             {tab_list.map((tab) => (
               <Button
                 variant={tab.value == currentTab ? 'contained' : 'outlined'}
