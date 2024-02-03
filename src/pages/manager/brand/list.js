@@ -10,7 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { onlyNumberText, returnMoment } from "src/utils/function";
+import { commarNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import { getCookie } from "src/utils/react-cookie";
 const BrandList = () => {
   const { setModal } = useModal()
@@ -91,6 +91,13 @@ const BrandList = () => {
         }
       },
       {
+        id: 'pay_day',
+        label: '납부금액',
+        action: (row, is_excel) => {
+          return commarNumber(row['pay_amount']) + '원';
+        }
+      },
+      {
         id: 'pay_day_process',
         label: '납부처리',
         action: (row, is_excel) => {
@@ -103,6 +110,7 @@ const BrandList = () => {
                 payProcess: true,
                 brand_id: row?.id,
                 date: returnMoment().substring(0, 10),
+                amount: (row?.pay_amount / 10000)
               })
             }}
           >납부처리하기</Button>

@@ -130,10 +130,14 @@ const BrandEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('brands', 'update', item);
+      result = await apiManager('brands', 'update', { ...item, pay_amount: parseInt(item?.pay_amount ?? 0) * 10000 });
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
-        window.location.reload();
+        if (router.query?.id) {
+          router.push(`/manager/brand`);
+        } else {
+          window.location.reload();
+        }
       }
     } else {//추가
       if (
@@ -148,7 +152,7 @@ const BrandEdit = () => {
         toast.error("본사 비밀번호가 일치하지 않습니다.");
         return;
       }
-      result = await apiManager('brands', 'create', item);
+      result = await apiManager('brands', 'create', { ...item, pay_amount: parseInt(item?.pay_amount ?? 0) * 10000 });
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
         router.push(`/manager/brand`);
@@ -318,7 +322,7 @@ const BrandEdit = () => {
                       {user?.level >= 50 &&
                         <>
                           <TextField
-                            label='납기일'
+                            label='납부일'
                             value={item.pay_day}
                             style={{
                               border: 'none'
@@ -334,6 +338,26 @@ const BrandEdit = () => {
                             InputProps={{
                               endAdornment: (
                                 <div>일</div>
+                              )
+                            }}
+                          />
+                          <TextField
+                            label='납부금액'
+                            value={item.pay_amount}
+                            style={{
+                              border: 'none'
+                            }}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['pay_amount']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>원</div>
                               )
                             }}
                           />
