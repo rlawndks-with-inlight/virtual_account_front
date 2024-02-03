@@ -17,5 +17,7 @@ module.exports = {
     BACK_URL: process.env.BACK_URL,
     API_URL: process.env.API_URL,
     SOCKET_URL: process.env.SOCKET_URL,
+    DEVELOPER_USER_NAME: process.env.DEVELOPER_USER_NAME,
+    DEVELOPER_USER_PW: process.env.DEVELOPER_USER_PW,
   }
 };

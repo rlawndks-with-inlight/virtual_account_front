@@ -315,6 +315,29 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                      {user?.level >= 50 &&
+                        <>
+                          <TextField
+                            label='납기일'
+                            value={item.pay_day}
+                            style={{
+                              border: 'none'
+                            }}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['pay_day']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>일</div>
+                              )
+                            }}
+                          />
+                        </>}
                       {router.query?.edit_category == 'edit' &&
                         <>
                           <TextField

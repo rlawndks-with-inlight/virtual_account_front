@@ -10,6 +10,8 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { onlyNumberText, returnMoment } from "src/utils/function";
+import { getCookie } from "src/utils/react-cookie";
 const BrandList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -25,7 +27,18 @@ const BrandList = () => {
       id: 'dns',
       label: 'DNS',
       action: (row, is_excel) => {
-        return row['dns'] ?? "---"
+        if (is_excel) {
+          return row['dns'] ?? "---"
+        }
+        return <div style={{ color: 'blue', cursor: 'pointer' }}
+          onClick={() => {
+            let token = getCookie('token');
+            console.log(token)
+            window.open('https://' + row?.dns + '?is_developer=true')
+          }}
+        >
+          {row['dns'] ?? "---"}
+        </div>
       }
     },
     {
@@ -69,6 +82,33 @@ const BrandList = () => {
         return row['business_num'] ?? "---"
       }
     },
+    ...(user?.level >= 50 ? [
+      {
+        id: 'pay_day',
+        label: '납부일',
+        action: (row, is_excel) => {
+          return row['pay_day'] + '일';
+        }
+      },
+      {
+        id: 'pay_day_process',
+        label: '납부처리',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setDialogObj({
+                payProcess: true,
+                brand_id: row?.id,
+                date: returnMoment().substring(0, 10),
+              })
+            }}
+          >납부처리하기</Button>
+        }
+      },
+    ] : []),
     {
       id: 'created_at',
       label: '생성시간',
@@ -156,50 +196,64 @@ const BrandList = () => {
       onChangePage(searchObj);
     }
   }
-  const onChangeUserPassword = async () => {
-    let result = await changePasswordUserByManager(changePasswordObj);
+  const onProcessPay = async () => {
+    let result = await apiManager('brand-pays', 'create', { ...dialogObj, amount: parseInt(dialogObj.amount) * 10000 });
     if (result) {
-      setDialogObj({
-        ...dialogObj,
-        changePassword: false
-      })
-      toast.success("성공적으로 변경 되었습니다.");
+      setDialogObj({})
+      toast.success("성공적으로 저장 되었습니다.");
     }
   }
   return (
     <>
       <Dialog
-        open={dialogObj.changePassword}
+        open={dialogObj.payProcess}
+        onClose={() => {
+          setDialogObj({});
+        }}
       >
-        <DialogTitle>{`비밀번호 변경`}</DialogTitle>
+        <DialogTitle>{`납부처리하기`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            새 비밀번호를 입력 후 확인을 눌러주세요.
+            납부금을 입력후 확인을 눌러주세요.
           </DialogContentText>
           <TextField
             autoFocus
             fullWidth
-            value={changePasswordObj.user_pw}
-            type="password"
+            value={dialogObj.amount}
             margin="dense"
-            label="새 비밀번호"
+            label="납부금"
             onChange={(e) => {
-              setChangePasswordObj({
-                ...changePasswordObj,
-                user_pw: e.target.value
+              setDialogObj({
+                ...dialogObj,
+                amount: onlyNumberText(e.target.value)
+              })
+            }}
+            InputProps={{
+              endAdornment: (
+                <div style={{ width: '50px' }}>만원</div>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            value={dialogObj.date}
+            margin="dense"
+            label="납부일"
+            type="date"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                date: e.target.value
               })
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={onChangeUserPassword}>
-            변경
+          <Button variant="contained" onClick={onProcessPay}>
+            저장
           </Button>
           <Button color="inherit" onClick={() => {
-            setDialogObj({
-              ...dialogObj,
-              changePassword: false
-            })
+            setDialogObj({});
           }}>
             취소
           </Button>

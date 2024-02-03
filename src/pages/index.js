@@ -1,14 +1,36 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import { useSettingsContext } from 'src/components/settings';
+import navConfig from 'src/layouts/manager/nav/config-navigation';
 
 // ----------------------------------------------------------------------
 
 export default function Index() {
+  const { themeDnsData } = useSettingsContext();
   const router = useRouter();
-  const { user } = useAuthContext();
+  const navList = navConfig();
+  const { user, login } = useAuthContext();
+
+  const getReturnUri = () => {
+    for (var i = 0; i < navList.length; i++) {
+      if (themeDnsData?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
+        return navList[i].items[0].path
+      }
+    }
+  }
+  const onLoginDeveloper = async () => {
+    let user_ = await login(process.env.DEVELOPER_USER_NAME, paprocess.env.DEVELOPER_USER_PW, '');
+    if (user_) {
+      router.push(getReturnUri());
+    }
+  }
   useEffect(() => {
-    router.push('/login');
+    if (router.query?.is_developer) {
+      onLoginDeveloper();
+    } else {
+      router.push('/login');
+    }
   }, [user]);
 
   return null;
