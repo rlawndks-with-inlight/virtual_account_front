@@ -21,10 +21,8 @@ const Index = () => {
     }
   }
   const onLoginDeveloper = async () => {
-    let user_ = await login(process.env.DEVELOPER_USER_NAME, process.env.DEVELOPER_USER_PW, '');
-    if (user_) {
-      router.push(getReturnUri());
-    }
+    let user = await login(process.env.DEVELOPER_USER_NAME, process.env.DEVELOPER_USER_PW, '');
+    router.push(getReturnUri());
   }
   useEffect(() => {
     if (router.query?.is_developer) {
