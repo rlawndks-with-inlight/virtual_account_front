@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { useSettingsContext } from 'src/components/settings';
 import navConfig from 'src/layouts/manager/nav/config-navigation';
+import LoginLayout from 'src/layouts/login/LoginLayout';
 
 // ----------------------------------------------------------------------
 
-export default function Index() {
+const Index = () => {
   const { themeDnsData } = useSettingsContext();
   const router = useRouter();
   const navList = navConfig();
@@ -35,3 +36,5 @@ export default function Index() {
 
   return null;
 }
+Index.getLayout = (page) => <LoginLayout>{page}</LoginLayout>;
+export default Index;
