@@ -21,7 +21,7 @@ const Index = () => {
     }
   }
   const onLoginDeveloper = async () => {
-    let user_ = await login(process.env.DEVELOPER_USER_NAME, paprocess.env.DEVELOPER_USER_PW, '');
+    let user_ = await login(process.env.DEVELOPER_USER_NAME, process.env.DEVELOPER_USER_PW, '');
     if (user_) {
       router.push(getReturnUri());
     }
