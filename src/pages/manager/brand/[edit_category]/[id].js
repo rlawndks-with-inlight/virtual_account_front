@@ -130,7 +130,7 @@ const BrandEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('brands', 'update', { ...item, pay_amount: parseInt(item?.pay_amount ?? 0) * 10000 });
+      result = await apiManager('brands', 'update', item);
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
         if (router.query?.id) {
@@ -152,7 +152,7 @@ const BrandEdit = () => {
         toast.error("본사 비밀번호가 일치하지 않습니다.");
         return;
       }
-      result = await apiManager('brands', 'create', { ...item, pay_amount: parseInt(item?.pay_amount ?? 0) * 10000 });
+      result = await apiManager('brands', 'create', item);
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
         router.push(`/manager/brand`);
