@@ -30,7 +30,6 @@ export default function SnackbarProvider({ children }) {
   return (
     <>
       <StyledNotistack />
-
       <NotistackProvider
         ref={notistackRef}
         dense

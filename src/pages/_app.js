@@ -31,7 +31,7 @@ import { ModalProvider } from 'src/components/dialog/ModalProvider';
 import { useState } from 'react';
 import { store } from '../redux/store'
 import { useRouter } from 'next/router';
-import SnackbarProvider from 'src/components/snackbar';
+import SnackbarProvider from '../components/snackbar';
 
 const App = (props) => {
   const { Component, pageProps, head_data = {}, host, host_data } = props;

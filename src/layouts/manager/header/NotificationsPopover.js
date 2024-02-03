@@ -54,6 +54,7 @@ export default function NotificationsPopover() {
   const totalUnRead = notifications.filter((item) => !(themeReadNotifications[item?.id])).length;
   const [splitCount, setSplitCount] = useState(4);
   useEffect(() => {
+
     socket.on('message', (msg) => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
@@ -73,6 +74,7 @@ export default function NotificationsPopover() {
     });
     getBellContent();
   }, [])
+
   useEffect(() => {
     if (openPopover) {
       let read_notifications = { ...themeReadNotifications };
@@ -245,7 +247,7 @@ function NotificationItem({ notification, router, handleClosePopover, idx, delet
             <Typography variant="caption" sx={{ mr: 0.5 }}>{notification.created_at}</Typography>
             <Typography variant="caption">{notification.is_read ? '읽음' : ''}</Typography>
             <IconButton
-              style={{ marginLeft: 'auto', position: 'absolute', right: '0', bottom: '0.5rem' }}
+              style={{ marginLeft: 'auto', position: 'absolute', right: '-0.5rem', bottom: '0' }}
               onClick={() => {
                 deleteItem(idx);
               }}>
