@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -91,7 +91,7 @@ const BrandList = () => {
         }
       },
       {
-        id: 'pay_day',
+        id: 'pay_amount',
         label: '납부금액',
         action: (row, is_excel) => {
           return commarNumber(row['pay_amount']) + '원';
@@ -278,6 +278,15 @@ const BrandList = () => {
             head_columns={[]}
             table={'brands'}
             excel_name={'브랜드'}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              {data?.content &&
+                <>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">총 납부금액</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.chart?.pay_amount)}원</Typography>
+                  </Row>
+                </>}
+            </Row>}
           />
         </Card>
       </Stack>
