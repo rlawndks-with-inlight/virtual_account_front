@@ -32,7 +32,7 @@ const Index = () => {
     } else {
       router.push('/login');
     }
-  }, [user]);
+  }, []);
 
   return null;
 }
