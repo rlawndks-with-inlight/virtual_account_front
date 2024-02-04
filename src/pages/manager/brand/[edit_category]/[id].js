@@ -1567,6 +1567,36 @@ const BrandEdit = () => {
                           }}
                         />
                       </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_asapmall_noti == 1} />} label={`asapmall 노티사용여부`}
+                          onChange={(e) => {
+                            let obj = {
+                              ...item,
+                              ['is_use_asapmall_noti']: e.target.checked ? 1 : 0,
+                            }
+                            if (!e.target.checked) {
+                              obj['asapmall_dns'] = '';
+                            }
+                            setItem(obj)
+                          }}
+                        />
+                      </Stack>
+                      {item?.is_use_asapmall_noti == 1 &&
+                        <>
+                          <TextField
+                            label='asapmall 도메인'
+                            value={item.asapmall_dns}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['asapmall_dns']: e.target.value
+                                }
+                              )
+                            }}
+                          />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>

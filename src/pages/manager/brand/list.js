@@ -61,27 +61,6 @@ const BrandList = () => {
         return <LazyLoadImage src={row['favicon_img']} style={{ height: '56px' }} />
       }
     },
-    {
-      id: 'company_name',
-      label: '법인상호',
-      action: (row, is_excel) => {
-        return row['company_name'] ?? "---"
-      }
-    },
-    {
-      id: 'ceo_name',
-      label: '대표자명',
-      action: (row, is_excel) => {
-        return row['ceo_name'] ?? "---"
-      }
-    },
-    {
-      id: 'business_num',
-      label: '사업자등록번호',
-      action: (row, is_excel) => {
-        return row['business_num'] ?? "---"
-      }
-    },
     ...(user?.level >= 50 ? [
       {
         id: 'pay_day',
