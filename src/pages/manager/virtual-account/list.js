@@ -84,7 +84,7 @@ const VirtualAccountList = () => {
         </Col>
       }
     },
-    ...(user?.level >= 50 ? [
+    ...(user?.level >= 40 ? [
       {
         id: 'balance',
         label: '잔액확인',
