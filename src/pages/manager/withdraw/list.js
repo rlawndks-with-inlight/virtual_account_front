@@ -85,9 +85,10 @@ const WithdrawList = () => {
           return status?.label
         }
         if (user?.level >= 50) {
+
           return <Select
             size='small'
-            value={row?.withdraw_status}
+            defaultValue={row?.withdraw_status}
             disabled={!(user?.level >= 40)}
             onChange={async (e) => {
               let result = await apiUtil(`deposits/withdraw_status`, 'update', {
