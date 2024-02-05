@@ -7,7 +7,7 @@ import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { apiManager, apiServer } from "src/utils/api-manager";
+import { apiManager, apiServer, apiUtil } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
@@ -22,7 +22,20 @@ const WithdrawList = () => {
       id: 'trx_id',
       label: '거래번호',
       action: (row, is_excel) => {
-        return row['trx_id'] ?? "---"
+        if (is_excel) {
+          return row['trx_id'] ?? "---"
+        }
+        if (user?.level >= 50) {
+          return <div style={{ cursor: 'pointer' }} onClick={() => {
+            setDialogObj({
+              changeTrxId: true,
+              trx_id: '',
+              id: row?.id,
+            })
+          }}>{row['trx_id'] ?? "---"}</div>
+        } else {
+          return row['trx_id'] ?? "---"
+        }
       }
     },
     {
@@ -71,7 +84,28 @@ const WithdrawList = () => {
         if (is_excel) {
           return status?.label
         }
-        return <Chip variant="soft" label={status?.label} color={status?.color} />
+        if (user?.level >= 50) {
+          return <Select
+            size='small'
+            value={row?.withdraw_status}
+            disabled={!(user?.level >= 40)}
+            onChange={async (e) => {
+              let result = await apiUtil(`deposits/withdraw_status`, 'update', {
+                id: row?.id,
+                value: e.target.value
+              });
+              if (result) {
+                onChangePage(searchObj)
+              }
+            }}
+          >
+            {withdrawStatusList.map((itm) => {
+              return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+            })}
+          </Select>
+        } else {
+          return <Chip variant="soft" label={status?.label} color={status?.color} />
+        }
       }
     },
     {
@@ -239,11 +273,7 @@ const WithdrawList = () => {
     is_sales_man: true,
   })
   const [dialogObj, setDialogObj] = useState({
-    changePassword: false,
-  })
-  const [changePasswordObj, setChangePasswordObj] = useState({
-    id: '',
-    user_pw: ''
+
   })
   useEffect(() => {
     pageSetting();
@@ -312,10 +342,51 @@ const WithdrawList = () => {
       onChangePage(searchObj);
     }
   }
+  const onChangeTrxId = async () => {
+    let result = undefined
+    result = await apiManager('withdraws/trx-id', 'update', dialogObj);
+    setDialogObj({});
+    onChangePage(searchObj);
+  }
   return (
     <>
       <Stack spacing={3}>
-
+        <Dialog
+          open={dialogObj.changeTrxId}
+          onClose={() => {
+            setDialogObj({})
+          }}
+        >
+          <DialogTitle>{`거래번호 변경`}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              거래번호를 입력 후 확인을 눌러주세요.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              fullWidth
+              value={dialogObj.trx_id}
+              margin="dense"
+              label="거래번호"
+              onChange={(e) => {
+                setDialogObj({
+                  ...dialogObj,
+                  trx_id: e.target.value
+                })
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={onChangeTrxId}>
+              변경
+            </Button>
+            <Button color="inherit" onClick={() => {
+              setDialogObj({})
+            }}>
+              취소
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
             {user?.level >= 40 &&
