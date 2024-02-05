@@ -100,7 +100,7 @@ const WithdrawList = () => {
             }}
           >
             {withdrawStatusList.map((itm) => {
-              return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+              return <MenuItem value={itm.value}><Chip variant="soft" label={itm?.label} color={itm?.color} /></MenuItem>
             })}
           </Select>
         } else {
