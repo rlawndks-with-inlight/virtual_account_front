@@ -94,9 +94,6 @@ const WithdrawList = () => {
                 id: row?.id,
                 value: e.target.value
               });
-              if (result) {
-                onChangePage(searchObj)
-              }
             }}
           >
             {withdrawStatusList.map((itm) => {
