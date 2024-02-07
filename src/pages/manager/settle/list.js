@@ -17,6 +17,14 @@ const SettleList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
+  const [searchObj, setSearchObj] = useState({
+    page: 1,
+    page_size: 10,
+    s_dt: '',
+    e_dt: '',
+    search: '',
+    level: 10,
+  })
   const defaultColumns = [
     {
       id: 'trx_id',
@@ -62,6 +70,46 @@ const SettleList = () => {
       }
     },
     {
+      id: 'request_amount',
+      label: '요청금액',
+      action: (row, is_excel) => {
+        let deposit_list = [0, 15, 25];
+        let withdraw_list = [5, 10, 20, 30];
+        let fee = 0;
+
+        if (deposit_list.includes(row?.pay_type)) {
+          fee = row?.deposit_fee;
+        } else if (withdraw_list.includes(row?.pay_type)) {
+          fee = row?.withdraw_fee;
+        }
+
+        let amount = row['user_amount'] - fee;
+        return (amount > 0 ? '+' : '') + commarNumber(amount)
+      },
+      sx: (row) => {
+        let amount = row['user_amount'];
+        return {
+          color: `${amount > 0 ? 'blue' : 'red'}`
+        }
+      },
+    },
+    {
+      id: 'fee',
+      label: '수수료',
+      action: (row, is_excel) => {
+        let deposit_list = [0, 15, 25];
+        let withdraw_list = [5, 10, 20, 30];
+        let fee = 0;
+
+        if (deposit_list.includes(row?.pay_type)) {
+          fee = row?.deposit_fee;
+        } else if (withdraw_list.includes(row?.pay_type)) {
+          fee = row?.withdraw_fee;
+        }
+        return commarNumber(fee)
+      }
+    },
+    {
       id: 'amount',
       label: '발생 보유정산금',
       action: (row, is_excel) => {
@@ -102,14 +150,7 @@ const SettleList = () => {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
-  const [searchObj, setSearchObj] = useState({
-    page: 1,
-    page_size: 10,
-    s_dt: '',
-    e_dt: '',
-    search: '',
-    level: 10,
-  })
+
   const [dialogObj, setDialogObj] = useState({
     changePassword: false,
   })
@@ -120,9 +161,11 @@ const SettleList = () => {
   useEffect(() => {
     pageSetting();
   }, [])
-  const pageSetting = () => {
+  useEffect(() => {
     let cols = defaultColumns;
     setColumns(cols)
+  }, [searchObj])
+  const pageSetting = () => {
     getAllOperUser();
     onChangePage({ ...searchObj, page: 1 });
   }
@@ -133,6 +176,7 @@ const SettleList = () => {
     setOperUserList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -141,7 +185,6 @@ const SettleList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   return (
     <>
@@ -206,10 +249,7 @@ const SettleList = () => {
                     }}>
                     <MenuItem value={null}>거래구분 전체</MenuItem>
                     {payTypeList.map((type) => {
-                      let not_use_type = [25, 30,]
-                      if (!not_use_type.includes(type.value)) {
-                        return <MenuItem value={type.value}>{type.label}</MenuItem>
-                      }
+                      return <MenuItem value={type.value}>{type.label}</MenuItem>
                     })}
                   </Select>
                 </FormControl>
