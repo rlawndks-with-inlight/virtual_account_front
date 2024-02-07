@@ -208,6 +208,7 @@ const navConfig = (is_show_all) => {
               { title: '기본설정', path: PATH_MANAGER.brand.edit },
               ...(isDeveloper() ? [
                 { title: '브랜드관리', path: PATH_MANAGER.brand.list },
+                { title: '본사계정관리', path: PATH_MANAGER.brand.managers },
                 { title: '비용지출내역', path: PATH_MANAGER.brand.payList },
               ] : []),
             ],
