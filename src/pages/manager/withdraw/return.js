@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Col, Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -361,7 +361,7 @@ const WithdrawReturn = () => {
                                                         <TextField
                                                             style={{ width: '50%' }}
                                                             label='반환 요청금'
-                                                            value={vir_acct?.withdraw_amount}
+                                                            value={commarNumberInput(vir_acct?.withdraw_amount)}
                                                             placeholder=""
                                                             error={vir_acct?.is_error == 1}
                                                             onChange={(e) => {

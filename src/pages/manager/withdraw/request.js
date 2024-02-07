@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -147,14 +147,13 @@ const WithdrawRequest = () => {
                                 <Stack spacing={3}>
                                     <TextField
                                         label='출금 요청금'
-                                        type="number"
-                                        value={item?.withdraw_amount}
+                                        value={commarNumberInput(item?.withdraw_amount)}
                                         placeholder=""
                                         onChange={(e) => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['withdraw_amount']: parseInt(e.target.value)
+                                                    ['withdraw_amount']: onlyNumberText(e.target.value)
                                                 }
                                             )
                                         }} />
