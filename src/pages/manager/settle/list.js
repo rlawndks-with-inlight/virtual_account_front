@@ -80,10 +80,10 @@ const SettleList = () => {
         if (deposit_list.includes(row?.pay_type)) {
           fee = row?.deposit_fee;
         } else if (withdraw_list.includes(row?.pay_type)) {
-          fee = row?.withdraw_fee * (-1);
+          fee = row?.withdraw_fee;
         }
 
-        let amount = row['user_amount'] - fee;
+        let amount = row['user_amount'] + fee;
         return (amount > 0 ? '+' : '') + commarNumber(amount)
       },
       sx: (row) => {
