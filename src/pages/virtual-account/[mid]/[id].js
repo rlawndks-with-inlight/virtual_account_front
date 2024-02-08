@@ -5,6 +5,7 @@ import BlankLayout from "src/layouts/BlankLayout";
 import VirtualAccountBankners from "src/views/virtual-account/bankners";
 import VirtualAccountPaytus from "src/views/virtual-account/paytus";
 import { Row } from "src/components/elements/styled-components";
+import VirtualAccountCoocon from "src/views/virtual-account/coocon";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -21,6 +22,10 @@ const VirtualAccountAddNoneAuth = () => {
                     {themeDnsData?.deposit_corp_type == 1 &&
                         <>
                             <VirtualAccountBankners />
+                        </>}
+                    {themeDnsData?.deposit_corp_type == 2 &&
+                        <>
+                            <VirtualAccountCoocon />
                         </>}
                     {themeDnsData?.deposit_corp_type == 3 &&
                         <>
