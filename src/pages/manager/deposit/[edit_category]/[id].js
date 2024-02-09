@@ -2,9 +2,7 @@
 import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
-import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
@@ -14,10 +12,8 @@ import { bankCodeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { onlyNumberText } from "src/utils/function";
-const ReactQuill = dynamic(() => import('react-quill'), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
-})
+import { Row } from "src/components/elements/styled-components";
+
 
 const DepositEdit = () => {
   const { setModal } = useModal()
@@ -27,6 +23,10 @@ const DepositEdit = () => {
 
   const [mchtList, setMchtList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [verifyData, setVerifyData] = useState({
+    is_check_phone: false,
+    is_check_account: false,
+  })
   const [item, setItem] = useState({
     virtual_acct_num: '',
     amount: 0,
@@ -44,14 +44,19 @@ const DepositEdit = () => {
     })
     let data = item;
     setMchtList(mcht_list?.content ?? []);
-    let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
-    data.mid = mid;
+    if (user?.level < 40) {
+      let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
+      data.mid = mid;
+      data.phone_num = user?.phone_num;
 
+      setItem(data);
+    }
     setLoading(false);
   }
   const onSave = async () => {
     let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}`, 'create', {
-      ...item,
+      ...verifyData,
+      mid: item?.mid,
       api_key: themeDnsData?.api_key
     });
     if (result) {
@@ -59,112 +64,182 @@ const DepositEdit = () => {
       router.push('/manager/deposit');
     }
   }
+  const onCheckPhoneNumRequest = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/request`, 'create', {
+      ...item,
+      api_key: themeDnsData?.api_key
+    });
+  }
+  const onCheckPhoneNumCheck = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/check`, 'create', {
+      ...item,
+      api_key: themeDnsData?.api_key
+    });
+  }
+  const onCheckAccountRequest = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/account/request`, 'create', {
+      ...item,
+      api_key: themeDnsData?.api_key
+    });
+  }
+  const onCheckAccountCheck = async () => {
+    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/check`, 'create', {
+      ...item,
+      api_key: themeDnsData?.api_key
+    });
+  }
   return (
     <>
       {!loading &&
         <>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <Card sx={{ p: 2, height: '100%' }}>
-                <Stack spacing={3}>
-                  {user?.level >= 40 &&
-                    <>
-                      <FormControl variant='outlined'  >
-                        <InputLabel>가맹점선택</InputLabel>
-                        <Select label='가맹점선택' value={item?.mid}
-                          onChange={(e) => {
-                            setItem({
+          <Row style={{ minHeight: '100vh' }}>
+            <div style={{ margin: '1rem auto', width: '90%', maxWidth: '800px' }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        label='휴대폰번호'
+                        value={item.phone_num}
+                        placeholder="하이픈(-) 제외 입력"
+                        disabled={true}
+                        onChange={(e) => {
+                          setItem(
+                            {
                               ...item,
-                              mid: e.target.value,
-                            })
-                          }}>
-                          {mchtList.map(mcht => {
-                            return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
-                          })}
-                        </Select>
-                      </FormControl>
-                    </>}
-                  <TextField
-                    label='결제금액'
-                    value={item.amount}
-                    placeholder="결제금액"
-                    type="number"
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['amount']: e.target.value
-                        }
-                      )
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <div>원</div>
-                      )
-                    }}
-                  />
-                  <Stack spacing={1}>
-                    <FormControl>
-                      <InputLabel>입금은행</InputLabel>
-                      <Select
-                        label='입금은행'
-                        value={item.deposit_bank_code}
-                        onChange={e => {
-                          setItem({
-                            ...item,
-                            ['deposit_bank_code']: e.target.value
-                          })
+                              ['phone_num']: onlyNumberText(e.target.value)
+                            }
+                          )
                         }}
-                      >
-                        {bankCodeList().map((itm, idx) => {
-                          return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                        })}
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                  <TextField
-                    label='입금계좌번호'
-                    value={item.deposit_acct_num}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['deposit_acct_num']: onlyNumberText(e.target.value)
-                        }
-                      )
-                    }} />
-                  <TextField
-                    label='입금자명'
-                    value={item.deposit_acct_name}
-                    onChange={(e) => {
-                      setItem(
-                        {
-                          ...item,
-                          ['deposit_acct_name']: e.target.value
-                        }
-                      )
-                    }} />
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <Card sx={{ p: 3 }}>
-                <Stack spacing={1} style={{ display: 'flex' }}>
-                  <Button variant="contained" style={{
-                    height: '48px', width: '120px', marginLeft: 'auto'
-                  }} onClick={() => {
-                    setModal({
-                      func: () => { onSave() },
-                      icon: 'material-symbols:edit-outline',
-                      title: '저장 하시겠습니까?'
-                    })
-                  }}>
-                    저장
-                  </Button>
-                </Stack>
-              </Card>
-            </Grid>
-          </Grid>
+                        InputProps={{
+                          endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                            onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button>
+                        }}
+                      />
+                      <TextField
+                        label='인증번호'
+                        value={item.phone_vrf_word}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['phone_vrf_word']: e.target.value
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                            disabled={!item?.tx_seq_no}
+                            onClick={onCheckPhoneNumCheck}>{'인증번호 확인'}</Button>
+                        }}
+                      />
+                      {(verifyData?.is_check_account && verifyData?.is_check_phone) &&
+                        <>
+                          {user?.level >= 40 &&
+                            <>
+                              <FormControl variant='outlined'  >
+                                <InputLabel>가맹점선택</InputLabel>
+                                <Select label='가맹점선택' value={item?.mid}
+                                  onChange={(e) => {
+                                    setItem({
+                                      ...item,
+                                      mid: e.target.value,
+                                    })
+                                  }}>
+                                  {mchtList.map(mcht => {
+                                    return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
+                                  })}
+                                </Select>
+                              </FormControl>
+                            </>}
+                          <TextField
+                            label='결제금액'
+                            value={item.amount}
+                            placeholder="결제금액"
+                            type="number"
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['amount']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <div>원</div>
+                              )
+                            }}
+                          />
+                          <Stack spacing={1}>
+                            <FormControl>
+                              <InputLabel>입금은행</InputLabel>
+                              <Select
+                                label='입금은행'
+                                value={item.deposit_bank_code}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    ['deposit_bank_code']: e.target.value
+                                  })
+                                }}
+                              >
+                                {bankCodeList().map((itm, idx) => {
+                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                })}
+                              </Select>
+                            </FormControl>
+                          </Stack>
+                          <TextField
+                            label='입금계좌번호'
+                            value={item.deposit_acct_num}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_acct_num']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }} />
+                          <TextField
+                            label='입금자명'
+                            value={item.deposit_acct_name}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['deposit_acct_name']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 3 }}>
+                    <Stack spacing={1} style={{ display: 'flex' }}>
+                      <Button variant="contained" style={{
+                        height: '48px', width: '120px', marginLeft: 'auto'
+                      }}
+                        disabled={!(verifyData?.is_check_account && verifyData?.is_check_phone)}
+                        onClick={() => {
+                          setModal({
+                            func: () => { onSave() },
+                            icon: 'material-symbols:edit-outline',
+                            title: '저장 하시겠습니까?'
+                          })
+                        }}>
+                        저장
+                      </Button>
+                    </Stack>
+                  </Card>
+                </Grid>
+              </Grid>
+            </div>
+          </Row>
         </>}
     </>
   )
