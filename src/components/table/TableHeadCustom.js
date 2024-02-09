@@ -39,8 +39,8 @@ export default function TableHeadCustom({
   onSort,
   onSelectAllRows,
   sx,
-  themeNotShowColumns,
-  column_table,
+  themeNotShowColumns = {},
+  column_table = "",
 }) {
   return (
     <TableHead sx={sx}>

@@ -535,7 +535,7 @@ const Dashboards = () => {
                     <Grid item xs={12} md={12}>
                         <Card>
                             <Table>
-                                <TableHeadCustom headLabel={_.find(tab_list, { value: currentTab })?.columns} />
+                                <TableHeadCustom headLabel={_.find(tab_list, { value: currentTab })?.columns} column_table={'dashboards'} />
                                 <TableBody>
                                     {deposits.map((row, index) => {
                                         let columns = _.find(tab_list, { value: currentTab })?.columns;
