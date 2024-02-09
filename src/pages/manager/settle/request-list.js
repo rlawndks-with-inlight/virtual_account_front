@@ -213,8 +213,9 @@ const SettleRequestList = () => {
                         searchObj={searchObj}
                         onChangePage={onChangePage}
                         head_columns={[]}
-                        table={'withdraws'}
-                        excel_name={'출금'}
+                        table={'deposit-requests'}
+                        column_table={`deposit_requests`}
+                        excel_name={'요청내역'}
                     />
                 </Card>
             </Stack>

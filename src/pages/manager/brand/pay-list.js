@@ -174,10 +174,10 @@ const BrandPayList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'브랜드 추가'}
             head_columns={[]}
             table={'brands'}
-            excel_name={'브랜드'}
+            column_table={'brand_pays'}
+            excel_name={'지불내역'}
           />
         </Card>
       </Stack>

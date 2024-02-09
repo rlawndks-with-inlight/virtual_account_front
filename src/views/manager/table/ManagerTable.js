@@ -1,5 +1,5 @@
 // @mui
-import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip, TableHead, Select, MenuItem } from '@mui/material';
+import { Table, TableRow, TableBody, TableCell, TableContainer, Pagination, Divider, Box, TextField, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, CircularProgress, Tooltip, TableHead, Select, MenuItem, Dialog, DialogContentText, DialogContent, DialogTitle, FormControlLabel, Switch } from '@mui/material';
 import { TableHeadCustom, TableNoData } from 'src/components/table';
 import {
   DatePicker,
@@ -15,9 +15,10 @@ import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
 import { styled as muiStyled } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { excelDownload, returnMoment } from 'src/utils/function';
+import { excelDownload, getTableIdDuplicate, returnMoment } from 'src/utils/function';
 import { Spinner } from 'evergreen-ui';
 import { apiManager } from 'src/utils/api-manager';
+import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 const TableHeaderContainer = styled.div`
 padding: 0.75rem;
@@ -37,20 +38,23 @@ const CustomTableRow = muiStyled(TableRow)(({ theme, index }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name, between_content } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name, between_content, column_table } = props;
   const { page, page_size } = props?.searchObj;
 
   const router = useRouter();
   const theme = useTheme();
+
+  const { themeNotShowColumns, onChangeNotShowColumns } = useSettingsContext();
   const [sDt, setSDt] = useState(undefined);
   const [eDt, setEDt] = useState(undefined);
   const [keyword, setKeyWord] = useState("");
   const [zColumn, setZColumn] = useState([]);
   const [zHeadColumn, setZHeadColumn] = useState([]);
-
+  const [openProcessColumns, setOpenProcessColumns] = useState(false);
   useEffect(() => {
     settingColumns();
   }, [columns, head_columns, router.asPath]);
+
   const settingColumns = async () => {
     try {
       let column_list = [...columns];
@@ -129,7 +133,41 @@ export default function ManagerTable(props) {
   }
   return (
     <>
+      <Dialog open={openProcessColumns}
+        onClose={() => {
+          setOpenProcessColumns(false);
+        }}
+      >
+        <DialogTitle>{`검색옵션 설정`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            테이블에 노출할 컬럼들을 설정하세요.
+          </DialogContentText>
+          <Row style={{ flexWrap: 'wrap', padding: '1rem 0 1rem 0' }}>
+            {columns.map((item, idx) => (
+              <>
+                <FormControlLabel control={<Switch checked={(themeNotShowColumns[column_table] ?? {})[item?.id] != 1} />} label={item?.label}
+                  sx={{ width: '45%' }}
+                  onChange={(e) => {
+                    let table_columns = themeNotShowColumns[column_table] ?? {};
+                    table_columns[item?.id] = e.target.checked ? 0 : 1;
+                    onChangeNotShowColumns({
+                      ...themeNotShowColumns,
+                      [column_table]: table_columns,
+                    })
+                  }}
+                />
+              </>
+            ))}
+          </Row>
+        </DialogContent>
+      </Dialog>
       <TableContainer sx={{ overflow: 'unset' }}>
+        <TableHeaderContainer>
+          <Row style={{ rowGap: '1rem', flexWrap: 'wrap', columnGap: '0.75rem' }}>
+            <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => setOpenProcessColumns(true)}>검색옵션</Button>
+          </Row>
+        </TableHeaderContainer>
         <TableHeaderContainer>
           <Row style={{ rowGap: '1rem', flexWrap: 'wrap', columnGap: '0.75rem' }}>
             {window.innerWidth > 1000 ?
@@ -282,19 +320,22 @@ export default function ManagerTable(props) {
                       </TableRow>
                     </TableHead>
                   </>}
-                <TableHeadCustom headLabel={zColumn} />
+                <TableHeadCustom headLabel={zColumn} themeNotShowColumns={themeNotShowColumns} column_table={column_table} />
                 <TableBody>
                   {data.content && data.content.map((row, index) => (
                     <CustomTableRow key={index} index={index} style={{}}>
                       {zColumn && zColumn.map((col, idx) => (
                         <>
-                          <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '16px 0' }}>
-                            <Row style={{ alignItems: 'center' }}>
-                              <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
-                              {col.action(row)}
-                              <div style={{ paddingLeft: '16px' }} />
-                            </Row>
-                          </TableCell>
+                          {(themeNotShowColumns[column_table] ?? {})[col?.id] != 1 &&
+                            <>
+                              <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '16px 0' }}>
+                                <Row style={{ alignItems: 'center' }}>
+                                  <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
+                                  {col.action(row)}
+                                  <div style={{ paddingLeft: '16px' }} />
+                                </Row>
+                              </TableCell>
+                            </>}
                         </>
                       ))}
                     </CustomTableRow>

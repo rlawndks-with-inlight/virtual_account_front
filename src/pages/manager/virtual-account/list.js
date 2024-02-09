@@ -281,6 +281,7 @@ const VirtualAccountList = () => {
             add_button_text={'가상계좌 발급'}
             head_columns={[]}
             table={'virtual-accounts'}
+            column_table={`virtual_accounts`}
             excel_name={'가상계좌'}
             between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
               <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>

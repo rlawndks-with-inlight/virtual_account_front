@@ -39,6 +39,8 @@ export default function TableHeadCustom({
   onSort,
   onSelectAllRows,
   sx,
+  themeNotShowColumns,
+  column_table,
 }) {
   return (
     <TableHead sx={sx}>
@@ -54,43 +56,48 @@ export default function TableHeadCustom({
         )}
 
         {headLabel && headLabel.map((headCell, idx) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.align || 'left'}
-            sortDirection={orderBy === headCell.id ? order : false}
-            sx={{
-              width: headCell.width,
-              minWidth: headCell.minWidth,
-              fontSize: '0.8rem',
-              padding: '16px 0',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <Row style={{ alignItems: 'center' }}>
-              <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
-              {onSort ? (
-                <TableSortLabel
-                  hideSortIcon
-                  active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : 'asc'}
-                  onClick={() => onSort(headCell.id)}
-                  sx={{ textTransform: 'capitalize' }}
+          <>
+            {(themeNotShowColumns[column_table] ?? {})[headCell?.id] != 1 &&
+              <>
+                <TableCell
+                  key={headCell.id}
+                  align={headCell.align || 'left'}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                  sx={{
+                    width: headCell.width,
+                    minWidth: headCell.minWidth,
+                    fontSize: '0.8rem',
+                    padding: '16px 0',
+                    whiteSpace: 'nowrap'
+                  }}
                 >
-                  {headCell.label}
+                  <Row style={{ alignItems: 'center' }}>
+                    <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
+                    {onSort ? (
+                      <TableSortLabel
+                        hideSortIcon
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : 'asc'}
+                        onClick={() => onSort(headCell.id)}
+                        sx={{ textTransform: 'capitalize' }}
+                      >
+                        {headCell.label}
 
-                  {orderBy === headCell.id ? (
-                    <Box sx={{ ...visuallyHidden }}>
-                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                    </Box>
-                  ) : null}
-                </TableSortLabel>
-              ) : (
-                headCell.label
-              )}
-              <div style={{ paddingLeft: '16px' }} />
-            </Row>
+                        {orderBy === headCell.id ? (
+                          <Box sx={{ ...visuallyHidden }}>
+                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </Box>
+                        ) : null}
+                      </TableSortLabel>
+                    ) : (
+                      headCell.label
+                    )}
+                    <div style={{ paddingLeft: '16px' }} />
+                  </Row>
 
-          </TableCell>
+                </TableCell>
+              </>}
+          </>
         ))}
       </TableRow>
     </TableHead>

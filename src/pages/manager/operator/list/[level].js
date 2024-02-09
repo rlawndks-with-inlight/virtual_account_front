@@ -69,7 +69,7 @@ const OperatorList = () => {
     },
     ...(themeDnsData?.withdraw_type == 0 ? [
       {
-        id: 'virtual_bank_code',
+        id: 'virtual_bank',
         label: '가상계좌정보',
         action: (row, is_excel) => {
           if (is_excel) {
@@ -83,7 +83,7 @@ const OperatorList = () => {
       },
     ] : []),
     {
-      id: 'virtual_bank_code',
+      id: 'settle_bank',
       label: '정산계좌정보',
       action: (row, is_excel) => {
         if (themeDnsData?.withdraw_type == 0) {
@@ -397,6 +397,7 @@ const OperatorList = () => {
             add_button_text={''}
             head_columns={[]}
             table={'users'}
+            column_table={`operator_${router.query?.level}`}
             excel_name={getUserLevelByNumber(router.query?.level)}
           />
         </Card>

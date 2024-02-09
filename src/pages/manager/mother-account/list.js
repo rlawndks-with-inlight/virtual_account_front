@@ -165,6 +165,7 @@ const MotherAccountList = () => {
             add_button_text={''}
             head_columns={[]}
             table={'deposits'}
+            column_table={'mother_accounts'}
             excel_name={'모계좌'}
           />
         </Card>

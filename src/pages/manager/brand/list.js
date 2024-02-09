@@ -256,6 +256,7 @@ const BrandList = () => {
             add_button_text={'브랜드 추가'}
             head_columns={[]}
             table={'brands'}
+            column_table={'brands'}
             excel_name={'브랜드'}
             between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
               {data?.content &&

@@ -132,6 +132,7 @@ const CorpAccountList = () => {
             add_button_text={'법인통장 추가'}
             head_columns={[]}
             table={'corp-accounts'}
+            column_table={'corp_accounts'}
             excel_name={'법인통장'}
           />
         </Card>

@@ -65,7 +65,7 @@ const DepositList = () => {
     },
     ...(user?.level >= 40 ? [
       {
-        id: 'note',
+        id: 'eidt_note',
         label: '비고수정',
         action: (row, is_excel) => {
           if (is_excel) {
@@ -192,7 +192,7 @@ const DepositList = () => {
     },
     ...(themeDnsData?.is_use_corp_account == 1 ? [
       {
-        id: 'amount',
+        id: 'corp_account_balance',
         label: '법인통장잔액',
         action: (row, is_excel) => {
           return commarNumber(row['corp_account_balance'])
@@ -293,7 +293,7 @@ const DepositList = () => {
           },
         },
         {
-          id: `head_office_fee`,
+          id: `head_office_get_fee`,
           label: `본사 획득 요율`,
           action: (row, is_excel) => {
             return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
@@ -361,7 +361,7 @@ const DepositList = () => {
                 },
               },
               {
-                id: `sales${operator?.num}_fee`,
+                id: `sales${operator?.num}_get_fee`,
                 label: `${label} 획득 요율`,
                 action: (row, is_excel) => {
                   return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
@@ -552,8 +552,9 @@ const DepositList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={themeDnsData?.is_use_corp_account == 1 ? '결제내역추가' : ''}
-            head_columns={defaultHeadColumns}
+            head_columns={[]}
             table={'deposits'}
+            column_table={'deposits'}
             excel_name={'출금'}
             between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
               {data?.content &&

@@ -136,7 +136,7 @@ const WithdrawList = () => {
       }
     },
     {
-      id: 'minus_amount',
+      id: 'expect_amount',
       label: '차감예정 보유정산금',
       action: (row, is_excel) => {
         return commarNumber(row['expect_amount'] * (-1))
@@ -167,7 +167,7 @@ const WithdrawList = () => {
     ] : []),
     ...(user?.level >= 40 ? [
       {
-        id: 'minus_amount',
+        id: 'withdraw_status_edit',
         label: '출금상태관리',
         action: (row, is_excel) => {
           if (is_excel) {
@@ -437,6 +437,7 @@ const WithdrawList = () => {
             onChangePage={onChangePage}
             head_columns={[]}
             table={'withdraws'}
+            column_table={`withdraws`}
             excel_name={'출금'}
             between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
               {data?.content &&

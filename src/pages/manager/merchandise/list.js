@@ -94,7 +94,7 @@ const UserList = () => {
     },
     ...(themeDnsData?.withdraw_type == 0 ? [
       {
-        id: 'name',
+        id: 'virtual_acct_link',
         label: '가상계좌발급주소',
         action: (row, is_excel) => {
           let link = 'https://' + themeDnsData?.dns + `/virtual-account/${row?.mid}`;
@@ -114,7 +114,7 @@ const UserList = () => {
         }
       },
       {
-        id: 'virtual_bank_code',
+        id: 'virtual_bank',
         label: '가상계좌정보',
         action: (row, is_excel) => {
 
@@ -130,7 +130,7 @@ const UserList = () => {
       },
     ] : []),
     {
-      id: 'virtual_bank_code',
+      id: 'settle_bank',
       label: '정산계좌정보',
       action: (row, is_excel) => {
         if (themeDnsData?.withdraw_type == 0) {
@@ -160,7 +160,7 @@ const UserList = () => {
       }
     },
     {
-      id: 'settle_amount',
+      id: 'withdraw_amount',
       label: '출금액',
       action: (row, is_excel) => {
         return commarNumber(row['withdraw_amount'] + row['withdraw_fee_amount'])
@@ -299,7 +299,7 @@ const UserList = () => {
     },
     ...(user?.level >= 40 ? [
       {
-        id: 'update_user_deposit',
+        id: 'user_login',
         label: '해당 유저로 로그인',
         action: (row, is_excel) => {
           if (is_excel) {
@@ -606,6 +606,7 @@ const UserList = () => {
             add_button_text={user?.level >= 40 ? '가맹점 추가' : ''}
             head_columns={[]}
             table={'users'}
+            column_table={'merchandises'}
             excel_name={'가맹점'}
           />
         </Card>

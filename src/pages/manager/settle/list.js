@@ -262,6 +262,7 @@ const SettleList = () => {
             onChangePage={onChangePage}
             head_columns={[]}
             table={'settles'}
+            column_table={`settles`}
             excel_name={'보유정산금'}
           />
         </Card>

@@ -209,6 +209,7 @@ const LogList = () => {
             add_button_text={''}
             head_columns={[]}
             table={'logs'}
+            column_table={'logs'}
             excel_name={'로그'}
           />
         </Card>

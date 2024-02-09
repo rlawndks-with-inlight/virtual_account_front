@@ -494,3 +494,13 @@ export const onlyNumberText = (text_ = "") => {
   }
   return str;
 }
+export const getTableIdDuplicate = (list = []) => {
+  let result = {};
+  for (var i = 0; i < list.length; i++) {
+    let dupl_list = list.filter(el => el?.id == list[i]?.id);
+    if (dupl_list.length > 1) {
+      result[list[i]?.id] = dupl_list.length;
+    }
+  }
+  return result;
+}

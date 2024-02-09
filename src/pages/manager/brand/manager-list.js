@@ -307,6 +307,7 @@ const UserList = () => {
                         onChangePage={onChangePage}
                         add_button_text={user?.level >= 50 ? '본사 추가' : ''}
                         head_columns={[]}
+                        column_table={'managers'}
                         table={'users'}
                         excel_name={'본사'}
                     />
