@@ -925,9 +925,7 @@ const UserEdit = () => {
                                   value={ip?.ip}
                                   onChange={(e) => {
                                     let ip_list = [...ipList];
-                                    console.log(ip_list)
-                                    ip_list[idx]['ip'] = e.target.value;
-                                    console.log(ip_list)
+                                    ip_list[idx]['ip'] = e.target.value.replaceAll(' ', '');
                                     setIpList(ip_list);
                                   }}
                                 />
