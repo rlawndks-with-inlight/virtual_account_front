@@ -5,7 +5,7 @@ import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, getAllIdsWithParents } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
 import styled from "styled-components";
 import { react_quill_data } from "src/data/manager-data";
 import { axiosIns } from "src/utils/axios";
@@ -144,14 +144,13 @@ const MotherAccountRequest = () => {
                                 <Stack spacing={3}>
                                     <TextField
                                         label='출금 요청금'
-                                        type="number"
-                                        value={item?.withdraw_amount}
+                                        value={commarNumberInput(item?.withdraw_amount)}
                                         placeholder=""
                                         onChange={(e) => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['withdraw_amount']: parseInt(e.target.value)
+                                                    ['withdraw_amount']: onlyNumberText(e.target.value)
                                                 }
                                             )
                                         }} />
