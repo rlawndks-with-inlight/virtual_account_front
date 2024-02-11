@@ -52,6 +52,7 @@ const WithdrawApiV1 = () => {
                 ['withdraw_bank_code', '출금은행코드', 'O', 'String'],
                 ['withdraw_acct_num', '출금계좌번호', 'O', 'String'],
                 ['withdraw_acct_name', '출금예금주명', 'O', 'String'],
+                ['deposit_acct_name', '입금자명', 'X', 'String'],
                 ['pay_type', '출금타입 (withdraw=정산, return=회원들에게 출금 기본값 withdraw)', 'X', 'String'],
                 ['note', '메모사항', 'X', 'String'],
             ],
