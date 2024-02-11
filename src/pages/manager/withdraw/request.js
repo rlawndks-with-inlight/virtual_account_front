@@ -120,7 +120,7 @@ const WithdrawRequest = () => {
                                             차감 보유정산금
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.withdraw_amount + (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0))} 원
+                                            {commarNumber(parseInt(item?.withdraw_amount) + (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0))} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
