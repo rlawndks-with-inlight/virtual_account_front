@@ -52,6 +52,7 @@ const UserEdit = () => {
 
   })
   const [ipData, setIpData] = useState({});
+  const [ipList, setIpList] = useState([]);
   const [ipSearchObj, setIpSearchObj] = useState({
     page: 1,
     page_size: 10,
@@ -76,6 +77,10 @@ const UserEdit = () => {
       value: 3,
       label: '정산정보'
     },
+    {
+      value: 4,
+      label: '허용 IP',
+    },
   ]
   useEffect(() => {
     if (router.query?.tab >= 0) {
@@ -96,6 +101,7 @@ const UserEdit = () => {
       data = await apiManager('users', 'get', {
         id: router.query.id
       })
+      setIpList(data?.ip_list);
       onChangePage(ipSearchObj)
     }
     if (router.query?.edit_category == 'add') {
@@ -130,9 +136,9 @@ const UserEdit = () => {
       data['telegram_chat_ids'] = '[]';
     }
     if (data?.id) {//수정
-      result = await apiManager('users', 'update', data);
+      result = await apiManager('users', 'update', { ...data, ip_list: ipList });
     } else {//추가
-      result = await apiManager('users', 'create', data);
+      result = await apiManager('users', 'create', { ...data, ip_list: ipList });
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
@@ -901,6 +907,50 @@ const UserEdit = () => {
                       </Card>
                     </Grid>
                   </>}
+              </>}
+            {currentTab == 4 &&
+              <>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={2} style={{ maxWidth: '500px', margin: 'auto' }}>
+                      {ipList.map((ip, idx) => (
+                        <>
+                          {ip?.is_delete != 1 &&
+                            <>
+                              <Row>
+                                <TextField
+                                  sx={{ flexGrow: 1 }}
+                                  size='small'
+                                  label='IP'
+                                  value={ip?.ip}
+                                  onChange={(e) => {
+                                    let ip_list = [...ipList];
+                                    console.log(ip_list)
+                                    ip_list[idx]['ip'] = e.target.value;
+                                    console.log(ip_list)
+                                    setIpList(ip_list);
+                                  }}
+                                />
+                                <IconButton onClick={() => {
+                                  let ip_list = [...ipList];
+                                  ip_list[idx].is_delete = 1;
+                                  setIpList(ip_list);
+                                }}>
+                                  <Icon icon='material-symbols:delete-outline' />
+                                </IconButton>
+                              </Row>
+                            </>}
+                        </>
+                      ))}
+                      <Button variant="outlined" onClick={() => {
+                        setIpList([
+                          ...ipList,
+                          ...[{ ip: '' }]
+                        ])
+                      }}>추가</Button>
+                    </Stack>
+                  </Card>
+                </Grid>
               </>}
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 3 }}>

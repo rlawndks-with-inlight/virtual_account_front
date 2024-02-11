@@ -25,7 +25,6 @@ const MotherAccountRequest = () => {
 
     const { user } = useAuthContext();
     const { setModal } = useModal()
-    const { themeMode, themeDnsData } = useSettingsContext();
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
