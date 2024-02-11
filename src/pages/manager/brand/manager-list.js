@@ -37,16 +37,16 @@ const UserList = () => {
             }
         },
         {
-            id: 'nickname',
-            label: '닉네임',
+            id: 'user_name',
+            label: '유저아이디',
             action: (row, is_excel) => {
                 if (is_excel) {
-                    return row['nickname']
+                    return row['user_name']
                 }
                 return <div style={{ cursor: 'pointer' }} onClick={() => {
                     router.push(`edit/${row?.id}`)
                 }}>
-                    {row['nickname'] ?? "---"}
+                    {row['user_name'] ?? "---"}
                 </div>
             }
         },
@@ -153,7 +153,7 @@ const UserList = () => {
             },
             {
                 id: 'edit',
-                label: '수정/삭제',
+                label: '삭제',
                 action: (row, is_excel) => {
                     if (is_excel) {
                         return "---"

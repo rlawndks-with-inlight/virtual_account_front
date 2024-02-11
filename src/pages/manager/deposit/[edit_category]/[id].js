@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList } from "src/utils/format";
+import { bankCodeList, genderList, telComList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { onlyNumberText } from "src/utils/function";
@@ -65,25 +65,25 @@ const DepositEdit = () => {
     }
   }
   const onCheckPhoneNumRequest = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/request`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/request`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
   }
   const onCheckPhoneNumCheck = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/check`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
   }
   const onCheckAccountRequest = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/account/request`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/account/request`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
   }
   const onCheckAccountCheck = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}/phone/check`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
@@ -98,6 +98,66 @@ const DepositEdit = () => {
                 <Grid item xs={12} md={12}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      <TextField
+                        label='이름'
+                        value={item.name}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['name']: e.target.value
+                            }
+                          )
+                        }}
+
+                      />
+                      <TextField
+                        label='생년월일'
+                        value={item.birth}
+                        placeholder="19990101"
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['birth']: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }}
+
+                      />
+                      <FormControl >
+                        <InputLabel>성별</InputLabel>
+                        <Select label='성별' value={item?.gender}
+                          onChange={(e) => {
+                            setItem(
+                              {
+                                ...item,
+                                ['gender']: e.target.value,
+                              }
+                            )
+                          }}>
+                          {genderList.map((itm) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>통신사</InputLabel>
+                        <Select label='통신사' value={item?.tel_com}
+                          onChange={(e) => {
+                            setItem(
+                              {
+                                ...item,
+                                ['tel_com']: e.target.value,
+                              }
+                            )
+                          }}>
+                          {telComList.map((itm) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
                       <TextField
                         label='휴대폰번호'
                         value={item.phone_num}

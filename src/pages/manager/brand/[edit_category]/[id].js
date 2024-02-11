@@ -747,7 +747,7 @@ const BrandEdit = () => {
               </>}
             {currentTab == 5 &&
               <>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
@@ -876,7 +876,7 @@ const BrandEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack>
@@ -1056,6 +1056,86 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj.is_use_auth == 1} />} label={`인증 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`is_use_auth`]: e.target.checked ? 1 : 0
+                              },
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <FormControl>
+                        <InputLabel>상위사 선택</InputLabel>
+                        <Select
+                          label='상위사 선택'
+                          value={item.auth_corp_type}
+                          onChange={e => {
+                            let data = {
+                              ...item,
+                              ['auth_corp_type']: e.target.value
+                            };
+                            if (e.target.value == 5) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_auth_version`]: 1,
+                              }
+                            }
+                            setItem(data)
+                          }}
+                        >
+                          <MenuItem value={0}>선택안함</MenuItem>
+                          {apiCorpList.map((itm, idx) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label='상점아이디'
+                        value={item.auth_mcht_id}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['auth_mcht_id']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='API ID'
+                        value={item.auth_api_id}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['auth_api_id']: e.target.value
+                            }
+                          )
+                        }} />
+                      <TextField
+                        label='IV'
+                        value={item.auth_iv}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['auth_iv']: e.target.value
+                            }
+                          )
+                        }} />
                     </Stack>
                   </Card>
                 </Grid>
@@ -1418,6 +1498,25 @@ const BrandEdit = () => {
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
                           <MenuItem value={2}>{'v2'}</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>인증버전</InputLabel>
+                        <Select
+                          label='인증버전'
+                          value={item.setting_obj?.api_auth_version}
+                          onChange={e => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`api_auth_version`]: e.target.value
+                              }
+                            })
+                          }}
+                        >
+                          <MenuItem value={0}>{'선택안함'}</MenuItem>
+                          <MenuItem value={1}>{'v1'}</MenuItem>
                         </Select>
                       </FormControl>
                     </Stack>
