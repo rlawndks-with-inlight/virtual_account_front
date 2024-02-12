@@ -112,7 +112,8 @@ const DepositEdit = () => {
                         }}
 
                       />
-                      <TextField
+                      {/*
+                        <TextField
                         label='생년월일'
                         value={item.birth}
                         placeholder="19990101"
@@ -192,6 +193,41 @@ const DepositEdit = () => {
                           endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
                             disabled={!item?.tx_seq_no}
                             onClick={onCheckPhoneNumCheck}>{'인증번호 확인'}</Button>
+                        }}
+                      />
+                      
+                      */}
+                      <FormControl>
+                        <InputLabel>은행선택</InputLabel>
+                        <Select label='은행선택' value={item?.bank_code}
+                          onChange={(e) => {
+                            setItem(
+                              {
+                                ...item,
+                                ['bank_code']: e.target.value,
+                              }
+                            )
+                          }}>
+                          {bankCodeList().map((itm) => {
+                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                          })}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        label='계좌번호'
+                        value={item.acct_num}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['acct_num']: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                            onClick={onCheckAccountRequest}>{'인증번호 발송'}</Button>
                         }}
                       />
                       {(verifyData?.is_check_account && verifyData?.is_check_phone) &&

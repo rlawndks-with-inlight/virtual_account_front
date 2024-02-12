@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, CircularProgress, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Button, Card, CircularProgress, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Col, Row, themeObj } from "src/components/elements/styled-components";
@@ -33,7 +33,7 @@ const WithdrawReturn = () => {
     const [item, setItem] = useState({
         note: '',
     })
-
+    const [errorAlert, setErrorAlert] = useState(false);
     useEffect(() => {
         settingPage();
     }, [])
@@ -73,6 +73,7 @@ const WithdrawReturn = () => {
                     guid: withdraw_list[i]?.guid,
                     pay_type: 'return',
                     otp_num: item?.otp_num,
+
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
@@ -95,15 +96,22 @@ const WithdrawReturn = () => {
                 withdraw_list[i].is_error = 1;
             }
         }
+        let is_exist_error = false;
         let withdraw_result_list = [];
         for (var i = 0; i < withdraw_list.length; i++) {
             if (withdraw_list[i]?.is_confirm != 1) {
                 withdraw_result_list.push(withdraw_list[i]);
             }
+            if (withdraw_list[i]?.is_error == 1) {
+                is_exist_error = true;
+            }
         }
         setWithdraws(withdraw_result_list);
         setTimeout(() => {
             setPageLoading(false);
+            if (is_exist_error) {
+                setErrorAlert(true);
+            }
         }, 1000);
     }
     const onCheckAcct = async (data, idx) => {
@@ -127,6 +135,23 @@ const WithdrawReturn = () => {
     }
     return (
         <>
+            <Dialog
+                open={errorAlert}
+                onClose={() => {
+                    setErrorAlert(false);
+                }}
+                PaperProps={{
+                    style: {
+                        background: 'transparent',
+                        overflow: 'hidden'
+                    }
+                }}
+            >
+                <Alert severity="error">
+                    오류발생시 꼭 이중출금이 되었는지 확인하신 후 출금처리를 해주시길 바랍니다. <br />당사에 불이익이 발생할 수 있습니다.
+                </Alert>
+            </Dialog>
+
             <Dialog open={pageLoading}
                 PaperProps={{
                     style: {
