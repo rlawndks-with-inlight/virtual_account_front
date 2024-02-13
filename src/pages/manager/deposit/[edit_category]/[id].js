@@ -84,6 +84,7 @@ const DepositEdit = () => {
       api_key: themeDnsData?.api_key
     });
     if (result) {
+      toast.success('성공적으로 발송 되었습니다.');
       setItem({
         ...item,
         mcht_trd_no: result?.mcht_trd_no,
@@ -97,6 +98,7 @@ const DepositEdit = () => {
       api_key: themeDnsData?.api_key
     });
     if (result) {
+      toast.success('성공적으로 인증 되었습니다.');
       setItem({
         ...item,
         is_check_account: true,
