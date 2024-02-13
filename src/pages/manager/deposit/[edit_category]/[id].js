@@ -87,6 +87,7 @@ const DepositEdit = () => {
       setItem({
         ...item,
         mcht_trd_no: result?.mcht_trd_no,
+        mcht_cust_id: result?.mcht_cust_id,
       })
     }
   }
