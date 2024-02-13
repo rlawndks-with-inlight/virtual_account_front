@@ -91,7 +91,7 @@ const DepositEdit = () => {
     }
   }
   const onCheckAccountCheck = async () => {
-    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
+    let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/account/check`, 'create', {
       ...item,
       api_key: themeDnsData?.api_key
     });
