@@ -26,6 +26,7 @@ const DepositEdit = () => {
   const [verifyData, setVerifyData] = useState({
     is_check_phone: false,
     is_check_account: false,
+
   })
   const [item, setItem] = useState({
     virtual_acct_num: '',
@@ -56,7 +57,7 @@ const DepositEdit = () => {
   }
   const onSave = async () => {
     let result = await apiServer(`${process.env.API_URL}/api/deposit/v${themeDnsData?.setting_obj?.api_deposit_version}`, 'create', {
-      ...verifyData,
+      ...item,
       mid: item?.mid,
       api_key: themeDnsData?.api_key
     });
@@ -82,6 +83,12 @@ const DepositEdit = () => {
       ...item,
       api_key: themeDnsData?.api_key
     });
+    if (result) {
+      setItem({
+        ...item,
+        mcht_trd_no: result?.mcht_trd_no,
+      })
+    }
   }
   const onCheckAccountCheck = async () => {
     let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
@@ -219,6 +226,7 @@ const DepositEdit = () => {
                         label='계좌번호'
                         value={item.acct_num}
                         placeholder=""
+                        disabled={item?.is_check_account}
                         onChange={(e) => {
                           setItem(
                             {
@@ -229,10 +237,34 @@ const DepositEdit = () => {
                         }}
                         InputProps={{
                           endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
-                            onClick={onCheckAccountRequest}>{'인증번호 발송'}</Button>
+                            onClick={onCheckAccountRequest}
+                            disabled={item?.is_check_account}
+                          >{'인증번호 발송'}</Button>
                         }}
                       />
-                      {(verifyData?.is_check_account && verifyData?.is_check_phone) &&
+                      {item?.mcht_trd_no &&
+                        <>
+                          <TextField
+                            label='인증번호'
+                            value={item.vrf_word}
+                            placeholder=""
+                            disabled={item?.is_check_account}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['vrf_word']: e.target.value
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                disabled={item?.is_check_account}
+                                onClick={onCheckPhoneNumCheck}>{item?.is_check_account ? '확인완료' : '인증번호 확인'}</Button>
+                            }}
+                          />
+                        </>}
+                      {(item?.is_check_account && item?.is_check_phone) &&
                         <>
                           {user?.level >= 40 &&
                             <>
@@ -322,7 +354,7 @@ const DepositEdit = () => {
                       <Button variant="contained" style={{
                         height: '48px', width: '120px', marginLeft: 'auto'
                       }}
-                        disabled={!(verifyData?.is_check_account && verifyData?.is_check_phone)}
+                        disabled={!(item?.is_check_account && item?.is_check_phone)}
                         onClick={() => {
                           setModal({
                             func: () => { onSave() },
