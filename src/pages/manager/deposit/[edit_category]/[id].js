@@ -30,7 +30,6 @@ const DepositEdit = () => {
   })
   const [item, setItem] = useState({
     virtual_acct_num: '',
-    amount: 0,
     deposit_bank_code: '',
     deposit_acct_num: '',
     deposit_acct_name: '',
@@ -299,12 +298,11 @@ const DepositEdit = () => {
                             label='결제금액'
                             value={item.amount}
                             placeholder="결제금액"
-                            type="number"
                             onChange={(e) => {
                               setItem(
                                 {
                                   ...item,
-                                  ['amount']: e.target.value
+                                  ['amount']: onlyNumberText(e.target.value)
                                 }
                               )
                             }}
