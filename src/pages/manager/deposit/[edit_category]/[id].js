@@ -48,6 +48,7 @@ const DepositEdit = () => {
       let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
       data.mid = mid;
       data.phone_num = user?.phone_num;
+      data.name = user?.name;
 
       setItem(data);
     }
@@ -100,6 +101,7 @@ const DepositEdit = () => {
                     <Stack spacing={3}>
                       <TextField
                         label='이름'
+                        disabled={true}
                         value={item.name}
                         placeholder=""
                         onChange={(e) => {
