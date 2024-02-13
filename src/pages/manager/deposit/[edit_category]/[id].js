@@ -324,7 +324,10 @@ const DepositEdit = () => {
                       <Button variant="contained" style={{
                         height: '48px', width: '120px', marginLeft: 'auto'
                       }}
-                        disabled={!(item?.is_check_account && item?.is_check_phone)}
+                        disabled={!(
+                          item?.is_check_account
+                          // && item?.is_check_phone
+                        )}
                         onClick={() => {
                           setModal({
                             func: () => { onSave() },
