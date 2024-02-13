@@ -49,7 +49,7 @@ const DepositEdit = () => {
       let mid = _.find(mcht_list?.content, { id: parseInt(user?.id) })?.mid;
       data.mid = mid;
       data.phone_num = user?.phone_num;
-      data.name = user?.name;
+      data.deposit_acct_name = user?.name;
 
       setItem(data);
     }
@@ -109,13 +109,13 @@ const DepositEdit = () => {
                       <TextField
                         label='이름'
                         disabled={true}
-                        value={item.name}
+                        value={item.deposit_acct_name}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['name']: e.target.value
+                              ['deposit_acct_name']: e.target.value
                             }
                           )
                         }}
@@ -208,12 +208,12 @@ const DepositEdit = () => {
                       */}
                       <FormControl>
                         <InputLabel>은행선택</InputLabel>
-                        <Select label='은행선택' value={item?.bank_code}
+                        <Select label='은행선택' value={item?.deposit_bank_code}
                           onChange={(e) => {
                             setItem(
                               {
                                 ...item,
-                                ['bank_code']: e.target.value,
+                                ['deposit_bank_code']: e.target.value,
                               }
                             )
                           }}>
@@ -224,14 +224,14 @@ const DepositEdit = () => {
                       </FormControl>
                       <TextField
                         label='계좌번호'
-                        value={item.acct_num}
+                        value={item.deposit_acct_num}
                         placeholder=""
                         disabled={item?.is_check_account}
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['acct_num']: onlyNumberText(e.target.value)
+                              ['deposit_acct_num']: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -302,49 +302,7 @@ const DepositEdit = () => {
                               )
                             }}
                           />
-                          <Stack spacing={1}>
-                            <FormControl>
-                              <InputLabel>입금은행</InputLabel>
-                              <Select
-                                label='입금은행'
-                                value={item.deposit_bank_code}
-                                onChange={e => {
-                                  setItem({
-                                    ...item,
-                                    ['deposit_bank_code']: e.target.value
-                                  })
-                                }}
-                              >
-                                {bankCodeList().map((itm, idx) => {
-                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                })}
-                              </Select>
-                            </FormControl>
-                          </Stack>
-                          <TextField
-                            label='입금계좌번호'
-                            value={item.deposit_acct_num}
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['deposit_acct_num']: onlyNumberText(e.target.value)
-                                }
-                              )
-                            }} />
-                          <TextField
-                            label='입금자명'
-                            value={item.deposit_acct_name}
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['deposit_acct_name']: e.target.value
-                                }
-                              )
-                            }} />
                         </>}
-
                     </Stack>
                   </Card>
                 </Grid>
