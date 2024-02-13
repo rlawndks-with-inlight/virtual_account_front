@@ -105,7 +105,7 @@ const MotherAccountList = () => {
         id: 'virtual_acct_balance',
         label: '모계좌잔액',
         action: (row, is_excel) => {
-          return row['virtual_acct_balance']
+          return commarNumber(row['virtual_acct_balance'])
         }
       },
     ] : []),
