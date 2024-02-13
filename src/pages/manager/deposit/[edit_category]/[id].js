@@ -264,7 +264,10 @@ const DepositEdit = () => {
                             }}
                           />
                         </>}
-                      {(item?.is_check_account && item?.is_check_phone) &&
+                      {(
+                        item?.is_check_account
+                        //&& item?.is_check_phone
+                      ) &&
                         <>
                           {user?.level >= 40 &&
                             <>
