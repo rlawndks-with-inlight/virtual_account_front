@@ -93,13 +93,6 @@ const MotherAccountList = () => {
         }
       },
     },
-    {
-      id: 'note',
-      label: '메모',
-      action: (row, is_excel) => {
-        return commarNumber(row['note'])
-      }
-    },
     ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
       {
         id: 'virtual_acct_balance',
@@ -109,6 +102,13 @@ const MotherAccountList = () => {
         }
       },
     ] : []),
+    {
+      id: 'note',
+      label: '메모',
+      action: (row, is_excel) => {
+        return commarNumber(row['note'])
+      }
+    },
     {
       id: 'created_at',
       label: '생성일',
