@@ -260,7 +260,7 @@ const DepositEdit = () => {
                             InputProps={{
                               endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
                                 disabled={item?.is_check_account}
-                                onClick={onCheckPhoneNumCheck}>{item?.is_check_account ? '확인완료' : '인증번호 확인'}</Button>
+                                onClick={onCheckAccountCheck}>{item?.is_check_account ? '확인완료' : '인증번호 확인'}</Button>
                             }}
                           />
                         </>}
