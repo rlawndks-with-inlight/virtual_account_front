@@ -96,6 +96,12 @@ const DepositEdit = () => {
       ...item,
       api_key: themeDnsData?.api_key
     });
+    if (result) {
+      setItem({
+        ...item,
+        is_check_account: true,
+      })
+    }
   }
   return (
     <>
