@@ -90,7 +90,6 @@ const DepositApiV1 = () => {
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
                 ['mid', '가맹점 mid', 'O', 'String'],
-                ['amount', '금액', 'O', 'Integer'],
                 ['mcht_trd_no', '요청시 받은 거래번호', 'O', 'String'],
                 ['mcht_cust_id', '요청시 받은 고객번호', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
