@@ -12,9 +12,13 @@ import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { payTypeList } from "src/utils/format";
 import _ from "lodash";
+import { useSettingsContext } from "src/components/settings";
+
 const MotherAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
+
   const defaultColumns = [
     {
       id: 'trx_id',
@@ -93,9 +97,18 @@ const MotherAccountList = () => {
       id: 'note',
       label: '메모',
       action: (row, is_excel) => {
-        return row['note']
+        return commarNumber(row['note'])
       }
     },
+    ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
+      {
+        id: 'virtual_acct_balance',
+        label: '모계좌잔액',
+        action: (row, is_excel) => {
+          return row['virtual_acct_balance']
+        }
+      },
+    ] : []),
     {
       id: 'created_at',
       label: '생성일',
