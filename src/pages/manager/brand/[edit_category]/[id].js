@@ -1667,6 +1667,19 @@ const BrandEdit = () => {
                         />
                       </Stack>
                       <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_reload_when_deposit == 1} />} label={`입금들어올시 결제내역페이지 새로고침`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              setting_obj: {
+                                ...item.setting_obj,
+                                ['is_reload_when_deposit']: e.target.checked ? 1 : 0,
+                              }
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <Stack>
                         <FormControlLabel control={<Switch checked={item.is_use_asapmall_noti == 1} />} label={`asapmall 노티사용여부`}
                           onChange={(e) => {
                             let obj = {

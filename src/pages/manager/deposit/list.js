@@ -436,7 +436,7 @@ const DepositList = () => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
         let method_list = [`deposit`, 'settle_request']
-        if (method_list.includes(method)) {
+        if (method == 'deposit' && themeDnsData?.setting_obj?.is_reload_when_deposit == 1) {
           onChangePage(searchObj);
         }
       }
