@@ -79,7 +79,7 @@ const DepositApiV1 = () => {
             ],
         },
         1: {
-            uri: '/api/auth/v1/account/request',
+            uri: '/api/auth/v1/account/check',
             explain: `1원인증확인 api 입니다.`,
             req_head: [
                 '키',
