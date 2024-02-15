@@ -165,7 +165,10 @@ const VirtualAccountApiV1 = () => {
                 ['mid', '가맹점 mid', 'O', 'String'],
                 ['guid', '출금할 가상계좌 guid', 'O', 'String'],
                 ['withdraw_amount', '출금액', 'O', 'Integer'],
-                ['pay_type', '출금타입 (가맹점출금-5, 유저출금-20)', 'O', 'Integer'],
+                ['pay_type', '출금타입 (가맹점출금-withdraw, 유저출금-return)', 'O', 'String'],
+                ...(themeDnsData?.is_use_sign_key == 1 ? [
+                    ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],
+                ] : []),
                 ['note', '메모', 'X', 'String'],
             ],
             res_head: [
@@ -217,7 +220,7 @@ const VirtualAccountApiV1 = () => {
                             <TableRow sx={{ padding: '1rem 0' }}>
                                 {col && col.map(row => (
                                     <>
-                                        <TableCell style={{ textAlign: 'center' }}>
+                                        <TableCell style={{ textAlign: 'center', whiteSpace: 'pre' }}>
                                             {row}
                                         </TableCell>
                                     </>

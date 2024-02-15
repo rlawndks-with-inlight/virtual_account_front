@@ -341,20 +341,35 @@ const UserEdit = () => {
                             value={item.otp_token}
                             placeholder="OTP 키"
                             disabled={true}
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['otp_token']: e.target.value
-                                }
-                              )
-                            }}
                             InputProps={{
                               endAdornment: <IconButton onClick={async () => {
                                 let result = await apiManager(`brands/otp`, 'create');
                                 setItem({
                                   ...item,
                                   ['otp_token']: result?.base32,
+                                })
+                              }}>
+                                <Icon icon='gg:redo' />
+                              </IconButton>
+                            }}
+                          />
+                        </>
+                        :
+                        <>
+                        </>}
+                      {(themeDnsData?.is_use_sign_key && user?.level >= 40) ?
+                        <>
+                          <TextField
+                            label='SIGN KEY'
+                            value={item.sign_key}
+                            placeholder="SIGN KEY"
+                            disabled={true}
+                            InputProps={{
+                              endAdornment: <IconButton onClick={async () => {
+                                let result = await apiManager(`brands/sign-key`, 'create');
+                                setItem({
+                                  ...item,
+                                  ['sign_key']: result?.rand_text,
                                 })
                               }}>
                                 <Icon icon='gg:redo' />

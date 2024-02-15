@@ -903,6 +903,7 @@ const BrandEdit = () => {
                               ['withdraw_corp_type']: e.target.value
                             };
                             if (e.target.value == 1) {
+                              data['withdraw_type'] = 0;
                               data['setting_obj'] = {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 2,
@@ -1605,7 +1606,16 @@ const BrandEdit = () => {
                           </IconButton>
                         }}
                       />
-
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_sign_key == 1} />} label={`sign key 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['is_use_sign_key']: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>
