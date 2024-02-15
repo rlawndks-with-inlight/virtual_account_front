@@ -33,10 +33,12 @@ const WithdrawRequest = () => {
         settingPage();
     }, [])
     const settingPage = async () => {
+        let api_sign_val = await apiManager('auth/sign-key', 'get',);
         let data = await apiManager('auth/deposit', 'get',);
         setItem({
             ...item,
             ...data,
+            api_sign_val: api_sign_val,
         });
         setLoading(false);
     }
@@ -54,6 +56,7 @@ const WithdrawRequest = () => {
                 pay_type: 'withdraw',
                 otp_num: item?.otp_num,
                 guid: item?.guid,
+                api_sign_val: item?.api_sign_val,
             });
         } else {
             result = await apiManager('withdraws', 'create', {

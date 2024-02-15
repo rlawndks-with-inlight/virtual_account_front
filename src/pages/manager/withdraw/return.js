@@ -38,10 +38,12 @@ const WithdrawReturn = () => {
         settingPage();
     }, [])
     const settingPage = async () => {
+        let api_sign_val = await apiManager('auth/sign-key', 'get',);
         let data = await apiManager('auth/deposit', 'get',);
         setItem({
             ...item,
             ...data,
+            api_sign_val: api_sign_val,
         });
         let virtual_accounts = await apiManager('virtual-accounts', 'list', {
             mcht_id: user?.id,
@@ -73,7 +75,7 @@ const WithdrawReturn = () => {
                     guid: withdraw_list[i]?.guid,
                     pay_type: 'return',
                     otp_num: item?.otp_num,
-
+                    api_sign_val: item?.api_sign_val,
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
