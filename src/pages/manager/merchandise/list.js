@@ -7,10 +7,10 @@ import { Col, Row } from "src/components/elements/styled-components";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { apiManager } from "src/utils/api-manager";
+import { apiManager, apiUtil } from "src/utils/api-manager";
 import { commarNumber, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { bankCodeList, operatorLevelList } from "src/utils/format";
+import { bankCodeList, operatorLevelList, virtualAcctLinkStatusList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 import _ from "lodash";
 import navConfig from "src/layouts/manager/nav/config-navigation";
@@ -106,13 +106,40 @@ const UserList = () => {
             color: 'blue',
           }}
             onClick={() => {
-              window.open(link)
+              window.open(`/virtual-account/${row?.mid}`)
             }}
           >
             {link}
           </div>
         }
       },
+      ...(user?.level >= 40 ? [
+        {
+          id: 'virtual_bank',
+          label: '발급주소 상태',
+          action: (row, is_excel) => {
+
+            if (is_excel) {
+              return `---`
+            }
+            return <Select
+              size='small'
+              defaultValue={row?.virtual_acct_link_status}
+              disabled={!(user?.level >= 40)}
+              onChange={async (e) => {
+                let result = await apiUtil(`users/virtual_acct_link_status`, 'update', {
+                  id: row?.id,
+                  value: e.target.value
+                });
+              }}
+            >
+              {virtualAcctLinkStatusList.map((itm) => {
+                return <MenuItem value={itm.value}>{itm?.label}</MenuItem>
+              })}
+            </Select>
+          }
+        },
+      ] : []),
       {
         id: 'virtual_bank',
         label: '가상계좌정보',

@@ -76,6 +76,11 @@ export const ntvFrnrList = [
     { label: '외국인', value: 'F' },
 
 ]
+export const virtualAcctLinkStatusList = [
+    { label: '정상', value: 0 },
+    { label: '차단', value: 1 },
+
+]
 export const telComList = [
     { label: 'SKT', value: '01' },
     { label: 'KT', value: '02' },
