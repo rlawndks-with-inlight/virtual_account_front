@@ -33,7 +33,11 @@ const WithdrawRequest = () => {
         settingPage();
     }, [])
     const settingPage = async () => {
-        let api_sign_val = await apiManager('auth/sign-key', 'get',);
+        let api_sign_val = '';
+        if (themeDnsData?.is_use_sign_key == 1) {
+            api_sign_val = await apiManager('auth/sign-key', 'get',);
+            api_sign_val = api_sign_val?.api_sign_val;
+        }
         let data = await apiManager('auth/deposit', 'get',);
         setItem({
             ...item,
