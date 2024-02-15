@@ -196,6 +196,9 @@ const VirtualAccountApiV1 = () => {
                 ['acct_num', '입금계좌번호', 'String'],
                 ['acct_name', '입금자명', 'String'],
                 ['tid', '거래번호', 'String'],
+                ...(themeDnsData?.is_use_sign_key == 1 ? [
+                    ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'String'],
+                ] : []),
             ],
 
         },
