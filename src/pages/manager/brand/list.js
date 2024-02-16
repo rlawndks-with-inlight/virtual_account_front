@@ -234,6 +234,20 @@ const BrandList = () => {
               })
             }}
           />
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            value={dialogObj.note}
+            margin="dense"
+            label="메모"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                note: e.target.value
+              })
+            }}
+          />
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onProcessPay}>
