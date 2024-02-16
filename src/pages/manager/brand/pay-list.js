@@ -44,6 +44,13 @@ const BrandPayList = () => {
       }
     },
     {
+      id: 'note',
+      label: '메모',
+      action: (row, is_excel) => {
+        return row['note'] ?? "---"
+      }
+    },
+    {
       id: 'created_at',
       label: '생성시간',
       action: (row, is_excel) => {
