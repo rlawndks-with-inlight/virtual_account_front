@@ -118,6 +118,17 @@ const WithdrawList = () => {
       }
     },
     {
+      id: 'expect_amount',
+      label: '이체예정금',
+      action: (row, is_excel) => {
+        if (row?.withdraw_status == 0) {
+          return commarNumber(row['expect_amount'] * (-1) - row['withdraw_fee'])
+        } else {
+          return 0;
+        }
+      }
+    },
+    {
       id: 'amount',
       label: '이체금',
       action: (row, is_excel) => {
@@ -136,17 +147,10 @@ const WithdrawList = () => {
       }
     },
     {
-      id: 'expect_amount',
-      label: '차감예정 보유정산금',
-      action: (row, is_excel) => {
-        return commarNumber(row['expect_amount'] * (-1))
-      }
-    },
-    {
       id: 'minus_amount',
       label: '차감 보유정산금',
       action: (row, is_excel) => {
-        return commarNumber(row['amount'] * (-1))
+        return commarNumber(row['expect_amount'] * (-1))
       }
     },
     ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
