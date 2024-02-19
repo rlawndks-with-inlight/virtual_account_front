@@ -42,7 +42,18 @@ const WithdrawList = () => {
       id: 'level',
       label: '유저레벨',
       action: (row, is_excel) => {
-        return getUserLevelByNumber(row['level'])
+        let level = row['level'];
+        for (var i = 0; i < themeDnsData?.operator_list.length; i++) {
+          let {
+            value,
+            label,
+            num
+          } = themeDnsData?.operator_list[i];
+          if (row[`sales${num}_level`]) {
+            level = row[`sales${num}_level`];
+          }
+        }
+        return getUserLevelByNumber(level)
       },
     },
     {
