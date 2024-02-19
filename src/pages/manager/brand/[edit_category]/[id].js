@@ -1718,6 +1718,19 @@ const BrandEdit = () => {
                               )
                             }}
                           />
+                          <TextField
+                            label='asapmall back 도메인'
+                            value={item.asapmall_back_dns}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['asapmall_back_dns']: e.target.value
+                                }
+                              )
+                            }}
+                          />
                         </>}
                     </Stack>
                   </Card>
