@@ -49,8 +49,9 @@ const WithdrawList = () => {
             label,
             num
           } = themeDnsData?.operator_list[i];
-          if (row[`sales${num}_level`]) {
+          if (row[`sales${num}_level`] && !level) {
             level = row[`sales${num}_level`];
+            break;
           }
         }
         return getUserLevelByNumber(level)
@@ -60,10 +61,28 @@ const WithdrawList = () => {
       id: 'nickname',
       label: '상호',
       action: (row, is_excel) => {
-        if (is_excel) {
-          return `${row[`nickname`]} (${row['user_name']})`
+        let user_item = {
+          nickname: row[`nickname`],
+          user_name: row['user_name'],
         }
-        return <div style={{ textAlign: 'center' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
+        for (var i = 0; i < themeDnsData?.operator_list.length; i++) {
+          let {
+            value,
+            label,
+            num
+          } = themeDnsData?.operator_list[i];
+          if (row[`sales${num}_user_name`] && !user_item.user_name) {
+            user_item = {
+              nickname: row[`sales${num}_nickname`],
+              user_name: row[`sales${num}_user_name`],
+            }
+            break;
+          }
+        }
+        if (is_excel) {
+          return `${user_item[`nickname`]} (${user_item['user_name']})`
+        }
+        return <div style={{ textAlign: 'center' }}>{`${user_item[`nickname`]}\n(${user_item['user_name']})`}</div>
       }
     },
     {
