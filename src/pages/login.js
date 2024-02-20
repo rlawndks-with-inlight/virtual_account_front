@@ -19,6 +19,7 @@ import { PATH_MANAGER } from 'src/routes/paths';
 import { Row } from 'src/components/elements/styled-components';
 import { apiManager } from 'src/utils/api-manager';
 import navConfig from 'src/layouts/manager/nav/config-navigation';
+import { getReturnUri } from 'src/utils/function';
 const Tour = dynamic(
   () => import('reactour'),
   { ssr: false },
@@ -34,16 +35,10 @@ const Login = () => {
   const [optNum, setOptNum] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const getReturnUri = () => {
-    for (var i = 0; i < navList.length; i++) {
-      if (themeDnsData?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
-        return navList[i].items[0].path
-      }
-    }
-  }
+
   useEffect(() => {
     if (user?.level >= 10) {
-      router.push(getReturnUri());
+      router.push(getReturnUri(navList));
     }
     setLoading(false);
   }, [user])
@@ -56,7 +51,7 @@ const Login = () => {
   const onSubmit = async () => {
     let user = await login(username, password, optNum);
     if (user) {
-      router.push(getReturnUri());
+      router.push(getReturnUri(navList));
     }
   };
   const [tourOpen, setTourOpen] = useState(false);

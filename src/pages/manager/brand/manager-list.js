@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
+import { commarNumber, getReturnUri, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -198,13 +198,7 @@ const UserList = () => {
         amount: 0,
     })
 
-    const getReturnUri = () => {
-        for (var i = 0; i < navList.length; i++) {
-            if (themeDnsData?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
-                return navList[i].items[0].path
-            }
-        }
-    }
+
     useEffect(() => {
         pageSetting();
     }, [])
@@ -250,7 +244,7 @@ const UserList = () => {
             user_id,
         })
         if (result?.id) {
-            window.location.href = getReturnUri();
+            window.location.href = getReturnUri(navList);
         }
     }
     return (

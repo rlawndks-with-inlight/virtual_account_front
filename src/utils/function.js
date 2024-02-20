@@ -137,7 +137,16 @@ export const getDomain = () => {
 
   return domain();
 }
+export const getReturnUri = (navList) => {
+  let dns_data = getLocalStorage('themeDnsData');
+  dns_data = JSON.parse(dns_data);
 
+  for (var i = 0; i < navList.length; i++) {
+    if (dns_data?.setting_obj[`is_not_show_tab_${navList[i].id}`] != 1) {
+      return navList[i].items[0].path
+    }
+  }
+}
 export const getUserLevelByNumber = (num) => {
   let dns_data = getLocalStorage('themeDnsData');
   dns_data = JSON.parse(dns_data);
@@ -305,6 +314,7 @@ export const detetimeFormat = (datetime) => {
 }
 import { useEffect, useState } from 'react'
 import { operatorLevelList } from "./format";
+import navConfig from "src/layouts/manager/nav/config-navigation";
 
 function easeOutExpo(t) {
   return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)

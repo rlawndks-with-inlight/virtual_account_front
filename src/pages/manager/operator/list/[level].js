@@ -8,11 +8,12 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getReturnUri, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList } from "src/utils/format";
 import _ from "lodash";
 import { useSettingsContext } from "src/components/settings";
+import navConfig from "src/layouts/manager/nav/config-navigation";
 const OperatorList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -168,6 +169,26 @@ const OperatorList = () => {
         </Select>
       }
     },
+    ...(user?.level >= 40 ? [
+      {
+        id: 'user_login',
+        label: '해당 유저로 로그인',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setModal({
+                func: () => { onSignInAnotherUser(row?.id) },
+                icon: 'material-symbols:lock-outline',
+                title: '해당 유저로 로그인 하시겠습니까?'
+              })
+            }}
+          >유저 로그인</Button>
+        }
+      },
+    ] : []),
     {
       id: 'edit_password',
       label: '비밀번호 변경',
@@ -215,6 +236,7 @@ const OperatorList = () => {
       }
     },
   ]
+  const navList = navConfig();
   const router = useRouter();
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
@@ -288,6 +310,14 @@ const OperatorList = () => {
 
       toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj);
+    }
+  }
+  const onSignInAnotherUser = async (user_id) => {
+    const result = await apiManager(`auth/sign-in-another-user`, 'create', {
+      user_id,
+    })
+    if (result?.id) {
+      window.location.href = getReturnUri(navList);
     }
   }
   return (
