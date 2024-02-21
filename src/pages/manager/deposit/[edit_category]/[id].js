@@ -176,9 +176,9 @@ const DepositEdit = () => {
                             for (var i = 0; i < excel_list.length; i++) {
                               deposit_list.push({
                                 deposit_acct_name: excel_list[i][0],
-                                deposit_bank_code: excel_list[i][1],
-                                deposit_acct_num: excel_list[i][2],
-                                amount: excel_list[i][3],
+                                deposit_bank_code: onlyNumberText(excel_list[i][1]),
+                                deposit_acct_num: onlyNumberText(excel_list[i][2]),
+                                amount: onlyNumberText(excel_list[i][3]),
                                 mid: user?.level == 10 ? user?.mid : '',
                               })
                             }
