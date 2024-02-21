@@ -151,16 +151,22 @@ const DepositEdit = () => {
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Row style={{ marginLeft: 'auto', columnGap: '0.5rem' }}>
-                        <Button variant="outlined" onClick={() => {
-                          excelDownload([], [
-                            { label: '이름' },
-                            { label: '은행선택' },
-                            { label: '계좌번호' },
-                            { label: '결제금액' },
-                          ], `결제등록양식_${returnMoment().substring(0, 10)}`)
-                        }}>엑셀양식추출</Button>
+                        <Button variant="outlined"
+                          startIcon={<Icon icon={'material-symbols:download-sharp'} />}
+                          onClick={() => {
+                            excelDownload([], [
+                              { label: '이름' },
+                              { label: '은행선택' },
+                              { label: '계좌번호' },
+                              { label: '결제금액' },
+                            ], `결제등록양식_${returnMoment().substring(0, 10)}`)
+                          }}>엑셀양식추출</Button>
                         <label htmlFor={'excel_upload'}>
-                          <Button variant="contained" component="span">엑셀등록</Button>
+                          <Button
+                            variant="contained"
+                            component="span"
+                            startIcon={<Icon icon={'icon-park-outline:excel'} />}
+                          >엑셀등록</Button>
                         </label>
                         <input type={'file'} onChange={async (e) => {
                           let excel_list = await uploadExcel(e, 'excel_upload')
