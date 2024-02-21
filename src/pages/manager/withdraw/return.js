@@ -327,12 +327,12 @@ const WithdrawReturn = () => {
                         </Grid>
                         <Grid item xs={12} md={12}>
                             <Card sx={{ p: 2, height: '100%' }}>
-                                <Stack spacing={3}>
+                                <Stack spacing={3} style={{ overflow: 'auto' }}>
                                     {withdraws.map(((vir_acct, idx) => (
                                         <>
                                             {vir_acct?.is_confirm != 1 &&
                                                 <>
-                                                    <Row style={{ columnGap: '1rem' }}>
+                                                    <Row style={{ columnGap: '1rem', minWidth: '800px' }}>
                                                         {themeDnsData?.withdraw_type == 0 &&
                                                             <>
                                                                 <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
