@@ -11,7 +11,7 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList, genderList, telComList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
-import { onlyNumberText } from "src/utils/function";
+import { excelDownload, onlyNumberText, returnMoment, uploadExcel } from "src/utils/function";
 import { Row } from "src/components/elements/styled-components";
 import { Icon } from "@iconify/react";
 
@@ -129,6 +129,7 @@ const DepositEdit = () => {
       })
     }
   }
+
   return (
     <>
       <Dialog open={pageLoading}
@@ -150,8 +151,35 @@ const DepositEdit = () => {
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Row style={{ marginLeft: 'auto', columnGap: '0.5rem' }}>
-                        <Button variant="outlined">엑셀양식추출</Button>
-                        <Button variant="contained">엑셀등록</Button>
+                        <Button variant="outlined" onClick={() => {
+                          excelDownload([], [
+                            { label: '이름' },
+                            { label: '은행선택' },
+                            { label: '계좌번호' },
+                            { label: '결제금액' },
+                          ], `결제등록양식_${returnMoment().substring(0, 10)}`)
+                        }}>엑셀양식추출</Button>
+                        <label htmlFor={'excel_upload'}>
+                          <Button variant="contained" component="span">엑셀등록</Button>
+                        </label>
+                        <input type={'file'} onChange={async (e) => {
+                          let excel_list = await uploadExcel(e, 'excel_upload')
+                          excel_list.shift();
+                          if (excel_list.length > 0) {
+                            let deposit_list = [...deposits];
+                            for (var i = 0; i < excel_list.length; i++) {
+                              deposit_list.push({
+                                deposit_acct_name: excel_list[i][0],
+                                deposit_bank_code: excel_list[i][1],
+                                deposit_acct_num: excel_list[i][2],
+                                amount: excel_list[i][3],
+                                mid: user?.level == 10 ? user?.mid : '',
+                              })
+                            }
+                            setDeposits(deposit_list);
+                          }
+
+                        }} id='excel_upload' style={{ display: 'none' }} />
                       </Row>
                       {deposits.map((deposit, idx) => (
                         <>

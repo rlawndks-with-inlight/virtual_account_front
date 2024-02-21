@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { deleteCookie, getCookie } from "./react-cookie";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import $ from 'jquery';
 
 export const objToQuery = (obj_) => {
   let obj = { ...obj_ };
@@ -412,7 +413,26 @@ export const excelDownload = async (excelData, columns = [], param_table) => {
   const excelFile = new Blob([excelButter], { type: excelFileType });
   FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
 }
-
+export const uploadExcel = async (e, id_name) => {
+  return new Promise((resolve, reject) => {
+    e.preventDefault();
+    var files = e.target.files, f = files[0];
+    var reader = new FileReader();
+    reader.onload = async function (e) {
+      let data = e.target.result;
+      let readedData = XLSX.read(data, { type: 'binary' });
+      let sheet_name = readedData.SheetNames[0];
+      let sheets = readedData.Sheets[sheet_name];
+      let list = XLSX.utils.sheet_to_json(sheets, { header: 1 });
+      resolve(list);
+    };
+    reader.onerror = function (error) {
+      reject(error);
+    };
+    reader.readAsBinaryString(f);
+    $(`#${id_name}`).val("");
+  });
+}
 export const getUserFee = (item, user_level, operator_list = [], head_office_fee) => {
   let top_fee = head_office_fee;
   let level = 40;
