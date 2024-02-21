@@ -243,13 +243,14 @@ const DepositEdit = () => {
                             }
                           )
                         }}
-                        InputProps={{
-                          endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
-                            onClick={onCheckAccountRequest}
-                            disabled={item?.is_check_account}
-                          >{'인증번호 발송'}</Button>
-                        }}
+                      // InputProps={{
+                      //   endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                      //     onClick={onCheckAccountRequest}
+                      //     disabled={item?.is_check_account}
+                      //   >{'인증번호 발송'}</Button>
+                      // }}
                       />
+                      {/*
                       {item?.mcht_trd_no &&
                         <>
                           <TextField
@@ -271,48 +272,44 @@ const DepositEdit = () => {
                                 onClick={onCheckAccountCheck}>{item?.is_check_account ? '확인완료' : '인증번호 확인'}</Button>
                             }}
                           />
-                        </>}
-                      {(
-                        item?.is_check_account
-                        //&& item?.is_check_phone
-                      ) &&
+                        </>}  
+                      
+                      */}
+                      {user?.level >= 40 &&
                         <>
-                          {user?.level >= 40 &&
-                            <>
-                              <FormControl variant='outlined'  >
-                                <InputLabel>가맹점선택</InputLabel>
-                                <Select label='가맹점선택' value={item?.mid}
-                                  onChange={(e) => {
-                                    setItem({
-                                      ...item,
-                                      mid: e.target.value,
-                                    })
-                                  }}>
-                                  {mchtList.map(mcht => {
-                                    return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
-                                  })}
-                                </Select>
-                              </FormControl>
-                            </>}
-                          <TextField
-                            label='결제금액'
-                            value={item.amount}
-                            placeholder="결제금액"
-                            onChange={(e) => {
-                              setItem(
-                                {
+                          <FormControl variant='outlined'  >
+                            <InputLabel>가맹점선택</InputLabel>
+                            <Select label='가맹점선택' value={item?.mid}
+                              onChange={(e) => {
+                                setItem({
                                   ...item,
-                                  ['amount']: onlyNumberText(e.target.value)
-                                }
-                              )
-                            }}
-                            InputProps={{
-                              endAdornment: (
-                                <div>원</div>
-                              )
-                            }}
-                          />
+                                  mid: e.target.value,
+                                })
+                              }}>
+                              {mchtList.map(mcht => {
+                                return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
+                              })}
+                            </Select>
+                          </FormControl>
                         </>}
+                      <TextField
+                        label='결제금액'
+                        value={item.amount}
+                        placeholder="결제금액"
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['amount']: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
@@ -322,10 +319,10 @@ const DepositEdit = () => {
                       <Button variant="contained" style={{
                         height: '48px', width: '120px', marginLeft: 'auto'
                       }}
-                        disabled={!(
-                          item?.is_check_account
-                          // && item?.is_check_phone
-                        )}
+                        // disabled={!(
+                        //   item?.is_check_account
+                        //   // && item?.is_check_phone
+                        // )}
                         onClick={() => {
                           setModal({
                             func: () => { onSave() },
