@@ -161,6 +161,7 @@ const DepositEdit = () => {
                               label='이름'
                               value={deposit.deposit_acct_name}
                               placeholder=""
+                              error={deposit?.is_error == 1}
                               onChange={(e) => {
                                 let deposit_list = [...deposits];
                                 deposit_list[idx].deposit_acct_name = e.target.value;
@@ -252,9 +253,10 @@ const DepositEdit = () => {
                       />
                       
                       */}
-                            <FormControl style={{ width: '50%' }}>
+                            <FormControl style={{ width: '50%' }} error={deposit?.is_error == 1}>
                               <InputLabel>은행선택</InputLabel>
                               <Select label='은행선택' value={deposit?.deposit_bank_code}
+
                                 onChange={(e) => {
                                   let deposit_list = [...deposits];
                                   deposit_list[idx].deposit_bank_code = e.target.value;
@@ -266,6 +268,7 @@ const DepositEdit = () => {
                               </Select>
                             </FormControl>
                             <TextField
+                              error={deposit?.is_error == 1}
                               style={{ width: '50%' }}
                               label='계좌번호'
                               value={deposit.deposit_acct_num}
@@ -309,7 +312,7 @@ const DepositEdit = () => {
                       */}
                             {user?.level >= 40 &&
                               <>
-                                <FormControl variant='outlined' style={{ width: '50%' }}>
+                                <FormControl variant='outlined' style={{ width: '50%' }} error={deposit?.is_error == 1}>
                                   <InputLabel>가맹점선택</InputLabel>
                                   <Select label='가맹점선택' value={deposit?.mid}
                                     onChange={(e) => {
@@ -324,6 +327,7 @@ const DepositEdit = () => {
                                 </FormControl>
                               </>}
                             <TextField
+                              error={deposit?.is_error == 1}
                               style={{ width: '50%' }}
                               label='결제금액'
                               value={deposit.amount}
