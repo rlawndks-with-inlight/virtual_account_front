@@ -134,21 +134,39 @@ const DepositList = () => {
         }
       },
     },
-    {
-      id: 'virtual_acct_num',
-      label: '가상계좌번호',
-      action: (row, is_excel) => {
-        return row['virtual_acct_num'] ?? "---"
-      },
-      sx: (row) => {
-
-        if (row?.deposit_status == 10) {
-          return {
-            color: 'red'
+    ...(themeDnsData?.is_use_corp_account == 1 ? [
+      {
+        id: 'corp_acct_num',
+        label: '법인통장번호',
+        action: (row, is_excel) => {
+          return row['corp_acct_num'] ?? "---"
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
           }
-        }
+        },
       },
-    },
+    ] : []),
+    ...(themeDnsData?.withdraw_type == 0 ? [
+      {
+        id: 'virtual_acct_num',
+        label: '가상계좌번호',
+        action: (row, is_excel) => {
+          return row['virtual_acct_num'] ?? "---"
+        },
+        sx: (row) => {
+
+          if (row?.deposit_status == 10) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
     // {
     //   id: 'user_name',
     //   label: '상태',
