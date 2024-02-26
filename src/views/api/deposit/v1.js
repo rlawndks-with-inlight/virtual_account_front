@@ -15,10 +15,12 @@ const DepositApiV1 = () => {
             value: 1,
             label: '1원인증확인'
         },
-        {
-            value: 2,
-            label: '입금데이터추가'
-        },
+        ...(themeDnsData?.is_can_add_deposit == 1 ? [
+            {
+                value: 2,
+                label: '입금데이터추가'
+            },
+        ] : []),
         {
             value: 3,
             label: '입금데이터노티'
