@@ -569,7 +569,7 @@ const DepositList = () => {
             columns={columns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={themeDnsData?.is_use_corp_account == 1 ? '결제내역추가' : ''}
+            add_button_text={themeDnsData?.is_can_add_deposit == 1 ? '결제내역추가' : ''}
             head_columns={[]}
             table={'deposits'}
             column_table={'deposits'}
