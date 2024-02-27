@@ -42,6 +42,7 @@ export const payTypeList = [
     { value: 0, label: '입금', color: 'success' },
     { value: 5, label: '출금', color: 'error' },
     { value: 10, label: '모계좌출금', color: 'info' },
+    { value: 12, label: '모계좌삭감', color: 'error' },
     { value: 15, label: '가맹점 -> 모계좌이체', color: 'warning' },
     { value: 20, label: '반환', color: 'warning' },
     { value: 25, label: '관리자 지급', color: 'info' },
