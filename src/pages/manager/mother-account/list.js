@@ -169,6 +169,10 @@ const MotherAccountList = () => {
                 })}
               </Select>
             </FormControl>
+            {user?.level >= 50 &&
+              <>
+                <Button variant="outlined">모계좌삭감</Button>
+              </>}
           </Row>
           <ManagerTable
             data={data}
