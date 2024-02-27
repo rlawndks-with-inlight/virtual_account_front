@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserLevelByNumber, onlyNumberText } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { payTypeList } from "src/utils/format";
 import _ from "lodash";
@@ -68,6 +68,8 @@ const MotherAccountList = () => {
           amount = row['amount'] + row['withdraw_fee'];
         } else if (row['pay_type'] == 10) {
           amount = row['amount'];
+        } else if (row['pay_type'] == 12) {
+          amount = row['amount'];
         } else if (row['pay_type'] == 15) {
           amount = row['amount'];
         } else if (row['pay_type'] == 20) {
@@ -82,6 +84,8 @@ const MotherAccountList = () => {
         } else if (row['pay_type'] == 5) {
           amount = row['amount'] + row['withdraw_fee'];
         } else if (row['pay_type'] == 10) {
+          amount = row['amount'];
+        } else if (row['pay_type'] == 12) {
           amount = row['amount'];
         } else if (row['pay_type'] == 15) {
           amount = row['amount'];
@@ -106,7 +110,7 @@ const MotherAccountList = () => {
       id: 'note',
       label: '메모',
       action: (row, is_excel) => {
-        return commarNumber(row['note'])
+        return row['note']
       }
     },
     {
@@ -127,7 +131,9 @@ const MotherAccountList = () => {
     search: '',
     is_mother: 1,
   })
-
+  const [changeMotherDepositObj, setChangeMotherDepositObj] = useState({
+    amount: 0,
+  })
   useEffect(() => {
     pageSetting();
   }, [])
@@ -148,9 +154,63 @@ const MotherAccountList = () => {
     setSearchObj(obj);
   }
 
-
+  const onChangeMotherDeposit = async () => {
+    setChangeMotherDepositObj({})
+    let result = await apiManager(`brands/change-deposit`, 'create', changeMotherDepositObj)
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
+      <Dialog
+        open={changeMotherDepositObj.open}
+        onClose={() => {
+          setChangeMotherDepositObj({})
+        }}
+      >
+        <DialogTitle>{`모계좌 차감`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            차감할 금액을 입력해 주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={changeMotherDepositObj.amount}
+            margin="dense"
+            label="금액"
+            type="number"
+            onChange={(e) => {
+              setChangeMotherDepositObj({
+                ...changeMotherDepositObj,
+                amount: '-' + onlyNumberText(e.target.value)
+              })
+            }}
+          />
+
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            value={changeMotherDepositObj.note}
+            margin="dense"
+            label="메모"
+            onChange={(e) => {
+              setChangeMotherDepositObj({
+                ...changeMotherDepositObj,
+                note: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => onChangeMotherDeposit()}>
+            차감하기
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={3}>
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
@@ -171,7 +231,12 @@ const MotherAccountList = () => {
             </FormControl>
             {user?.level >= 50 &&
               <>
-                <Button variant="outlined">모계좌삭감</Button>
+                <Button variant="outlined" onClick={() => {
+                  setChangeMotherDepositObj({
+                    open: true,
+                    pay_type: 12,
+                  })
+                }}>모계좌차감</Button>
               </>}
           </Row>
           <ManagerTable
