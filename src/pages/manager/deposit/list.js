@@ -435,6 +435,7 @@ const DepositList = () => {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
+  const [corpAccountList, setCorpAccountList] = useState([]);
   const [dialogObj, setDialogObj] = useState({
     changeNote: false,
   })
@@ -464,6 +465,9 @@ const DepositList = () => {
     let cols = defaultColumns;
     setColumns(cols)
     getAllOperUser();
+    if (themeDnsData?.is_use_corp_account == 1) {
+      getCorpAccounts();
+    }
     onChangePage({ ...searchObj, page: 1 });
 
   }
@@ -472,6 +476,12 @@ const DepositList = () => {
       level_list: [10, ...operatorLevelList.map(itm => { return itm.value })],
     });
     setOperUserList(data?.content ?? []);
+  }
+  const getCorpAccounts = async () => {
+    let data = await apiManager('corp-accounts', 'list', {
+      page: 1,
+    });
+    setCorpAccountList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
     setData({
@@ -492,6 +502,7 @@ const DepositList = () => {
       onChangePage(searchObj);
     }
   }
+  console.log(bankCodeList())
   return (
     <>
       <Dialog
@@ -536,6 +547,22 @@ const DepositList = () => {
           {user?.level >= 40 &&
             <>
               <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+                {themeDnsData?.is_use_corp_account == 1 &&
+                  <>
+                    <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                      <InputLabel>법인통장 선택</InputLabel>
+                      <Select label={'법인통장 선택'} value={searchObj[`corp_account_id`]}
+                        onChange={(e) => {
+                          onChangePage({ ...searchObj, [`corp_account_id`]: e.target.value, page: 1, })
+                        }}>
+                        <MenuItem value={null}>법인통장 전체</MenuItem>
+                        <MenuItem value={-1}>법인통장 제외</MenuItem>
+                        {corpAccountList.map(corp => {
+                          return <MenuItem value={corp?.id}>{`(${_.find(bankCodeList(), { value: corp?.bank_code })?.label})${corp?.acct_num}`}</MenuItem>
+                        })}
+                      </Select>
+                    </FormControl>
+                  </>}
                 {(themeDnsData?.operator_list ?? []).map(operator => {
                   return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
                     <InputLabel>{operator?.label}</InputLabel>
