@@ -21,7 +21,8 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 const MotherAccountRequest = () => {
 
     const { user } = useAuthContext();
-    const { setModal } = useModal()
+    const { setModal } = useModal();
+    const { themeDnsData } = useSettingsContext();
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
@@ -115,7 +116,7 @@ const MotherAccountRequest = () => {
                                                     하위전산 {children?.brand?.name} 지불 입금 요율
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {commarNumber(getNumberByPercent(children?.real_amount, (item?.brand?.head_office_fee - children?.brand?.head_office_fee)))} 원
+                                                    {commarNumber(getNumberByPercent(children?.sum?.total_deposit_amount, (children?.sum?.head_office_fee - item?.brand?.head_office_fee)))} 원
                                                 </Typography>
                                             </Stack>
                                             <Stack spacing={1}>
@@ -123,7 +124,7 @@ const MotherAccountRequest = () => {
                                                     하위전산 {children?.brand?.name} 지불 입금수수료
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {commarNumber(children?.total_deposit_fee)} 원
+                                                    {commarNumber(330 * children?.sum?.total_deposit_count)} 원
                                                 </Typography>
                                             </Stack>
                                             <Stack spacing={1}>
@@ -131,7 +132,7 @@ const MotherAccountRequest = () => {
                                                     하위전산 {children?.brand?.name} 지불 출금수수료
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {commarNumber(children?.total_withdraw_fee)} 원
+                                                    {commarNumber(330 * children?.sum?.total_withdraw_count)} 원
                                                 </Typography>
                                             </Stack>
                                         </>
