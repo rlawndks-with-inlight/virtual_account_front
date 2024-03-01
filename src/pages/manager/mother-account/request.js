@@ -5,7 +5,7 @@ import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, getNumberByPercent, onlyNumberText } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -108,6 +108,30 @@ const MotherAccountRequest = () => {
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                                     {commarNumber(children?.real_amount)} 원
+                                                </Typography>
+                                            </Stack>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    하위전산 {children?.brand?.name} 지불 입금 요율
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(getNumberByPercent(children?.real_amount, (item?.brand?.head_office_fee - children?.brand?.head_office_fee)))} 원
+                                                </Typography>
+                                            </Stack>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    하위전산 {children?.brand?.name} 지불 입금수수료
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(children?.total_deposit_fee)} 원
+                                                </Typography>
+                                            </Stack>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    하위전산 {children?.brand?.name} 지불 출금수수료
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(children?.total_withdraw_fee)} 원
                                                 </Typography>
                                             </Stack>
                                         </>

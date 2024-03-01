@@ -254,7 +254,9 @@ export const handleLogout = async (router, link_) => {
     }
   }
 }
-
+export const getNumberByPercent = (num = 0, percent = 0) => {
+  return Math.round(num * (percent).toFixed(2) / 100);
+}
 export function getLocation() {
   if (navigator.geolocation) {
     // GPS를 지원하면
