@@ -116,7 +116,7 @@ const MotherAccountRequest = () => {
                                                     하위전산 {children?.brand?.name} 지불 입금 요율
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {commarNumber(getNumberByPercent(children?.sum?.total_deposit_amount, (children?.sum?.head_office_fee - item?.brand?.head_office_fee)))} 원
+                                                    {commarNumber(getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee - item?.brand?.head_office_fee)))} 원
                                                 </Typography>
                                             </Stack>
                                             <Stack spacing={1}>
