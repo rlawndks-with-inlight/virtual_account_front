@@ -83,6 +83,18 @@ const MotherAccountRequest = () => {
                                             {commarNumber(item?.real_amount)} 원
                                         </Typography>
                                     </Stack>
+                                    {item?.childrens && item?.childrens.map((children, idx) => (
+                                        <>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    {children?.brand?.name} 모계좌 잔액
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(children?.real_amount)} 원
+                                                </Typography>
+                                            </Stack>
+                                        </>
+                                    ))}
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             출금 수수료
@@ -105,7 +117,6 @@ const MotherAccountRequest = () => {
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.sum?.total_mcht_amount)} 원
-
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
@@ -121,7 +132,7 @@ const MotherAccountRequest = () => {
                                             차액 (본사 보유정산금)
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.real_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount + item?.sum?.total_withdraw_fee)} 원
+                                            {commarNumber(item?.real_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount + item?.sum?.total_withdraw_fee - (_.sum(item?.childrens.map(itm => { return itm?.real_amount })) ?? 0))} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
