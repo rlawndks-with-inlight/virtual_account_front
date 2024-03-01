@@ -56,6 +56,16 @@ const MotherAccountRequest = () => {
             router.push('/manager/withdraw');
         }
     }
+    const getManagerAmount = () => {
+        let real_amount = item?.real_amount;
+        real_amount -= item?.sum?.total_mcht_amount;
+        real_amount -= item?.sum?.total_oper_amount;
+        real_amount += item?.sum?.total_withdraw_fee;
+        real_amount -= (_.sum(item?.childrens.map(children => { return children?.real_amount })) ?? 0);
+        real_amount += (_.sum(item?.childrens.map(children => { return (330 * children?.sum?.total_deposit_count + 330 * children?.sum?.total_withdraw_count) })) ?? 0);
+        real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee - item?.brand?.head_office_fee)) })) ?? 0);
+        return real_amount;
+    }
     return (
         <>
             {!loading &&
@@ -158,7 +168,7 @@ const MotherAccountRequest = () => {
                                             차액 (본사 보유정산금)
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.real_amount - item?.sum?.total_mcht_amount - item?.sum?.total_oper_amount + item?.sum?.total_withdraw_fee - (_.sum(item?.childrens.map(itm => { return itm?.real_amount })) ?? 0))} 원
+                                            {commarNumber(getManagerAmount())} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
