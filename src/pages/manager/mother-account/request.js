@@ -83,18 +83,7 @@ const MotherAccountRequest = () => {
                                             {commarNumber(item?.real_amount)} 원
                                         </Typography>
                                     </Stack>
-                                    {item?.childrens && item?.childrens.map((children, idx) => (
-                                        <>
-                                            <Stack spacing={1}>
-                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                                    {children?.brand?.name} 모계좌 잔액
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {commarNumber(children?.real_amount)} 원
-                                                </Typography>
-                                            </Stack>
-                                        </>
-                                    ))}
+
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             출금 수수료
@@ -111,6 +100,18 @@ const MotherAccountRequest = () => {
                                             {commarNumber(item?.real_amount - item?.withdraw_amount)} 원
                                         </Typography>
                                     </Stack>
+                                    {item?.childrens && item?.childrens.map((children, idx) => (
+                                        <>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    하위전산 {children?.brand?.name} 모계좌 잔액
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(children?.real_amount)} 원
+                                                </Typography>
+                                            </Stack>
+                                        </>
+                                    ))}
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             가맹점 보유정산금총합
