@@ -24,7 +24,7 @@ const WithdrawRequest = () => {
     const { themeMode, themeDnsData } = useSettingsContext();
 
     const router = useRouter();
-
+    const [pageLoading, setPageLoading] = useState(false);
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({
         note: '',
