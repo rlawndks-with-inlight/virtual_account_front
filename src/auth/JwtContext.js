@@ -76,7 +76,6 @@ export function AuthProvider({ children }) {
     let user = undefined;
     try {
       const { data: response } = await axios.get(`/api/auth`);
-
       if (response?.data?.id > 0) {
         user = response?.data;
         dispatch({

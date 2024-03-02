@@ -187,6 +187,7 @@ const UserList = () => {
         search: '',
         level: 40,
     })
+    const [item, setItem] = useState({});
     const [dialogObj, setDialogObj] = useState({
         changePassword: false,
     })
@@ -197,7 +198,6 @@ const UserList = () => {
     const [changeUserDepositObj, setChangeUserDepositObj] = useState({
         amount: 0,
     })
-
 
     useEffect(() => {
         pageSetting();
@@ -238,7 +238,6 @@ const UserList = () => {
             toast.success("성공적으로 변경 되었습니다.");
         }
     }
-
     const onSignInAnotherUser = async (user_id) => {
         const result = await apiManager(`auth/sign-in-another-user`, 'create', {
             user_id,
@@ -246,6 +245,9 @@ const UserList = () => {
         if (result?.id) {
             window.location.href = getReturnUri(navList);
         }
+    }
+    const getUser = async (id) => {
+
     }
     return (
         <>
