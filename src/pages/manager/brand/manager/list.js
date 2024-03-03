@@ -153,13 +153,18 @@ const UserList = () => {
             },
             {
                 id: 'edit',
-                label: '삭제',
+                label: '수정/삭제',
                 action: (row, is_excel) => {
                     if (is_excel) {
                         return "---"
                     }
                     return (
                         <>
+                            <IconButton>
+                                <Icon icon='material-symbols:edit-outline' onClick={() => {
+                                    router.push(`edit/${row?.id}`)
+                                }} />
+                            </IconButton>
                             <IconButton onClick={() => {
                                 setModal({
                                     func: () => { deleteUser(row?.id) },

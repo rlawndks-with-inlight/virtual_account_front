@@ -22,7 +22,7 @@ export const PATH_MANAGER = {
     list: path(ROOTS_MANAGER, '/brand/list'),
     payList: path(ROOTS_MANAGER, '/brand/pay-list'),
     shopDesign: path(ROOTS_MANAGER, '/brand/shop-design'),
-    managers: path(ROOTS_MANAGER, '/brand/manager-list'),
+    managers: path(ROOTS_MANAGER, '/brand/manager/list'),
   },
   merchandise: {
     root: path(ROOTS_MANAGER, '/merchandise'),
