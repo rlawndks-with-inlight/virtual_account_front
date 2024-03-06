@@ -32,8 +32,7 @@ white-space: pre;
 }
 `
 const ApiDocs = () => {
-    const { setModal } = useModal()
-    const { themeMode, themeDnsData } = useSettingsContext();
+    const { themeDnsData } = useSettingsContext();
 
     const [tableObj, setTableObj] = useState({});
     const [loading, setLoading] = useState(true);
@@ -43,7 +42,7 @@ const ApiDocs = () => {
         ...(themeDnsData?.setting_obj?.api_withdraw_version == 1 ? [...WithdrawApiV1().tab_list.map(itm => { return { ...itm, value: `${WithdrawApiV1().tab_key}_${itm.value}` } })] : []),
         ...(themeDnsData?.setting_obj?.api_deposit_version == 1 ? [...DepositApiV1().tab_list.map(itm => { return { ...itm, value: `${DepositApiV1().tab_key}_${itm.value}` } })] : []),
     ]
-    const [currentTab, setCurrentTab] = useState(tab_list[0].value);
+    const [currentTab, setCurrentTab] = useState(tab_list[0]?.value);
 
     useEffect(() => {
         settingTableObj();

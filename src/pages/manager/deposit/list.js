@@ -634,7 +634,6 @@ const DepositList = () => {
                         <Typography variant="subtitle2">{commarNumber(data?.chart[`sales${oper?.num}_amount`])}원</Typography>
                       </Row>
                     }
-
                   })}
                   {user?.level >= 40 &&
                     <>

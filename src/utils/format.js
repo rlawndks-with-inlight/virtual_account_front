@@ -33,6 +33,7 @@ export const apiCorpList = [
     { value: 3, label: '페이투스' },
     { value: 4, label: '더즌' },
     { value: 5, label: '헥토파이낸셜' },
+    { value: 6, label: '코리아결제시스템' },
 ]
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
