@@ -12,6 +12,7 @@ import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
 import _ from "lodash";
+import { onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -342,7 +343,7 @@ const VirtualAccountPaytus = () => {
                                             setItem(
                                                 {
                                                     ...item,
-                                                    ['birth']: e.target.value
+                                                    ['birth']: onlyNumberText(e.target.value)
                                                 }
                                             )
                                         }} />
