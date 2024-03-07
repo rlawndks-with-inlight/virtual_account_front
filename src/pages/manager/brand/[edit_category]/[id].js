@@ -783,6 +783,11 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`api_virtual_account_version`]: 2,
                               }
+                            } else if (e.target.value == 6) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 3,
+                              }
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -813,7 +818,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1].includes(item.deposit_corp_type) &&
+                      {[1, 6].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -828,7 +833,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1].includes(item.deposit_corp_type) &&
+                      {[1, 6].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'
@@ -873,6 +878,28 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
+                      {[1, 2, 6].includes(item.deposit_corp_type) &&
+                        <>
+                          <Stack spacing={1}>
+                            <FormControl>
+                              <InputLabel>입금가상계좌은행</InputLabel>
+                              <Select
+                                label='입금가상계좌은행'
+                                value={item.deposit_virtual_bank_code}
+                                onChange={e => {
+                                  setItem({
+                                    ...item,
+                                    ['deposit_virtual_bank_code']: e.target.value
+                                  })
+                                }}
+                              >
+                                {bankCodeList().map((itm, idx) => {
+                                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                })}
+                              </Select>
+                            </FormControl>
+                          </Stack>
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
@@ -903,17 +930,23 @@ const BrandEdit = () => {
                               ['withdraw_corp_type']: e.target.value
                             };
                             if (e.target.value == 1) {
-                              data['withdraw_type'] = 0;
                               data['setting_obj'] = {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 2,
                               }
+                              data['withdraw_type'] = 0;
                             } else if (e.target.value == 2) {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 1,
                               }
                               data['withdraw_type'] = 1;
+                            } else if (e.target.value == 6) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 3,
+                              }
+                              data['withdraw_type'] = 0;
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -944,7 +977,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1].includes(item.withdraw_corp_type) &&
+                      {[1, 6].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -959,7 +992,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 6].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'
@@ -1020,7 +1053,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[2].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 6].includes(item.withdraw_corp_type) &&
                         <>
                           <Stack spacing={1}>
                             <FormControl>
@@ -1459,6 +1492,9 @@ const BrandEdit = () => {
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
                           <MenuItem value={2}>{'v2'}</MenuItem>
+                          <MenuItem value={3}>{'v3'}</MenuItem>
+                          <MenuItem value={4}>{'v4'}</MenuItem>
+                          <MenuItem value={5}>{'v5'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>
@@ -1479,6 +1515,9 @@ const BrandEdit = () => {
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
                           <MenuItem value={2}>{'v2'}</MenuItem>
+                          <MenuItem value={3}>{'v3'}</MenuItem>
+                          <MenuItem value={4}>{'v4'}</MenuItem>
+                          <MenuItem value={5}>{'v5'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>
@@ -1499,6 +1538,9 @@ const BrandEdit = () => {
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
                           <MenuItem value={2}>{'v2'}</MenuItem>
+                          <MenuItem value={3}>{'v3'}</MenuItem>
+                          <MenuItem value={4}>{'v4'}</MenuItem>
+                          <MenuItem value={5}>{'v5'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>
@@ -1518,6 +1560,10 @@ const BrandEdit = () => {
                         >
                           <MenuItem value={0}>{'선택안함'}</MenuItem>
                           <MenuItem value={1}>{'v1'}</MenuItem>
+                          <MenuItem value={2}>{'v2'}</MenuItem>
+                          <MenuItem value={3}>{'v3'}</MenuItem>
+                          <MenuItem value={4}>{'v4'}</MenuItem>
+                          <MenuItem value={5}>{'v5'}</MenuItem>
                         </Select>
                       </FormControl>
                     </Stack>

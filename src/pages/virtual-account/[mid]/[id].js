@@ -6,6 +6,7 @@ import VirtualAccountBankners from "src/views/virtual-account/bankners";
 import VirtualAccountPaytus from "src/views/virtual-account/paytus";
 import { Row } from "src/components/elements/styled-components";
 import VirtualAccountCoocon from "src/views/virtual-account/coocon";
+import VirtualAccountKoreaPaySystem from "src/views/virtual-account/korea-pay-system";
 
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
@@ -19,7 +20,7 @@ const VirtualAccountAddNoneAuth = () => {
     return (
         <>
             <Row style={{ minHeight: '100vh' }}>
-                <div style={{ margin: 'auto', width: '90%', maxWidth: '1000px' }}>
+                <div style={{ margin: '2rem auto auto auto', width: '90%', maxWidth: '1000px' }}>
                     {themeDnsData?.deposit_corp_type == 1 &&
                         <>
                             <VirtualAccountBankners />
@@ -31,6 +32,10 @@ const VirtualAccountAddNoneAuth = () => {
                     {themeDnsData?.deposit_corp_type == 3 &&
                         <>
                             <VirtualAccountPaytus />
+                        </>}
+                    {themeDnsData?.deposit_corp_type == 6 &&
+                        <>
+                            <VirtualAccountKoreaPaySystem />
                         </>}
                 </div>
             </Row>

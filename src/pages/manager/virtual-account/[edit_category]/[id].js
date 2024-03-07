@@ -8,7 +8,6 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
-import VirtualAccountBankners from "src/views/virtual-account/bankners";
 import VirtualAccountAddNoneAuth from "src/pages/virtual-account/[mid]";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
