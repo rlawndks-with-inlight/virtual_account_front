@@ -62,6 +62,9 @@ const VirtualAccountBankners = () => {
         let data = item;
         setMchtList(mcht_list?.content ?? []);
         data.mid = router.query?.mid || user?.mid;
+        if (!(user?.level >= 40) && !router.query?.mid && user?.mid) {
+            return;
+        }
         if (router.query?.id) {
             data = await apiManager('virtual-accounts', 'get', {
                 id: router.query.id
