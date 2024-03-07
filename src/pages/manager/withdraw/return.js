@@ -445,11 +445,9 @@ const WithdrawReturn = () => {
                                     <Button variant="contained" style={{
                                         height: '48px', width: '120px', marginLeft: 'auto'
                                     }} onClick={() => {
-                                        setModal({
-                                            func: () => { onSave() },
-                                            icon: 'material-symbols:edit-outline',
-                                            title: '반환요청 하시겠습니까?'
-                                        })
+                                        if (window.confirm('출금요청 하시겠습니까?')) {
+                                            onSave()
+                                        }
                                     }}>
                                         반환 요청하기
                                     </Button>
