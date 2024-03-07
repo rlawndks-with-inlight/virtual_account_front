@@ -62,7 +62,7 @@ const VirtualAccountBankners = () => {
         let data = item;
         setMchtList(mcht_list?.content ?? []);
         data.mid = router.query?.mid || user?.mid;
-        if (!(user?.level >= 40) && !router.query?.mid && user?.mid) {
+        if (!(user?.level >= 40) && !router.query?.mid && !user?.mid && !router.query?.id) {
             return;
         }
         if (router.query?.id) {
