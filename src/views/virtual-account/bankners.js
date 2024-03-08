@@ -319,7 +319,9 @@ const VirtualAccountBankners = () => {
                                                         }}
                                                     >
                                                         {bankCodeList().map((itm, idx) => {
-                                                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                            if (itm?.value != '092') {
+                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                            }
                                                         })}
                                                     </Select>
                                                 </FormControl>
