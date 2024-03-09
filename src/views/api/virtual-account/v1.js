@@ -163,7 +163,7 @@ const VirtualAccountApiV1 = () => {
         },
         4: {
             uri: '',
-            explain: `입금데이터노티 입니다.`,
+            explain: `입금데이터노티 입니다. 응답주실때 0000-성공, 9999-실패로 판단합니다.`,
             res_head: [
                 '키',
                 '설명',
