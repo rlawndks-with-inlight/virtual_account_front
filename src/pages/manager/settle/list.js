@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -264,6 +264,19 @@ const SettleList = () => {
             table={'settles'}
             column_table={`settles`}
             excel_name={'보유정산금'}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              {data?.content &&
+                <>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">조회건수</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.total)}</Typography>
+                  </Row>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">총변동액</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.chart?.user_amount)}</Typography>
+                  </Row>
+                </>}
+            </Row>}
           />
         </Card>
       </Stack>
