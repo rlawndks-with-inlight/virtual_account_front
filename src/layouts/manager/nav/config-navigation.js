@@ -231,6 +231,21 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...((isDeveloper() && isShowTab('bulkUpload') && themeDnsData?.setting_obj?.is_use_bulk_upload == 1) ? [
+      {
+        id: 'bulkUpload',
+        items: [
+          {
+            title: '대량등록',
+            path: PATH_MANAGER.bulkUpload.root,
+            icon: <Icon icon={'icon-park-outline:excel'} style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '대량등록', path: PATH_MANAGER.bulkUpload.upload },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...((!isOperator() && isShowTab('api')) ? [
       {
         id: 'api',

@@ -125,7 +125,7 @@ const UserEdit = () => {
     setIpSearchObj(obj);
   }
   const onSave = async () => {
-    let data = item;
+    let data = { ...item };
     if (!data?.mcht_fee && themeDnsData?.is_use_fee_operator == 1) {
       return toast.error('가맹점 요율은 필수값입니다.');
     }

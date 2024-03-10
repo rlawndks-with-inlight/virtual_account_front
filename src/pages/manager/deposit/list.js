@@ -502,7 +502,6 @@ const DepositList = () => {
       onChangePage(searchObj);
     }
   }
-  console.log(bankCodeList())
   return (
     <>
       <Dialog

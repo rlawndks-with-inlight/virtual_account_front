@@ -1778,6 +1778,19 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_use_bulk_upload == 1} />} label={`대량등록 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              setting_obj: {
+                                ...item.setting_obj,
+                                ['is_use_bulk_upload']: e.target.checked ? 1 : 0,
+                              }
+                            })
+                          }}
+                        />
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>

@@ -68,6 +68,10 @@ export const PATH_MANAGER = {
     list: path(ROOTS_MANAGER, '/corp-account/list'),
     add: path(ROOTS_MANAGER, '/corp-account/add'),
   },
+  bulkUpload: {
+    root: path(ROOTS_MANAGER, '/bulk-upload'),
+    upload: path(ROOTS_MANAGER, '/bulk-upload/upload'),
+  },
   log: {
     root: path(ROOTS_MANAGER, '/log'),
     list: path(ROOTS_MANAGER, '/log/list'),

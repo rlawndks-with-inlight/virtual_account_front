@@ -19,5 +19,6 @@ module.exports = {
     SOCKET_URL: process.env.SOCKET_URL,
     DEVELOPER_USER_NAME: process.env.DEVELOPER_USER_NAME,
     DEVELOPER_USER_PW: process.env.DEVELOPER_USER_PW,
+    FRONT_URL: process.env.FRONT_URL,
   }
 };
