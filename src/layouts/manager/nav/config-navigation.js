@@ -231,7 +231,7 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
-    ...((isDeveloper() && isShowTab('bulkUpload') && themeDnsData?.setting_obj?.is_use_bulk_upload == 1) ? [
+    ...((isManager() && isShowTab('bulkUpload') && themeDnsData?.setting_obj?.is_use_bulk_upload == 1) ? [
       {
         id: 'bulkUpload',
         items: [
