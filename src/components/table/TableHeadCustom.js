@@ -72,7 +72,7 @@ export default function TableHeadCustom({
                   }}
                 >
                   <Row style={{ alignItems: 'center' }}>
-                    <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
+                    <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '8px', height: '1.5rem' }} />
                     {onSort ? (
                       <TableSortLabel
                         hideSortIcon

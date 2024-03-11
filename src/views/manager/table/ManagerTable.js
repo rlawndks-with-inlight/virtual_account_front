@@ -237,7 +237,7 @@ export default function ManagerTable(props) {
               onClick={exportExcel}
             >엑셀추출</Button>
           </Row>
-          <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.75rem' }}>
+          <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.7rem' }}>
             <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
               <InputLabel>조회개수</InputLabel>
               <Select label='조회개수' value={page_size}
@@ -306,10 +306,10 @@ export default function ManagerTable(props) {
                 {zHeadColumn.length > 0 &&
                   <>
                     <TableHead>
-                      <TableRow sx={{ padding: '1rem 0' }}>
+                      <TableRow sx={{ padding: '0' }}>
                         {zHeadColumn.map((head, idx) => (
                           <>
-                            <TableCell colSpan={head.count} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0', fontSize: '0.8rem' }}>
+                            <TableCell colSpan={head.count} sx={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0', fontSize: '0.8rem', padding: '8px 0' }}>
                               <div style={{ borderRight: `1px solid #ccc` }}>
                                 {head.title}
                               </div>
@@ -328,11 +328,11 @@ export default function ManagerTable(props) {
                         <>
                           {(themeNotShowColumns[column_table] ?? {})[col?.id] != 1 &&
                             <>
-                              <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '16px 0' }}>
+                              <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '8px 0' }}>
                                 <Row style={{ alignItems: 'center' }}>
-                                  <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '16px', height: '2rem' }} />
+                                  <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '8px', height: '1.5rem' }} />
                                   {col.action(row)}
-                                  <div style={{ paddingLeft: '16px' }} />
+                                  <div style={{ paddingLeft: '8px' }} />
                                 </Row>
                               </TableCell>
                             </>}
