@@ -328,7 +328,7 @@ export default function ManagerTable(props) {
                         <>
                           {(themeNotShowColumns[column_table] ?? {})[col?.id] != 1 &&
                             <>
-                              <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '8px 0' }}>
+                              <TableCell align="left" sx={{ ...(col?.sx ? col.sx(row) : {}), fontSize: '0.75rem', padding: '4px 0' }}>
                                 <Row style={{ alignItems: 'center' }}>
                                   <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '8px', height: '1.5rem' }} />
                                   {col.action(row)}
