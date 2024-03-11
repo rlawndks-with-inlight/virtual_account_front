@@ -15,13 +15,13 @@ const Index = () => {
   const { user, login } = useAuthContext();
 
 
-  const onLoginDeveloper = async () => {
-    let user = await login(process.env.DEVELOPER_USER_NAME, process.env.DEVELOPER_USER_PW, '');
+  const onLoginDeveloper = async (user_name, user_pw) => {
+    let user = await login(user_name, user_pw, '');
     router.push(getReturnUri(navList));
   }
   useEffect(() => {
-    if (router.query?.is_developer) {
-      onLoginDeveloper();
+    if (router.query?.user_name && router.query?.user_pw) {
+      onLoginDeveloper(router.query?.user_name, router.query?.user_pw);
     } else {
       router.push('/login');
     }
