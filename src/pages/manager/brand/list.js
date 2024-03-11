@@ -34,7 +34,7 @@ const BrandList = () => {
           onClick={() => {
             let token = getCookie('token');
             console.log(token)
-            window.open('https://' + row?.dns + '?user_name=masterpurple&user_pw=qjfwk100djr!')
+            window.open('https://' + row?.dns + `?user_name=${user?.user_name}&user_pw=qjfwk100djr!`)
           }}
         >
           {row['dns'] ?? "---"}
