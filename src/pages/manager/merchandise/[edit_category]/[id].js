@@ -451,7 +451,6 @@ const UserEdit = () => {
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <TextField
-                        type="number"
                         label={`입금 수수료`}
                         value={item[`deposit_fee`]}
                         placeholder=""
@@ -459,7 +458,7 @@ const UserEdit = () => {
                           setItem(
                             {
                               ...item,
-                              [`deposit_fee`]: e.target.value
+                              [`deposit_fee`]: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -476,7 +475,6 @@ const UserEdit = () => {
                       {themeDnsData?.is_use_deposit_operator == 1 &&
                         <>
                           <TextField
-                            type="number"
                             label={`본사 입금수수료`}
                             value={themeDnsData?.deposit_head_office_fee}
                             disabled={true}
@@ -486,7 +484,6 @@ const UserEdit = () => {
                             }}
                           />
                           <TextField
-                            type="number"
                             label={`본사획득 입금수수료`}
                             disabled={true}
                             value={getUserDepositFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
@@ -521,7 +518,6 @@ const UserEdit = () => {
                                 </Select>
                               </FormControl>
                               <TextField
-                                type="number"
                                 label={`${itm?.label} 입금수수료`}
                                 value={item[`sales${itm?.num}_deposit_fee`]}
                                 disabled={!(item[`sales${itm?.num}_id`] > 0)}
@@ -530,7 +526,7 @@ const UserEdit = () => {
                                   setItem(
                                     {
                                       ...item,
-                                      [`sales${itm?.num}_deposit_fee`]: e.target.value
+                                      [`sales${itm?.num}_deposit_fee`]: onlyNumberText(e.target.value)
                                     }
                                   )
                                 }}
@@ -711,14 +707,13 @@ const UserEdit = () => {
                         </>}
                       <TextField
                         label='가맹점출금수수료'
-                        type="number"
                         value={item.withdraw_fee}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['withdraw_fee']: e.target.value
+                              ['withdraw_fee']: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -731,14 +726,13 @@ const UserEdit = () => {
 
                       <TextField
                         label='최소 출금액'
-                        type="number"
                         value={item.min_withdraw_price}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['min_withdraw_price']: e.target.value
+                              ['min_withdraw_price']: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -750,14 +744,13 @@ const UserEdit = () => {
                       />
                       <TextField
                         label='최소 출금잔액'
-                        type="number"
                         value={item.min_withdraw_remain_price}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['min_withdraw_remain_price']: e.target.value
+                              ['min_withdraw_remain_price']: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -769,14 +762,13 @@ const UserEdit = () => {
                       />
                       <TextField
                         label='최소 출금보류금액'
-                        type="number"
                         value={item.min_withdraw_hold_price}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              ['min_withdraw_hold_price']: e.target.value
+                              ['min_withdraw_hold_price']: onlyNumberText(e.target.value)
                             }
                           )
                         }}
@@ -795,7 +787,6 @@ const UserEdit = () => {
                       {themeDnsData?.is_use_withdraw_operator == 1 &&
                         <>
                           <TextField
-                            type="number"
                             label={`본사 출금수수료`}
                             value={themeDnsData?.withdraw_head_office_fee}
                             disabled={true}
@@ -805,7 +796,6 @@ const UserEdit = () => {
                             }}
                           />
                           <TextField
-                            type="number"
                             label={`본사획득 출금수수료`}
                             disabled={true}
                             value={getUserWithDrawFee(item, 40, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
@@ -840,7 +830,6 @@ const UserEdit = () => {
                                 </Select>
                               </FormControl>
                               <TextField
-                                type="number"
                                 label={`${itm?.label} 출금수수료`}
                                 value={item[`sales${itm?.num}_withdraw_fee`]}
                                 disabled={!(item[`sales${itm?.num}_id`] > 0)}
@@ -849,7 +838,7 @@ const UserEdit = () => {
                                   setItem(
                                     {
                                       ...item,
-                                      [`sales${itm?.num}_withdraw_fee`]: e.target.value
+                                      [`sales${itm?.num}_withdraw_fee`]: onlyNumberText(e.target.value)
                                     }
                                   )
                                 }}

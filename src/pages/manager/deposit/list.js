@@ -397,7 +397,7 @@ const DepositList = () => {
               id: `sales${operator?.num}_amount`,
               label: `${label} 수수료`,
               action: (row, is_excel) => {
-                return row[`sales${operator?.num}_amount`] > 0 ? commarNumber(row[`sales${operator?.num}_amount`]) : "---"
+                return row[`sales${operator?.num}_amount`] == 0 ? "---" : commarNumber(row[`sales${operator?.num}_amount`]);
               },
               sx: (row) => {
                 if (row?.deposit_status == 10) {
