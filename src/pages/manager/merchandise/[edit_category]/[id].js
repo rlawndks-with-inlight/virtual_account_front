@@ -692,6 +692,16 @@ const UserEdit = () => {
                           }}
                         />
                       </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.can_return == 1} />} label={`반환가능 여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              can_return: e.target.checked ? 1 : 0,
+                            })
+                          }}
+                        />
+                      </Stack>
                       {themeDnsData?.withdraw_type == 0 &&
                         <>
                           <Stack>
