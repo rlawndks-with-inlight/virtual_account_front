@@ -230,7 +230,7 @@ const WithdrawReturn = () => {
                                                 style={{
                                                     whiteSpace: 'pre'
                                                 }}
-                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} (${option?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} (${option?.deposit_acct_name})`}
+                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} ${option?.virtual_acct_name ? `(${option?.virtual_acct_name})` : ''}\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} ${option?.deposit_acct_name ? `(${option?.deposit_acct_name})` : ''}`}
                                                 value={withdraws}
                                                 onChange={(e, value) => {
                                                     let withdraw_list = [...withdraws];
