@@ -88,7 +88,7 @@ const VirtualAccountList = () => {
         </Col>
       }
     },
-    ...(user?.level >= 40 ? [
+    ...((user?.level >= 40 && themeDnsData?.deposit_corp_type == 1) ? [
       {
         id: 'balance',
         label: '잔액확인',
@@ -142,7 +142,7 @@ const VirtualAccountList = () => {
         </> : "---"
       }
     },
-    ...(user?.level >= 10 ? [
+    ...((user?.level >= 10 && themeDnsData?.deposit_corp_type == 1) ? [
       {
         id: 'delete',
         label: '삭제',
