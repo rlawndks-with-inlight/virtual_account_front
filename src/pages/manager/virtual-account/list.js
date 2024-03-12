@@ -44,7 +44,11 @@ const VirtualAccountList = () => {
       id: 'virtual_acct_num',
       label: '가상계좌번호',
       action: (row, is_excel) => {
-        return row['virtual_acct_num'] ?? "---"
+        if (row?.status == 0) {
+          return row['virtual_acct_num'] ?? "---"
+        } else {
+          return "---";
+        }
       }
     },
     {
@@ -169,7 +173,7 @@ const VirtualAccountList = () => {
   const [operUserList, setOperUserList] = useState([]);
   const [searchObj, setSearchObj] = useState({
     page: 1,
-    page_size: 10,
+    page_size: 20,
     s_dt: '',
     e_dt: '',
     search: '',

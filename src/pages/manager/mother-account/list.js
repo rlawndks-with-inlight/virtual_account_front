@@ -125,7 +125,7 @@ const MotherAccountList = () => {
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
-    page_size: 10,
+    page_size: 20,
     s_dt: '',
     e_dt: '',
     search: '',

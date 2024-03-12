@@ -1227,6 +1227,19 @@ const BrandEdit = () => {
                           }}
                         />
                       </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_settle_user_deposit_operator == 1} />} label={`정산금 지급시 입금시 영업자 입금 수수료 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              ['setting_obj']: {
+                                ...item.setting_obj,
+                                [`is_settle_user_deposit_operator`]: e.target.checked ? 1 : 0
+                              },
+                            })
+                          }}
+                        />
+                      </Stack>
                       <TextField
                         label='입금수수료 기본값'
                         value={item.default_deposit_fee}

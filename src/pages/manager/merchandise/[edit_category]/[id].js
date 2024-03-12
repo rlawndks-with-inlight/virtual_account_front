@@ -55,7 +55,7 @@ const UserEdit = () => {
   const [ipList, setIpList] = useState([]);
   const [ipSearchObj, setIpSearchObj] = useState({
     page: 1,
-    page_size: 10,
+    page_size: 20,
     id: router.query?.id
   })
   const tab_list = [

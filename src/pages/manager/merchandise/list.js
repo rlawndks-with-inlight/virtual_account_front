@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiUtil } from "src/utils/api-manager";
-import { commarNumber, getReturnUri, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee } from "src/utils/function";
+import { commarNumber, commarNumberInput, getReturnUri, getUserDepositFee, getUserFee, getUserStatusByNum, getUserWithDrawFee, onlyNumberText } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, virtualAcctLinkStatusList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
@@ -66,8 +66,8 @@ const UserList = () => {
                   amount: '',
                   user_id: row?.id,
                   pay_type: 25,
-                  deposit_fee: row?.deposit_fee,
-                  is_use_deposit_fee: 1,
+                  deposit_fee: themeDnsData?.setting_obj?.is_settle_user_deposit_operator == 1 ? row?.deposit_fee : 0,
+                  is_use_deposit_fee: themeDnsData?.setting_obj?.is_settle_user_deposit_operator == 1 ? 1 : 0,
                 })
               }}
             >정산금 지급</Button>
@@ -405,7 +405,7 @@ const UserList = () => {
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
-    page_size: 10,
+    page_size: 20,
     s_dt: '',
     e_dt: '',
     search: '',
@@ -541,20 +541,19 @@ const UserList = () => {
           <TextField
             autoFocus
             fullWidth
-            value={changeUserDepositObj.amount}
+            value={commarNumberInput(changeUserDepositObj?.amount)}
             margin="dense"
             label="금액"
-            type="number"
             onChange={(e) => {
               setChangeUserDepositObj({
                 ...changeUserDepositObj,
-                amount: e.target.value
+                amount: onlyNumberText(e.target.value)
               })
             }}
           />
-          {(changeUserDepositObj?.pay_type == 25 && themeDnsData?.is_use_deposit_operator == 1) &&
+          {(changeUserDepositObj?.pay_type == 25 && themeDnsData?.setting_obj?.is_settle_user_deposit_operator == 1) &&
             <>
-              {changeUserDepositObj?.is_use_deposit_fee == 1 &&
+              {changeUserDepositObj?.setting_obj?.is_settle_user_deposit_operator == 1 &&
                 <>
                   <TextField
                     fullWidth
@@ -568,10 +567,9 @@ const UserList = () => {
               <TextField
                 fullWidth
                 disabled={true}
-                value={changeUserDepositObj.amount - (changeUserDepositObj?.is_use_deposit_fee == 1 ? changeUserDepositObj.deposit_fee : 0)}
+                value={commarNumberInput(changeUserDepositObj.amount - (changeUserDepositObj?.is_use_deposit_fee == 1 ? changeUserDepositObj.deposit_fee : 0))}
                 margin="dense"
                 label="적립 예정 금액"
-                type="number"
               />
             </>}
           <TextField
@@ -592,7 +590,7 @@ const UserList = () => {
         <DialogActions>
           {changeUserDepositObj?.pay_type == 25 &&
             <>
-              {themeDnsData?.is_use_deposit_operator == 1 &&
+              {themeDnsData?.setting_obj?.is_settle_user_deposit_operator == 1 &&
                 <>
                   <FormControlLabel
                     label={<Typography>입금 수수료 적용</Typography>}
