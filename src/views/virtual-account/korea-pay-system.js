@@ -190,6 +190,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                                     mid: e.target.value,
                                                                 })
                                                             }}>
+                                                            <MenuItem value={null}>{`가맹점 선택안함`}</MenuItem>
                                                             {mchtList.map(mcht => {
                                                                 return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
                                                             })}
