@@ -75,7 +75,7 @@ const VirtualAccountList = () => {
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
-    ...(themeDnsData?.setting_obj?.is_input_user_name_by_virtual_acct == 1 ? [
+    ...(themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 ? [
       {
         id: 'virtual_user_name',
         label: '유저아이디',

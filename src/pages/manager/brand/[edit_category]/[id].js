@@ -1805,13 +1805,13 @@ const BrandEdit = () => {
                         />
                       </Stack>
                       <Stack>
-                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_input_user_name_by_virtual_acct == 1} />} label={`가상계좌 발급시 아이디 입력여부`}
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_use_virtual_user_name == 1} />} label={`가상계좌 발급시 아이디 입력여부`}
                           onChange={(e) => {
                             setItem({
                               ...item,
                               setting_obj: {
                                 ...item.setting_obj,
-                                ['is_input_user_name_by_virtual_acct']: e.target.checked ? 1 : 0,
+                                ['is_use_virtual_user_name']: e.target.checked ? 1 : 0,
                               }
                             })
                           }}

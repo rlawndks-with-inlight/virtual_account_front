@@ -224,7 +224,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                     }))}
                                                 </Select>
                                             </FormControl>
-                                            {themeDnsData?.setting_obj?.is_input_user_name_by_virtual_acct == 1 &&
+                                            {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
                                                 <>
                                                     <TextField
                                                         label='아이디'
