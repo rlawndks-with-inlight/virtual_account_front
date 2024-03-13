@@ -202,6 +202,21 @@ const VirtualAccountKoreaPaySystem = () => {
                                                 value={item.mid}
                                                 disabled={true}
                                             />
+                                            {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
+                                                <>
+                                                    <TextField
+                                                        label='아이디'
+                                                        value={item.virtual_user_name}
+                                                        placeholder=""
+                                                        onChange={(e) => {
+                                                            setItem(
+                                                                {
+                                                                    ...item,
+                                                                    ['virtual_user_name']: e.target.value
+                                                                }
+                                                            )
+                                                        }} />
+                                                </>}
                                             <FormControl variant='outlined' >
                                                 <InputLabel>사용자구분</InputLabel>
                                                 <Select label='사용자구분' value={item?.user_type}
@@ -226,21 +241,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                     }))}
                                                 </Select>
                                             </FormControl>
-                                            {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
-                                                <>
-                                                    <TextField
-                                                        label='아이디'
-                                                        value={item.virtual_user_name}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['virtual_user_name']: e.target.value
-                                                                }
-                                                            )
-                                                        }} />
-                                                </>}
+
                                             {(item.user_type == 1 || item.user_type == 2) &&
                                                 <>
                                                     <TextField

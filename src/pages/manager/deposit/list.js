@@ -167,6 +167,15 @@ const DepositList = () => {
         },
       },
     ] : []),
+    ...(themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 ? [
+      {
+        id: 'virtual_user_name',
+        label: '유저아이디',
+        action: (row, is_excel) => {
+          return row['virtual_user_name'] ?? "---"
+        }
+      },
+    ] : []),
     // {
     //   id: 'user_name',
     //   label: '상태',
