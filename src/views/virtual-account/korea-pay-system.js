@@ -107,6 +107,7 @@ const VirtualAccountKoreaPaySystem = () => {
             company_name: item?.company_name,
             ceo_name: item?.ceo_name,
             company_phone_num: item?.company_phone_num,
+            virtual_user_name: item?.virtual_user_name,
         });
         let data = item;
         if (result?.tid) {
