@@ -75,6 +75,15 @@ const VirtualAccountList = () => {
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
+    ...(themeDnsData?.setting_obj?.is_input_user_name_by_virtual_acct == 1 ? [
+      {
+        id: 'virtual_user_name',
+        label: '유저아이디',
+        action: (row, is_excel) => {
+          return row['virtual_user_name'] ?? "---"
+        }
+      },
+    ] : []),
     {
       id: 'deposit_bank_code',
       label: '입금은행정보',

@@ -224,6 +224,21 @@ const VirtualAccountKoreaPaySystem = () => {
                                                     }))}
                                                 </Select>
                                             </FormControl>
+                                            {themeDnsData?.setting_obj?.is_input_user_name_by_virtual_acct == 1 &&
+                                                <>
+                                                    <TextField
+                                                        label='아이디'
+                                                        value={item.virtual_user_name}
+                                                        placeholder=""
+                                                        onChange={(e) => {
+                                                            setItem(
+                                                                {
+                                                                    ...item,
+                                                                    ['virtual_user_name']: e.target.value
+                                                                }
+                                                            )
+                                                        }} />
+                                                </>}
                                             {(item.user_type == 1 || item.user_type == 2) &&
                                                 <>
                                                     <TextField
