@@ -631,10 +631,6 @@ const DepositList = () => {
                   {user?.level >= 40 &&
                     <>
                       <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
-                        <Typography variant="body2">상위사선취금액</Typography>
-                        <Typography variant="subtitle2">{commarNumber(data?.chart?.top_office_amount)}원</Typography>
-                      </Row>
-                      <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
                         <Typography variant="body2">본사수수료</Typography>
                         <Typography variant="subtitle2">{commarNumber(data?.chart?.head_office_amount)}원</Typography>
                       </Row>
@@ -654,6 +650,13 @@ const DepositList = () => {
                         <Typography variant="subtitle2">{commarNumber(_.sum(themeDnsData?.operator_list.map(oper => {
                           return data?.chart[`sales${oper?.num}_amount`]
                         })))}원</Typography>
+                      </Row>
+                    </>}
+                  {user?.level == 10 &&
+                    <>
+                      <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                        <Typography variant="body2">총 차감 수수료</Typography>
+                        <Typography variant="subtitle2">{commarNumber((data?.chart?.deposit_fee ?? 0) + (data?.chart?.amount ?? 0) - (data?.chart?.mcht_amount ?? 0))}원</Typography>
                       </Row>
                     </>}
                   <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
