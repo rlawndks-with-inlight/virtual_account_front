@@ -26,6 +26,9 @@ export const post = async (url, obj) => {
     } catch (err) {
         console.log(err)
         toast.error(err?.message);
+        if (err?.rate_limiter) {
+            toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
+        }
         return false;
     }
 }
@@ -51,6 +54,9 @@ export const postReturn = async (url, obj) => {
     } catch (err) {
         console.log(err)
         toast.error(err?.message);
+        if (err?.rate_limiter) {
+            toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
+        }
         return false;
     }
 }
@@ -66,6 +72,9 @@ export const deleteItem = async (url, obj) => {
     } catch (err) {
         console.log(err)
         toast.error(err?.response?.data?.message);
+        if (err?.rate_limiter) {
+            toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
+        }
         return false;
     }
 }
@@ -91,6 +100,9 @@ export const put = async (url, obj) => {
     } catch (err) {
         console.log(err)
         toast.error(err?.message);
+        if (err?.rate_limiter) {
+            toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
+        }
         return false;
     }
 }
@@ -108,6 +120,9 @@ export const get = async (url, params) => {
         }
     } catch (err) {
         console.log(err)
+        if (err?.rate_limiter) {
+            toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
+        }
         return false;
     }
 }

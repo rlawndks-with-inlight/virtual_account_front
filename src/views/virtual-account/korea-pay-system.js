@@ -129,7 +129,7 @@ const VirtualAccountKoreaPaySystem = () => {
             api_key: themeDnsData?.api_key,
         });
         if (result?.tid) {
-            toast.success('성공적으로 인증 되었습니다.');
+            toast.success('성공적으로 발급 되었습니다.');
             setItem({
                 ...item,
                 is_check_bank: true
