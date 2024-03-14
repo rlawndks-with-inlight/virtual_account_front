@@ -631,6 +631,10 @@ const DepositList = () => {
                   {user?.level >= 40 &&
                     <>
                       <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                        <Typography variant="body2">상위사지급금액</Typography>
+                        <Typography variant="subtitle2">{commarNumber(data?.chart?.top_office_amount)}원</Typography>
+                      </Row>
+                      <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
                         <Typography variant="body2">본사수수료</Typography>
                         <Typography variant="subtitle2">{commarNumber(data?.chart?.head_office_amount)}원</Typography>
                       </Row>
