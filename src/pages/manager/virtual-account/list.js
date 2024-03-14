@@ -151,7 +151,7 @@ const VirtualAccountList = () => {
         </> : "---"
       }
     },
-    ...((user?.level >= 10 && themeDnsData?.deposit_corp_type == 1) ? [
+    ...(user?.level >= 10 ? [
       {
         id: 'delete',
         label: '삭제',
