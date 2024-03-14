@@ -656,7 +656,7 @@ const DepositList = () => {
                     <>
                       <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
                         <Typography variant="body2">총 차감 수수료</Typography>
-                        <Typography variant="subtitle2">{commarNumber((data?.chart?.deposit_fee ?? 0) + (data?.chart?.amount ?? 0) - (data?.chart?.mcht_amount ?? 0))}원</Typography>
+                        <Typography variant="subtitle2">{commarNumber((data?.chart?.amount ?? 0) - (data?.chart?.mcht_amount ?? 0))}원</Typography>
                       </Row>
                     </>}
                   <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
