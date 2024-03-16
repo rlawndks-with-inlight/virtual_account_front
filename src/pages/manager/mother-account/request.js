@@ -197,7 +197,7 @@ const MotherAccountRequest = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                                            관리자 지급금 & 출금요청 및 실패금 차액
+                                            관리자 지급금 & 출금요청 및 실패 및 출금반려금 차액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.sum?.total_manager_mcht_give_amount + item?.sum?.total_manager_oper_give_amount + item?.sum?.total_attempt_mcht_withdraw_amount + item?.sum?.total_attempt_oper_withdraw_amount)} 원
