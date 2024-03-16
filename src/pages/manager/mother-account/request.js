@@ -157,10 +157,50 @@ const MotherAccountRequest = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            가맹점 관리자지급금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_manager_mcht_give_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            가맹점 출금요청금 및 출금실패 및 출금반려금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_attempt_mcht_withdraw_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             영업자 보유정산금총합
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                             {commarNumber(item?.sum?.total_oper_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            영업자 관리자지급금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_manager_oper_give_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            영업자 출금요청금 및 출금실패 및 출금반려금
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_attempt_oper_withdraw_amount)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            관리자 지급금 & 출금요청 및 실패금 차액
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.sum?.total_manager_mcht_give_amount + item?.sum?.total_manager_oper_give_amount + item?.sum?.total_attempt_mcht_withdraw_amount + item?.sum?.total_attempt_oper_withdraw_amount)} 원
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1}>
