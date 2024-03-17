@@ -64,9 +64,7 @@ export default function NotificationsPopover() {
         notification_list.unshift(data);
         let method_list = [`deposit`, 'settle_request']
         if (method_list.includes(method)) {
-          if (themeSetting?.is_not_sound_alarm != 1) {
-            setIsPlayMp3(true);
-          }
+          setIsPlayMp3(true);
           enqueueSnackbar(title, {
             variant: 'success',
           })
@@ -128,7 +126,7 @@ export default function NotificationsPopover() {
   return (
     <>
 
-      {isPlayMp3 &&
+      {isPlayMp3 && themeSetting?.is_not_sound_alarm != 1 &&
         <>
           <BellMp3 src={'/bell'} />
         </>}
