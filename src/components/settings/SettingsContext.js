@@ -35,7 +35,7 @@ const initialState = {
   onResetSetting: () => { },
   // dns data
   onChangeDnsData: () => { },
-  onChangeShopSetting: () => { },
+  onChangeSetting: () => { },
   onChangeReadNotifications: () => { },
   onChangeNotShowColumns: () => { },
   // cart data
@@ -87,7 +87,7 @@ export function SettingsProvider({ children }) {
   const [themePopupList, setThemePopupList] = useState(defaultSettings.themePopupList);
   const [themePostCategoryList, setThemePostCategoryList] = useState(defaultSettings.themePostCategoryList);
   const [themeSellerList, setThemeSellerList] = useState(defaultSettings.themeSellerList);
-  const [themeShopSetting, setThemeShopSetting] = useState(defaultSettings.themeShopSetting);
+  const [themeSetting, setThemeSetting] = useState(defaultSettings.themeSetting);
   const [themeReadNotifications, setThemeReadNotifications] = useState(defaultSettings.themeReadNotifications);
   const [themeNotShowColumns, setThemeNotShowColumns] = useState(defaultSettings.themeNotShowColumns);
   const isArabic = false;
@@ -233,9 +233,9 @@ export function SettingsProvider({ children }) {
     setThemeCartData(cart_data);
     setLocalStorage('themeCartData', JSON.stringify(cart_data));
   }, [])
-  const onChangeShopSetting = useCallback((setting) => {
-    setThemeShopSetting(setting);
-    setLocalStorage('themeShopSetting', JSON.stringify(setting));
+  const onChangeSetting = useCallback((setting) => {
+    setThemeSetting(setting);
+    setLocalStorage('themeSetting', JSON.stringify(setting));
   }, [])
   const onChangeReadNotifications = useCallback((obj) => {
     setThemeReadNotifications(obj);
@@ -289,7 +289,7 @@ export function SettingsProvider({ children }) {
     setThemeDirection(defaultSettings.themeDirection);
     setThemeColorPresets(defaultSettings.themeColorPresets);
     setThemeDnsData(defaultSettings.themeDnsData);
-    setThemeShopSetting(defaultSettings.themeShopSetting);
+    setThemeSetting(defaultSettings.themeSetting);
     setThemeReadNotifications(defaultSettings.themeReadNotifications);
     setThemeNotShowColumns(defaultSettings.themeNotShowColumns);
     setThemeCartData(defaultSettings.themeCartData);
@@ -308,7 +308,7 @@ export function SettingsProvider({ children }) {
     removeCookie('themeColorPresets');
     removeCookie('themeCurrentPageObj');
     removeCookie('themeAuth');
-    deleteLocalStorage('themeShopSetting');
+    deleteLocalStorage('themeSetting');
     deleteLocalStorage('themeReadNotifications');
     deleteLocalStorage('themeNotShowColumns');
     deleteLocalStorage('themeDnsData')
@@ -371,8 +371,8 @@ export function SettingsProvider({ children }) {
       onChangePostCategoryList,
       themeSellerList,
       onChangeSellerList,
-      themeShopSetting,
-      onChangeShopSetting,
+      themeSetting,
+      onChangeSetting,
       themeReadNotifications,
       onChangeReadNotifications,
       themeNotShowColumns,
@@ -426,8 +426,8 @@ export function SettingsProvider({ children }) {
       onChangePostCategoryList,
       themeSellerList,
       onChangeSellerList,
-      themeShopSetting,
-      onChangeShopSetting,
+      themeSetting,
+      onChangeSetting,
       themeReadNotifications,
       onChangeReadNotifications,
       themeNotShowColumns,

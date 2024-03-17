@@ -14,6 +14,8 @@ import {
   Typography,
   ListItemText,
   ListItemButton,
+  FormControlLabel,
+  Switch,
 } from '@mui/material';
 // utils
 // _mock_
@@ -47,7 +49,7 @@ export default function NotificationsPopover() {
   const router = useRouter();
 
 
-  const { themeReadNotifications, onChangeReadNotifications, themeDnsData, themeMode } = useSettingsContext();
+  const { themeReadNotifications, onChangeReadNotifications, themeDnsData, themeMode, themeSetting, onChangeSetting } = useSettingsContext();
   const [openPopover, setOpenPopover] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isPlayMp3, setIsPlayMp3] = useState(false);
@@ -62,7 +64,9 @@ export default function NotificationsPopover() {
         notification_list.unshift(data);
         let method_list = [`deposit`, 'settle_request']
         if (method_list.includes(method)) {
-          setIsPlayMp3(true);
+          if (themeSetting?.is_not_sound_alarm != 1) {
+            setIsPlayMp3(true);
+          }
           enqueueSnackbar(title, {
             variant: 'success',
           })
@@ -142,10 +146,21 @@ export default function NotificationsPopover() {
         <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">알림</Typography>
-
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {notifications.length} 개 메세지가 있습니다.
-            </Typography>
+            <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {notifications.length} 개 메세지가 있습니다.
+              </Typography>
+              <Stack>
+                <FormControlLabel control={<Switch checked={themeSetting?.is_not_sound_alarm != 1} />} label={`알림소리켜기`}
+                  onChange={(e) => {
+                    onChangeSetting({
+                      ...themeSetting,
+                      is_not_sound_alarm: e.target.checked ? 0 : 1
+                    })
+                  }}
+                />
+              </Stack>
+            </Row>
             <Row>
               <Button variant='outlined' startIcon={<Icon icon='material-symbols:delete-outline' />} style={{ margin: "0 0 auto auto" }}
                 onClick={() => {
