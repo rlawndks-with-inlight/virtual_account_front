@@ -208,10 +208,18 @@ const WithdrawReturn = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            출금 보류 금액
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.min_withdraw_hold_price)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             반환 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - item?.withdraw_fee * withdraws.length)} 원
+                                            {commarNumber(item?.settle_amount - item?.withdraw_fee * withdraws.length - item?.min_withdraw_hold_price)} 원
                                         </Typography>
                                     </Stack>
                                 </Stack>

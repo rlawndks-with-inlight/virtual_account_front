@@ -80,7 +80,13 @@ const VirtualAccountList = () => {
         id: 'virtual_user_name',
         label: '유저아이디',
         action: (row, is_excel) => {
-          return row['virtual_user_name'] ?? "---"
+          return <div style={{ cursor: 'pointer' }} onClick={() => {
+            setDialogObj({
+              changeVirtualUserName: true,
+              virtual_user_name: '',
+              virtual_account_id: row?.id,
+            })
+          }}>{row['virtual_user_name'] ?? "---"}</div>
         }
       },
     ] : []),
@@ -190,6 +196,7 @@ const VirtualAccountList = () => {
   })
   const [dialogObj, setDialogObj] = useState({
     changePassword: false,
+    changeVirtualUserName: false,
   })
   const [changePasswordObj, setChangePasswordObj] = useState({
     id: '',
@@ -242,8 +249,53 @@ const VirtualAccountList = () => {
       toast.success(`성공적으로 이동 되었습니다.`);
     }
   }
+  const onChangeVirtualUserName = async () => {
+    let result = undefined
+    result = await apiManager('virtual-accounts/change-virtual-user-name', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
+      <Dialog
+        open={dialogObj.changeVirtualUserName}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`유저아이디 변경`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            유저아이디를 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={dialogObj.virtual_user_name}
+            margin="dense"
+            label="유저아이디"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                virtual_user_name: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onChangeVirtualUserName}>
+            변경
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={3}>
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>

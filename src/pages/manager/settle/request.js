@@ -71,10 +71,18 @@ const WithdrawRequest = () => {
                                     </Stack>
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                            출금 보류 금액
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {commarNumber(item?.min_withdraw_hold_price)} 원
+                                        </Typography>
+                                    </Stack>
+                                    <Stack spacing={1}>
+                                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             출금 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.settle_amount - (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0))} 원
+                                            {commarNumber(item?.settle_amount - (themeDnsData?.withdraw_fee_type == 0 ? item?.withdraw_fee : 0) - item?.min_withdraw_hold_price)} 원
                                         </Typography>
                                     </Stack>
                                 </Stack>
