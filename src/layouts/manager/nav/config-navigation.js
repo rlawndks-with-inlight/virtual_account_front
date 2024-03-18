@@ -254,6 +254,14 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...((isDeveloper() && isShowTab('git')) ? [
+      {
+        id: 'git',
+        items: [
+          { title: '깃허브푸시', path: PATH_MANAGER.git.commit, icon: <Icon icon='teenyicons:git-outline' style={{ fontSize: '1.5rem' }} /> },
+        ],
+      },
+    ] : []),
   ];
 }
 

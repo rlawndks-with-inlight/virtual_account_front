@@ -232,7 +232,7 @@ const VirtualAccountList = () => {
   const deleteUser = async (id) => {
     let data = await apiManager('virtual-accounts', 'delete', { id });
     if (data) {
-      onChangePage(searchObj);
+      onChangePage({ ...searchObj });
     }
   }
   const getBalance = async (id) => {

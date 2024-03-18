@@ -76,4 +76,8 @@ export const PATH_MANAGER = {
     root: path(ROOTS_MANAGER, '/log'),
     list: path(ROOTS_MANAGER, '/log/list'),
   },
+  git: {
+    root: path(ROOTS_MANAGER, '/git'),
+    commit: path(ROOTS_MANAGER, '/git/commit'),
+  },
 };
