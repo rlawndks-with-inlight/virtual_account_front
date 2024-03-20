@@ -1,5 +1,5 @@
 
-import { Button, Card, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -13,6 +13,7 @@ import { apiManager } from "src/utils/api-manager";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { onlyNumberText } from "src/utils/function";
+import { Icon } from "@iconify/react";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -26,6 +27,7 @@ const UserEdit = () => {
 
   const [currentTab, setCurrentTab] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [ipList, setIpList] = useState([]);
   const [item, setItem] = useState({
     profile_file: undefined,
     user_name: '',
@@ -52,6 +54,10 @@ const UserEdit = () => {
       value: 1,
       label: '정산정보'
     },
+    {
+      value: 3,
+      label: '허용 IP',
+    },
   ]
   useEffect(() => {
     if (router.query?.tab >= 0) {
@@ -65,6 +71,7 @@ const UserEdit = () => {
       data = await apiManager('users', 'get', {
         id: router.query.id
       })
+      setIpList(data?.ip_list);
     } else {
       data = {};
       for (var i = 0; i < operatorLevelList.length; i++) {
@@ -84,9 +91,9 @@ const UserEdit = () => {
   const onSave = async () => {
     let result = undefined
     if (item?.id) {//수정
-      result = await apiManager('users', 'update', item);
+      result = await apiManager('users', 'update', { ...item, ip_list: ipList });
     } else {//추가
-      result = await apiManager('users', 'create', item);
+      result = await apiManager('users', 'create', { ...item, ip_list: ipList });
     }
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
@@ -410,6 +417,48 @@ const UserEdit = () => {
                       </Card>
                     </Grid>
                   </>}
+              </>}
+            {currentTab == 3 &&
+              <>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={2} style={{ maxWidth: '500px', margin: 'auto' }}>
+                      {ipList.map((ip, idx) => (
+                        <>
+                          {ip?.is_delete != 1 &&
+                            <>
+                              <Row>
+                                <TextField
+                                  sx={{ flexGrow: 1 }}
+                                  size='small'
+                                  label='IP'
+                                  value={ip?.ip}
+                                  onChange={(e) => {
+                                    let ip_list = [...ipList];
+                                    ip_list[idx]['ip'] = e.target.value.replaceAll(' ', '');
+                                    setIpList(ip_list);
+                                  }}
+                                />
+                                <IconButton onClick={() => {
+                                  let ip_list = [...ipList];
+                                  ip_list[idx].is_delete = 1;
+                                  setIpList(ip_list);
+                                }}>
+                                  <Icon icon='material-symbols:delete-outline' />
+                                </IconButton>
+                              </Row>
+                            </>}
+                        </>
+                      ))}
+                      <Button variant="outlined" onClick={() => {
+                        setIpList([
+                          ...ipList,
+                          ...[{ ip: '' }]
+                        ])
+                      }}>추가</Button>
+                    </Stack>
+                  </Card>
+                </Grid>
               </>}
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 3 }}>
