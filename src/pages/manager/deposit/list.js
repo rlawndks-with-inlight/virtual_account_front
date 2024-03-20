@@ -427,6 +427,24 @@ const DepositList = () => {
       }).flat(),
     ] : []),
     {
+      id: 'trade_at',
+      label: '거래시간',
+      action: (row, is_excel) => {
+        if (row?.trans_date) {
+          return `${row?.trans_date} ${row?.trans_time}`
+        } else {
+          return "---"
+        }
+      },
+      sx: (row) => {
+        if (row?.deposit_status == 10) {
+          return {
+            color: 'red'
+          }
+        }
+      },
+    },
+    {
       id: 'created_at',
       label: '생성일',
       action: (row, is_excel) => {
