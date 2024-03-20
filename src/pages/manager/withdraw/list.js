@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -296,6 +296,7 @@ const WithdrawList = () => {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
@@ -334,6 +335,7 @@ const WithdrawList = () => {
     setSearchObj(obj);
   }
   const onConfirmWithdraw = async (id) => {
+    setPageLoading(true);
     let result = undefined
     result = await apiManager('withdraws/confirm', 'create', {
       id
@@ -341,6 +343,8 @@ const WithdrawList = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj)
+      setPageLoading(false);
+
     }
   }
   const onRefuseWithdraw = async (id) => {
@@ -382,6 +386,16 @@ const WithdrawList = () => {
   }
   return (
     <>
+      <Dialog open={pageLoading}
+        PaperProps={{
+          style: {
+            background: 'transparent',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        <CircularProgress />
+      </Dialog>
       <Stack spacing={3}>
         <Dialog
           open={dialogObj.changeTrxId}
