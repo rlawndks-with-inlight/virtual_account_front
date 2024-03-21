@@ -418,6 +418,22 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
+                      {item?.withdraw_type == 0 &&
+                        <>
+                          <Stack>
+                            <FormControlLabel control={<Switch checked={item.setting_obj.is_virtual_acct_inspect == 1} />} label={`가상계좌 점검여부`}
+                              onChange={(e) => {
+                                setItem({
+                                  ...item,
+                                  ['setting_obj']: {
+                                    ...item.setting_obj,
+                                    [`is_virtual_acct_inspect`]: e.target.checked ? 1 : 0
+                                  },
+                                })
+                              }}
+                            />
+                          </Stack>
+                        </>}
                       <Stack spacing={1}>
                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                           비고
