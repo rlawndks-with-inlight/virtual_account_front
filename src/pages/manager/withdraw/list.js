@@ -261,7 +261,7 @@ const WithdrawList = () => {
           if (is_excel) {
             return "---";
           }
-          if (row?.is_move_mother == 1 && row?.withdraw_status == 5) {
+          if (row?.withdraw_status == 5) {
             return <Button variant="outlined" size="small" sx={{ width: '100px' }}
               onClick={() => {
                 setModal({
@@ -270,7 +270,7 @@ const WithdrawList = () => {
                   title: '출금을 실패처리 하시겠습니까?'
                 })
               }}
-            >출금허용</Button>
+            >출금실패</Button>
           } else {
             return "---";
           }
