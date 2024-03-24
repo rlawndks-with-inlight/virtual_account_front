@@ -1,26 +1,26 @@
 server {
 listen 80;
-server_name emerypay.com
+server_name ponyo-11.com
 root html;
 
 
 location / {
-        return 301 https://emerypay.com$request_uri;
+        return 301 https://ponyo-11.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  emerypay.com;
+    server_name  ponyo-11.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/emerypay.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/emerypay.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/ponyo-11.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ponyo-11.com/privkey.pem;
 
     location / {
-       proxy_pass http://emerypay.com:3000;
+       proxy_pass http://0.0.0.0:3000;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
@@ -44,5 +44,4 @@ server {
          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
        proxy_set_header X-Forwarded-Proto $scheme;
 }
-
 }

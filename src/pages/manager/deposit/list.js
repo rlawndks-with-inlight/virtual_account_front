@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Checkbox, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiUtil } from "src/utils/api-manager";
-import { commarNumber, getUserFee, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getUserFee, getUserLevelByNumber, onlyNumberText } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
 import { bankCodeList, operatorLevelList } from "src/utils/format";
@@ -463,6 +463,7 @@ const DepositList = () => {
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [corpAccountList, setCorpAccountList] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
   const [dialogObj, setDialogObj] = useState({
     changeNote: false,
   })
@@ -495,9 +496,11 @@ const DepositList = () => {
     if (themeDnsData?.is_use_corp_account == 1) {
       getCorpAccounts();
     }
+
     onChangePage({ ...searchObj, page: 1 });
 
   }
+
   const getAllOperUser = async () => {
     let data = await apiManager('users', 'list', {
       level_list: [10, ...operatorLevelList.map(itm => { return itm.value })],
@@ -529,8 +532,28 @@ const DepositList = () => {
       onChangePage(searchObj);
     }
   }
+  const onAddNotiDeposit = async () => {
+    setPageLoading(true);
+    let result = await apiManager('deposits/add-noti', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+    setPageLoading(false);
+  }
   return (
     <>
+      <Dialog open={pageLoading}
+        PaperProps={{
+          style: {
+            background: 'transparent',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        <CircularProgress />
+      </Dialog>
       <Dialog
         open={dialogObj.changeNote}
         onClose={() => {
@@ -559,6 +582,100 @@ const DepositList = () => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onChagneNote}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.addNotiDeposit}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`노티 누락건 추가`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            아래 내용을 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            fullWidth
+            value={dialogObj.trx_id}
+            margin="dense"
+            label="거래번호"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                trx_id: e.target.value
+              })
+            }}
+          />
+          <TextField
+            fullWidth
+            value={dialogObj.guid}
+            margin="dense"
+            label="guid"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                guid: e.target.value
+              })
+            }}
+          />
+          <TextField
+            fullWidth
+            value={dialogObj.amount}
+            margin="dense"
+            label="금액"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                amount: onlyNumberText(e.target.value)
+              })
+            }}
+          />
+          {themeDnsData?.deposit_corp_type == 6 &&
+            <>
+              <TextField
+                fullWidth
+                value={dialogObj.date}
+                margin="dense"
+                type="date"
+                label="날짜"
+                onChange={(e) => {
+                  setDialogObj({
+                    ...dialogObj,
+                    date: e.target.value
+                  })
+                }}
+              />
+              <TextField
+                fullWidth
+                value={dialogObj.time}
+                margin="dense"
+                type="time"
+                label="시간"
+                onChange={(e) => {
+                  setDialogObj({
+                    ...dialogObj,
+                    time: e.target.value
+                  })
+                }}
+              />
+            </>}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => {
+            setModal({
+              func: () => { onAddNotiDeposit() },
+              icon: 'material-symbols:edit-outline',
+              title: '저장 하시겠습니까?'
+            })
+          }}>
             확인
           </Button>
           <Button color="inherit" onClick={() => {
@@ -615,6 +732,14 @@ const DepositList = () => {
                     })}
                   </Select>
                 </FormControl>
+                {((user?.level >= 40 && !(themeDnsData?.parent_id > 0)) || user?.level >= 45) && [1, 3, 6].includes(themeDnsData?.deposit_corp_type) &&
+                  <>
+                    <Button variant="outlined" onClick={() => {
+                      setDialogObj({
+                        addNotiDeposit: true,
+                      })
+                    }}>노티 누락건 추가</Button>
+                  </>}
               </Row>
             </>}
           <ManagerTable
