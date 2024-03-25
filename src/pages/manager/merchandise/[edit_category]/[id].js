@@ -715,6 +715,19 @@ const UserEdit = () => {
                             />
                           </Stack>
                         </>}
+                      {themeDnsData?.withdraw_type == 1 &&
+                        <>
+                          <Stack>
+                            <FormControlLabel control={<Switch checked={item.is_not_same_acct_withdraw_minute == 1} />} label={`1분내 동일계좌 출금불가`}
+                              onChange={(e) => {
+                                setItem({
+                                  ...item,
+                                  is_not_same_acct_withdraw_minute: e.target.checked ? 1 : 0,
+                                })
+                              }}
+                            />
+                          </Stack>
+                        </>}
                       <TextField
                         label='가맹점출금수수료'
                         value={item.withdraw_fee}
