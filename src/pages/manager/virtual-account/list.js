@@ -26,11 +26,15 @@ const VirtualAccountList = () => {
         if (is_excel) {
           return `${row[`nickname`]} (${row['user_name']})`
         }
-        if (row['user_name']) {
-          return <div style={{ whiteSpace: 'pre' }}>{`${row[`nickname`]}\n(${row['user_name']})`}</div>
-        } else {
-          return "---";
-        }
+        let text = row['user_name'] ? `${row[`nickname`]}\n(${row['user_name']})` : "---";
+        return <div style={{ whiteSpace: 'pre', cursor: `${user?.level >= 40 ? 'pointer' : ''}` }} onClick={() => {
+          if (user?.level >= 40) {
+            setDialogObj({
+              connectMcht: true,
+              virtual_account_id: row?.id,
+            })
+          }
+        }}>{text}</div>
       }
     },
     {
@@ -263,6 +267,15 @@ const VirtualAccountList = () => {
       onChangePage(searchObj);
     }
   }
+  const connectMcht = async () => {
+    let result = undefined
+    result = await apiManager('virtual-accounts/connect-mcht', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
       <Dialog open={pageLoading}
@@ -302,7 +315,49 @@ const VirtualAccountList = () => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onChangeVirtualUserName}>
-            변경
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.connectMcht}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`가맹점 매칭`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            가맹점 MID를 입력후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={dialogObj.mid}
+            margin="dense"
+            label="MID"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                mid: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => {
+            setModal({
+              func: () => { connectMcht() },
+              icon: 'material-symbols:edit-outline',
+              title: '저장 하시겠습니까?'
+            })
+          }}>
+            확인
           </Button>
           <Button color="inherit" onClick={() => {
             setDialogObj({})
