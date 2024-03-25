@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Button, Card, CardContent, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -333,20 +333,26 @@ const VirtualAccountList = () => {
         <DialogTitle>{`가맹점 매칭`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            가맹점 MID를 입력후 확인을 눌러주세요.
+            가맹점 선택 후 확인을 눌러주세요.
           </DialogContentText>
-          <TextField
-            autoFocus
+          <Autocomplete
             fullWidth
-            value={dialogObj.mid}
-            margin="dense"
-            label="MID"
-            onChange={(e) => {
+            autoComplete='new-password'
+            options={operUserList}
+            style={{
+              whiteSpace: 'pre'
+            }}
+            getOptionLabel={(option) => `${option?.user_name} (${option?.nickname})`}
+            value={dialogObj?.mcht_id}
+            onChange={(e, value) => {
               setDialogObj({
                 ...dialogObj,
-                mid: e.target.value
+                mcht_id: value?.id
               })
             }}
+            renderInput={(params) => (
+              <TextField {...params} label="가맹점선택" placeholder="가맹점선택" autoComplete='new-password' />
+            )}
           />
         </DialogContent>
         <DialogActions>
