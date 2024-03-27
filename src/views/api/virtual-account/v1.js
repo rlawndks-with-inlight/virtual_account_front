@@ -52,7 +52,9 @@ const VirtualAccountApiV1 = () => {
                 ['company_name', '회사명(상호) (user_type이 1 또는 2일시 필수)', 'X', 'String'],
                 ['ceo_name', '대표자명 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
                 ['company_phone_num', '회사 전화번호 (user_type이 1 또는 2일시 필수)', 'X', 'String'],
-
+                ...(themeDnsData?.is_use_sign_key == 1 ? [
+                    ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],
+                ] : []),
             ],
             res_head: [
                 '키',
@@ -84,6 +86,9 @@ const VirtualAccountApiV1 = () => {
                 ['tid', '입금은행 1원인증 요청 tid', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
+                ...(themeDnsData?.is_use_sign_key == 1 ? [
+                    ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],
+                ] : []),
             ],
             res_head: [
                 '키',
@@ -112,6 +117,9 @@ const VirtualAccountApiV1 = () => {
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
                 ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
+                ...(themeDnsData?.is_use_sign_key == 1 ? [
+                    ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],
+                ] : []),
             ],
             res_head: [
                 '키',
@@ -128,6 +136,7 @@ const VirtualAccountApiV1 = () => {
                 ['virtual_acct_num', '가상계좌번호', 'String'],
                 ['virtual_acct_name', '가상계좌명', 'String'],
                 ['tid', '가상계좌발급 tid', 'String'],
+
             ],
         },
         3: {
