@@ -56,11 +56,14 @@ const VirtualAccountBankners = () => {
         settingPage();
     }, [])
     const settingPage = async () => {
-        let mcht_list = await apiManager(`users`, 'list', {
-            level: 10,
-        })
+        if (user?.level >= 40) {
+            let mcht_list = await apiManager(`users`, 'list', {
+                level: 10,
+            })
+            setMchtList(mcht_list?.content ?? []);
+        }
         let data = item;
-        setMchtList(mcht_list?.content ?? []);
+
         data.mid = router.query?.mid || user?.mid;
         if (!(user?.level >= 40) && !router.query?.mid && !user?.mid && !router.query?.id) {
             return;
