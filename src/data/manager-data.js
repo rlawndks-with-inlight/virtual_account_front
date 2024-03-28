@@ -90,6 +90,8 @@ export const defaultManagerObj = {
       api_virtual_account_version: 0,
       api_withdraw_version: 0,
       api_deposit_version: 0,
+      not_withdraw_s_time: '23:20',
+      not_withdraw_e_time: '00:35',
     },
     theme_css: {
       main_color: '#00ab55'
