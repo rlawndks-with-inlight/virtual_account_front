@@ -61,7 +61,7 @@ export default function NotificationsPopover() {
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
         let notification_list = [...notifications];
         notification_list.unshift(data);
-        let method_list = [`deposit`, 'settle_request']
+        let method_list = [`deposit`, 'settle_request', 'withdraw_request', 'settle_plus']
         if (method_list.includes(method)) {
           setIsPlayMp3(true);
           enqueueSnackbar(title, {
