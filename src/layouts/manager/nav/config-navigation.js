@@ -196,6 +196,21 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...(isShowTab('myPage') ? [
+      {
+        id: 'myPage',
+        items: [
+          {
+            title: '마이페이지',
+            path: PATH_MANAGER.myPage.root,
+            icon: <Icon icon='f7:person' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '비밀번호 변경', path: PATH_MANAGER.myPage.changePw },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...((isManager() && isShowTab('brand')) ? [
       {
         id: 'brand',

@@ -80,4 +80,8 @@ export const PATH_MANAGER = {
     root: path(ROOTS_MANAGER, '/git'),
     commit: path(ROOTS_MANAGER, '/git/commit'),
   },
+  myPage: {
+    root: path(ROOTS_MANAGER, '/my-page'),
+    changePw: path(ROOTS_MANAGER, '/my-page/change-pw'),
+  },
 };
