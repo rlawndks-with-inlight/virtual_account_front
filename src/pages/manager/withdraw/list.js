@@ -211,20 +211,16 @@ const WithdrawList = () => {
             return <Col style={{ rowGap: '0.5rem' }}>
               <Button variant="outlined" size="small" sx={{ width: '100px' }}
                 onClick={() => {
-                  setModal({
-                    func: () => { onConfirmWithdraw(row?.id) },
-                    icon: 'bx:money-withdraw',
-                    title: '출금을 허용 하시겠습니까?'
-                  })
+                  if (window.confirm('출금을 허용 하시겠습니까?')) {
+                    onConfirmWithdraw(row?.id)
+                  }
                 }}
               >출금허용</Button>
               <Button variant="contained" size="small" sx={{ width: '100px' }}
                 onClick={() => {
-                  setModal({
-                    func: () => { onRefuseWithdraw(row?.id) },
-                    icon: 'bx:money-withdraw',
-                    title: '출금을 반려 하시겠습니까?'
-                  })
+                  if (window.confirm('출금을 반려 하시겠습니까?')) {
+                    onRefuseWithdraw(row?.id)
+                  }
                 }}
               >출금반려</Button>
             </Col>
@@ -264,11 +260,9 @@ const WithdrawList = () => {
           if (row?.withdraw_status == 5) {
             return <Button variant="outlined" size="small" sx={{ width: '100px' }}
               onClick={() => {
-                setModal({
-                  func: () => { onFailWithdraw(row?.id) },
-                  icon: 'bx:money-withdraw',
-                  title: '출금을 실패처리 하시겠습니까?'
-                })
+                if (window.confirm('출금을 실패처리 하시겠습니까?')) {
+                  onFailWithdraw(row?.id)
+                }
               }}
             >출금실패</Button>
           } else {

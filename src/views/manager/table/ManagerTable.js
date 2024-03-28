@@ -119,7 +119,7 @@ export default function ManagerTable(props) {
     })
   }
   const exportExcel = async () => {
-    let data = await apiManager(table, 'list', { ...searchObj, page_size: 50000 });
+    let data = await apiManager(table, 'list', { ...searchObj, page_size: 50000, is_excel: true, });
     let result = [];
     for (var i = 0; i < data.content.length; i++) {
       let col = data.content[i];
