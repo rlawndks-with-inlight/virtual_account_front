@@ -196,12 +196,13 @@ const VirtualAccountKoreaPaySystem = () => {
                                                             })}
                                                         </Select>
                                                     </FormControl>
+                                                    <TextField
+                                                        label='MID'
+                                                        value={item.mid}
+                                                        disabled={true}
+                                                    />
                                                 </>}
-                                            <TextField
-                                                label='MID'
-                                                value={item.mid}
-                                                disabled={true}
-                                            />
+
                                             {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
                                                 <>
                                                     <TextField

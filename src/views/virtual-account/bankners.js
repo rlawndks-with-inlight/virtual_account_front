@@ -195,12 +195,13 @@ const VirtualAccountBankners = () => {
                                                             })}
                                                         </Select>
                                                     </FormControl>
+                                                    <TextField
+                                                        label='MID'
+                                                        value={item.mid}
+                                                        disabled={true}
+                                                    />
                                                 </>}
-                                            <TextField
-                                                label='MID'
-                                                value={item.mid}
-                                                disabled={true}
-                                            />
+
                                             <FormControl variant='outlined' >
                                                 <InputLabel>사용자구분</InputLabel>
                                                 <Select label='사용자구분' value={item?.user_type}

@@ -213,12 +213,13 @@ const VirtualAccountPaytus = () => {
                                                     })}
                                                 </Select>
                                             </FormControl>
+                                            <TextField
+                                                label='MID'
+                                                value={item.mid}
+                                                disabled={true}
+                                            />
                                         </>}
-                                    <TextField
-                                        label='MID'
-                                        value={item.mid}
-                                        disabled={true}
-                                    />
+
                                     <Stack spacing={1}>
                                         <FormControl>
                                             <InputLabel>입금은행</InputLabel>
