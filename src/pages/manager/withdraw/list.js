@@ -250,28 +250,26 @@ const WithdrawList = () => {
           }
         },
       ] : []),
-      ...(themeDnsData?.withdraw_corp_type == 6 ? [
-        {
-          id: 'withdraw_success',
-          label: '출금 성공처리',
-          action: (row, is_excel) => {
-            if (is_excel) {
-              return "---";
-            }
-            if (row?.withdraw_status == 5) {
-              return <Button variant="outlined" size="small" sx={{ width: '100px' }}
-                onClick={() => {
-                  if (window.confirm('출금을 성공처리 하시겠습니까?')) {
-                    onSuccessWithdraw(row?.id)
-                  }
-                }}
-              >출금성공</Button>
-            } else {
-              return "---";
-            }
+      {
+        id: 'withdraw_success',
+        label: '출금 성공처리',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
           }
-        },
-      ] : []),
+          if (row?.withdraw_status == 5) {
+            return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                if (window.confirm('출금을 성공처리 하시겠습니까?')) {
+                  onSuccessWithdraw(row?.id)
+                }
+              }}
+            >출금성공</Button>
+          } else {
+            return "---";
+          }
+        }
+      },
       {
         id: 'withdraw_fail',
         label: '출금 실패처리',
