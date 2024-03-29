@@ -1833,6 +1833,19 @@ const BrandEdit = () => {
                           }}
                         />
                       </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_use_withdraw_success_button == 1} />} label={`출금관리에서 성공버튼 사용여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              setting_obj: {
+                                ...item.setting_obj,
+                                ['is_use_withdraw_success_button']: e.target.checked ? 1 : 0,
+                              }
+                            })
+                          }}
+                        />
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>
