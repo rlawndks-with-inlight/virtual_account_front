@@ -163,7 +163,7 @@ const WithdrawList = () => {
       label: '이체금',
       action: (row, is_excel) => {
         if (row?.withdraw_status == 0) {
-          return commarNumber(row['amount'] * (-1) - row['withdraw_fee'])
+          return commarNumber(row['expect_amount'] * (-1) - row['withdraw_fee'])
         } else {
           return 0;
         }
