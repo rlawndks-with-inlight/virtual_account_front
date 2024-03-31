@@ -183,17 +183,19 @@ const WithdrawList = () => {
         return commarNumber(row['expect_amount'] * (-1))
       }
     },
-    {
-      id: 'is_hand',
-      label: '상태변경구분',
-      action: (row, is_excel) => {
-        let is_hand = _.find(withdrawHandList, { value: row?.is_hand });
-        if (is_excel) {
-          return is_hand?.label
+    ...(user?.level >= 40 ? [
+      {
+        id: 'is_hand',
+        label: '상태변경구분',
+        action: (row, is_excel) => {
+          let is_hand = _.find(withdrawHandList, { value: row?.is_hand });
+          if (is_excel) {
+            return is_hand?.label
+          }
+          return <Chip variant="soft" label={is_hand.label} color={is_hand.color} />
         }
-        return <Chip variant="soft" label={is_hand.label} color={is_hand.color} />
-      }
-    },
+      },
+    ] : []),
     ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
       {
         id: 'virtual_acct_balance',
