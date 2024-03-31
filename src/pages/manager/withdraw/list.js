@@ -10,7 +10,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiServer, apiUtil } from "src/utils/api-manager";
 import { commarNumber, getUserLevelByNumber } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
+import { bankCodeList, operatorLevelList, payTypeList, withdrawHandList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
 import { useSettingsContext } from "src/components/settings";
 const WithdrawList = () => {
@@ -181,6 +181,17 @@ const WithdrawList = () => {
       label: '차감 보유정산금',
       action: (row, is_excel) => {
         return commarNumber(row['expect_amount'] * (-1))
+      }
+    },
+    {
+      id: 'is_hand',
+      label: '상태변경구분',
+      action: (row, is_excel) => {
+        let is_hand = _.find(withdrawHandList, { value: row?.is_hand });
+        if (is_excel) {
+          return is_hand?.label
+        }
+        return <Chip variant="soft" label={is_hand.label} color={is_hand.color} />
       }
     },
     ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [

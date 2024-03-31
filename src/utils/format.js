@@ -39,6 +39,10 @@ export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
     { value: 5, label: '생성중', color: 'warning' },
 ]
+export const withdrawHandList = [
+    { value: 0, label: '노티', color: 'info' },
+    { value: 1, label: '수기', color: 'warning' },
+]
 export const payTypeList = [
     { value: 0, label: '입금', color: 'success' },
     { value: 5, label: '출금', color: 'error' },
