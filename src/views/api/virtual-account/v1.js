@@ -157,6 +157,9 @@ const VirtualAccountApiV1 = () => {
                 ...(themeDnsData?.is_use_sign_key == 1 ? [
                     ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],
                 ] : []),
+                ...(themeDnsData?.is_use_otp == 1 ? [
+                    ['otp_num', 'otp 값', 'O', 'String'],
+                ] : []),
                 ['note', '메모', 'X', 'String'],
             ],
             res_head: [

@@ -33,6 +33,9 @@ const WithdrawApiV1 = () => {
                 ['deposit_acct_name', '입금자명', 'X', 'String'],
                 ['pay_type', '출금타입 (withdraw=정산, return=회원들에게 출금 기본값 withdraw)', 'X', 'String'],
                 ['note', '메모사항', 'X', 'String'],
+                ...(themeDnsData?.is_use_otp == 1 ? [
+                    ['otp_num', 'otp 값', 'O', 'String'],
+                ] : []),
             ],
             res_head: [
                 '키',
