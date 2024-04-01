@@ -30,10 +30,24 @@ const OperatorList = () => {
       }
     },
     {
-      id: 'user_name',
-      label: '유저아이디',
+      id: 'nickname',
+      label: '닉네임',
       action: (row, is_excel) => {
-        return row['user_name'] ?? "---"
+        if (is_excel) {
+          return row['nickname']
+        }
+        return <div style={{ cursor: 'pointer' }} onClick={() => {
+          router.push(`/manager/operator/edit/${row?.id}`)
+        }}>
+          {row['nickname'] ?? "---"}
+        </div>
+      }
+    },
+    {
+      id: 'name',
+      label: '이름',
+      action: (row, is_excel) => {
+        return row['name'] ?? "---"
       }
     },
     {
@@ -52,20 +66,6 @@ const OperatorList = () => {
             })
           }}
         >정산금 수정</Button>
-      }
-    },
-    {
-      id: 'nickname',
-      label: '닉네임',
-      action: (row, is_excel) => {
-        return row['nickname'] ?? "---"
-      }
-    },
-    {
-      id: 'name',
-      label: '이름',
-      action: (row, is_excel) => {
-        return row['name'] ?? "---"
       }
     },
     ...(themeDnsData?.withdraw_type == 0 ? [

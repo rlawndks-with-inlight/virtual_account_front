@@ -217,21 +217,7 @@ const UserEdit = () => {
                             }
                           )
                         }} />
-                      {themeDnsData?.withdraw_type == 0 &&
-                        <>
-                          <TextField
-                            label='guid'
-                            value={item.guid}
-                            placeholder=""
-                            onChange={(e) => {
-                              setItem(
-                                {
-                                  ...item,
-                                  ['guid']: e.target.value
-                                }
-                              )
-                            }} />
-                        </>}
+
                       {user?.level >= 50 &&
                         <>
                           <TextField
@@ -269,6 +255,50 @@ const UserEdit = () => {
                           </Select>
                         </FormControl>
                       </Stack>
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
+                      {themeDnsData?.withdraw_type == 0 &&
+                        <>
+                          <TextField
+                            label='guid'
+                            value={item.guid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['guid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {(themeDnsData?.is_use_otp && user?.level >= 40) ?
+                        <>
+                          <TextField
+                            label='OTP 키'
+                            value={item.otp_token}
+                            placeholder="OTP 키"
+                            disabled={true}
+                            InputProps={{
+                              endAdornment: <IconButton onClick={async () => {
+                                let result = await apiManager(`brands/otp`, 'create');
+                                setItem({
+                                  ...item,
+                                  ['otp_token']: result?.base32,
+                                })
+                              }}>
+                                <Icon icon='gg:redo' />
+                              </IconButton>
+                            }}
+                          />
+                        </>
+                        :
+                        <>
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
