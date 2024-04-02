@@ -85,7 +85,7 @@ const VirtualAccountBankners = () => {
     }
     const onSave = async () => {
         let result = undefined
-        result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: router.query?.mid, });
+        result = await apiServer(`${process.env.API_URL}/api/acct/v1/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: item?.mid, });
         if (result?.tid) {
             toast.success("성공적으로 발급 되었습니다.");
             if (router.asPath.split('/')[1] == 'manager') {
