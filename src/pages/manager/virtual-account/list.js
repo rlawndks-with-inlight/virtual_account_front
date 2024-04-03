@@ -241,7 +241,8 @@ const VirtualAccountList = () => {
     if (data) {
       setPageLoading(false);
       toast.success('삭제처리가 완료되었습니다.');
-      onChangePage({ ...searchObj });
+      console.log(searchObj)
+      onChangePage(searchObj);
     }
   }
   const getBalance = async (id) => {
