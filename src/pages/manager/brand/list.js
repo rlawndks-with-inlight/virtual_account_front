@@ -15,6 +15,17 @@ import { getCookie } from "src/utils/react-cookie";
 const BrandList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
+
+  const passByDate = (last_pay_date = '2000-01-01', day) => {
+    let now_date = returnMoment().substring(0, 10);
+    if (!last_pay_date) {
+      return false;
+    }
+    if (last_pay_date.split('-')[1] != now_date.split('-')[1] && parseInt(now_date.split('-')[2]) > parseInt(day)) {
+      return true;
+    }
+    return false;
+  }
   const defaultColumns = [
     {
       id: 'name',
@@ -75,6 +86,20 @@ const BrandList = () => {
         action: (row, is_excel) => {
           return commarNumber(row['pay_amount']) + '원';
         }
+      },
+      {
+        id: 'pay_day',
+        label: '마지막납부일',
+        action: (row, is_excel) => {
+          return row['last_pay_date'];
+        },
+        sx: (row) => {
+          if (passByDate(row?.last_pay_date, row?.pay_day)) {
+            return {
+              color: 'red'
+            }
+          }
+        },
       },
       {
         id: 'pay_day_process',
