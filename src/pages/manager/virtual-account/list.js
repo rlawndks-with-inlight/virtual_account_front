@@ -18,6 +18,7 @@ const VirtualAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
+
   const defaultColumns = [
     {
       id: 'user_name',
@@ -209,7 +210,6 @@ const VirtualAccountList = () => {
   })
   useEffect(() => {
     pageSetting();
-
   }, [])
   const pageSetting = () => {
     let cols = defaultColumns;
@@ -241,7 +241,6 @@ const VirtualAccountList = () => {
     if (data) {
       setPageLoading(false);
       toast.success('삭제처리가 완료되었습니다.');
-      console.log(searchObj)
       onChangePage(searchObj);
     }
   }
