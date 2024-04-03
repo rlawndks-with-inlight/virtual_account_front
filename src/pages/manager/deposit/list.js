@@ -514,6 +514,7 @@ const DepositList = () => {
     setCorpAccountList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -522,7 +523,6 @@ const DepositList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   const onChagneNote = async () => {
     let result = await apiManager('deposits/change-note', 'create', dialogObj);

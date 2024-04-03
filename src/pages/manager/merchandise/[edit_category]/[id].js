@@ -114,6 +114,7 @@ const UserEdit = () => {
 
   }
   const onChangePage = async (obj) => {
+    setIpSearchObj(obj);
     setIpData({
       ...ipData,
       content: undefined
@@ -122,7 +123,6 @@ const UserEdit = () => {
     if (data_) {
       setIpData(data_);
     }
-    setIpSearchObj(obj);
   }
   const onSave = async () => {
     let data = { ...item };

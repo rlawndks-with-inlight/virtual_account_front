@@ -109,6 +109,7 @@ const BrandPayList = () => {
     onChangePage({ ...searchObj, page: 1, });
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -117,7 +118,6 @@ const BrandPayList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   const deleteBrand = async (id) => {
     let data = await apiManager('brand-pays', 'delete', { id });

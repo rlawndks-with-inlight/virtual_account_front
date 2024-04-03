@@ -134,6 +134,7 @@ const SettleRequestList = () => {
         setOperUserList(data?.content ?? []);
     }
     const onChangePage = async (obj) => {
+        setSearchObj(obj);
         setData({
             ...data,
             content: undefined
@@ -142,7 +143,6 @@ const SettleRequestList = () => {
         if (data_) {
             setData(data_);
         }
-        setSearchObj(obj);
     }
     const deleteItem = async (id) => {
         let data = await apiManager('deposit-requests', 'delete', { id });

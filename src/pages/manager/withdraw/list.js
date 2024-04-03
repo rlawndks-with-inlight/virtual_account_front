@@ -353,6 +353,7 @@ const WithdrawList = () => {
     setOperUserList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -361,7 +362,6 @@ const WithdrawList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   const onConfirmWithdraw = async (id) => {
     setPageLoading(true);

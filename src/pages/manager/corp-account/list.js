@@ -103,6 +103,7 @@ const CorpAccountList = () => {
     onChangePage({ ...searchObj, page: 1, });
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -111,7 +112,6 @@ const CorpAccountList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   const deleteItem = async (id) => {
     let data = await apiManager('corp-accounts', 'delete', { id });

@@ -224,6 +224,7 @@ const VirtualAccountList = () => {
     setOperUserList(data?.content ?? []);
   }
   const onChangePage = async (obj) => {
+    setSearchObj(obj);
     setData({
       ...data,
       content: undefined
@@ -232,7 +233,6 @@ const VirtualAccountList = () => {
     if (data_) {
       setData(data_);
     }
-    setSearchObj(obj);
   }
   const deleteUser = async (id) => {
     setPageLoading(true);
