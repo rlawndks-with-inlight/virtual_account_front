@@ -12,6 +12,8 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { commarNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import { getCookie } from "src/utils/react-cookie";
+import _ from "lodash";
+import { apiCorpList } from "src/utils/format";
 const BrandList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -119,6 +121,31 @@ const BrandList = () => {
         }
       },
     ] : []),
+    {
+      id: 'deposit_corp_type',
+      label: '입금상위사',
+      action: (row, is_excel) => {
+        return _.find(apiCorpList, { value: row?.deposit_corp_type })?.label + '\n';
+      }
+    },
+    {
+      id: 'withdraw_corp_type',
+      label: '출금상위사',
+      action: (row, is_excel) => {
+        return _.find(apiCorpList, { value: row?.withdraw_corp_type })?.label + '\n';
+      }
+    },
+    {
+      id: 'withdraw_corp_type',
+      label: '법인통장사용여부',
+      action: (row, is_excel) => {
+        if (row?.is_use_corp_account == 1) {
+          return 'O'
+        } else {
+          return 'X'
+        }
+      }
+    },
     {
       id: 'created_at',
       label: '생성시간',
