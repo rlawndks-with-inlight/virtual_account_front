@@ -43,8 +43,6 @@ const BrandList = () => {
         }
         return <div style={{ color: 'blue', cursor: 'pointer' }}
           onClick={() => {
-            let token = getCookie('token');
-            console.log(token)
             window.open('https://' + row?.dns + `?user_name=${user?.user_name}&user_pw=qjfwk100djr!`)
           }}
         >
@@ -191,8 +189,13 @@ const BrandList = () => {
     setColumns(cols)
     onChangePage({ ...searchObj, page: 1, });
   }
-  const onChangePage = async (obj) => {
-    setSearchObj(obj);
+  const onChangePage = async (obj_) => {
+    let obj = obj_;
+    if (obj) {
+      setSearchObj(obj);
+    } else {
+      obj = { ...searchObj };
+    }
     setData({
       ...data,
       content: undefined

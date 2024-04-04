@@ -102,8 +102,13 @@ const CorpAccountList = () => {
     setColumns(cols)
     onChangePage({ ...searchObj, page: 1, });
   }
-  const onChangePage = async (obj) => {
-    setSearchObj(obj);
+  const onChangePage = async (obj_) => {
+    let obj = obj_;
+    if (obj) {
+      setSearchObj(obj);
+    } else {
+      obj = { ...searchObj };
+    }
     setData({
       ...data,
       content: undefined

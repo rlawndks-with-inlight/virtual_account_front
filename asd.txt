@@ -1,23 +1,23 @@
 server {
 listen 80;
-server_name ponyo-11.com
+server_name choi-114.com
 root html;
 
 
 location / {
-        return 301 https://ponyo-11.com$request_uri;
+        return 301 https://choi-114.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  ponyo-11.com;
+    server_name  choi-114.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/ponyo-11.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/ponyo-11.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/choi-114.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/choi-114.com/privkey.pem;
 
     location / {
        proxy_pass http://0.0.0.0:3000;
@@ -29,7 +29,7 @@ server {
         root   /usr/share/nginx/html;
     }
 }
-
+// sudo certbot --nginx -d choi-114.com
 server {
     listen 80;
     server_name triple01.com; # 도메인이나 IP 주소로 변경

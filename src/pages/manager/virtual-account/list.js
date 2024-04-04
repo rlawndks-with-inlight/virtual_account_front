@@ -223,8 +223,13 @@ const VirtualAccountList = () => {
     });
     setOperUserList(data?.content ?? []);
   }
-  const onChangePage = async (obj) => {
-    setSearchObj(obj);
+  const onChangePage = async (obj_) => {
+    let obj = obj_;
+    if (obj) {
+      setSearchObj(obj);
+    } else {
+      obj = { ...searchObj };
+    }
     setData({
       ...data,
       content: undefined
@@ -241,7 +246,7 @@ const VirtualAccountList = () => {
     if (data) {
       setPageLoading(false);
       toast.success('삭제처리가 완료되었습니다.');
-      onChangePage(searchObj);
+      onChangePage();
     }
   }
   const getBalance = async (id) => {
