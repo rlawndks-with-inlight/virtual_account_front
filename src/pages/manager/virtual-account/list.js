@@ -110,6 +110,22 @@ const VirtualAccountList = () => {
     },
     ...((user?.level >= 40 && themeDnsData?.deposit_corp_type == 1) ? [
       {
+        id: 'status',
+        label: '상태확인',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Col style={{ alignItems: 'center', rowGap: '0.5rem' }}>
+            <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                getStatus(row?.id)
+              }}
+            >상태확인</Button>
+          </Col>
+        }
+      },
+      {
         id: 'balance',
         label: '잔액확인',
         action: (row, is_excel) => {
@@ -254,6 +270,16 @@ const VirtualAccountList = () => {
       id: id,
     })
     toast.success(`${commarNumber(result?.amount)}원`)
+  }
+  const getStatus = async (id) => {
+    let result = await apiManager('virtual-accounts/status', 'get', {
+      id: id,
+    })
+    if (result?.status == 0) {
+      toast.success(`정상상태`)
+    } else {
+      toast.error(`해지상태`)
+    }
   }
   const moveToMother = async (id) => {
     let result = await apiManager('virtual-accounts/mother', 'create', {
