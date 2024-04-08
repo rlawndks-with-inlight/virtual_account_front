@@ -169,7 +169,7 @@ const VirtualAccountList = () => {
         if (is_excel) {
           return `---`
         }
-        return row['status'] == 5 ? <>
+        return (row['status'] == 5 || row['is_delete'] == 1) ? <>
           <IconButton>
             <Icon icon='material-symbols:edit-outline' onClick={() => {
               router.push(`edit/${row?.id}`)
