@@ -40,7 +40,7 @@ const VirtualAccountApiV2 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['bank_code', '입금은행코드', 'O', 'String'],
                 ['account', '입금계좌번호', 'O', 'String'],
                 ['name', '예금주명', 'O', 'String'],
@@ -72,7 +72,7 @@ const VirtualAccountApiV2 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
                 ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
                 ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
@@ -102,7 +102,7 @@ const VirtualAccountApiV2 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['gender', '성별 (M-남자,F-여자)', 'O', 'String'],
                 ['ntv_frnr', '내외국인 (L-내국인,F-외국인)', 'O', 'String'],
                 ['birth', '생년월일 ex) 19990101', 'O', 'String'],
@@ -136,7 +136,7 @@ const VirtualAccountApiV2 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['tx_seq_no', '문자인증에 사용될 거래번호', 'O', 'String'],
                 ['phone_vrf_word', '문자인증번호', 'O', 'String'],
                 ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
@@ -167,7 +167,7 @@ const VirtualAccountApiV2 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['verify_tr_no', '발급된 거래번호', 'O', 'String'],
                 ['verify_tr_dt', '발급된 거래날짜', 'O', 'String'],
             ],

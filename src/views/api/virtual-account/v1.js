@@ -41,7 +41,7 @@ const VirtualAccountApiV1 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['bank_code', '입금은행코드', 'O', 'String'],
                 ['account', '입금계좌번호', 'O', 'String'],
                 ['name', '이름', 'O', 'String'],
@@ -82,7 +82,7 @@ const VirtualAccountApiV1 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['tid', '입금은행 1원인증 요청 tid', 'O', 'String'],
                 ['vrf_word', '인증번호', 'O', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
@@ -115,7 +115,7 @@ const VirtualAccountApiV1 = () => {
             ],
             req_body: [
                 ['api_key', themeDnsData?.api_key, 'O', 'String'],
-                ['mid', '가맹점 mid (가맹점 하위 유저 아닐시 공백)', 'X', 'String'],
+                ['mid', '가맹점 mid', 'O', 'String'],
                 ['guid', '생성된유저 guid', 'O', 'String'],
                 ...(themeDnsData?.is_use_sign_key == 1 ? [
                     ['api_sign_val', 'API signature 값\n서명값생성: SHA256(api_key + mid + sign_key)', 'O', 'String'],

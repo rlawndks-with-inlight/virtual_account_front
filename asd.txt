@@ -1,26 +1,31 @@
 server {
 listen 80;
-server_name choi-114.com
+server_name greenpay-79.com
 root html;
 
 
 location / {
-        return 301 https://choi-114.com$request_uri;
+        return 301 https://greenpay-79.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  choi-114.com;
+    server_name  greenpay-79.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/choi-114.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/choi-114.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/greenpay-79.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/greenpay-79.com/privkey.pem;
 
     location / {
-       proxy_pass http://0.0.0.0:3000;
+        proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
@@ -29,7 +34,7 @@ server {
         root   /usr/share/nginx/html;
     }
 }
-// sudo certbot --nginx -d choi-114.com
+// sudo certbot --nginx -d greenpay-79.com
 server {
     listen 80;
     server_name triple01.com; # 도메인이나 IP 주소로 변경

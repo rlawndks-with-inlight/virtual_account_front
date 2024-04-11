@@ -1,10 +1,10 @@
-import { Alert, Autocomplete, Button, Card, CircularProgress, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Button, Card, CircularProgress, Dialog, Tooltip, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Col, Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, onlyNumberText } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, excelDownload, getAllIdsWithParents, onlyNumberText, returnMoment, uploadExcel } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -225,11 +225,71 @@ const WithdrawReturn = () => {
                                 </Stack>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={4}>
+                        <Grid item xs={12} md={5}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
                                     {themeDnsData?.withdraw_type == 1 &&
                                         <>
+                                            {/*
+                                        <Row style={{ marginLeft: 'auto', columnGap: '0.5rem' }}>
+                                                <Tooltip title={<>
+                                                    <Col>
+                                                        {bankCodeList('withdraw').map(bank => {
+                                                            return <Row>
+                                                                <div style={{ width: '100px' }}>{bank?.label}:</div>
+                                                                <div>{bank?.value}</div>
+                                                            </Row>
+                                                        })}
+                                                    </Col>
+                                                </>}>
+                                                    <Button variant="outlined"
+                                                        startIcon={<Icon icon={'ph:bank'} />}
+                                                    >은행코드</Button>
+                                                </Tooltip>
+
+                                                <Button variant="outlined"
+                                                    startIcon={<Icon icon={'material-symbols:download-sharp'} />}
+                                                    onClick={() => {
+                                                        excelDownload([], [
+                                                            { label: '은행코드' },
+                                                            { label: '출금계좌번호' },
+                                                            { label: '반환요청금' },
+                                                            { label: '메모' },
+                                                        ], `출금등록양식_${returnMoment().substring(0, 10)}`)
+                                                    }}>엑셀양식추출</Button>
+                                                <label htmlFor={'excel_upload'}>
+                                                    <Button
+                                                        variant="contained"
+                                                        component="span"
+                                                        startIcon={<Icon icon={'icon-park-outline:excel'} />}
+                                                    >엑셀등록</Button>
+                                                </label>
+                                                <input type={'file'} onChange={async (e) => {
+                                                    let excel_list = await uploadExcel(e, 'excel_upload',[
+                                                        'string',
+                                                        'string',
+                                                        'string',
+                                                        'string',
+                                                    ])
+                                                    excel_list.shift();
+                                                    if (excel_list.length > 0) {
+                                                        let withdraw_list = [];
+                                                        for (var i = 0; i < excel_list.length; i++) {
+                                                            console.log(excel_list[i])
+                                                            withdraw_list.push({
+                                                                withdraw_bank_code: excel_list[i][0],
+                                                                withdraw_acct_num: onlyNumberText(excel_list[i][1]),
+                                                                withdraw_acct_name: '',
+                                                                withdraw_amount: onlyNumberText(excel_list[i][2]),
+                                                                note: excel_list[i][3],
+                                                            })
+                                                        }
+                                                        setWithdraws(withdraw_list);
+                                                    }
+
+                                                }} id='excel_upload' style={{ display: 'none' }} />
+                                            </Row>
+                                        */}
 
                                         </>}
                                     {themeDnsData?.withdraw_type == 0 &&
