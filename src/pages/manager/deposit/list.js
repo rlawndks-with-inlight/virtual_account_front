@@ -466,7 +466,9 @@ const DepositList = () => {
           if (is_excel) {
             return "---";
           }
-          if (row?.is_cancel != 1) {
+          if (row?.is_cancel == 1) {
+            return '취소건'
+          } else {
             return <Button
               variant="contained"
               size="small"
@@ -477,7 +479,13 @@ const DepositList = () => {
               }}
             >취소처리</Button>;
           }
-
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            return {
+              color: 'red'
+            }
+          }
         },
       },
     ] : []),
