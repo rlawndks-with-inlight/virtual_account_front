@@ -1,23 +1,23 @@
 server {
 listen 80;
-server_name greenpay-79.com
+server_name hb-pay.com
 root html;
 
 
 location / {
-        return 301 https://greenpay-79.com$request_uri;
+        return 301 https://hb-pay.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  greenpay-79.com;
+    server_name  hb-pay.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/greenpay-79.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/greenpay-79.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/hb-pay.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/hb-pay.com/privkey.pem;
 
     location / {
         proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
@@ -34,7 +34,8 @@ server {
         root   /usr/share/nginx/html;
     }
 }
-// sudo certbot --nginx -d greenpay-79.com
+
+// sudo certbot --nginx -d hb-pay.com
 server {
     listen 80;
     server_name triple01.com; # 도메인이나 IP 주소로 변경
@@ -46,7 +47,7 @@ server {
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
-         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-       proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
 }
 }
