@@ -803,6 +803,19 @@ const DepositList = () => {
             table={'deposits'}
             column_table={'deposits'}
             excel_name={'출금'}
+            middle_line_content={<>
+              <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                <InputLabel>취소상태</InputLabel>
+                <Select label='취소상태' value={searchObj[`is_cancel`]}
+                  onChange={(e) => {
+                    onChangePage({ ...searchObj, [`is_cancel`]: e.target.value, page: 1, })
+                  }}>
+                  <MenuItem value={null}>상태 전체</MenuItem>
+                  <MenuItem value={1}>취소됨</MenuItem>
+                  <MenuItem value={0}>취소안됨</MenuItem>
+                </Select>
+              </FormControl>
+            </>}
             between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
               {data?.content &&
                 <>

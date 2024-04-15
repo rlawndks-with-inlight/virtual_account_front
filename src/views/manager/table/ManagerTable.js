@@ -38,7 +38,7 @@ const CustomTableRow = muiStyled(TableRow)(({ theme, index }) => ({
 }));
 
 export default function ManagerTable(props) {
-  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name, between_content, column_table } = props;
+  const { columns, data, add_button_text, add_link, onChangePage, searchObj, head_columns = [], width, table, excel_name, between_content, middle_line_content, column_table } = props;
   const { page, page_size } = props?.searchObj;
 
   const router = useRouter();
@@ -166,6 +166,7 @@ export default function ManagerTable(props) {
         <TableHeaderContainer>
           <Row style={{ rowGap: '1rem', flexWrap: 'wrap', columnGap: '0.75rem' }}>
             <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => setOpenProcessColumns(true)}>검색옵션</Button>
+            {middle_line_content}
           </Row>
         </TableHeaderContainer>
         <TableHeaderContainer>
