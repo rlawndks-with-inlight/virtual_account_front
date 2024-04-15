@@ -41,7 +41,17 @@ export default function TableHeadCustom({
   sx,
   themeNotShowColumns = {},
   column_table = "",
+  searchObj,
+  onChangePage,
 }) {
+
+  const createSortHandler = (prop) => (e) => {
+    onSort(e, prop)
+    console.log(order)
+    const orderVal = order == 'asc' ? false : true
+    onChangePage({ ...searchObj, is_asc: orderVal, order: prop })
+  }
+
   return (
     <TableHead sx={sx}>
       <TableRow>
@@ -73,12 +83,12 @@ export default function TableHeadCustom({
                 >
                   <Row style={{ alignItems: 'center' }}>
                     <div style={{ borderLeft: `${idx != 0 ? '1px solid #ccc' : ''}`, paddingLeft: '8px', height: '1.5rem' }} />
-                    {onSort ? (
+                    {(onSort && headCell?.isOrder) ? (
                       <TableSortLabel
                         hideSortIcon
                         active={orderBy === headCell.id}
                         direction={orderBy === headCell.id ? order : 'asc'}
-                        onClick={() => onSort(headCell.id)}
+                        onClick={createSortHandler(headCell.id)}
                         sx={{ textTransform: 'capitalize' }}
                       >
                         {headCell.label}

@@ -78,7 +78,8 @@ const BrandList = () => {
         label: '납부일',
         action: (row, is_excel) => {
           return row['pay_day'] + '일';
-        }
+        },
+        isOrder: true,
       },
       {
         id: 'pay_amount',

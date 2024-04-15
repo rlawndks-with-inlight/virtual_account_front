@@ -51,6 +51,9 @@ export default function ManagerTable(props) {
   const [zColumn, setZColumn] = useState([]);
   const [zHeadColumn, setZHeadColumn] = useState([]);
   const [openProcessColumns, setOpenProcessColumns] = useState(false);
+  const [checked, setChecked] = useState('id')
+  const [order, setOrder] = useState('desc')
+
   useEffect(() => {
     settingColumns();
   }, [columns, head_columns, router.asPath]);
@@ -130,6 +133,11 @@ export default function ManagerTable(props) {
       }
     }
     await excelDownload(result, zColumn, excel_name);
+  }
+  const onSort = (e, prop) => {
+    const isDesc = checked === prop && order === 'desc';
+    setOrder(isDesc ? 'asc' : 'desc')
+    setChecked(prop)
   }
   return (
     <>
@@ -321,7 +329,7 @@ export default function ManagerTable(props) {
                       </TableRow>
                     </TableHead>
                   </>}
-                <TableHeadCustom headLabel={zColumn} themeNotShowColumns={themeNotShowColumns} column_table={column_table} />
+                <TableHeadCustom order={order} onSort={onSort} headLabel={zColumn} themeNotShowColumns={themeNotShowColumns} column_table={column_table} searchObj={searchObj} onChangePage={onChangePage} />
                 <TableBody>
                   {data.content && data.content.map((row, index) => (
                     <CustomTableRow key={index} index={index} style={{}}>
