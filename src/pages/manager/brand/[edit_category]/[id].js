@@ -418,6 +418,23 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
+                      {user?.level >= 45 &&
+                        <>
+                          <TextField
+                            label='출금홀딩금액'
+                            value={item.hold_amount}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['hold_amount']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }}
+                          />
+                        </>}
+
                       {item?.withdraw_type == 0 &&
                         <>
                           <Stack>

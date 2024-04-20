@@ -211,7 +211,7 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
-    ...((isShowTab('blackList') && themeDnsData?.deposit_corp_type == 1 && !isOperator()) ? [
+    ...((isShowTab('blackList') && !isOperator()) ? [
       {
         id: 'blackList',
         items: [
