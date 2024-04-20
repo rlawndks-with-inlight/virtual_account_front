@@ -211,6 +211,22 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...((isShowTab('blackList') && themeDnsData?.deposit_corp_type == 1 && !isOperator()) ? [
+      {
+        id: 'blackList',
+        items: [
+          {
+            title: '블랙리스트관리',
+            path: PATH_MANAGER.blackList.root,
+            icon: <Icon icon='fluent:people-prohibited-16-regular' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '블랙리스트관리', path: PATH_MANAGER.blackList.root },
+              { title: '블랙리스트추가', path: PATH_MANAGER.blackList.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...((isManager() && isShowTab('brand')) ? [
       {
         id: 'brand',
