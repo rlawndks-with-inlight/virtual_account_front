@@ -94,6 +94,38 @@ const DepositList = () => {
       },
     },
     {
+      id: 'trade_at',
+      label: '거래시간',
+      action: (row, is_excel) => {
+        if (row?.trans_date) {
+          return `${row?.trans_date} ${row?.trans_time}`
+        } else {
+          return "---"
+        }
+      },
+      sx: (row) => {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          return {
+            color: 'red'
+          }
+        }
+      },
+    },
+    {
+      id: 'created_at',
+      label: '생성일',
+      action: (row, is_excel) => {
+        return row['created_at'] ?? "---"
+      },
+      sx: (row) => {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          return {
+            color: 'red'
+          }
+        }
+      },
+    },
+    {
       id: 'mcht_nickname',
       label: '가맹점',
       action: (row, is_excel) => {
@@ -426,38 +458,7 @@ const DepositList = () => {
 
       }).flat(),
     ] : []),
-    {
-      id: 'trade_at',
-      label: '거래시간',
-      action: (row, is_excel) => {
-        if (row?.trans_date) {
-          return `${row?.trans_date} ${row?.trans_time}`
-        } else {
-          return "---"
-        }
-      },
-      sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
-          return {
-            color: 'red'
-          }
-        }
-      },
-    },
-    {
-      id: 'created_at',
-      label: '생성일',
-      action: (row, is_excel) => {
-        return row['created_at'] ?? "---"
-      },
-      sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
-          return {
-            color: 'red'
-          }
-        }
-      },
-    },
+
     ...(((user?.level >= 40 && !(themeDnsData?.parent_id > 0)) || user?.level >= 45) ? [
       {
         id: 'cancel_deposit',
