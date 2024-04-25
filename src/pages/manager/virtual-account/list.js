@@ -259,8 +259,9 @@ const VirtualAccountList = () => {
     setPageLoading(true);
     toast.error('삭제처리가 완료될때까지 기다려주세요....');
     let data = await apiManager('virtual-accounts', 'delete', { id });
+    setPageLoading(false);
     if (data) {
-      setPageLoading(false);
+
       toast.success('삭제처리가 완료되었습니다.');
       onChangePage();
     }

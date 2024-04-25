@@ -71,7 +71,7 @@ export const deleteItem = async (url, obj) => {
         }
     } catch (err) {
         console.log(err)
-        toast.error(err?.response?.data?.message);
+        toast.error(err?.response?.data?.message || err?.message);
         if (err?.rate_limiter) {
             toast.error('너무 많은 요청을 하였습니다. 잠시 후 이용해 주세요.');
         }
