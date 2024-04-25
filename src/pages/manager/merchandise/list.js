@@ -194,20 +194,6 @@ const UserList = () => {
       }
     },
     {
-      id: 'manager_plus_amount',
-      label: '관리자지급액',
-      action: (row, is_excel) => {
-        return commarNumber(row['manager_plus_amount'])
-      }
-    },
-    {
-      id: 'manager_minus_amount',
-      label: '관리자차감액',
-      action: (row, is_excel) => {
-        return commarNumber(row['manager_minus_amount'])
-      }
-    },
-    {
       id: 'withdraw_amount',
       label: '출금액',
       action: (row, is_excel) => {
@@ -219,6 +205,20 @@ const UserList = () => {
       label: '출금실패차감정산금',
       action: (row, is_excel) => {
         return commarNumber(row['withdraw_fail_amount'])
+      }
+    },
+    {
+      id: 'manager_plus_amount',
+      label: '관리자지급액',
+      action: (row, is_excel) => {
+        return commarNumber(row['manager_plus_amount'])
+      }
+    },
+    {
+      id: 'manager_minus_amount',
+      label: '관리자차감액',
+      action: (row, is_excel) => {
+        return commarNumber(row['manager_minus_amount'])
       }
     },
     {
