@@ -134,9 +134,9 @@ const BrandEdit = () => {
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
         if (router.query?.id) {
-          router.push(`/manager/brand`);
+          router.push(`/manager/brand/list`);
         } else {
-          window.location.reload();
+          router.push(`/manager/brand`);
         }
       }
     } else {//추가
