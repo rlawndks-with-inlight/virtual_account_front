@@ -194,7 +194,6 @@ const SettleList = () => {
   return (
     <>
       <Stack spacing={3}>
-
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
             {user?.level >= 40 &&

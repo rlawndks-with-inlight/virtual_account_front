@@ -155,7 +155,11 @@ const BrandEdit = () => {
       result = await apiManager('brands', 'create', item);
       if (result) {
         toast.success("성공적으로 저장 되었습니다.");
-        router.push(`/manager/brand`);
+        if (router.query?.id) {
+          router.push(`/manager/brand/list`);
+        } else {
+          router.push(`/manager/brand`);
+        }
       }
     }
 
