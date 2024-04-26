@@ -196,9 +196,10 @@ const SettleList = () => {
       <Stack spacing={3}>
 
         <Card>
-          {user?.level >= 40 &&
-            <>
-              <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            {user?.level >= 40 &&
+              <>
+
                 <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
                   <InputLabel>유저레벨구분</InputLabel>
                   <Select label='유저레벨구분' value={searchObj[`level`]}
@@ -246,20 +247,22 @@ const SettleList = () => {
                       </Select>
                     </FormControl>
                   </>}
-                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
-                  <InputLabel>거래구분</InputLabel>
-                  <Select label='거래구분' value={searchObj[`pay_type`]}
-                    onChange={(e) => {
-                      onChangePage({ ...searchObj, [`pay_type`]: e.target.value })
-                    }}>
-                    <MenuItem value={null}>거래구분 전체</MenuItem>
-                    {payTypeList.map((type) => {
-                      return <MenuItem value={type.value}>{type.label}</MenuItem>
-                    })}
-                  </Select>
-                </FormControl>
-              </Row>
-            </>}
+              </>}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>거래구분</InputLabel>
+              <Select label='거래구분' value={searchObj[`pay_type`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`pay_type`]: e.target.value })
+                }}>
+                <MenuItem value={null}>거래구분 전체</MenuItem>
+                {payTypeList.map((type) => {
+                  if (user?.level >= type?.level) {
+                    return <MenuItem value={type.value}>{type.label}</MenuItem>
+                  }
+                })}
+              </Select>
+            </FormControl>
+          </Row>
           <ManagerTable
             data={data}
             columns={columns}
