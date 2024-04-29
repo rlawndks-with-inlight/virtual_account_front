@@ -1867,6 +1867,39 @@ const BrandEdit = () => {
                           }}
                         />
                       </Stack>
+                      <Stack>
+                        <FormControlLabel control={<Switch checked={item.is_use_destruct_auto_virtual_acct == 1} />} label={`가상계좌 자동파기 사용여부`}
+                          onChange={(e) => {
+                            let obj = {
+                              ...item,
+                              ['is_use_destruct_auto_virtual_acct']: e.target.checked ? 1 : 0,
+                            }
+                            if (!e.target.checked) {
+                              obj['destruct_auto_virtual_acct_minute'] = 0;
+                            }
+                            setItem(obj)
+                          }}
+                        />
+                      </Stack>
+                      {item?.is_use_destruct_auto_virtual_acct == 1 &&
+                        <>
+                          <TextField
+                            label='자동파기 시간'
+                            value={item.destruct_auto_virtual_acct_minute}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['destruct_auto_virtual_acct_minute']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }}
+                            InputProps={{
+                              endAdornment: <div>분</div>
+                            }}
+                          />
+                        </>}
                     </Stack>
                   </Card>
                 </Grid>
