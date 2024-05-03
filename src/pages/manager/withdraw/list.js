@@ -42,6 +42,9 @@ const WithdrawList = () => {
       id: 'level',
       label: '유저레벨',
       action: (row, is_excel) => {
+        if (row?.pay_type == 10) {
+          return '모계좌출금'
+        }
         let level = row['level'];
         for (var i = 0; i < themeDnsData?.operator_list.length; i++) {
           let {
@@ -61,6 +64,9 @@ const WithdrawList = () => {
       id: 'nickname',
       label: '상호',
       action: (row, is_excel) => {
+        if (row?.pay_type == 10) {
+          return '모계좌출금'
+        }
         let user_item = {
           nickname: row[`nickname`],
           user_name: row['user_name'],
