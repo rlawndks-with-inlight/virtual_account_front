@@ -248,6 +248,13 @@ const UserList = () => {
             id: `sales${operator?.num}_id`,
             label: label,
             action: (row, is_excel) => {
+              if (is_excel) {
+                if (row[`sales${operator?.num}_id`] > 0) {
+                  return `${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`
+                } else {
+                  return "---";
+                }
+              }
               return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
             }
           },
