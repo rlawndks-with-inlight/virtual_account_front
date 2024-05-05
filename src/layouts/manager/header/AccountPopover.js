@@ -53,14 +53,9 @@ export default function AccountPopover() {
   const [userDeposit, setUserDeposit] = useState({});
   useEffect(() => {
     getUserDeposit();
-    socket.on('message', (msg) => {
-      let { method, data, brand_id, title } = msg;
-      if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
-        getUserDeposit();
-      }
-    });
   }, [])
   const handleOpenPopover = (event) => {
+    getUserDeposit();
     setOpenPopover(event.currentTarget);
   };
   const getUserDeposit = async () => {
