@@ -1868,6 +1868,19 @@ const BrandEdit = () => {
                         />
                       </Stack>
                       <Stack>
+                        <FormControlLabel control={<Switch checked={item.setting_obj?.is_auto_parent_brand_settle == 1} />} label={`상위 전산 있을시 자동 모계좌 차감여부`}
+                          onChange={(e) => {
+                            setItem({
+                              ...item,
+                              setting_obj: {
+                                ...item.setting_obj,
+                                ['is_auto_parent_brand_settle']: e.target.checked ? 1 : 0,
+                              }
+                            })
+                          }}
+                        />
+                      </Stack>
+                      <Stack>
                         <FormControlLabel control={<Switch checked={item.is_use_destruct_auto_virtual_acct == 1} />} label={`가상계좌 자동파기 사용여부`}
                           onChange={(e) => {
                             let obj = {
@@ -1927,7 +1940,6 @@ const BrandEdit = () => {
                                 />
                               </Stack>
                             </>}
-
                         </>
                       ))}
                     </Stack>
