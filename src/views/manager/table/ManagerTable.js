@@ -53,7 +53,7 @@ export default function ManagerTable(props) {
   const [openProcessColumns, setOpenProcessColumns] = useState(false);
   const [checked, setChecked] = useState('id')
   const [order, setOrder] = useState('desc')
-
+  const [excelLoading, setExcelLoading] = useState(false);
   useEffect(() => {
     settingColumns();
   }, [columns, head_columns, router.asPath]);
@@ -122,6 +122,7 @@ export default function ManagerTable(props) {
     })
   }
   const exportExcel = async () => {
+    setExcelLoading(true);
     let data = await apiManager(table, 'list', { ...searchObj, page_size: 50000, is_excel: true, });
     let result = [];
     for (var i = 0; i < data.content.length; i++) {
@@ -133,6 +134,7 @@ export default function ManagerTable(props) {
       }
     }
     await excelDownload(result, zColumn, excel_name);
+    setExcelLoading(false);
   }
   const onSort = (e, prop) => {
     const isDesc = checked === prop && order === 'desc';
@@ -244,7 +246,18 @@ export default function ManagerTable(props) {
             <Button variant='outlined'
               startIcon={<Icon icon={'icon-park-outline:excel'} />}
               onClick={exportExcel}
-            >엑셀추출</Button>
+              disabled={excelLoading}
+            >
+              {excelLoading ?
+                <>
+                  <CircularProgress sx={{ margin: 'auto' }} size={20} />
+                  <div>추출중입니다...</div>
+                </>
+                :
+                <>
+                  엑셀추출
+                </>}
+            </Button>
           </Row>
           <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.7rem' }}>
             <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>
