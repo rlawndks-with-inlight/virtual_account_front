@@ -803,7 +803,7 @@ const DepositList = () => {
             head_columns={[]}
             table={'deposits'}
             column_table={'deposits'}
-            excel_name={'출금'}
+            excel_name={'입금'}
             middle_line_content={<>
               <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
                 <InputLabel>취소상태</InputLabel>
