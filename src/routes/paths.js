@@ -85,8 +85,8 @@ export const PATH_MANAGER = {
     changePw: path(ROOTS_MANAGER, '/my-page/change-pw'),
   },
   blackList: {
-    root: path(ROOTS_MANAGER, '/black-list'),
-    list: path(ROOTS_MANAGER, '/black-list/list'),
-    add: path(ROOTS_MANAGER, '/black-list/add'),
+    root: path(ROOTS_MANAGER, '/black-lst'),
+    list: path(ROOTS_MANAGER, '/black-lst/list'),
+    add: path(ROOTS_MANAGER, '/black-lst/add'),
   },
 };

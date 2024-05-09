@@ -143,7 +143,7 @@ const BlackList = () => {
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'블랙리스트추가'}
-            add_link={'/manager/black-list/add'}
+            add_link={'/manager/black-lst/add'}
             head_columns={[]}
             table={'black-lists'}
             column_table={'black-lists'}
