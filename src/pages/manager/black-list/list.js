@@ -71,7 +71,7 @@ const BlackList = () => {
         }
         return (
           <>
-            {user?.level >= 50 &&
+            {user?.level >= 40 &&
               <>
                 <IconButton onClick={() => {
                   setModal({
@@ -83,7 +83,6 @@ const BlackList = () => {
                   <Icon icon='material-symbols:delete-outline' />
                 </IconButton>
               </>}
-
           </>
         )
       }
