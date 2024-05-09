@@ -56,7 +56,7 @@ export default function NotificationsPopover() {
   const totalUnRead = notifications.filter((item) => !(themeReadNotifications[item?.id])).length;
   const [splitCount, setSplitCount] = useState(4);
   useEffect(() => {
-    socket.on('message', (msg) => {
+    socket.on(`message_${themeDnsData?.id}`, (msg) => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
         let notification_list = [...notifications];
