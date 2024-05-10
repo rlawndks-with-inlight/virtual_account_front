@@ -191,7 +191,7 @@ const VirtualAccountList = () => {
             <>
               <IconButton onClick={() => {
                 setModal({
-                  func: () => { deleteUser(row?.id) },
+                  func: () => { deleteItem(row?.id) },
                   icon: 'material-symbols:delete-outline',
                   title: '정말 삭제하시겠습니까?'
                 })
@@ -256,13 +256,27 @@ const VirtualAccountList = () => {
       setData(data_);
     }
   }
-  const deleteUser = async (id) => {
+  const deleteItem = async (id) => {
     setPageLoading(true);
     toast.error('삭제처리가 완료될때까지 기다려주세요....');
     let data = await apiManager('virtual-accounts', 'delete', { id });
     setPageLoading(false);
     if (data) {
 
+      toast.success('삭제처리가 완료되었습니다.');
+      onChangePage();
+    }
+  }
+  const deleteItemByMcht = async (id) => {
+    if (!(searchObj?.mcht_id > 0)) {
+      toast.error('가맹점 선택을 해주세요.');
+      return;
+    }
+    setPageLoading(true);
+    toast.error('삭제처리가 완료될때까지 기다려주세요....');
+    let data = await apiManager('virtual-accounts/mcht', 'delete', { id: searchObj?.mcht_id });
+    setPageLoading(false);
+    if (data) {
       toast.success('삭제처리가 완료되었습니다.');
       onChangePage();
     }
@@ -445,6 +459,16 @@ const VirtualAccountList = () => {
                 <MenuItem value={1}>삭제됨</MenuItem>
               </Select>
             </FormControl>
+            {user?.level >= 40 &&
+              <>
+                <Button variant="outlined" sx={{}} onClick={() => {
+                  setModal({
+                    func: () => { deleteItemByMcht() },
+                    icon: 'material-symbols:delete-outline',
+                    title: '가상계좌 일괄삭제 하시겠습니까?'
+                  })
+                }}>가맹점 하부 가상계좌 삭제</Button>
+              </>}
           </Row>
 
           <ManagerTable
