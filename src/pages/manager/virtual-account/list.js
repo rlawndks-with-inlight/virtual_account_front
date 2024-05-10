@@ -104,7 +104,8 @@ const VirtualAccountList = () => {
         }
         return <Col>
           <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['deposit_acct_num']} {row['deposit_acct_name']} {row['birth']} {row['phone_num']}</div>
+          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+          <div>{row['birth']} {row['phone_num']}</div>
         </Col>
       }
     },
