@@ -16,7 +16,7 @@ import { useSettingsContext } from "src/components/settings";
 const SettleList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
-  const { themeDnsData } = useSettingsContext();
+  const { themeDnsData, themeMode } = useSettingsContext();
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
@@ -88,8 +88,14 @@ const SettleList = () => {
       },
       sx: (row) => {
         let amount = row['user_amount'];
-        return {
-          color: `${amount > 0 ? 'blue' : 'red'}`
+        if (amount >= 0) {
+          return {
+            color: themeMode == 'dark' ? '#0080ff' : 'blue'
+          }
+        } else {
+          return {
+            color: themeMode == 'dark' ? '#f29886' : 'red'
+          }
         }
       },
     },
@@ -118,8 +124,14 @@ const SettleList = () => {
       },
       sx: (row) => {
         let amount = row['user_amount'];
-        return {
-          color: `${amount > 0 ? 'blue' : 'red'}`
+        if (amount >= 0) {
+          return {
+            color: themeMode == 'dark' ? '#0080ff' : 'blue'
+          }
+        } else {
+          return {
+            color: themeMode == 'dark' ? '#f29886' : 'red'
+          }
         }
       },
     },

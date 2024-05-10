@@ -1,23 +1,23 @@
 server {
 listen 80;
-server_name dl-8989.com
+server_name team.tikitaka.kr
 root html;
 
 
 location / {
-        return 301 https://dl-8989.com$request_uri;
+        return 301 https://team.tikitaka.kr$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  dl-8989.com;
+    server_name  team.tikitaka.kr;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/dl-8989.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/dl-8989.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/team.tikitaka.kr/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/team.tikitaka.kr/privkey.pem;
 
     location / {
         proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
@@ -35,7 +35,7 @@ server {
     }
 }
 
-// sudo certbot --nginx -d dl-8989.com
+// sudo certbot --nginx -d team.tikitaka.kr
 server {
     listen 80;
     server_name triple01.com; # 도메인이나 IP 주소로 변경

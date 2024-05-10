@@ -17,7 +17,7 @@ import { socket } from "src/data/data";
 const DepositList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
-  const { themeDnsData } = useSettingsContext();
+  const { themeDnsData, themeMode } = useSettingsContext();
   const defaultHeadColumns = [
     {
       title: '기본정보',
@@ -228,7 +228,7 @@ const DepositList = () => {
           }
         }
         return {
-          color: 'green'
+          color: themeMode == 'dark' ? '#81c147' : 'green'
         }
       },
     },
@@ -245,7 +245,7 @@ const DepositList = () => {
           }
         }
         return {
-          color: 'blue'
+          color: themeMode == 'dark' ? '#0080ff' : 'blue'
         }
       },
     },
@@ -294,7 +294,7 @@ const DepositList = () => {
           }
         }
         return {
-          color: '#a52a2a'
+          color: themeMode == 'dark' ? '#f29886' : '#a52a2a'
         }
       },
     },
@@ -378,7 +378,7 @@ const DepositList = () => {
               }
             }
             return {
-              color: '#a52a2a'
+              color: themeMode == 'dark' ? '#f29886' : '#a52a2a'
             }
           },
         },
@@ -447,7 +447,7 @@ const DepositList = () => {
                   }
                 }
                 return {
-                  color: '#a52a2a'
+                  color: themeMode == 'dark' ? '#f29886' : '#a52a2a'
                 }
               },
             },

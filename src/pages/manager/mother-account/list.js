@@ -17,7 +17,7 @@ import { useSettingsContext } from "src/components/settings";
 const MotherAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
-  const { themeDnsData } = useSettingsContext();
+  const { themeDnsData, themeMode } = useSettingsContext();
 
   const defaultColumns = [
     {
@@ -92,9 +92,16 @@ const MotherAccountList = () => {
         } else if (row['pay_type'] == 20) {
           amount = row['amount'] + row['withdraw_fee'];
         }
-        return {
-          color: `${amount > 0 ? 'blue' : 'red'}`
+        if (amount >= 0) {
+          return {
+            color: themeMode == 'dark' ? '#0080ff' : 'blue'
+          }
+        } else {
+          return {
+            color: themeMode == 'dark' ? '#f29886' : 'red'
+          }
         }
+
       },
     },
     ...((themeDnsData?.withdraw_corp_type == 2 && user?.level >= 40) ? [
