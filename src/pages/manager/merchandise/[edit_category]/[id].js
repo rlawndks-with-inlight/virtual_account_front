@@ -129,6 +129,7 @@ const UserEdit = () => {
     if (!data?.mcht_fee && themeDnsData?.is_use_fee_operator == 1) {
       return toast.error('가맹점 요율은 필수값입니다.');
     }
+    delete data['ip_logs']
     let result = undefined
     if (data?.telegram_chat_ids) {
       data['telegram_chat_ids'] = JSON.stringify((data?.telegram_chat_ids ?? "").split(','));
