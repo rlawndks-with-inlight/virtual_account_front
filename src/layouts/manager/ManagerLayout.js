@@ -32,6 +32,8 @@ export default function ManagerLayout({ children }) {
 
   const [open, setOpen] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const isNavHorizontal = themeLayout === 'horizontal';
 
   const isNavMini = themeLayout === 'mini';
@@ -40,11 +42,13 @@ export default function ManagerLayout({ children }) {
   }, [router.asPath])
 
   const checkAuth = async () => {
+    setLoading(true);
     let result = await initialize();
 
     if (result?.level < 10 || !result) {
       window.location.href = ('/manager')
     }
+    setLoading(false);
   }
   const handleOpen = () => {
     setOpen(true);
@@ -70,7 +74,12 @@ export default function ManagerLayout({ children }) {
 
           {isDesktop ? <NavHorizontal /> : renderNavVertical}
 
-          <Main>{children}</Main>
+          <Main>
+            {!loading &&
+              <>
+                {children}
+              </>}
+          </Main>
         </>
       );
     }
@@ -88,7 +97,12 @@ export default function ManagerLayout({ children }) {
           >
             {isDesktop ? <NavMini /> : renderNavVertical}
 
-            <Main>{children}</Main>
+            <Main>
+              {!loading &&
+                <>
+                  {children}
+                </>}
+            </Main>
           </Box>
         </>
       );
@@ -106,7 +120,12 @@ export default function ManagerLayout({ children }) {
         >
           {renderNavVertical}
 
-          <Main>{children}</Main>
+          <Main>
+            {!loading &&
+              <>
+                {children}
+              </>}
+          </Main>
         </Box>
       </>
     );

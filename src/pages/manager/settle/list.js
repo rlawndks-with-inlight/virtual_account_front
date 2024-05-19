@@ -14,7 +14,6 @@ import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from
 import _ from "lodash";
 import { useSettingsContext } from "src/components/settings";
 const SettleList = () => {
-  const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData, themeMode } = useSettingsContext();
   const [searchObj, setSearchObj] = useState({
