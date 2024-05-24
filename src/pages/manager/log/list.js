@@ -1,4 +1,4 @@
-import { Card, Chip, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Tooltip } from "@mui/material";
+import { Card, Chip, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -9,7 +9,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
-import { returnMoment } from "src/utils/function";
+import { commarNumber, returnMoment } from "src/utils/function";
 const LogList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -234,6 +234,15 @@ const LogList = () => {
             column_table={'logs'}
             excel_name={'로그'}
             is_one_date={true}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              {data?.content &&
+                <>
+                  <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                    <Typography variant="body2">조회건수</Typography>
+                    <Typography variant="subtitle2">{commarNumber(data?.total)}</Typography>
+                  </Row>
+                </>}
+            </Row>}
           />
         </Card>
       </Stack>
