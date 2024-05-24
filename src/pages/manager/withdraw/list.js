@@ -325,7 +325,6 @@ const WithdrawList = () => {
       action: (row, is_excel) => {
         return row['created_at'] ?? "---"
       },
-      isOrder: true,
     },
     {
       id: 'updated_at',
