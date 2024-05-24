@@ -1,23 +1,23 @@
 server {
 listen 80;
-server_name bdbd-98.com
+server_name mari-99.com
 root html;
 
 
 location / {
-        return 301 https://bdbd-98.com$request_uri;
+        return 301 https://mari-99.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  bdbd-98.com;
+    server_name  mari-99.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/bdbd-98.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/bdbd-98.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/mari-99.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mari-99.com/privkey.pem;
 
     location / {
         proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
@@ -35,7 +35,7 @@ server {
     }
 }
 
-// sudo certbot --nginx -d bdbd-98.com 
+// sudo certbot --nginx -d mari-99.com 
 server {
     listen 80;
     server_name sinsawearcp.com; # 도메인이나 IP 주소로 변경

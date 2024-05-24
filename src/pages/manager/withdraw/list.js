@@ -326,6 +326,13 @@ const WithdrawList = () => {
         return row['created_at'] ?? "---"
       }
     },
+    {
+      id: 'updated_at',
+      label: '업데이트일',
+      action: (row, is_excel) => {
+        return row['updated_at'] ?? "---"
+      }
+    },
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
