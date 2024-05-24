@@ -93,11 +93,20 @@ export default function TableHeadCustom({
                         sx={{ textTransform: 'capitalize' }}
                       >
                         {headCell.label}
-                        {searchObj?.order == headCell.id &&
+                        {headCell?.isOrder &&
                           <>
                             &nbsp;
-                            <Icon icon={`teenyicons:${searchObj?.is_asc ? 'up' : 'down'}-solid`} />
+                            {searchObj?.order == headCell.id ?
+                              <>
+
+                                <Icon icon={`teenyicons:${searchObj?.is_asc ? 'up' : 'down'}-solid`} />
+                              </>
+                              :
+                              <>
+                                <Icon icon={`tabler:caret-up-down-filled`} />
+                              </>}
                           </>}
+
                       </TableSortLabel>
                     ) : (
                       headCell.label

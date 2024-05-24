@@ -70,7 +70,7 @@ const BrandList = () => {
           return row['favicon_img'] ?? "---"
         }
         return <LazyLoadImage src={row['favicon_img']} style={{ height: '56px' }} />
-      }
+      },
     },
     ...(user?.level >= 50 ? [
       {
