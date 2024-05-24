@@ -327,7 +327,7 @@ export default function ManagerTable(props) {
                 }}
                 onKeyPress={(e) => {
                   if (e.key == 'Enter') {
-                    onChangePage({ ...searchObj, search: keyword })
+                    onChangePage({ ...searchObj, search: keyword, page: 1, })
                   }
                 }}
               />
