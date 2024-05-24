@@ -529,7 +529,7 @@ const WithdrawList = () => {
             </FormControl>
             <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
               <InputLabel>출금상태변경</InputLabel>
-              <Select label='출금상태' value={searchObj[`is_hand`]}
+              <Select label='출금상태변경' value={searchObj[`is_hand`]}
                 onChange={(e) => {
                   onChangePage({ ...searchObj, [`is_hand`]: e.target.value })
                 }}>
