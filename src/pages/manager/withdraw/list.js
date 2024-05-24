@@ -331,7 +331,8 @@ const WithdrawList = () => {
       label: '업데이트일',
       action: (row, is_excel) => {
         return row['updated_at'] ?? "---"
-      }
+      },
+      isOrder: true,
     },
   ]
   const router = useRouter();

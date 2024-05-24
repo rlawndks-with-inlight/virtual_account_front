@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 import { Row } from '../elements/styled-components';
+import { Icon } from '@iconify/react';
 
 // ----------------------------------------------------------------------
 
@@ -92,12 +93,11 @@ export default function TableHeadCustom({
                         sx={{ textTransform: 'capitalize' }}
                       >
                         {headCell.label}
-
-                        {orderBy === headCell.id ? (
-                          <Box sx={{ ...visuallyHidden }}>
-                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                          </Box>
-                        ) : null}
+                        {searchObj?.order == headCell.id &&
+                          <>
+                            &nbsp;
+                            <Icon icon={`teenyicons:${searchObj?.is_asc ? 'up' : 'down'}-solid`} />
+                          </>}
                       </TableSortLabel>
                     ) : (
                       headCell.label
