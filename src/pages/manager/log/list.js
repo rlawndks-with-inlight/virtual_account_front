@@ -9,6 +9,7 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
+import { returnMoment } from "src/utils/function";
 const LogList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -43,7 +44,7 @@ const LogList = () => {
       id: 'method',
       label: 'METHOD',
       action: (row, is_excel) => {
-        let request = JSON.parse(row['request']);
+        let request = JSON.parse(row?.request ?? "{}");
         return request['method'] ?? "---"
       }
     },
@@ -51,7 +52,7 @@ const LogList = () => {
       id: 'url',
       label: 'URL',
       action: (row, is_excel) => {
-        let request = JSON.parse(row['request']);
+        let request = JSON.parse(row?.request ?? "{}");
         return request['url'] ?? "---"
       }
     },
@@ -59,7 +60,7 @@ const LogList = () => {
       id: 'request_data',
       label: 'REQUEST DATA',
       action: (row, is_excel) => {
-        let request = JSON.parse(row['request']);
+        let request = JSON.parse(row?.request ?? "{}");
 
         if (is_excel) {
           return `query: ${JSON.stringify(request?.query)}\nparams: ${JSON.stringify(request?.params)}\nbody: ${JSON.stringify(request?.body)}`
@@ -148,10 +149,9 @@ const LogList = () => {
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: '',
-    e_dt: '',
+    dt: returnMoment().substring(0, 10),
     search: '',
-
+    type: 'back'
   })
   useEffect(() => {
     pageSetting();
@@ -183,6 +183,7 @@ const LogList = () => {
       onChangePage(searchObj);
     }
   }
+
   return (
     <>
       <Stack spacing={3}>
@@ -193,7 +194,7 @@ const LogList = () => {
             >
               <InputLabel>result 타입</InputLabel>
               <Select
-                style={{ flexGrow: 1, width: '240px' }}
+                style={{ flexGrow: 1, width: '200px' }}
                 label='result 타입'
                 value={searchObj?.response_result_type}
                 onChange={(e) => {
@@ -202,6 +203,22 @@ const LogList = () => {
                 <MenuItem value={null}>{'전체'}</MenuItem>
                 <MenuItem value={1}>{'성공'} ({data?.success && (data?.success[0]?.success ?? 0)})</MenuItem>
                 <MenuItem value={2}>{'실패'} ({data?.fail && (data?.fail[0]?.fail ?? 0)})</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl
+              size="small"
+            >
+              <InputLabel>api 타입</InputLabel>
+              <Select
+                style={{ flexGrow: 1, width: '200px' }}
+                label='api 타입'
+                value={searchObj?.type}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, type: e.target.value })
+                }}>
+                <MenuItem value={'back'}>{'백오피스'}</MenuItem>
+                <MenuItem value={'noti'}>{'노티'}</MenuItem>
+                <MenuItem value={'api'}>{'API'}</MenuItem>
               </Select>
             </FormControl>
           </Row>
@@ -216,6 +233,7 @@ const LogList = () => {
             table={'logs'}
             column_table={'logs'}
             excel_name={'로그'}
+            is_one_date={true}
           />
         </Card>
       </Stack>
