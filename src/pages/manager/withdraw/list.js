@@ -527,6 +527,18 @@ const WithdrawList = () => {
                 })}
               </Select>
             </FormControl>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>출금상태변경</InputLabel>
+              <Select label='출금상태' value={searchObj[`is_hand`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`is_hand`]: e.target.value })
+                }}>
+                <MenuItem value={null}>상태변경 전체</MenuItem>
+                {withdrawHandList.map(status => {
+                  return <MenuItem value={status.value}>{`${status.label}`}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
           </Row>
           <ManagerTable
             data={data}
