@@ -35,8 +35,14 @@ const LogList = () => {
         if (is_excel) {
           return row['response_result']
         }
+        let color = 'error';
+        if (searchObj?.type == 'back') {
+          color = row['response_result'] > 0 ? 'secondary' : 'error'
+        } else if (searchObj?.type == 'noti') {
+          color = row['response_result'] == '0000' ? 'secondary' : 'error'
+        }
         return <>
-          <Chip label={row['response_result'] ?? "---"} color={row['response_result'] > 0 ? 'secondary' : 'error'} />
+          <Chip label={row['response_result'] ?? "---"} color={color} />
         </>
       }
     },
