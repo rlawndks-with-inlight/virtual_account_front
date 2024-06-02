@@ -363,6 +363,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         label='이름'
                                                         size="small"
                                                         value={item.deposit_acct_name}
+                                                        disabled={authItem?.is_confirm == 1}
                                                         onChange={(e) => {
                                                             setItem(
                                                                 {
