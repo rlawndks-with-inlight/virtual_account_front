@@ -1218,7 +1218,13 @@ const BrandEdit = () => {
                               ['auth_fee']: onlyNumberText(e.target.value)
                             }
                           )
-                        }} />
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
                     </Stack>
                   </Card>
                 </Grid>
