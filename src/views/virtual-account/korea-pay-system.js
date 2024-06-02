@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
+import { bankCodeList, genderList, telComList, virtualAccountUserTypeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
@@ -40,6 +40,7 @@ const VirtualAccountKoreaPaySystem = () => {
         ceo_name: '',
         company_phone_num: '',
     })
+    const [authItem, setAuthItem] = useState({})
     const [currentTab, setCurrentTab] = useState(0);
 
     const tab_list = [
@@ -141,6 +142,23 @@ const VirtualAccountKoreaPaySystem = () => {
             }
         }
     }
+    const onCheckPhoneNumRequest = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/request`, 'create', {
+            ...item,
+            api_key: themeDnsData?.api_key,
+            name: item?.deposit_acct_name,
+        });
+        if (result) {
+            console.log(result)
+            setAuthItem(result);
+        }
+    }
+    const onCheckPhoneNumCheck = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
+            ...item,
+            api_key: themeDnsData?.api_key
+        });
+    }
 
     return (
         <>
@@ -178,10 +196,10 @@ const VirtualAccountKoreaPaySystem = () => {
                             <>
                                 <Grid item xs={12} md={6}>
                                     <Card sx={{ p: 2, height: '100%' }}>
-                                        <Stack spacing={3}>
+                                        <Stack spacing={2}>
                                             {user?.level >= 40 &&
                                                 <>
-                                                    <FormControl variant='outlined'  >
+                                                    <FormControl variant='outlined' size="small">
                                                         <InputLabel>가맹점선택</InputLabel>
                                                         <Select label='가맹점선택' value={item?.mid}
                                                             onChange={(e) => {
@@ -197,6 +215,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         </Select>
                                                     </FormControl>
                                                     <TextField
+                                                        size="small"
                                                         label='MID'
                                                         value={item.mid}
                                                         disabled={true}
@@ -207,6 +226,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                 <>
                                                     <TextField
                                                         label='아이디'
+                                                        size="small"
                                                         value={item.virtual_user_name}
                                                         placeholder=""
                                                         onChange={(e) => {
@@ -218,7 +238,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                             )
                                                         }} />
                                                 </>}
-                                            <FormControl variant='outlined' >
+                                            <FormControl variant='outlined' size="small">
                                                 <InputLabel>사용자구분</InputLabel>
                                                 <Select label='사용자구분' value={item?.user_type}
                                                     onChange={(e) => {
@@ -247,6 +267,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                 <>
                                                     <TextField
                                                         label='사업자등록번호'
+                                                        size="small"
                                                         value={item.business_num}
                                                         placeholder=""
                                                         onChange={(e) => {
@@ -259,6 +280,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }} />
                                                     <TextField
                                                         label='회사명(상호)'
+                                                        size="small"
                                                         value={item.company_name}
                                                         placeholder=""
                                                         onChange={(e) => {
@@ -271,6 +293,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }} />
                                                     <TextField
                                                         label='대표자명'
+                                                        size="small"
                                                         value={item.ceo_name}
                                                         placeholder=""
                                                         onChange={(e) => {
@@ -283,6 +306,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }} />
                                                     <TextField
                                                         label='회사 전화번호'
+                                                        size="small"
                                                         value={item.company_phone_num}
                                                         placeholder=""
                                                         onChange={(e) => {
@@ -295,20 +319,73 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }} />
 
                                                 </>}
-                                            <TextField
-                                                label='생년월일'
-                                                value={item.birth}
-                                                placeholder="19990101"
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['birth']: onlyNumberText(e.target.value)
-                                                        }
-                                                    )
-                                                }} />
+                                            {themeDnsData?.setting_obj?.is_use_auth == 1 &&
+                                                <>
+                                                    <FormControl size="small">
+                                                        <InputLabel>성별</InputLabel>
+                                                        <Select label='성별' value={item?.gender}
+                                                            onChange={(e) => {
+                                                                setItem(
+                                                                    {
+                                                                        ...item,
+                                                                        ['gender']: e.target.value,
+                                                                    }
+                                                                )
+                                                            }}>
+                                                            {genderList.map((itm) => {
+                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                            })}
+                                                        </Select>
+                                                    </FormControl>
+                                                    <TextField
+                                                        size="small"
+                                                        label='생년월일'
+                                                        value={item.birth}
+                                                        placeholder="19990101"
+                                                        onChange={(e) => {
+                                                            setItem(
+                                                                {
+                                                                    ...item,
+                                                                    ['birth']: onlyNumberText(e.target.value)
+                                                                }
+                                                            )
+                                                        }} />
+                                                    <TextField
+                                                        label='이름'
+                                                        size="small"
+                                                        value={item.deposit_acct_name}
+                                                        onChange={(e) => {
+                                                            setItem(
+                                                                {
+                                                                    ...item,
+                                                                    ['deposit_acct_name']: e.target.value
+                                                                }
+                                                            )
+                                                        }} />
+                                                </>}
+                                            {themeDnsData?.setting_obj?.is_use_auth == 1 &&
+                                                <>
+                                                    <FormControl size="small">
+                                                        <InputLabel>통신사</InputLabel>
+                                                        <Select label='통신사' value={item?.tel_com}
+                                                            onChange={(e) => {
+                                                                setItem(
+                                                                    {
+                                                                        ...item,
+                                                                        ['tel_com']: e.target.value,
+                                                                    }
+                                                                )
+                                                            }}>
+                                                            {telComList.map((itm) => {
+                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                            })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </>}
+
                                             <TextField
                                                 label='휴대폰번호'
+                                                size="small"
                                                 value={item.phone_num}
                                                 placeholder="하이픈(-) 제외 입력"
                                                 onChange={(e) => {
@@ -318,16 +395,43 @@ const VirtualAccountKoreaPaySystem = () => {
                                                             ['phone_num']: onlyNumberText(e.target.value)
                                                         }
                                                     )
-                                                }} />
+                                                }}
+                                                InputProps={{
+                                                    endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                        onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
+                                                }}
+                                            />
+                                            {themeDnsData?.setting_obj?.is_use_auth == 1 &&
+                                                <>
+                                                    <TextField
+                                                        label='인증번호'
+                                                        size="small"
+                                                        value={item.phone_vrf_word}
+                                                        placeholder=""
+                                                        onChange={(e) => {
+                                                            setItem(
+                                                                {
+                                                                    ...item,
+                                                                    ['phone_vrf_word']: e.target.value
+                                                                }
+                                                            )
+                                                        }}
+                                                        InputProps={{
+                                                            endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                                disabled={!item?.tx_seq_no}
+                                                                onClick={onCheckPhoneNumCheck}>{'인증번호 확인'}</Button>
+                                                        }}
+                                                    />
+                                                </>}
 
                                         </Stack>
                                     </Card>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Card sx={{ p: 2, height: '100%' }}>
-                                        <Stack spacing={3}>
+                                        <Stack spacing={2}>
                                             <Stack spacing={1}>
-                                                <FormControl>
+                                                <FormControl size="small">
                                                     <InputLabel>입금은행</InputLabel>
                                                     <Select
                                                         label='입금은행'
@@ -346,6 +450,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                 </FormControl>
                                             </Stack>
                                             <TextField
+                                                size="small"
                                                 label='입금계좌번호'
                                                 value={item.deposit_acct_num}
                                                 onChange={(e) => {
@@ -357,8 +462,10 @@ const VirtualAccountKoreaPaySystem = () => {
                                                     )
                                                 }} />
                                             <TextField
-                                                label='입금자명'
+                                                label='예금주명'
+                                                size="small"
                                                 value={item.deposit_acct_name}
+                                                disabled={themeDnsData?.setting_obj?.is_use_auth == 1}
                                                 onChange={(e) => {
                                                     setItem(
                                                         {
@@ -367,10 +474,11 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }
                                                     )
                                                 }} />
-                                            <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                                            <Button onClick={oneWonCertification} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
                                             {item.is_send_one_won_check &&
                                                 <>
                                                     <TextField
+                                                        size="small"
                                                         label='인증번호'
                                                         value={item.vrf_word}
                                                         placeholder=""
@@ -382,7 +490,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                                 }
                                                             )
                                                         }} />
-                                                    <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                                                    <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '40px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
                                                 </>}
                                         </Stack>
                                     </Card>
