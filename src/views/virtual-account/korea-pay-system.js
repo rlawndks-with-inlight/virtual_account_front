@@ -319,6 +319,19 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }} />
 
                                                 </>}
+                                            <TextField
+                                                size="small"
+                                                label='생년월일'
+                                                value={item.birth}
+                                                placeholder="19990101"
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['birth']: onlyNumberText(e.target.value)
+                                                        }
+                                                    )
+                                                }} />
                                             {themeDnsData?.setting_obj?.is_use_auth == 1 &&
                                                 <>
                                                     <FormControl size="small">
@@ -337,19 +350,6 @@ const VirtualAccountKoreaPaySystem = () => {
                                                             })}
                                                         </Select>
                                                     </FormControl>
-                                                    <TextField
-                                                        size="small"
-                                                        label='생년월일'
-                                                        value={item.birth}
-                                                        placeholder="19990101"
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['birth']: onlyNumberText(e.target.value)
-                                                                }
-                                                            )
-                                                        }} />
                                                     <TextField
                                                         label='이름'
                                                         size="small"
