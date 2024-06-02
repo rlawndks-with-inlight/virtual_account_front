@@ -149,15 +149,24 @@ const VirtualAccountKoreaPaySystem = () => {
             name: item?.deposit_acct_name,
         });
         if (result) {
-            console.log(result)
+            toast.success('성공적으로 발송 되었습니다.');
             setAuthItem(result);
         }
     }
     const onCheckPhoneNumCheck = async () => {
         let result = await apiServer(`${process.env.API_URL}/api/auth/v${themeDnsData?.setting_obj?.api_auth_version}/phone/check`, 'create', {
             ...item,
-            api_key: themeDnsData?.api_key
+            api_key: themeDnsData?.api_key,
+            vrf_word: item?.phone_vrf_word,
+            ...authItem,
         });
+        if (result) {
+            toast.success('성공적으로 인증 되었습니다.');
+            setAuthItem({
+                ...authItem,
+                is_confirm: 1,
+            })
+        }
     }
 
     return (
@@ -418,7 +427,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }}
                                                         InputProps={{
                                                             endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                disabled={!item?.tx_seq_no}
+                                                                disabled={!authItem?.tid}
                                                                 onClick={onCheckPhoneNumCheck}>{'인증번호 확인'}</Button>
                                                         }}
                                                     />
@@ -474,7 +483,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                         }
                                                     )
                                                 }} />
-                                            <Button onClick={oneWonCertification} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
+                                            <Button onClick={oneWonCertification} disabled={themeDnsData?.setting_obj?.is_use_auth == 1 && authItem?.is_confirm != 1} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
                                             {item.is_send_one_won_check &&
                                                 <>
                                                     <TextField
