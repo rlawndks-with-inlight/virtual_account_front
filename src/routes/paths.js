@@ -89,4 +89,8 @@ export const PATH_MANAGER = {
     list: path(ROOTS_MANAGER, '/black-lst/list'),
     add: path(ROOTS_MANAGER, '/black-lst/add'),
   },
+  phoneAuthHistory: {
+    root: path(ROOTS_MANAGER, '/phone-auth-history'),
+    list: path(ROOTS_MANAGER, '/phone-auth-history/list'),
+  },
 };

@@ -227,6 +227,21 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...((!isOperator() && isShowTab('phoneAuthHistory') && themeDnsData?.setting_obj?.is_use_auth == 1) ? [
+      {
+        id: 'phoneAuthHistory',
+        items: [
+          {
+            title: '휴대폰인증관리',
+            path: PATH_MANAGER.phoneAuthHistory.root,
+            icon: <Icon icon='fluent:phone-12-regular' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '휴대폰인증관리', path: PATH_MANAGER.phoneAuthHistory.list },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...((isManager() && isShowTab('brand')) ? [
       {
         id: 'brand',

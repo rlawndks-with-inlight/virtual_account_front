@@ -1207,6 +1207,18 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                      <TextField
+                        label='인증당 발생하는 비용'
+                        value={item.auth_fee}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['auth_fee']: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }} />
                     </Stack>
                   </Card>
                 </Grid>
