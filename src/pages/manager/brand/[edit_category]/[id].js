@@ -978,6 +978,12 @@ const BrandEdit = () => {
                                 [`api_withdraw_version`]: 1,
                               }
                               data['withdraw_type'] = 1;
+                            } else if (e.target.value == 5) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 4,
+                              }
+                              data['withdraw_type'] = 1;
                             } else if (e.target.value == 6) {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -1014,7 +1020,22 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 6].includes(item.withdraw_corp_type) &&
+                      {[5].includes(item.withdraw_corp_type) &&
+                        <>
+                          <TextField
+                            label='가맹점ID'
+                            value={item.withdraw_mid}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_mid']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+                      {[1, 5, 6].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -1029,7 +1050,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 6].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 5, 6].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'
@@ -1075,7 +1096,7 @@ const BrandEdit = () => {
                             }} />
                         </>}
 
-                      {[2].includes(item.withdraw_corp_type) &&
+                      {[2,].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='취급기관코드'
@@ -1090,7 +1111,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 6].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 5, 6,].includes(item.withdraw_corp_type) &&
                         <>
                           <Stack spacing={1}>
                             <FormControl>
@@ -1112,7 +1133,7 @@ const BrandEdit = () => {
                             </FormControl>
                           </Stack>
                         </>}
-                      {[2].includes(item.withdraw_corp_type) &&
+                      {[2, 5,].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='출금가상계좌번호'
