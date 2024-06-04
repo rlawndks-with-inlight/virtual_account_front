@@ -385,14 +385,13 @@ const UserEdit = () => {
                         <>
                           <TextField
                             label='일일 이체한도'
-                            type="number"
                             value={item.daily_withdraw_amount}
                             placeholder=""
                             onChange={(e) => {
                               setItem(
                                 {
                                   ...item,
-                                  ['daily_withdraw_amount']: e.target.value
+                                  ['daily_withdraw_amount']: onlyNumberText(e.target.value)
                                 }
                               )
                             }}
