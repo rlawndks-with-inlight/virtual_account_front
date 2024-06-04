@@ -446,13 +446,17 @@ const WithdrawReturn = () => {
                                                                         withdraw_list[idx].withdraw_acct_name = e.target.value;
                                                                         setWithdraws(withdraw_list);
                                                                     }} /> */}
-                                                                <Button variant="outlined" onClick={() => {
-                                                                    onCheckAcct(vir_acct, idx)
-                                                                }}>조회</Button>
+                                                                {themeDnsData?.withdraw_corp_type == 2 &&
+                                                                    <>
+                                                                        <Button variant="outlined" onClick={() => {
+                                                                            onCheckAcct(vir_acct, idx)
+                                                                        }}>조회</Button>
+                                                                    </>}
+
                                                                 <TextField
                                                                     style={{ width: '50%' }}
-                                                                    label='예금주확인'
-                                                                    disabled={true}
+                                                                    label={`예금주${themeDnsData?.withdraw_corp_type == 2 ? '확인' : ''}`}
+                                                                    disabled={themeDnsData?.withdraw_corp_type == 2}
                                                                     value={vir_acct.withdraw_acct_name}
                                                                     error={vir_acct?.is_error == 1}
                                                                     onChange={(e) => {
