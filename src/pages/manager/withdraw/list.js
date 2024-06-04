@@ -248,7 +248,7 @@ const WithdrawList = () => {
           }
         }
       },
-      ...(themeDnsData?.withdraw_corp_type == 2 ? [
+      ...([2, 5].includes(themeDnsData?.withdraw_corp_type) ? [
         {
           id: 'minus_amount',
           label: '출금체크',
