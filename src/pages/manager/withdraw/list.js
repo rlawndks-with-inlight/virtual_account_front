@@ -250,7 +250,7 @@ const WithdrawList = () => {
       },
       ...([2, 5].includes(themeDnsData?.withdraw_corp_type) ? [
         {
-          id: 'minus_amount',
+          id: 'withdraw_check',
           label: '출금체크',
           action: (row, is_excel) => {
             if (is_excel) {
