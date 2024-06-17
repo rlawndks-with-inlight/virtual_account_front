@@ -249,7 +249,7 @@ const DepositList = () => {
         }
       },
     },
-    ...(themeDnsData?.is_use_corp_account == 1 ? [
+    ...((themeDnsData?.is_use_corp_account == 1 && user?.level >= 40) ? [
       {
         id: 'corp_account_balance',
         label: '법인통장잔액',

@@ -64,38 +64,36 @@ const DepositAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
-    ...(user?.level >= 40 ? [
-      {
-        id: 'delete',
-        label: '삭제',
-        action: (row, is_excel) => {
-          if (is_excel) {
-            return `---`
-          }
-          if (row?.is_delete == 1) {
-            return "---";
-          }
-          return (
-            <>
-              <IconButton>
-                <Icon icon='material-symbols:edit-outline' onClick={() => {
-                  router.push(`edit/${row?.id}`)
-                }} />
-              </IconButton>
-              <IconButton onClick={() => {
-                setModal({
-                  func: () => { deleteItem(row?.id) },
-                  icon: 'material-symbols:delete-outline',
-                  title: '정말 삭제하시겠습니까?'
-                })
-              }}>
-                <Icon icon='material-symbols:delete-outline' />
-              </IconButton>
-            </>
-          )
+    {
+      id: 'edit',
+      label: '수정/삭제',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `---`
         }
-      },
-    ] : []),
+        if (row?.is_delete == 1) {
+          return "---";
+        }
+        return (
+          <>
+            <IconButton>
+              <Icon icon='material-symbols:edit-outline' onClick={() => {
+                router.push(`edit/${row?.id}`)
+              }} />
+            </IconButton>
+            <IconButton onClick={() => {
+              setModal({
+                func: () => { deleteItem(row?.id) },
+                icon: 'material-symbols:delete-outline',
+                title: '정말 삭제하시겠습니까?'
+              })
+            }}>
+              <Icon icon='material-symbols:delete-outline' />
+            </IconButton>
+          </>
+        )
+      }
+    },
   ]
   const router = useRouter();
   const [columns, setColumns] = useState([]);
