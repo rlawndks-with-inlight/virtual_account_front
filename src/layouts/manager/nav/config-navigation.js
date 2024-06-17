@@ -196,6 +196,22 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
+    ...((!isOperator() && themeDnsData?.is_use_corp_account == 1 && isShowTab('depositAccount')) ? [
+      {
+        id: 'depositAccount',
+        items: [
+          {
+            title: '입금통장관리',
+            path: PATH_MANAGER.depositAccount.root,
+            icon: <Icon icon='vaadin:money-deposit' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '입금통장관리', path: PATH_MANAGER.depositAccount.list },
+              { title: '입금통장추가', path: PATH_MANAGER.depositAccount.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
     ...(isShowTab('myPage') ? [
       {
         id: 'myPage',

@@ -231,7 +231,9 @@ const VirtualAccountList = () => {
   const pageSetting = () => {
     let cols = defaultColumns;
     setColumns(cols)
-    getAllOperUser();
+    if (user?.level >= 40) {
+      getAllOperUser();
+    }
     onChangePage({ ...searchObj, page: 1, });
   }
   const getAllOperUser = async () => {
