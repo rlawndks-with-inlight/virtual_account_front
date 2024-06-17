@@ -38,10 +38,10 @@ server {
 // sudo certbot --nginx -d hecto.tikitaka.kr  
 server {
     listen 80;
-    server_name youandmemall.com; # 도메인이나 IP 주소로 변경
+    server_name yjsstore.store; # 도메인이나 IP 주소로 변경
 
     location / {
-        proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
+        proxy_pass http://0.0.0.0:2000; # 변경된 부분: 3000 포트로 설정
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

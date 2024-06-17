@@ -438,7 +438,38 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
-
+                      {user?.level >= 45 &&
+                        <>
+                          <TextField
+                            label='일 최대 출금금액'
+                            value={item.withdraw_max_price}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['withdraw_max_price']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }}
+                          />
+                        </>}
+                      {user?.level >= 45 &&
+                        <>
+                          <TextField
+                            label='월 최대 출금금액'
+                            value={item.month_withdraw_max_price}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['month_withdraw_max_price']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }}
+                          />
+                        </>}
                       {item?.withdraw_type == 0 &&
                         <>
                           <Stack>
