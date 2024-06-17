@@ -96,7 +96,17 @@ const DepositAccountEdit = () => {
                         </Select>
                       </FormControl>
                     </>}
-
+                  <TextField
+                    label='상세'
+                    value={item.detail}
+                    onChange={(e) => {
+                      setItem(
+                        {
+                          ...item,
+                          ['detail']: e.target.value
+                        }
+                      )
+                    }} />
                   <Stack spacing={1}>
                     <FormControl>
                       <InputLabel>은행</InputLabel>

@@ -37,6 +37,13 @@ const DepositAccountList = () => {
       }
     },
     {
+      id: 'detail',
+      label: '상세',
+      action: (row, is_excel) => {
+        return row['detail']
+      }
+    },
+    {
       id: 'bank_code',
       label: '은행',
       action: (row, is_excel) => {
