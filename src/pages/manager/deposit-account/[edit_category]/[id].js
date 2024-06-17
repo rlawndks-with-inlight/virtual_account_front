@@ -148,45 +148,6 @@ const DepositAccountEdit = () => {
                 </Stack>
               </Card>
             </Grid>
-            {router.query?.edit_category == 'edit' &&
-              <>
-                <Grid item xs={12} md={12}>
-                  <Card sx={{ height: '100%' }}>
-                    <Stack spacing={3}>
-                      <Table>
-                        <TableHead>
-                          <TableRow sx={{ padding: '1rem 0' }}>
-                            <TableCell style={{ textAlign: 'center' }}>접속시간</TableCell>
-                            <TableCell style={{ textAlign: 'center' }}>접속 아이피</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {item?.ip_logs && item?.ip_logs.splice((ipPage - 1) * 10, ipPage * 10).map((itm, idx) => (
-                            <>
-                              <TableRow sx={{ padding: '1rem 0' }}>
-                                <TableCell style={{ textAlign: 'center' }}>{itm?.created_at}</TableCell>
-                                <TableCell style={{ textAlign: 'center' }}>{itm?.ip}</TableCell>
-                              </TableRow>
-                            </>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
-                        <Pagination
-                          style={{ margin: 'auto' }}
-                          size={'medium'}
-                          count={getMaxPage(item?.ip_logs.length, 10)}
-                          page={ipPage}
-                          variant='outlined' shape='rounded'
-                          color='primary'
-                          onChange={(_, num) => {
-                            setIpPage(num)
-                          }} />
-                      </Box>
-                    </Stack>
-                  </Card>
-                </Grid>
-              </>}
             <Grid item xs={12} md={12}>
               <Card sx={{ p: 3 }}>
                 <Stack spacing={1} style={{ display: 'flex' }}>
