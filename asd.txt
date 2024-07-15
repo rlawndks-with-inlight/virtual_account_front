@@ -1,26 +1,26 @@
 server {
 listen 80;
-server_name hecto.tikitaka.kr
+server_name mjcp0125.com
 root html;
 
 
 location / {
-        return 301 https://hecto.tikitaka.kr$request_uri;
+        return 301 https://mjcp0125.com$request_uri;
     }
 }
 
 server {
 
     listen       443 ssl;
-    server_name  hecto.tikitaka.kr;
+    server_name  mjcp0125.com;
 
     client_max_body_size 256M;
 
-    ssl_certificate     /etc/letsencrypt/live/hecto.tikitaka.kr/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/hecto.tikitaka.kr/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/mjcp0125.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mjcp0125.com/privkey.pem;
 
     location / {
-        proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
+        proxy_pass http://0.0.0.0:2000; # 변경된 부분: 3000 포트로 설정
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -35,10 +35,10 @@ server {
     }
 }
 	
-// sudo certbot --nginx -d hecto.tikitaka.kr  
+// sudo certbot --nginx -d mjcp0125.com
 server {
     listen 80;
-    server_name yjsstore.store; # 도메인이나 IP 주소로 변경
+    server_name crscf0009.com; # 도메인이나 IP 주소로 변경
 
     location / {
         proxy_pass http://0.0.0.0:2000; # 변경된 부분: 3000 포트로 설정

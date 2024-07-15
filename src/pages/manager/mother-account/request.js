@@ -94,7 +94,17 @@ const MotherAccountRequest = () => {
                                             {commarNumber(item?.real_amount)} 원
                                         </Typography>
                                     </Stack>
-
+                                    {item?.hold_deposit_amount > 0 &&
+                                        <>
+                                            <Stack spacing={1}>
+                                                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                                                    모계좌 보류금액
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                    {commarNumber(item?.hold_deposit_amount)} 원
+                                                </Typography>
+                                            </Stack>
+                                        </>}
                                     <Stack spacing={1}>
                                         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                                             출금 수수료

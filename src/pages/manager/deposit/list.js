@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, Checkbox, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -11,7 +11,7 @@ import { apiManager, apiUtil } from "src/utils/api-manager";
 import { commarNumber, getUserFee, getUserLevelByNumber, onlyNumberText } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
-import { bankCodeList, operatorLevelList } from "src/utils/format";
+import { bankCodeList, depositStatusList, operatorLevelList } from "src/utils/format";
 import _ from "lodash";
 import { socket } from "src/data/data";
 const DepositList = () => {
@@ -166,6 +166,17 @@ const DepositList = () => {
           }
         }
       },
+    },
+    {
+      id: 'status',
+      label: '상태',
+      action: (row, is_excel) => {
+        let status = _.find(depositStatusList, { value: row?.deposit_status });
+        if (is_excel) {
+          return status?.label
+        }
+        return <Chip variant="soft" label={status?.label} color={status?.color} />
+      }
     },
     ...(themeDnsData?.is_use_corp_account == 1 ? [
       {
@@ -782,6 +793,18 @@ const DepositList = () => {
                     <MenuItem value={null}>가맹점 전체</MenuItem>
                     {operUserList.filter(el => el?.level == 10).map(oper => {
                       return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                    })}
+                  </Select>
+                </FormControl>
+                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                  <InputLabel>입금상태</InputLabel>
+                  <Select label='출금상태' value={searchObj[`deposit_status`]}
+                    onChange={(e) => {
+                      onChangePage({ ...searchObj, [`deposit_status`]: e.target.value })
+                    }}>
+                    <MenuItem value={null}>상태 전체</MenuItem>
+                    {depositStatusList.map(status => {
+                      return <MenuItem value={status.value}>{`${status.label}`}</MenuItem>
                     })}
                   </Select>
                 </FormControl>

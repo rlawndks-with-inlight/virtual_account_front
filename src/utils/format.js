@@ -34,6 +34,7 @@ export const apiCorpList = [
     { value: 4, label: '더즌' },
     { value: 5, label: '헥토파이낸셜' },
     { value: 6, label: '코리아결제시스템' },
+    { value: 7, label: 'ICB' },
 ]
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
@@ -59,6 +60,11 @@ export const withdrawStatusList = [
     { value: 10, label: '출금실패', color: 'error' },
     { value: 15, label: '출금반려', color: 'error' },
     { value: 20, label: '출금대기', color: 'warning' },
+]
+export const depositStatusList = [
+    { value: 0, label: '입금완료', color: 'success' },
+    { value: 5, label: '입금요청완료', color: 'warning' },
+    { value: 10, label: '주의건', color: 'error' },
 ]
 export const virtualAccountUserTypeList = [
     { value: 0, label: '개인', color: 'success' },

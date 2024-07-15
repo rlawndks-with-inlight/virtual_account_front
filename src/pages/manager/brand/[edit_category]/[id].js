@@ -856,6 +856,11 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`api_virtual_account_version`]: 3,
                               }
+                            } else if (e.target.value == 7) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 4,
+                              }
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -886,7 +891,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 6].includes(item.deposit_corp_type) &&
+                      {[1, 6, 7].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -901,7 +906,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 6].includes(item.deposit_corp_type) &&
+                      {[1, 6, 7].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'
@@ -1021,6 +1026,12 @@ const BrandEdit = () => {
                                 [`api_withdraw_version`]: 3,
                               }
                               data['withdraw_type'] = 0;
+                            } else if (e.target.value == 7) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 5,
+                              }
+                              data['withdraw_type'] = 0;
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -1066,7 +1077,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 5, 6].includes(item.withdraw_corp_type) &&
+                      {[1, 5, 6, 7].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -1081,7 +1092,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 5, 6].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 5, 6, 7].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'

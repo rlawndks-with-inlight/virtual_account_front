@@ -12,7 +12,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
-import { commarNumber } from "src/utils/function";
+import { commarNumber, onlyNumberText } from "src/utils/function";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
@@ -80,6 +80,25 @@ const VirtualAccountList = () => {
         return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
       }
     },
+    ...(themeDnsData?.deposit_corp_type == 7 ? [
+      {
+        id: 'created_at',
+        label: '입금데이터 추가',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small"
+            onClick={() => {
+              setDialogObj({
+                addDeposit: true,
+                virtual_account_id: row?.id,
+              })
+            }}
+          >추가</Button>
+        }
+      },
+    ] : []),
     ...(themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 ? [
       {
         id: 'virtual_user_name',
@@ -163,6 +182,7 @@ const VirtualAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
+
     {
       id: 'edit',
       label: '이어서 생성',
@@ -325,6 +345,15 @@ const VirtualAccountList = () => {
       onChangePage(searchObj);
     }
   }
+  const addDepositItem = async () => {
+    let result = undefined
+    result = await apiManager('virtual-accounts/request-deposit', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
       <Dialog open={pageLoading}
@@ -336,6 +365,42 @@ const VirtualAccountList = () => {
         }}
       >
         <CircularProgress />
+      </Dialog>
+      <Dialog
+        open={dialogObj.addDeposit}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`입금데이터 추가`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            입금예정금액을 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={dialogObj.amount}
+            margin="dense"
+            label="입금액"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                amount: onlyNumberText(e.target.value)
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={addDepositItem}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
       </Dialog>
       <Dialog
         open={dialogObj.changeVirtualUserName}
