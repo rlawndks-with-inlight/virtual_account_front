@@ -66,6 +66,7 @@ const MotherAccountRequest = () => {
         real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee)) })) ?? 0);
         return real_amount;
     }
+
     return (
         <>
             {!loading &&

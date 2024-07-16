@@ -214,6 +214,27 @@ const WithdrawList = () => {
         },
       },
     ] : []),
+    ...([2, 5, 7].includes(themeDnsData?.withdraw_corp_type) ? [
+      {
+        id: 'withdraw_check',
+        label: '출금체크',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Col style={{ rowGap: '0.5rem' }}>
+            <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                onProcessWithdraw({
+                  mid: row?.mid,
+                  tid: row?.trx_id,
+                })
+              }}
+            >출금여부확인</Button>
+          </Col>
+        }
+      },
+    ] : []),
     ...(user?.level >= 40 ? [
       {
         id: 'withdraw_status_edit',
@@ -244,27 +265,7 @@ const WithdrawList = () => {
           }
         }
       },
-      ...([2, 5].includes(themeDnsData?.withdraw_corp_type) ? [
-        {
-          id: 'withdraw_check',
-          label: '출금체크',
-          action: (row, is_excel) => {
-            if (is_excel) {
-              return "---";
-            }
-            return <Col style={{ rowGap: '0.5rem' }}>
-              <Button variant="outlined" size="small" sx={{ width: '100px' }}
-                onClick={() => {
-                  onProcessWithdraw({
-                    mid: row?.mid,
-                    tid: row?.trx_id,
-                  })
-                }}
-              >출금여부확인</Button>
-            </Col>
-          }
-        },
-      ] : []),
+
       ...(themeDnsData?.setting_obj?.is_use_withdraw_success_button == 1 ? [
         {
           id: 'withdraw_success',
