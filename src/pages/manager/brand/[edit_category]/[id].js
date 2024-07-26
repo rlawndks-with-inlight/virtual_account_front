@@ -936,7 +936,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1].includes(item.deposit_corp_type) &&
+                      {[1, 7].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='IV'
@@ -1122,7 +1122,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1].includes(item.withdraw_corp_type) &&
+                      {[1, 7].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='IV'
