@@ -43,12 +43,12 @@ const MotherAccountRequest = () => {
     }
     const onSave = async () => {
         let result = undefined
-
         result = await apiManager('withdraws/mother', 'create', {
             withdraw_amount: item?.withdraw_amount,
             user_id: user?.id,
             pay_type: 10,
             note: item?.note,
+            is_deposit: item?.is_deposit ?? 0,
         });
 
         if (result) {
@@ -236,6 +236,27 @@ const MotherAccountRequest = () => {
                         <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
+                                    {themeDnsData?.withdraw_corp_type == 7 &&
+                                        <>
+                                            <Stack spacing={1}>
+                                                <FormControl>
+                                                    <InputLabel>출금 타입</InputLabel>
+                                                    <Select
+                                                        label='출금 타입'
+                                                        value={item.is_deposit ?? 0}
+                                                        onChange={e => {
+                                                            setItem({
+                                                                ...item,
+                                                                ['is_deposit']: e.target.value
+                                                            })
+                                                        }}
+                                                    >
+                                                        <MenuItem value={0}>잔액</MenuItem>
+                                                        <MenuItem value={1}>보류금액</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Stack>
+                                        </>}
                                     <TextField
                                         label='출금 요청금'
                                         value={commarNumberInput(item?.withdraw_amount)}
