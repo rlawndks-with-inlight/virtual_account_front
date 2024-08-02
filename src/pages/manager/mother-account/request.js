@@ -227,7 +227,7 @@ const MotherAccountRequest = () => {
                                             출금 가능 금액
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            {commarNumber(item?.real_amount + item?.hold_deposit_amount)} 원
+                                            {commarNumber(parseInt(item?.real_amount ?? 0) + parseInt(item?.hold_deposit_amount ?? 0))} 원
                                         </Typography>
                                     </Stack>
                                 </Stack>
