@@ -196,7 +196,7 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
-    ...((!isOperator() && themeDnsData?.is_use_corp_account == 1 && isShowTab('depositAccount')) ? [
+    ...((isManager() && themeDnsData?.is_use_corp_account == 1 && isShowTab('depositAccount')) ? [
       {
         id: 'depositAccount',
         items: [
