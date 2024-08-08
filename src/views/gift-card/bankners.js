@@ -103,7 +103,7 @@ const GiftCardBankners = () => {
             setCurrentStep(data?.step ?? 0)
         }
         if (router.query?.ci) {
-            data = await apiManager('members/0', 'get', {
+            data = await apiManager('members/0', 'list', {
                 ci: router.query.ci
             })
             setCurrentStep(data?.step ?? 0)
