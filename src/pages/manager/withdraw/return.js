@@ -49,7 +49,7 @@ const WithdrawReturn = () => {
             ...data,
             api_sign_val: api_sign_val,
         });
-        let virtual_accounts = await apiManager('virtual-accounts', 'list', {
+        let virtual_accounts = await apiManager(`${themeDnsData?.deposit_type == 'virtual_account' ? 'virtual-accounts' : 'members'}`, 'list', {
             mcht_id: user?.id,
             status: 0,
         });
@@ -94,7 +94,7 @@ const WithdrawReturn = () => {
                 withdraw_list[i].is_error = 0;
                 withdraw_list[i].is_confirm = 1;
                 if (themeDnsData?.withdraw_type == 0) {
-                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.virtual_bank_code })?.label} ${withdraw_list[i]?.virtual_acct_num} (${withdraw_list[i]?.virtual_acct_name})\n${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.deposit_bank_code })?.label} ${withdraw_list[i]?.deposit_acct_num} (${withdraw_list[i]?.deposit_acct_name})`);
+                    toast.success("성공적으로 반환요청 되었습니다.\n" + `${themeDnsData?.deposit_type == 'virtual_account' ? `${_.find(bankCodeList(), { value: withdraw_list[i]?.virtual_bank_code })?.label} ${withdraw_list[i]?.virtual_acct_num} ${withdraw_list[i]?.virtual_acct_name ? `(${withdraw_list[i]?.virtual_acct_name})` : ''}` : `${withdraw_list[i]?.guid}`}\n${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.deposit_bank_code })?.label} ${withdraw_list[i]?.deposit_acct_num} (${withdraw_list[i]?.deposit_acct_name})`);
                 } else if (themeDnsData?.withdraw_type == 1) {
                     toast.success("성공적으로 반환요청 되었습니다.\n" + `${_.find(bankCodeList('withdraw'), { value: withdraw_list[i]?.withdraw_bank_code })?.label} ${withdraw_list[i]?.withdraw_acct_num} (${withdraw_list[i]?.withdraw_acct_name})`);
                 }
@@ -302,7 +302,7 @@ const WithdrawReturn = () => {
                                                 style={{
                                                     whiteSpace: 'pre'
                                                 }}
-                                                getOptionLabel={(option) => `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} ${option?.virtual_acct_name ? `(${option?.virtual_acct_name})` : ''}\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} ${option?.deposit_acct_name ? `(${option?.deposit_acct_name})` : ''}`}
+                                                getOptionLabel={(option) => `${themeDnsData?.deposit_type == 'virtual_account' ? `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} ${option?.virtual_acct_name ? `(${option?.virtual_acct_name})` : ''}` : `${option?.guid}`}\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} ${option?.deposit_acct_name ? `(${option?.deposit_acct_name})` : ''}`}
                                                 value={withdraws}
                                                 onChange={(e, value) => {
                                                     let withdraw_list = [...withdraws];
@@ -407,7 +407,7 @@ const WithdrawReturn = () => {
                                                     <Row style={{ columnGap: '1rem', minWidth: '800px' }}>
                                                         {themeDnsData?.withdraw_type == 0 &&
                                                             <>
-                                                                <Typography style={{ width: '30%' }}>{`${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} (${vir_acct?.virtual_acct_name})\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
+                                                                <Typography style={{ width: '30%' }}>{`${themeDnsData?.deposit_type == 'virtual_account' ? `${_.find(bankCodeList(), { value: vir_acct?.virtual_bank_code })?.label} ${vir_acct?.virtual_acct_num} ${vir_acct?.virtual_acct_name ? `(${vir_acct?.virtual_acct_name})` : ''}` : `${vir_acct?.guid}`}\n${_.find(bankCodeList(), { value: vir_acct?.deposit_bank_code })?.label} ${vir_acct?.deposit_acct_num} (${vir_acct?.deposit_acct_name})`}</Typography>
                                                             </>}
                                                         {themeDnsData?.withdraw_type == 1 &&
                                                             <>

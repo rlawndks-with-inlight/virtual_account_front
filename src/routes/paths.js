@@ -57,6 +57,16 @@ export const PATH_MANAGER = {
     list: path(ROOTS_MANAGER, '/virtual-account/list'),
     add: path(ROOTS_MANAGER, '/virtual-account/add'),
   },
+  giftCard: {
+    root: path(ROOTS_MANAGER, '/gift-card'),
+    list: path(ROOTS_MANAGER, '/gift-card/list'),
+    add: path(ROOTS_MANAGER, '/gift-card/add'),
+    member: {
+      root: path(ROOTS_MANAGER, '/gift-card/member'),
+      list: path(ROOTS_MANAGER, '/gift-card/member/list'),
+      add: path(ROOTS_MANAGER, '/gift-card/member/add'),
+    },
+  },
   motherAccount: {
     root: path(ROOTS_MANAGER, '/mother-account'),
     list: path(ROOTS_MANAGER, '/mother-account/list'),

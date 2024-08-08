@@ -1,0 +1,530 @@
+import { Autocomplete, Avatar, Button, Card, CardContent, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import ManagerTable from "src/views/manager/table/ManagerTable";
+import { Icon } from "@iconify/react";
+import { useRouter } from "next/router";
+import { Col, Row } from "src/components/elements/styled-components";
+import { toast } from "react-hot-toast";
+import { useModal } from "src/components/dialog/ModalProvider";
+import ManagerLayout from "src/layouts/manager/ManagerLayout";
+import { apiManager } from "src/utils/api-manager";
+import { useAuthContext } from "src/auth/useAuthContext";
+import _ from "lodash";
+import { bankCodeList, giftCardMemberStatusList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
+import { useSettingsContext } from "src/components/settings";
+import { commarNumber, onlyNumberText } from "src/utils/function";
+
+const VirtualAccountList = () => {
+  const { setModal } = useModal()
+  const { user } = useAuthContext();
+  const { themeDnsData } = useSettingsContext();
+
+  const defaultColumns = [
+    {
+      id: 'user_name',
+      label: '가맹점',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${row[`nickname`]} (${row['user_name']})`
+        }
+        let text = row['user_name'] ? `${row[`nickname`]}\n(${row['user_name']})` : "---";
+        return <div style={{ whiteSpace: 'pre', cursor: `${user?.level >= 40 ? 'pointer' : ''}` }} onClick={() => {
+          if (user?.level >= 40) {
+            setDialogObj({
+              connectMcht: true,
+              virtual_account_id: row?.id,
+            })
+          }
+        }}>{text}</div>
+      }
+    },
+    {
+      id: 'guid',
+      label: 'USER GUID',
+      action: (row, is_excel) => {
+        return row['guid'] ?? "---"
+      }
+    },
+    {
+      id: 'status',
+      label: '상태',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return _.find(giftCardMemberStatusList, { value: row?.step })?.label
+        }
+        return <Chip variant="soft" label={_.find(giftCardMemberStatusList, { value: row?.step })?.label} color={_.find(giftCardMemberStatusList, { value: row?.step })?.color} />
+      }
+    },
+    {
+      id: 'link',
+      label: '상품권발급주소',
+      action: (row, is_excel) => {
+        let link = 'https://' + themeDnsData?.dns + `/gift-card?ci=${row?.ci}`;
+        if (is_excel) {
+          return link
+        }
+        return <div style={{
+          cursor: 'pointer',
+          color: 'blue',
+        }}
+          onClick={() => {
+            window.open(`/gift-card?ci=${row?.ci}`)
+          }}
+        >
+          {link}
+        </div>
+      }
+    },
+    ...(themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 ? [
+      {
+        id: 'virtual_user_name',
+        label: '유저아이디',
+        action: (row, is_excel) => {
+          return <div style={{ cursor: 'pointer' }} onClick={() => {
+            setDialogObj({
+              changeVirtualUserName: true,
+              virtual_user_name: '',
+              virtual_account_id: row?.id,
+            })
+          }}>{row['virtual_user_name'] ?? "---"}</div>
+        }
+      },
+    ] : []),
+    {
+      id: 'info',
+      label: '유저정보',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${row['birth']} ${row['phone_num']} ${row['name']}`
+        }
+        return <Col>
+          <div>{row['birth']}</div>
+          <div>{row['phone_num']}</div>
+          <div>{row['name']}</div>
+        </Col>
+      }
+    },
+    {
+      id: 'deposit_bank_code',
+      label: '출금은행정보',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `${_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_acct_num']} ${row['deposit_acct_name']} ${row['birth']} ${row['phone_num']}`
+        }
+        return <Col>
+          <div>{_.find(bankCodeList(), { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+        </Col>
+      }
+    },
+    ...((user?.level >= 40 && themeDnsData?.deposit_corp_type == 1) ? [
+      {
+        id: 'balance',
+        label: '잔액확인',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Col style={{ alignItems: 'center', rowGap: '0.5rem' }}>
+            <Button variant="outlined" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                getBalance(row?.id)
+              }}
+            >잔액확인</Button>
+            <Button variant="contained" size="small" sx={{ width: '100px' }}
+              onClick={() => {
+                moveToMother(row?.id)
+              }}
+            >모계좌이동</Button>
+          </Col>
+        }
+      },
+    ] : []),
+    {
+      id: 'user_type',
+      label: '사용자구분',
+      action: (row, is_excel) => {
+        let text = `${_.find(virtualAccountUserTypeList, { value: row['user_type'] })?.label ?? "---"}`;
+        return text
+      }
+    },
+    {
+      id: 'created_at',
+      label: '생성일',
+      action: (row, is_excel) => {
+        return row['created_at'] ?? "---"
+      }
+    },
+
+    {
+      id: 'edit',
+      label: '이어서 생성',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `---`
+        }
+        return (row?.step < 2) ? <>
+          <IconButton>
+            <Icon icon='material-symbols:edit-outline' onClick={() => {
+              router.push(`edit/${row?.id}`)
+            }} />
+          </IconButton>
+        </> : "---"
+      }
+    },
+    /*
+    ...(user?.level >= 10 ? [
+      {
+        id: 'delete',
+        label: '삭제',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return `---`
+          }
+          return (
+            <>
+              <IconButton onClick={() => {
+                setModal({
+                  func: () => { deleteItem(row?.id) },
+                  icon: 'material-symbols:delete-outline',
+                  title: '정말 삭제하시겠습니까?'
+                })
+              }}>
+                <Icon icon='material-symbols:delete-outline' />
+              </IconButton>
+            </>
+          )
+        }
+      },
+    ] : []),
+    */
+
+  ]
+  const router = useRouter();
+  const [columns, setColumns] = useState([]);
+  const [data, setData] = useState({});
+  const [operUserList, setOperUserList] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [searchObj, setSearchObj] = useState({
+    page: 1,
+    page_size: 20,
+    s_dt: '',
+    e_dt: '',
+    search: '',
+    is_sales_man: true,
+  })
+  const [dialogObj, setDialogObj] = useState({
+    changePassword: false,
+    changeVirtualUserName: false,
+  })
+  const [changePasswordObj, setChangePasswordObj] = useState({
+    id: '',
+    user_pw: ''
+  })
+  useEffect(() => {
+    pageSetting();
+  }, [])
+  const pageSetting = () => {
+    let cols = defaultColumns;
+    setColumns(cols)
+    if (user?.level >= 40) {
+      getAllOperUser();
+    }
+    onChangePage({ ...searchObj, page: 1, });
+  }
+  const getAllOperUser = async () => {
+    let data = await apiManager('users', 'list', {
+      level: 10,
+    });
+    setOperUserList(data?.content ?? []);
+  }
+  const onChangePage = async (obj_) => {
+    let obj = obj_;
+    if (obj) {
+      setSearchObj(obj);
+    } else {
+      obj = { ...searchObj };
+    }
+    setData({
+      ...data,
+      content: undefined
+    })
+    let data_ = await apiManager('members', 'list', obj);
+    if (data_) {
+      setData(data_);
+    }
+  }
+  const deleteItem = async (id) => {
+    setPageLoading(true);
+    toast.error('삭제처리가 완료될때까지 기다려주세요....');
+    let data = await apiManager('members', 'delete', { id });
+    setPageLoading(false);
+    if (data) {
+
+      toast.success('삭제처리가 완료되었습니다.');
+      onChangePage();
+    }
+  }
+  const deleteItemByMcht = async (id) => {
+    if (!(searchObj?.mcht_id > 0)) {
+      toast.error('가맹점 선택을 해주세요.');
+      return;
+    }
+    setPageLoading(true);
+    toast.error('삭제처리가 완료될때까지 기다려주세요....');
+    let data = await apiManager('members/mcht', 'delete', { id: searchObj?.mcht_id });
+    setPageLoading(false);
+    if (data) {
+      toast.success('삭제처리가 완료되었습니다.');
+      onChangePage();
+    }
+  }
+  const getBalance = async (id) => {
+    let result = await apiManager('members/balance', 'get', {
+      id: id,
+    })
+    toast.success(`${commarNumber(result?.amount)}원`)
+  }
+  const moveToMother = async (id) => {
+    let result = await apiManager('members/mother', 'create', {
+      id: id,
+    })
+    if (result) {
+      toast.success(`성공적으로 이동 되었습니다.`);
+    }
+  }
+  const onChangeVirtualUserName = async () => {
+    let result = undefined
+    result = await apiManager('members/change-virtual-user-name', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
+  const connectMcht = async () => {
+    let result = undefined
+    result = await apiManager('members/connect-mcht', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
+  const addDepositItem = async () => {
+    let result = undefined
+    result = await apiManager('members/request-deposit', 'create', dialogObj);
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
+  return (
+    <>
+      <Dialog open={pageLoading}
+        PaperProps={{
+          style: {
+            background: 'transparent',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        <CircularProgress />
+      </Dialog>
+      <Dialog
+        open={dialogObj.addDeposit}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`입금데이터 추가`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            입금예정금액을 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={dialogObj.amount}
+            margin="dense"
+            label="입금액"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                amount: onlyNumberText(e.target.value)
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={addDepositItem}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.changeVirtualUserName}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`유저아이디 변경`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            유저아이디를 입력 후 확인을 눌러주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            value={dialogObj.virtual_user_name}
+            margin="dense"
+            label="유저아이디"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                virtual_user_name: e.target.value
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onChangeVirtualUserName}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.connectMcht}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`가맹점 매칭`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            가맹점 선택 후 확인을 눌러주세요.
+          </DialogContentText>
+          <Autocomplete
+            fullWidth
+            autoComplete='new-password'
+            options={operUserList}
+            style={{
+              whiteSpace: 'pre'
+            }}
+            getOptionLabel={(option) => `${option?.user_name} (${option?.nickname})`}
+            value={dialogObj?.mcht_id}
+            onChange={(e, value) => {
+              setDialogObj({
+                ...dialogObj,
+                mcht_id: value?.id
+              })
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="가맹점선택" placeholder="가맹점선택" autoComplete='new-password' />
+            )}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => {
+            setModal({
+              func: () => { connectMcht() },
+              icon: 'material-symbols:edit-outline',
+              title: '저장 하시겠습니까?'
+            })
+          }}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Stack spacing={3}>
+        <Card>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            {user?.level >= 40 &&
+              <>
+                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                  <InputLabel>가맹점</InputLabel>
+                  <Select label='가맹점' value={searchObj[`mcht_id`]}
+                    onChange={(e) => {
+                      onChangePage({ ...searchObj, [`mcht_id`]: e.target.value, page: 1, })
+                    }}>
+                    <MenuItem value={null}>가맹점 전체</MenuItem>
+                    {operUserList.filter(el => el?.level == 10).map(oper => {
+                      return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                    })}
+                  </Select>
+                </FormControl>
+              </>}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>상태</InputLabel>
+              <Select label='상태' value={searchObj[`status`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`status`]: e.target.value, page: 1, })
+                }}>
+                <MenuItem value={null}>상태 전체</MenuItem>
+                {virtualAccountStatusList.map(status => {
+                  return <MenuItem value={status?.value}>{status.label}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>삭제여부</InputLabel>
+              <Select label='삭제여부' value={searchObj[`is_delete`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`is_delete`]: e.target.value })
+                }}>
+                <MenuItem value={0}>삭제안됨</MenuItem>
+                <MenuItem value={1}>삭제됨</MenuItem>
+              </Select>
+            </FormControl>
+            {user?.level >= 40 &&
+              <>
+                {/* <Button variant="outlined" sx={{}} onClick={() => {
+                  setModal({
+                    func: () => { deleteItemByMcht() },
+                    icon: 'material-symbols:delete-outline',
+                    title: '가상계좌 일괄삭제 하시겠습니까?'
+                  })
+                }}>가맹점 하부 가상계좌 삭제</Button> */}
+              </>}
+          </Row>
+
+          <ManagerTable
+            data={data}
+            columns={columns}
+            searchObj={searchObj}
+            onChangePage={onChangePage}
+            add_button_text={'상품권회원 발급'}
+            head_columns={[]}
+            table={'members'}
+            column_table={`members`}
+            excel_name={'상품권회원'}
+            between_content={<Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+              <Row style={{ alignItems: 'center', columnGap: '0.25rem' }}>
+                <Typography variant="body2">조회건수</Typography>
+                <Typography variant="subtitle2">{commarNumber(data?.total)}</Typography>
+              </Row>
+            </Row>}
+          />
+        </Card>
+      </Stack>
+    </>
+  )
+}
+VirtualAccountList.getLayout = (page) => <ManagerLayout>{page}</ManagerLayout>;
+export default VirtualAccountList

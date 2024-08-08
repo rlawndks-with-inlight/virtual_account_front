@@ -40,6 +40,11 @@ export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
     { value: 5, label: '생성중', color: 'warning' },
 ]
+export const giftCardMemberStatusList = [
+    { value: 0, label: '본인인증중', color: 'error' },
+    { value: 1, label: '출금계좌인증중', color: 'warning' },
+    { value: 2, label: '정상', color: 'success' },
+]
 export const withdrawHandList = [
     { value: 0, label: '노티', color: 'info' },
     { value: 1, label: '수기', color: 'warning' },
@@ -94,10 +99,10 @@ export const virtualAcctLinkStatusList = [
 
 ]
 export const telComList = [
-    { label: 'SKT', value: '01' },
-    { label: 'KT', value: '02' },
-    { label: 'LGU+', value: '03' },
-    { label: '알뜰폰SKT', value: '04' },
-    { label: '알뜰폰KT', value: '05' },
-    { label: '알뜰폰LGU', value: '06' },
+    { label: 'SKT', value: '01', labelValue: 'SK', },
+    { label: 'KT', value: '02', labelValue: 'KT', },
+    { label: 'LGU+', value: '03', labelValue: 'LG', },
+    { label: '알뜰폰SKT', value: '04', labelValue: 'SK_MVNO', },
+    { label: '알뜰폰KT', value: '05', labelValue: 'KT_MVNO', },
+    { label: '알뜰폰LGU', value: '06', labelValue: 'LG_MVNO', },
 ]

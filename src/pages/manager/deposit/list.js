@@ -142,31 +142,56 @@ const DepositList = () => {
         }
       },
     },
-    {
-      id: 'deposit_bank_code',
-      label: '입금은행정보',
-      action: (row, is_excel) => {
-        let bank_list = bankCodeList();
-        if (row?.is_type_withdraw_acct == 1) {
-          bank_list = bankCodeList('withdraw');
-        }
-        if (is_excel) {
-          return `${_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_detail'] ?? ""} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
-        }
-        return <Col>
-          <div>{_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
-          <div>{row['deposit_detail'] ?? ""}</div>
-          <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
-        </Col>
-      },
-      sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
-          return {
-            color: 'red'
+    ...(themeDnsData?.deposit_type == 'virtual_account' ? [
+      {
+        id: 'deposit_bank_code',
+        label: '입금은행정보',
+        action: (row, is_excel) => {
+          let bank_list = bankCodeList();
+          if (row?.is_type_withdraw_acct == 1) {
+            bank_list = bankCodeList('withdraw');
           }
-        }
+          if (is_excel) {
+            return `${_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_detail'] ?? ""} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+          }
+          return <Col>
+            <div>{_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+            <div>{row['deposit_detail'] ?? ""}</div>
+            <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+          </Col>
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            return {
+              color: 'red'
+            }
+          }
+        },
       },
-    },
+    ] : []),
+    ...(themeDnsData?.deposit_type == 'gift_card' ? [
+      {
+        id: 'gift_card_member',
+        label: '입금회원정보',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return `${row['member_guid']} ${row['member_phone_num']} ${row['member_name']}`
+          }
+          return <Col>
+            <div>{row['member_guid'] ?? ""}</div>
+            <div>{row['member_phone_num'] ?? ""}</div>
+            <div>{row['member_name'] ?? ""}</div>
+          </Col>
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
     {
       id: 'status',
       label: '상태',
@@ -194,12 +219,29 @@ const DepositList = () => {
         },
       },
     ] : []),
-    ...(themeDnsData?.withdraw_type == 0 ? [
+    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' ? [
       {
         id: 'virtual_acct_num',
         label: '가상계좌번호',
         action: (row, is_excel) => {
           return row['virtual_acct_num'] ?? "---"
+        },
+        sx: (row) => {
+
+          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+    ] : []),
+    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'gift_card' ? [
+      {
+        id: 'gift_card_code',
+        label: '상품권 번호',
+        action: (row, is_excel) => {
+          return row['gift_card_code'] ?? "---"
         },
         sx: (row) => {
 

@@ -92,7 +92,7 @@ const UserList = () => {
         return row['mid'] ?? "---"
       }
     },
-    ...(themeDnsData?.withdraw_type == 0 ? [
+    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' ? [
       {
         id: 'virtual_acct_link',
         label: '가상계좌발급주소',
@@ -155,6 +155,55 @@ const UserList = () => {
           </Col>
         }
       },
+    ] : []),
+    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'gift_card' ? [
+      {
+        id: 'gift_card_link',
+        label: '상품권회원생성주소',
+        action: (row, is_excel) => {
+          let link = 'https://' + themeDnsData?.dns + `/gift-card/${row?.mid}`;
+          if (is_excel) {
+            return link
+          }
+          return <div style={{
+            cursor: 'pointer',
+            color: 'blue',
+          }}
+            onClick={() => {
+              window.open(`/gift-card/${row?.mid}`)
+            }}
+          >
+            {link}
+          </div>
+        }
+      },
+      ...(user?.level >= 40 ? [
+        {
+          id: 'virtual_bank',
+          label: '발급주소 상태',
+          action: (row, is_excel) => {
+
+            if (is_excel) {
+              return `---`
+            }
+            return <Select
+              size='small'
+              defaultValue={row?.virtual_acct_link_status}
+              disabled={!(user?.level >= 40)}
+              onChange={async (e) => {
+                let result = await apiUtil(`users/virtual_acct_link_status`, 'update', {
+                  id: row?.id,
+                  value: e.target.value
+                });
+              }}
+            >
+              {virtualAcctLinkStatusList.map((itm) => {
+                return <MenuItem value={itm.value}>{itm?.label}</MenuItem>
+              })}
+            </Select>
+          }
+        },
+      ] : []),
     ] : []),
     {
       id: 'settle_bank',

@@ -470,7 +470,7 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
-                      {item?.withdraw_type == 0 &&
+                      {item?.withdraw_type == 0 && item?.deposit_type == 'virtual_account' &&
                         <>
                           <Stack>
                             <FormControlLabel control={<Switch checked={item.setting_obj.is_virtual_acct_inspect == 1} />} label={`가상계좌 점검여부`}
@@ -480,6 +480,22 @@ const BrandEdit = () => {
                                   ['setting_obj']: {
                                     ...item.setting_obj,
                                     [`is_virtual_acct_inspect`]: e.target.checked ? 1 : 0
+                                  },
+                                })
+                              }}
+                            />
+                          </Stack>
+                        </>}
+                      {item?.withdraw_type == 0 && item?.deposit_type == 'gift_card' &&
+                        <>
+                          <Stack>
+                            <FormControlLabel control={<Switch checked={item.setting_obj.is_gift_card_inspect == 1} />} label={`상품권 점검여부`}
+                              onChange={(e) => {
+                                setItem({
+                                  ...item,
+                                  ['setting_obj']: {
+                                    ...item.setting_obj,
+                                    [`is_gift_card_inspect`]: e.target.checked ? 1 : 0
                                   },
                                 })
                               }}
@@ -969,10 +985,29 @@ const BrandEdit = () => {
                                 {bankCodeList().map((itm, idx) => {
                                   return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                                 })}
+                                <MenuItem value={'PINPLENET'}>핀플넷(상품권)</MenuItem>
                               </Select>
                             </FormControl>
                           </Stack>
                         </>}
+                      <Stack spacing={1}>
+                        <FormControl>
+                          <InputLabel>입금타입</InputLabel>
+                          <Select
+                            label='입금타입'
+                            value={item.deposit_type}
+                            onChange={e => {
+                              setItem({
+                                ...item,
+                                ['deposit_type']: e.target.value
+                              })
+                            }}
+                          >
+                            <MenuItem value={'virtual_account'}>가상계좌</MenuItem>
+                            <MenuItem value={'gift_card'}>상품권</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>
@@ -1171,6 +1206,7 @@ const BrandEdit = () => {
                                 {bankCodeList('withdraw').map((itm, idx) => {
                                   return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                                 })}
+                                <MenuItem value={'PINPLENET'}>핀플넷(상품권)</MenuItem>
                               </Select>
                             </FormControl>
                           </Stack>

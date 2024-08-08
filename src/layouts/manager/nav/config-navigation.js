@@ -164,7 +164,7 @@ const navConfig = (is_show_all) => {
         ],
       },
     ] : []),
-    ...((!isOperator() && themeDnsData?.withdraw_type == 0 && isShowTab('virtualAccount')) ? [
+    ...((!isOperator() && themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' && isShowTab('virtualAccount')) ? [
       {
         id: 'virtualAccount',
         items: [
@@ -175,6 +175,22 @@ const navConfig = (is_show_all) => {
             children: [
               { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
               { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
+            ],
+          },
+        ],
+      },
+    ] : []),
+    ...((!isOperator() && themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'gift_card' && isShowTab('giftCardMember')) ? [
+      {
+        id: 'giftCardMember',
+        items: [
+          {
+            title: '상품권회원관리',
+            path: PATH_MANAGER.giftCard.member.root,
+            icon: <Icon icon='ph:gift' style={{ fontSize: '1.5rem' }} />,
+            children: [
+              { title: '상품권회원관리', path: PATH_MANAGER.giftCard.member.list },
+              { title: '상품권회원발급', path: PATH_MANAGER.giftCard.member.add },
             ],
           },
         ],
