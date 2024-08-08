@@ -93,7 +93,7 @@ const GiftCardBankners = () => {
         let data = item;
 
         data.mid = router.query?.mid || user?.mid;
-        if (!(user?.level >= 40) && !router.query?.mid && !user?.mid && !router.query?.id) {
+        if (!(user?.level >= 40) && !router.query?.mid && !user?.mid && !router.query?.id && !router.query.ci) {
             return;
         }
         if (router.query?.id) {
