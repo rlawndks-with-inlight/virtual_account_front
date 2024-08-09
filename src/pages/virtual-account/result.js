@@ -43,10 +43,12 @@ const VirtualAccountResult = () => {
     }, [])
 
     const settingPage = async () => {
+        setLoading(true);
         let data = await apiManager(`virtual-accounts/0`, 'list', {
             ci: router.query?.ci
         })
         setItem(data);
+        setLoading(false);
     }
     const addDepositItem = async () => {
         let result = undefined
@@ -59,6 +61,9 @@ const VirtualAccountResult = () => {
             setDialogObj({});
             onChangePage(searchObj);
         }
+    }
+    if (loading) {
+        return <></>
     }
     return (
         <>
