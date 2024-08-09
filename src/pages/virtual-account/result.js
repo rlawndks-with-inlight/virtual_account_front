@@ -110,7 +110,6 @@ const VirtualAccountResult = () => {
                                     <Typography variant="body2">• 1일 최대 입금금액은 2000만원 까지 입니다.</Typography>
                                     <Typography variant="body2">• 신청한 입금금액과 실 입금액의 오차가 있을시 입금처리 되지 않습니다.</Typography>
                                     <Typography variant="body2">• 타명의 입금, 간편송금어플, ATM, 수표 입금은 불가합니다.</Typography>
-                                    <Typography variant="body2">• </Typography>
                                     <Typography variant="body2" style={{ color: '#aaa' }}>{item?.virtual_acct_name}</Typography>
                                     <Row style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
                                         {[1, 3, 5, 10, 30, 50, 100, 200].map(num => (
