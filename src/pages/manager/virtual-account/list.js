@@ -82,7 +82,27 @@ const VirtualAccountList = () => {
     },
     ...(themeDnsData?.deposit_corp_type == 7 ? [
       {
-        id: 'created_at',
+        id: 'deposit_link',
+        label: '입금데이터 추가 링크',
+        action: (row, is_excel) => {
+          let link = 'https://' + themeDnsData?.dns + `/virtual-account/result/?ci=${row?.ci}`;
+          if (is_excel) {
+            return link
+          }
+          return <div style={{
+            cursor: 'pointer',
+            color: 'blue',
+          }}
+            onClick={() => {
+              window.open(`/virtual-account/result/?ci=${row?.ci}`)
+            }}
+          >
+            {link}
+          </div>
+        }
+      },
+      {
+        id: 'deposit_create',
         label: '입금데이터 추가',
         action: (row, is_excel) => {
           if (is_excel) {
