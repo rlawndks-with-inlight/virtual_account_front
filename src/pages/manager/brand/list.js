@@ -130,10 +130,24 @@ const BrandList = () => {
       }
     },
     {
+      id: 'deposit_corp_type',
+      label: '마지막입금시간',
+      action: (row, is_excel) => {
+        return row?.last_deposit_date ?? "";
+      }
+    },
+    {
       id: 'withdraw_corp_type',
       label: '출금상위사',
       action: (row, is_excel) => {
         return _.find(apiCorpList, { value: row?.withdraw_corp_type })?.label + '\n';
+      }
+    },
+    {
+      id: 'deposit_corp_type',
+      label: '마지막출금시간',
+      action: (row, is_excel) => {
+        return row?.last_withdraw_date ?? "";
       }
     },
     {
