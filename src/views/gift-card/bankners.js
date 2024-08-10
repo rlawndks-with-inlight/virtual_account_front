@@ -307,7 +307,7 @@ const GiftCardBankners = () => {
                                                             <TextField
                                                                 size="small"
                                                                 label='MID'
-                                                                value={item.mid}
+                                                                value={item?.mid}
                                                                 disabled={true}
                                                             />
                                                         </>}
