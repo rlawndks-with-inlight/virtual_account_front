@@ -336,12 +336,12 @@ const GiftCardBankners = () => {
                                                             }))}
                                                         </Select>
                                                     </FormControl>
-                                                    {(item.user_type == 1 || item.user_type == 2) &&
+                                                    {(item?.user_type == 1 || item?.user_type == 2) &&
                                                         <>
                                                             <TextField
                                                                 size="small"
                                                                 label='사업자등록번호'
-                                                                value={item.business_num}
+                                                                value={item?.business_num}
                                                                 placeholder=""
                                                                 onChange={(e) => {
                                                                     setItem(
@@ -354,7 +354,7 @@ const GiftCardBankners = () => {
                                                             <TextField
                                                                 size="small"
                                                                 label='회사명(상호)'
-                                                                value={item.company_name}
+                                                                value={item?.company_name}
                                                                 placeholder=""
                                                                 onChange={(e) => {
                                                                     setItem(
@@ -367,7 +367,7 @@ const GiftCardBankners = () => {
                                                             <TextField
                                                                 size="small"
                                                                 label='대표자명'
-                                                                value={item.ceo_name}
+                                                                value={item?.ceo_name}
                                                                 placeholder=""
                                                                 onChange={(e) => {
                                                                     setItem(
@@ -380,7 +380,7 @@ const GiftCardBankners = () => {
                                                             <TextField
                                                                 size="small"
                                                                 label='회사 전화번호'
-                                                                value={item.company_phone_num}
+                                                                value={item?.company_phone_num}
                                                                 placeholder=""
                                                                 onChange={(e) => {
                                                                     setItem(
@@ -395,7 +395,7 @@ const GiftCardBankners = () => {
                                                     <TextField
                                                         size="small"
                                                         label='생년월일'
-                                                        value={item.birth}
+                                                        value={item?.birth}
                                                         placeholder="19990101"
                                                         onChange={(e) => {
                                                             setItem(
@@ -408,7 +408,7 @@ const GiftCardBankners = () => {
                                                     <TextField
                                                         size="small"
                                                         label='주민등록번호 뒷자리 첫번째숫자'
-                                                        value={item.acct_back_one_num}
+                                                        value={item?.acct_back_one_num}
                                                         placeholder="1"
                                                         onChange={(e) => {
                                                             setItem(
@@ -421,7 +421,7 @@ const GiftCardBankners = () => {
                                                     <TextField
                                                         size="small"
                                                         label='이름'
-                                                        value={item.name}
+                                                        value={item?.name}
                                                         placeholder="홍길동(출금계좌 예금주와 일치해야 함)"
                                                         onChange={(e) => {
                                                             setItem(
@@ -457,7 +457,7 @@ const GiftCardBankners = () => {
                                                     <TextField
                                                         label='휴대폰번호'
                                                         size="small"
-                                                        value={item.phone_num}
+                                                        value={item?.phone_num}
                                                         disabled={item?.phone_check == 1}
                                                         placeholder="하이픈(-) 제외 입력"
                                                         onChange={(e) => {
@@ -480,7 +480,7 @@ const GiftCardBankners = () => {
                                                     <TextField
                                                         label='인증번호'
                                                         size="small"
-                                                        value={item.phone_vrf_word}
+                                                        value={item?.phone_vrf_word}
                                                         placeholder=""
                                                         onChange={(e) => {
                                                             setItem(
@@ -510,7 +510,7 @@ const GiftCardBankners = () => {
                                                             <InputLabel>출금은행</InputLabel>
                                                             <Select
                                                                 label='출금은행'
-                                                                value={item.deposit_bank_code}
+                                                                value={item?.deposit_bank_code}
                                                                 onChange={e => {
                                                                     setItem({
                                                                         ...item,
@@ -528,7 +528,7 @@ const GiftCardBankners = () => {
                                                     </Stack>
                                                     <TextField
                                                         label='출금계좌번호'
-                                                        value={item.deposit_acct_num}
+                                                        value={item?.deposit_acct_num}
                                                         onChange={(e) => {
                                                             setItem(
                                                                 {
@@ -539,14 +539,14 @@ const GiftCardBankners = () => {
                                                         }} />
                                                     <TextField
                                                         label='예금주명'
-                                                        value={item.name}
+                                                        value={item?.name}
                                                     />
                                                     <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
-                                                    {item.is_send_one_won_check &&
+                                                    {item?.is_send_one_won_check &&
                                                         <>
                                                             <TextField
                                                                 label='인증번호'
-                                                                value={item.vrf_word}
+                                                                value={item?.vrf_word}
                                                                 placeholder=""
                                                                 onChange={(e) => {
                                                                     setItem(
