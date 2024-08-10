@@ -152,12 +152,12 @@ const DepositList = () => {
             bank_list = bankCodeList('withdraw');
           }
           if (is_excel) {
-            return `${_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"} ${row['deposit_detail'] ?? ""} ${row['deposit_acct_num']} ${row['deposit_acct_name']}`
+            return `${_.find(bank_list, { value: row['deposit_bank_code'] || row['virtual_deposit_bank_code'] })?.label ?? "---"} ${(row['deposit_detail']) ?? ""} ${row['deposit_acct_num'] || row['virtual_deposit_acct_num']} ${row['deposit_acct_name'] || row['virtual_deposit_acct_name']}`
           }
           return <Col>
-            <div>{_.find(bank_list, { value: row['deposit_bank_code'] })?.label ?? "---"}</div>
+            <div>{_.find(bank_list, { value: row['deposit_bank_code'] || row['virtual_deposit_bank_code'] })?.label ?? "---"}</div>
             <div>{row['deposit_detail'] ?? ""}</div>
-            <div>{row['deposit_acct_num']} {row['deposit_acct_name']}</div>
+            <div>{row['deposit_acct_num'] || row['virtual_deposit_acct_num']} {row['deposit_acct_name'] || row['virtual_deposit_acct_name']}</div>
           </Col>
         },
         sx: (row) => {
