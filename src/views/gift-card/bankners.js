@@ -135,7 +135,6 @@ const GiftCardBankners = () => {
             ...item,
             api_key: themeDnsData?.api_key,
         });
-        console.log(result)
         if (result) {
             toast.success('성공적으로 발송 되었습니다.');
             setAuthItem(result);
