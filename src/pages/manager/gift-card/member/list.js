@@ -201,7 +201,7 @@ const VirtualAccountList = () => {
 
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
@@ -225,8 +225,7 @@ const VirtualAccountList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     if (user?.level >= 40) {
       getAllOperUser();
     }
@@ -506,7 +505,7 @@ const VirtualAccountList = () => {
 
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'상품권회원 발급'}

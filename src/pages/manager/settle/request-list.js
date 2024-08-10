@@ -106,7 +106,7 @@ const SettleRequestList = () => {
             }
         },
     ]
-    const [columns, setColumns] = useState([]);
+
     const [data, setData] = useState({});
     const [operUserList, setOperUserList] = useState([]);
     const [searchObj, setSearchObj] = useState({
@@ -122,8 +122,6 @@ const SettleRequestList = () => {
         pageSetting();
     }, [])
     const pageSetting = () => {
-        let cols = defaultColumns;
-        setColumns(cols)
         getAllOperUser();
         onChangePage({ ...searchObj, page: 1 });
     }
@@ -209,7 +207,7 @@ const SettleRequestList = () => {
                         </>}
                     <ManagerTable
                         data={data}
-                        columns={columns}
+                        columns={defaultColumns}
                         searchObj={searchObj}
                         onChangePage={onChangePage}
                         head_columns={[]}

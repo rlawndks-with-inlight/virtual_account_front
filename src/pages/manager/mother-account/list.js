@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber, onlyNumberText } from "src/utils/function";
+import { commarNumber, getFirstDateByMonth, getUserLevelByNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { payTypeList } from "src/utils/format";
 import _ from "lodash";
@@ -128,12 +128,12 @@ const MotherAccountList = () => {
       }
     },
   ]
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: '',
+    s_dt: getFirstDateByMonth(returnMoment().substring(0, 10)),
     e_dt: '',
     search: '',
     is_mother: 1,
@@ -145,8 +145,7 @@ const MotherAccountList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     onChangePage({ ...searchObj, page: 1 });
   }
   const onChangePage = async (obj_) => {
@@ -253,7 +252,7 @@ const MotherAccountList = () => {
           </Row>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={''}

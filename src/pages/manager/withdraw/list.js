@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiServer, apiUtil } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getFirstDateByMonth, getUserLevelByNumber, returnMoment } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, payTypeList, withdrawHandList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
@@ -205,13 +205,6 @@ const WithdrawList = () => {
         action: (row, is_excel) => {
           return commarNumber(row['virtual_acct_balance'])
         },
-        sx: (row) => {
-          if (row?.deposit_status == 10) {
-            return {
-              color: 'red'
-            }
-          }
-        },
       },
     ] : []),
     ...([2, 5, 7].includes(themeDnsData?.withdraw_corp_type) ? [
@@ -333,14 +326,14 @@ const WithdrawList = () => {
     },
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: '',
+    s_dt: getFirstDateByMonth(returnMoment().substring(0, 10)),
     e_dt: '',
     search: '',
     is_sales_man: true,
@@ -352,8 +345,7 @@ const WithdrawList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     getAllOperUser();
     onChangePage({ ...searchObj, page: 1 });
   }
@@ -547,7 +539,7 @@ const WithdrawList = () => {
           </Row>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             head_columns={[]}

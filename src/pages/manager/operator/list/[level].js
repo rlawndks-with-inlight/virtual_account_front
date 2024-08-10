@@ -273,7 +273,7 @@ const OperatorList = () => {
   ]
   const navList = navConfig();
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
@@ -297,8 +297,7 @@ const OperatorList = () => {
     pageSetting();
   }, [router.query])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     onChangePage({ ...searchObj, page: 1, level: router.query?.level });
   }
   const onChangePage = async (obj_) => {
@@ -461,7 +460,7 @@ const OperatorList = () => {
         <Card>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={''}

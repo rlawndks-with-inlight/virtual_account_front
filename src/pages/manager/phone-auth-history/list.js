@@ -68,7 +68,7 @@ const PhoneAuthHistoryList = () => {
     },
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
@@ -92,8 +92,7 @@ const PhoneAuthHistoryList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     getAllOperUser();
     onChangePage({ ...searchObj, page: 1, });
   }
@@ -303,7 +302,7 @@ const PhoneAuthHistoryList = () => {
           </Row>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'가상계좌 발급'}

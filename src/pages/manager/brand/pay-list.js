@@ -84,7 +84,7 @@ const BrandPayList = () => {
     },
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
@@ -104,8 +104,7 @@ const BrandPayList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     onChangePage({ ...searchObj, page: 1, });
   }
   const onChangePage = async (obj_) => {
@@ -183,7 +182,7 @@ const BrandPayList = () => {
         <Card>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             head_columns={[]}

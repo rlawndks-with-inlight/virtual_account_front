@@ -182,7 +182,7 @@ const UserList = () => {
     ]
     const navList = navConfig();
     const router = useRouter();
-    const [columns, setColumns] = useState([]);
+
     const [data, setData] = useState({});
     const [searchObj, setSearchObj] = useState({
         page: 1,
@@ -208,8 +208,6 @@ const UserList = () => {
         pageSetting();
     }, [])
     const pageSetting = () => {
-        let cols = defaultColumns;
-        setColumns(cols)
         onChangePage({ ...searchObj, page: 1, level: 40, });
     }
     const onChangePage = async (obj) => {
@@ -303,7 +301,7 @@ const UserList = () => {
                 <Card>
                     <ManagerTable
                         data={data}
-                        columns={columns}
+                        columns={defaultColumns}
                         searchObj={searchObj}
                         onChangePage={onChangePage}
                         add_button_text={user?.level >= 50 ? '본사 추가' : ''}

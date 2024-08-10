@@ -207,7 +207,7 @@ const BrandList = () => {
     },
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [searchObj, setSearchObj] = useState({
     page: 1,
@@ -227,8 +227,7 @@ const BrandList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     onChangePage({ ...searchObj, page: 1, });
   }
   const onChangePage = async (obj_) => {
@@ -334,7 +333,7 @@ const BrandList = () => {
         <Card>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'브랜드 추가'}

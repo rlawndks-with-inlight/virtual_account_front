@@ -75,7 +75,7 @@ const CorpAccountList = () => {
     ] : []),
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [searchObj, setSearchObj] = useState({
@@ -98,8 +98,7 @@ const CorpAccountList = () => {
 
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     onChangePage({ ...searchObj, page: 1, });
   }
   const onChangePage = async (obj_) => {
@@ -131,7 +130,7 @@ const CorpAccountList = () => {
         <Card>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={'법인통장 추가'}

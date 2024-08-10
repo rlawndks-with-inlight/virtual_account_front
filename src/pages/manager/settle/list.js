@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
-import { commarNumber, getUserLevelByNumber } from "src/utils/function";
+import { commarNumber, getFirstDateByMonth, getUserLevelByNumber, returnMoment } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { bankCodeList, operatorLevelList, payTypeList, withdrawStatusList } from "src/utils/format";
 import _ from "lodash";
@@ -19,7 +19,7 @@ const SettleList = () => {
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: '',
+    s_dt: getFirstDateByMonth(returnMoment().substring(0, 10)),
     e_dt: '',
     search: '',
     level: 10,
@@ -158,7 +158,7 @@ const SettleList = () => {
     },
   ]
   const router = useRouter();
-  const [columns, setColumns] = useState([]);
+
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
 
@@ -173,8 +173,7 @@ const SettleList = () => {
     pageSetting();
   }, [])
   useEffect(() => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
   }, [searchObj])
   const pageSetting = () => {
     getAllOperUser();
@@ -275,7 +274,7 @@ const SettleList = () => {
           </Row>
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             head_columns={[]}

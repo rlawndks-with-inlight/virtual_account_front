@@ -536,3 +536,7 @@ export const getTableIdDuplicate = (list = []) => {
   }
   return result;
 }
+export const getFirstDateByMonth = (date_ = "") => {
+  let date = date_.split('-');
+  return `${date[0]}-${date[1]}-01`
+}

@@ -60,8 +60,8 @@ export default function ManagerTable(props) {
   const theme = useTheme();
 
   const { themeNotShowColumns, onChangeNotShowColumns } = useSettingsContext();
-  const [sDt, setSDt] = useState(undefined);
-  const [eDt, setEDt] = useState(undefined);
+  const [sDt, setSDt] = useState(searchObj?.s_dt ? new Date(searchObj?.s_dt) : undefined);
+  const [eDt, setEDt] = useState(searchObj?.e_dt ? new Date(searchObj?.e_dt) : undefined);
   const [dt, setDt] = useState(new Date())
   const [keyword, setKeyWord] = useState("");
   const [zColumn, setZColumn] = useState([]);
@@ -130,7 +130,6 @@ export default function ManagerTable(props) {
 
     setSDt(new Date(s_dt));
     setEDt(new Date(e_dt));
-
     onChangePage({
       ...searchObj,
       s_dt: s_dt,
@@ -197,102 +196,105 @@ export default function ManagerTable(props) {
         </TableHeaderContainer>
         <TableHeaderContainer>
           <Row style={{ rowGap: '1rem', flexWrap: 'wrap', columnGap: '0.75rem' }}>
-            {is_one_date ?
+            {data.content &&
               <>
-                <DesktopDatePicker
-                  label="날짜 선택"
-                  value={dt}
-                  format='yyyy-MM-dd'
-                  onChange={(newValue) => {
-                    setDt(newValue);
-                    onChangePage({ ...searchObj, dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                  }}
-                  renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                  sx={{ width: '180px', height: '32px' }}
-                  slotProps={{ textField: { size: 'small' } }}
-                />
-              </>
-              :
-              <>
-                {window.innerWidth > 1000 ?
+                {is_one_date ?
                   <>
                     <DesktopDatePicker
-                      label="시작일 선택"
-                      value={sDt}
+                      label="날짜 선택"
+                      value={dt}
                       format='yyyy-MM-dd'
                       onChange={(newValue) => {
-                        setSDt(newValue);
-                        onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                        setDt(newValue);
+                        onChangePage({ ...searchObj, dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
                       }}
                       renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                      sx={{ width: '150px', height: '32px' }}
-                      slotProps={{ textField: { size: 'small' } }}
-                    />
-                    <DesktopDatePicker
-                      label="종료일 선택"
-                      value={eDt}
-                      format='yyyy-MM-dd'
-                      onChange={(newValue) => {
-                        setEDt(newValue);
-                        onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                      }}
-                      renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                      sx={{ width: '150px' }}
+                      sx={{ width: '180px', height: '32px' }}
                       slotProps={{ textField: { size: 'small' } }}
                     />
                   </>
                   :
                   <>
+                    {window.innerWidth > 1000 ?
+                      <>
+                        <DesktopDatePicker
+                          label="시작일 선택"
+                          value={sDt}
+                          format='yyyy-MM-dd'
+                          onChange={(newValue) => {
+                            setSDt(newValue);
+                            onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                          }}
+                          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                          sx={{ width: '150px', height: '32px' }}
+                          slotProps={{ textField: { size: 'small' } }}
+                        />
+                        <DesktopDatePicker
+                          label="종료일 선택"
+                          value={eDt}
+                          format='yyyy-MM-dd'
+                          onChange={(newValue) => {
+                            setEDt(newValue);
+                            onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                          }}
+                          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                          sx={{ width: '150px' }}
+                          slotProps={{ textField: { size: 'small' } }}
+                        />
+                      </>
+                      :
+                      <>
+                        <Row style={{ columnGap: '0.5rem' }}>
+                          <MobileDatePicker
+                            label="시작일 선택"
+                            value={sDt}
+                            format='yyyy-MM-dd'
+                            onChange={(newValue) => {
+                              setSDt(newValue);
+                              onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                            }}
+                            renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                            sx={{ flexGrow: 1 }}
+                            slotProps={{ textField: { size: 'small' } }}
+                          />
+                          <MobileDatePicker
+                            label="종료일 선택"
+                            value={eDt}
+                            format='yyyy-MM-dd'
+                            onChange={(newValue) => {
+                              setEDt(newValue);
+                              onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
+                            }}
+                            renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                            sx={{ flexGrow: 1 }}
+                            slotProps={{ textField: { size: 'small' } }}
+                          />
+                        </Row>
+                      </>}
                     <Row style={{ columnGap: '0.5rem' }}>
-                      <MobileDatePicker
-                        label="시작일 선택"
-                        value={sDt}
-                        format='yyyy-MM-dd'
-                        onChange={(newValue) => {
-                          setSDt(newValue);
-                          onChangePage({ ...searchObj, s_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                        }}
-                        renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                        sx={{ flexGrow: 1 }}
-                        slotProps={{ textField: { size: 'small' } }}
-                      />
-                      <MobileDatePicker
-                        label="종료일 선택"
-                        value={eDt}
-                        format='yyyy-MM-dd'
-                        onChange={(newValue) => {
-                          setEDt(newValue);
-                          onChangePage({ ...searchObj, e_dt: returnMoment(false, new Date(newValue)).substring(0, 10), page: 1 })
-                        }}
-                        renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
-                        sx={{ flexGrow: 1 }}
-                        slotProps={{ textField: { size: 'small' } }}
-                      />
+                      <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(-1)}>어제</Button>
+                      <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(1)}>당일</Button>
+                      <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(3)}>3일전</Button>
+                      <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(30)}>1개월</Button>
                     </Row>
                   </>}
-                <Row style={{ columnGap: '0.5rem' }}>
-                  <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(-1)}>어제</Button>
-                  <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(1)}>당일</Button>
-                  <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(3)}>3일전</Button>
-                  <Button variant="outlined" sx={{ flexGrow: 1 }} onClick={() => onClickDateButton(30)}>1개월</Button>
-                </Row>
-              </>}
 
-            <Button variant='outlined'
-              startIcon={<Icon icon={'icon-park-outline:excel'} />}
-              onClick={exportExcel}
-              disabled={excelLoading}
-            >
-              {excelLoading ?
-                <>
-                  <CircularProgress sx={{ margin: 'auto' }} size={20} />
-                  <div>추출중입니다...</div>
-                </>
-                :
-                <>
-                  엑셀추출
-                </>}
-            </Button>
+                <Button variant='outlined'
+                  startIcon={<Icon icon={'icon-park-outline:excel'} />}
+                  onClick={exportExcel}
+                  disabled={excelLoading}
+                >
+                  {excelLoading ?
+                    <>
+                      <CircularProgress sx={{ margin: 'auto' }} size={20} />
+                      <div>추출중입니다...</div>
+                    </>
+                    :
+                    <>
+                      엑셀추출
+                    </>}
+                </Button>
+              </>}
           </Row>
           <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.7rem' }}>
             <FormControl variant='outlined' size='small' sx={{ width: '100px', marginLeft: 'auto' }}>

@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiUtil } from "src/utils/api-manager";
-import { commarNumber, getUserFee, getUserLevelByNumber, onlyNumberText } from "src/utils/function";
+import { commarNumber, getFirstDateByMonth, getUserFee, getUserLevelByNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
 import { bankCodeList, depositStatusList, operatorLevelList } from "src/utils/format";
@@ -556,7 +556,7 @@ const DepositList = () => {
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: '',
+    s_dt: getFirstDateByMonth(returnMoment().substring(0, 10)),
     e_dt: '',
     search: '',
   })
@@ -576,8 +576,7 @@ const DepositList = () => {
     });
   }, [])
   const pageSetting = () => {
-    let cols = defaultColumns;
-    setColumns(cols)
+
     getAllOperUser();
     if (themeDnsData?.is_use_corp_account == 1) {
       getCorpAccounts();
@@ -862,7 +861,7 @@ const DepositList = () => {
             </>}
           <ManagerTable
             data={data}
-            columns={columns}
+            columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
             add_button_text={themeDnsData?.is_can_add_deposit == 1 ? '결제내역추가' : ''}
