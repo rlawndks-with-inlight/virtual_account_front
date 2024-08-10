@@ -13,9 +13,6 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 const GiftCardAddNoneAuth = () => {
     const { setModal } = useModal()
     const { themeDnsData } = useSettingsContext();
-    if (!themeDnsData?.id) {
-        return <></>
-    }
     return (
         <>
             <Row style={{ minHeight: '100vh' }}>
