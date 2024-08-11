@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 // components
 import { CustomAvatar } from '../../../components/custom-avatar';
 import { getUserLevelByNumber } from 'src/utils/function';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 export default function NavAccount() {
   const { user } = useAuthContext();
-
+  const { themeDnsData } = useSettingsContext();
   return (
     <Link underline="none" color="inherit">
       <StyledRoot>
@@ -36,10 +37,18 @@ export default function NavAccount() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {(user?.level >= 40 || user?.level == 10) &&
+            {themeDnsData?.id == 106 ?
+              <>
+                {(user?.level >= 40 || user?.level == 10) &&
+                  <>
+                    {getUserLevelByNumber(user?.level)}
+                  </>}
+              </>
+              :
               <>
                 {getUserLevelByNumber(user?.level)}
               </>}
+
           </Typography>
         </Box>
       </StyledRoot>
