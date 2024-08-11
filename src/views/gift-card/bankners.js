@@ -232,7 +232,7 @@ const GiftCardBankners = () => {
             api_key: themeDnsData?.api_key,
             ...giftCard,
         });
-        if (result?.tid) {
+        if (result) {
             toast.success('성공적으로 사용 되었습니다.');
             setGiftCard({});
         }
