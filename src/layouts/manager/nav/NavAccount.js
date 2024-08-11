@@ -36,7 +36,10 @@ export default function NavAccount() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {getUserLevelByNumber(user?.level)}
+            {(user?.level >= 40 || user?.level == 10) &&
+              <>
+                {getUserLevelByNumber(user?.level)}
+              </>}
           </Typography>
         </Box>
       </StyledRoot>
