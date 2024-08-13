@@ -156,6 +156,7 @@ const VirtualAccountIcb = () => {
             toast.success('성공적으로 인증 되었습니다.');
             setItem({
                 ...item,
+                ci: result?.ci,
                 phone_check: 1,
             })
         }

@@ -524,15 +524,27 @@ const DepositList = () => {
           if (row?.is_cancel == 1) {
             return '취소건'
           } else {
-            return <Button
+            let button_item = <Button
               variant="contained"
               size="small"
               sx={{ width: '100px' }}
               startIcon={<Icon icon={'material-symbols:cancel-outline'} />}
               onClick={() => {
-                onCancelDeposit(row?.id)
+                if (themeDnsData?.deposit_corp_type == 7) {
+                  onCancelDepositByVirtualAccount(row?.id)
+                } else {
+                  onCancelDeposit(row?.id)
+                }
               }}
             >취소처리</Button>;
+            if (themeDnsData?.deposit_corp_type == 7) {
+              if (row?.deposit_status != 0) {
+                return button_item;
+              }
+            } else {
+              return button_item;
+            }
+
           }
         },
         sx: (row) => {
@@ -643,6 +655,20 @@ const DepositList = () => {
     if (result) {
       toast.success("성공적으로 저장 되었습니다.");
       setDialogObj({});
+      onChangePage(searchObj);
+    }
+    setPageLoading(false);
+  }
+  const onCancelDepositByVirtualAccount = async (id) => {
+    if (!window.confirm('입금취소처리 하시겠습니까?')) {
+      return;
+    }
+    setPageLoading(true);
+    let result = await apiManager('virtual-accounts/cancel-deposit', 'create', {
+      id
+    });
+    if (result) {
+      toast.success("성공적으로 저장 되었습니다.");
       onChangePage(searchObj);
     }
     setPageLoading(false);
