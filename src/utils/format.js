@@ -70,6 +70,7 @@ export const depositStatusList = [
     { value: 0, label: '입금완료', color: 'success' },
     { value: 5, label: '입금요청완료', color: 'warning' },
     { value: 10, label: '주의건', color: 'error' },
+    { value: 20, label: '입금대기', color: 'warning' },
 ]
 export const virtualAccountUserTypeList = [
     { value: 0, label: '개인', color: 'success' },
