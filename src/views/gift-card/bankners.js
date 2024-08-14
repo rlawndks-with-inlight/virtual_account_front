@@ -109,6 +109,9 @@ const GiftCardBankners = () => {
                 phone_num: router.query?.phone_num,
                 mid: data.mid,
             })
+            if (!data) {
+                return;
+            }
             setCurrentStep(data?.step ?? 0)
         }
         if (router.query?.mid) {
