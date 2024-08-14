@@ -110,6 +110,7 @@ const GiftCardBankners = () => {
                 mid: data.mid,
             })
             if (!data) {
+                toast.error('본사에 문의해 주세요.')
                 return;
             }
             setCurrentStep(data?.step ?? 0)
