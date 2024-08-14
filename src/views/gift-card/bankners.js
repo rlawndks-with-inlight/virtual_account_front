@@ -200,11 +200,15 @@ const GiftCardBankners = () => {
         }
     }
     const onRequestGiftOrder = async () => {
+        if (!window.confirm('입금계좌를 발송하시겠습니까?')) {
+            return;
+        }
         setLoading(true);
         let result = await apiServer(`${process.env.API_URL}/api/gift/v1/gift/order`, 'create', {
             guid: item?.guid,
             api_key: themeDnsData?.api_key,
             ...giftCard,
+            gift_biz: 'PINPLENET',
         });
         if (result) {
             toast.success('성공적으로 발송 되었습니다. 알림톡 확인해 주세요.');
@@ -218,6 +222,7 @@ const GiftCardBankners = () => {
             guid: item?.guid,
             api_key: themeDnsData?.api_key,
             ...giftCard,
+            gift_biz: 'PINPLENET',
         });
         if (result) {
             setGiftCard({
@@ -234,6 +239,7 @@ const GiftCardBankners = () => {
             guid: item?.guid,
             api_key: themeDnsData?.api_key,
             ...giftCard,
+            gift_biz: 'PINPLENET',
         });
         if (result) {
             toast.success('성공적으로 사용 되었습니다.');
@@ -585,7 +591,7 @@ const GiftCardBankners = () => {
                                                 <>
                                                     <Card sx={{ p: 2, height: '100%' }}>
                                                         <Stack spacing={2}>
-                                                            <Stack spacing={1}>
+                                                            {/* <Stack spacing={1}>
                                                                 <FormControl>
                                                                     <InputLabel>상품권사</InputLabel>
                                                                     <Select
@@ -601,7 +607,7 @@ const GiftCardBankners = () => {
                                                                         <MenuItem value={'PINPLENET'}>핀플넷</MenuItem>
                                                                     </Select>
                                                                 </FormControl>
-                                                            </Stack>
+                                                            </Stack> */}
                                                             <Stack spacing={1}>
                                                                 <FormControl>
                                                                     <InputLabel>상품권 금액 선택</InputLabel>
@@ -659,7 +665,7 @@ const GiftCardBankners = () => {
                                                 <>
                                                     <Card sx={{ p: 2, height: '100%' }}>
                                                         <Stack spacing={2}>
-                                                            <Stack spacing={1}>
+                                                            {/* <Stack spacing={1}>
                                                                 <FormControl>
                                                                     <InputLabel>상품권사</InputLabel>
                                                                     <Select
@@ -676,7 +682,7 @@ const GiftCardBankners = () => {
                                                                         <MenuItem value={'PINPLENET'}>핀플넷</MenuItem>
                                                                     </Select>
                                                                 </FormControl>
-                                                            </Stack>
+                                                            </Stack> */}
                                                             <TextField
                                                                 label='상품권번호 (-포함)'
                                                                 value={giftCard.gift_num}
