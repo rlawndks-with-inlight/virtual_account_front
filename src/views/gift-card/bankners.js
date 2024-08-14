@@ -1,5 +1,5 @@
 
-import { Button, Card, CardHeader, CircularProgress, Dialog, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Step, StepLabel, Stepper, TextField, Typography } from "@mui/material";
+import { Button, Card, CardHeader, CircularProgress, Dialog, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Step, StepLabel, Stepper, Switch, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSettingsContext } from "src/components/settings";
@@ -10,7 +10,7 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList, telComList, virtualAccountUserTypeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { Row } from "src/components/elements/styled-components";
+import { Col, Row } from "src/components/elements/styled-components";
 import _ from "lodash";
 import { commarNumber, onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
@@ -608,6 +608,24 @@ const GiftCardBankners = () => {
                                                                     </Select>
                                                                 </FormControl>
                                                             </Stack> */}
+                                                            <Col style={{ rowGap: '0.5rem' }}>
+                                                                ✓유의사항
+                                                                <Typography variant="body2">· 인증받은 본인 계좌에서만 입금이 가능하며, 구매정보(입금자, 주문금액, 미인증 계좌)가 불일치할 경우 충전권이 발행되지 않습니다.</Typography>
+                                                                <Typography variant="body2">· 토스, 카카오페이 등 각종 페이 및 오픈뱅킹으로 입금 시 충전권이 발행되지 않습니다.</Typography>
+                                                                <Typography variant="body2">· 입금 후 3분 이내 휴대폰 문자메세지로 충전권이 발송되며, 미수신 시 고객센터로 문의해주시기 바랍니다.</Typography>
+                                                                <Typography variant="body2">· 구매자 본인의 사용 또는 선물 용도가 아닌 제3자의 요구에 의해 충전권을 구매하는 경우 구매를 즉시 중단해 주시기 바랍니다.</Typography>
+                                                                <Typography variant="body2">· 보이스피싱 및 대출사기 급증 경찰, 검찰 사칭 또는 자녀사칭으로 상품권 구매를 유도하는 사기 및 피싱건들이 급증하고 있습니다. 본인 사용목적이 아닌 구매자분들은 피싱 또는 사기가 아닌지 확인 하신 후 구매 부탁드립니다.</Typography>
+                                                                <Typography variant="body2">
+                                                                    <FormControlLabel control={<Switch checked={giftCard?.is_agree_order == 1} />} label={` 위 유의사항을 확인 하였으며, 구매자 본인은 충전권 구매에 동의합니다.`}
+                                                                        onChange={(e) => {
+                                                                            setGiftCard({
+                                                                                ...giftCard,
+                                                                                is_agree_order: e.target.checked ? 1 : 0,
+                                                                            })
+                                                                        }}
+                                                                    />
+                                                                </Typography>
+                                                            </Col>
                                                             <Stack spacing={1}>
                                                                 <FormControl>
                                                                     <InputLabel>상품권 금액 선택</InputLabel>
@@ -657,7 +675,7 @@ const GiftCardBankners = () => {
                                                             <Stack spacing={1}>
                                                                 <Typography variant="body2" style={{ color: '#888' }}>발송된 입금계좌로 선택금액만큼 입금하시면 위에 선택한 내용과 일치한 상품권이 발송됩니다.</Typography>
                                                             </Stack>
-                                                            <Button onClick={onRequestGiftOrder} variant="outlined" style={{ height: '48px', }}>입금계좌 발송</Button>
+                                                            <Button onClick={onRequestGiftOrder} variant="outlined" style={{ height: '48px', }} disabled={giftCard?.is_agree_order != 1}>입금계좌 발송</Button>
                                                         </Stack>
                                                     </Card>
                                                 </>}
