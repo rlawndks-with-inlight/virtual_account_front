@@ -672,9 +672,6 @@ const GiftCardBankners = () => {
                                                             <Stack spacing={1}>
                                                                 총 주문금액: {commarNumber((giftCard?.gift_price ?? 0) * 10000 * (giftCard?.gift_count ?? 0))}원
                                                             </Stack>
-                                                            <Stack spacing={1}>
-                                                                <Typography variant="body2" style={{ color: '#888' }}>발송된 입금계좌로 선택금액만큼 입금하시면 위에 선택한 내용과 일치한 상품권이 발송됩니다.</Typography>
-                                                            </Stack>
                                                             <Button onClick={onRequestGiftOrder} variant="outlined" style={{ height: '48px', }} disabled={giftCard?.is_agree_order != 1}>입금계좌 발송</Button>
                                                         </Stack>
                                                     </Card>
