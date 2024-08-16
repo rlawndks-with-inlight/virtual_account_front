@@ -365,7 +365,7 @@ const VirtualAccountList = () => {
     }
   }
   const addDepositItem = async () => {
-    if (window.confirm(`${commarNumber(dialogObj?.amount)}원을 입금 신청하겠습니까?`)) {
+    if (!window.confirm(`${commarNumber(dialogObj?.amount)}원을 입금 신청하겠습니까?`)) {
       return;
     }
     let result = undefined
