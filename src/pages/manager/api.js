@@ -13,6 +13,7 @@ import BlankLayout from "src/layouts/BlankLayout";
 import VirtualAccountApiV2 from "src/views/api/virtual-account/v2";
 import styled from "styled-components";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
+import GiftCardApiV1 from "src/views/api/gift-card/v1";
 
 export const Title2 = styled.h2`
 margin: 1rem auto;
@@ -38,7 +39,11 @@ const ApiDocs = () => {
     const [tableObj, setTableObj] = useState({});
     const [loading, setLoading] = useState(true);
     const tab_list = [
-        ...(themeDnsData?.setting_obj?.api_virtual_account_version == 1 ? [...VirtualAccountApiV1().tab_list.map(itm => { return { ...itm, value: `${VirtualAccountApiV1().tab_key}_${itm.value}` } })] : []),
+        ...(themeDnsData?.setting_obj?.api_virtual_account_version == 1 ? (themeDnsData?.deposit_type == 'virtual_account' ?
+            [...VirtualAccountApiV1().tab_list.map(itm => { return { ...itm, value: `${VirtualAccountApiV1().tab_key}_${itm.value}` } })]
+            :
+            [...GiftCardApiV1().tab_list.map(itm => { return { ...itm, value: `${GiftCardApiV1().tab_key}_${itm.value}` } })]
+        ) : []),
         ...(themeDnsData?.setting_obj?.api_virtual_account_version == 2 ? [...VirtualAccountApiV2().tab_list.map(itm => { return { ...itm, value: `${VirtualAccountApiV2().tab_key}_${itm.value}` } })] : []),
         ...(themeDnsData?.setting_obj?.api_withdraw_version == 1 ? [...WithdrawApiV1().tab_list.map(itm => { return { ...itm, value: `${WithdrawApiV1().tab_key}_${itm.value}` } })] : []),
         ...(themeDnsData?.setting_obj?.api_deposit_version == 1 ? [...DepositApiV1().tab_list.map(itm => { return { ...itm, value: `${DepositApiV1().tab_key}_${itm.value}` } })] : []),
@@ -53,7 +58,12 @@ const ApiDocs = () => {
         try {
             let result = {};
             if (themeDnsData?.setting_obj?.api_virtual_account_version == 1) {
-                result = { ...result, ...settingKeyObj(VirtualAccountApiV1().table_obj, VirtualAccountApiV1().tab_key) };
+                console.log(themeDnsData)
+                if (themeDnsData?.deposit_type == 'virtual_account') {
+                    result = { ...result, ...settingKeyObj(VirtualAccountApiV1().table_obj, VirtualAccountApiV1().tab_key) };
+                } else if (themeDnsData?.deposit_type == 'gift_card') {
+                    result = { ...result, ...settingKeyObj(GiftCardApiV1().table_obj, GiftCardApiV1().tab_key) };
+                }
             }
             if (themeDnsData?.setting_obj?.api_virtual_account_version == 2) {
                 result = { ...result, ...settingKeyObj(VirtualAccountApiV2().table_obj, VirtualAccountApiV2().tab_key) };
@@ -120,7 +130,7 @@ const ApiDocs = () => {
         <>
             {!loading &&
                 <>
-                    <Row style={{ margin: '0 0 1rem 0', columnGap: '0.5rem' }}>
+                    <Row style={{ margin: '0 0 1rem 0', columnGap: '0.5rem', overflow: 'auto' }}>
                         {tab_list.map((tab) => (
                             <Button
                                 variant={tab.value == currentTab ? 'contained' : 'outlined'}

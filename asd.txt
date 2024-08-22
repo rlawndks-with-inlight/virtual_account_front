@@ -38,7 +38,7 @@ server {
 // sudo certbot --nginx -d mjcp0125.com
 server {
     listen 80;
-    server_name woorik.co.kr; # 도메인이나 IP 주소로 변경
+    server_name st0re99.com; # 도메인이나 IP 주소로 변경
 
     location / {
         proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정
