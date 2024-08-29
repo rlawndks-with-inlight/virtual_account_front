@@ -59,18 +59,8 @@ const BrandList = () => {
         if (is_excel) {
           return row['logo_img'] ?? "---"
         }
-        return <LazyLoadImage src={row['logo_img']} style={{ height: '56px' }} />
+        return <LazyLoadImage src={`/brand-logo/${row?.id}.png`} style={{ height: '56px' }} />
       }
-    },
-    {
-      id: 'favicon_img',
-      label: 'FAVICON',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return row['favicon_img'] ?? "---"
-        }
-        return <LazyLoadImage src={row['favicon_img']} style={{ height: '56px' }} />
-      },
     },
     ...(user?.level >= 50 ? [
       {
