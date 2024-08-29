@@ -15,7 +15,6 @@ import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
 import { commarNumber, getUserLevelByNumber } from 'src/utils/function';
 import { deleteCookie } from 'src/utils/react-cookie';
-import { socket } from 'src/data/data';
 import { useSettingsContext } from 'src/components/settings';
 import { apiManager } from 'src/utils/api-manager';
 import { Col, Row } from 'src/components/elements/styled-components';

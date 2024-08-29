@@ -13,7 +13,8 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
 import { bankCodeList, depositStatusList, operatorLevelList } from "src/utils/format";
 import _ from "lodash";
-import { socket } from "src/data/data";
+//import { socket } from "src/data/data";
+
 const DepositList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
@@ -577,6 +578,7 @@ const DepositList = () => {
     pageSetting();
   }, [])
   useEffect(() => {
+    /*
     socket.on(`message_${themeDnsData?.id}`, (msg) => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
@@ -586,6 +588,8 @@ const DepositList = () => {
         }
       }
     });
+    */
+
   }, [])
   const pageSetting = () => {
 

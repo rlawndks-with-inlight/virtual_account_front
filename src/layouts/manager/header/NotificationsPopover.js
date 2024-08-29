@@ -25,7 +25,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
-import { socket } from 'src/data/data';
+//import { socket } from 'src/data/data';
 import styled from 'styled-components';
 import { apiManager } from 'src/utils/api-manager';
 import { useRouter } from 'next/router';
@@ -56,6 +56,7 @@ export default function NotificationsPopover() {
   const totalUnRead = notifications.filter((item) => !(themeReadNotifications[item?.id])).length;
   const [splitCount, setSplitCount] = useState(4);
   useEffect(() => {
+    /*
     socket.on(`message_${themeDnsData?.id}`, (msg) => {
       let { method, data, brand_id, title } = msg;
       if (brand_id == themeDnsData?.id && (user?.level >= 40 || (user?.id == data?.user_id))) {
@@ -72,7 +73,9 @@ export default function NotificationsPopover() {
           }, 2000)
         }
       }
-    });
+    });  
+    */
+
     getBellContent();
   }, [])
 

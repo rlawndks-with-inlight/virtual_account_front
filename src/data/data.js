@@ -10,7 +10,7 @@ export const logoSrc = () => {
 
   return themeDnsData[`${themeMode == 'dark' ? 'dark_' : ''}logo_img`]
 };
-export const socket = io(process.env.SOCKET_URL);
+//export const socket = io(process.env.SOCKET_URL);
 
 export const KAKAO_OBJ = {
   BACKGROUND: '#F9E000',
