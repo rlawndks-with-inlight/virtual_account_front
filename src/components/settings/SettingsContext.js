@@ -138,6 +138,9 @@ export function SettingsProvider({ children }) {
       onChangeDnsData({
         ...dns_data,
         ...setting,
+        logo_img: `/brand-logo/${dns_data?.id}.png`,
+        dark_logo_img: `/brand-logo/${dns_data?.id}.png`,
+        favicon_img: `/brand-logo/${dns_data?.id}.png`,
       });
     } catch (err) {
       console.log(err)

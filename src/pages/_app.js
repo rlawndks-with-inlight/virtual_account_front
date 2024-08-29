@@ -51,7 +51,7 @@ const App = (props) => {
           name='description'
           content={head_data?.og_description || headData?.og_description}
         />
-        <link rel='shortcut icon' href={head_data?.favicon_img || headData?.favicon_img} />
+        <link rel='shortcut icon' href={`/brand-logo/${head_data?.id || headData?.id}.png`} />
         <link rel="apple-touch-icon" sizes="180x180" href={head_data?.favicon_img || headData?.favicon_img} />
         <meta name='keywords' content={head_data?.name || headData?.name} />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
