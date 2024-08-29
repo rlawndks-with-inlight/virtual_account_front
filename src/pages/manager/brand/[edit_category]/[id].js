@@ -182,7 +182,7 @@ const BrandEdit = () => {
           <Grid container spacing={3}>
             {currentTab == 0 &&
               <>
-                <Grid item xs={12} md={6}>
+                {/* <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
                       <Stack spacing={1}>
@@ -265,7 +265,7 @@ const BrandEdit = () => {
                       </Stack>
                     </Stack>
                   </Card>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
