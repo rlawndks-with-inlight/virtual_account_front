@@ -323,6 +323,12 @@ const BrandEdit = () => {
                             }
                           )
                         }} />
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ p: 2, height: '100%' }}>
+                    <Stack spacing={3}>
                       {user?.level >= 50 &&
                         <>
                           <TextField
