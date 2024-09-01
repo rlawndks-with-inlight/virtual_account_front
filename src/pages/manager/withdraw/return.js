@@ -68,7 +68,7 @@ const WithdrawReturn = () => {
                 if (!withdraw_list[i]?.withdraw_bank_code && !withdraw_list[i]?.deposit_bank_code) {
                     continue;
                 }
-                result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}`, 'create', {
+                result = await apiManager(`withdraws/request`, 'create', {
                     api_key: themeDnsData?.api_key,
                     mid: user?.mid,
                     withdraw_amount: withdraw_list[i]?.withdraw_amount,

@@ -38,6 +38,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user?.level >= 10) {
+      console.log(user)
       router.push(getReturnUri(navList));
     }
     setLoading(false);
@@ -51,6 +52,7 @@ const Login = () => {
   const onSubmit = async () => {
     let user = await login(username, password, optNum);
     if (user) {
+      console.log(user)
       router.push(getReturnUri(navList));
     }
   };
