@@ -109,10 +109,6 @@ const GiftCardBankners = () => {
                 phone_num: router.query?.phone_num,
                 mid: data.mid,
             })
-            if (!data) {
-                toast.error('본사에 문의해 주세요.')
-                return;
-            }
             setCurrentStep(data?.step ?? 0)
         }
         if (router.query?.mid) {
