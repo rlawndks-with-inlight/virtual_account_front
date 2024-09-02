@@ -320,7 +320,7 @@ const GiftCardBankners = () => {
                                                             />
                                                         </>}
 
-                                                    <FormControl variant='outlined' size="small">
+                                                    {/* <FormControl variant='outlined' size="small">
                                                         <InputLabel>사용자구분</InputLabel>
                                                         <Select label='사용자구분' value={item?.user_type}
                                                             onChange={(e) => {
@@ -343,7 +343,7 @@ const GiftCardBankners = () => {
                                                                 return <MenuItem value={itm.value}>{itm.label}</MenuItem>
                                                             }))}
                                                         </Select>
-                                                    </FormControl>
+                                                    </FormControl> */}
                                                     {(item?.user_type == 1 || item?.user_type == 2) &&
                                                         <>
                                                             <TextField
