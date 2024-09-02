@@ -91,7 +91,7 @@ const GiftCardBankners = () => {
             setMchtList(mcht_list?.content ?? []);
         }
         let data = item;
-
+        let is_exist_data = false;
         data.mid = router.query?.mid || user?.mid;
         if (!(user?.level >= 40) && !router.query?.mid && !user?.mid && !router.query?.id && !router.query.ci) {
             return;
@@ -109,6 +109,10 @@ const GiftCardBankners = () => {
                 phone_num: router.query?.phone_num,
                 mid: data.mid,
             })
+            if (data) {
+                is_exist_data = true;
+
+            }
             setCurrentStep(data?.step ?? 0)
         }
         if (router.query?.mid) {
@@ -117,7 +121,9 @@ const GiftCardBankners = () => {
                 return;
             }
         }
-        setItem(data);
+        if (is_exist_data) {
+            setItem(data);
+        }
         setBlockPage(false);
         setLoading(false);
     }
