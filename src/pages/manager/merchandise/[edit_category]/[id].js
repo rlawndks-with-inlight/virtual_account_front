@@ -40,6 +40,7 @@ const UserEdit = () => {
     user_pw: '',
     withdraw_fee: 0,
     min_withdraw_price: 0,
+    max_withdraw_price: 0,
     min_withdraw_remain_price: 0,
     min_withdraw_hold_price: 0,
     is_send_one_won_check: false,
@@ -756,6 +757,25 @@ const UserEdit = () => {
                             {
                               ...item,
                               ['min_withdraw_price']: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <div>원</div>
+                          )
+                        }}
+                      />
+                      <TextField
+                        label='최대 출금액'
+                        type="number"
+                        value={item.max_withdraw_price}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              ['max_withdraw_price']: e.target.value
                             }
                           )
                         }}
