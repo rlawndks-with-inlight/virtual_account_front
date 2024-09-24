@@ -111,7 +111,6 @@ const GiftCardBankners = () => {
             })
             if (data) {
                 is_exist_data = true;
-
             }
             setCurrentStep(data?.step ?? 0)
         }
@@ -145,8 +144,17 @@ const GiftCardBankners = () => {
             api_key: themeDnsData?.api_key,
         });
         if (result) {
-            toast.success('성공적으로 발송 되었습니다.');
-            setAuthItem(result);
+            toast.success('성공적으로 인증 되었습니다.');
+            setItem({
+                ...item,
+                phone_check: 1,
+                ci: result?.ci
+            })
+            if (router.asPath.includes('manager')) {
+                setCurrentStep(1);
+            } else {
+                router.push(`/gift-card?ci=${result?.ci}`)
+            }
         }
     }
     const onCheckPhoneNumCheck = async () => {
@@ -452,6 +460,9 @@ const GiftCardBankners = () => {
                                         <Grid item xs={12} md={6}>
                                             <Card sx={{ p: 2, height: '100%' }}>
                                                 <Stack spacing={2}>
+                                                    ✓유의사항
+                                                    <Typography variant="body2">· 인증받은 본인 계좌에서만 입금이 가능하며, 구매정보(입금자, 주문금액, 미인증 계좌)가 불일치할 경우 충전권이 발행되지 않습니다.</Typography>
+                                                    <Typography variant="body2">· 휴대폰 번호를 실제 정보와 다르게 입력할시, 상품권 정보 전달 불가 및 이용에 제약이 있습니다.</Typography>
                                                     <FormControl size="small" disabled={item?.phone_check == 1}>
                                                         <InputLabel>통신사</InputLabel>
                                                         <Select label='통신사' value={item?.tel_com}
@@ -482,16 +493,19 @@ const GiftCardBankners = () => {
                                                                 }
                                                             )
                                                         }}
-                                                        InputProps={{
-                                                            endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
-                                                                disabled={item?.phone_check == 1}
-                                                                variant='contained'
-                                                                size='small'
-                                                                sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
-                                                        }}
+                                                    /*
+                                                    InputProps={{
+                                                        endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
+                                                            disabled={item?.phone_check == 1}
+                                                            variant='contained'
+                                                            size='small'
+                                                            sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                            onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
+                                                    }} 
+                                                    */
                                                     />
-                                                    <TextField
+                                                    <Button variant="contained" onClick={onCheckPhoneNumRequest}>다음</Button>
+                                                    {/* <TextField
                                                         label='인증번호'
                                                         size="small"
                                                         value={item?.phone_vrf_word}
@@ -509,7 +523,7 @@ const GiftCardBankners = () => {
                                                                 disabled={(!authItem?.tid) || item?.phone_check == 1}
                                                                 onClick={onCheckPhoneNumCheck}>{item?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
                                                         }}
-                                                    />
+                                                    /> */}
                                                 </Stack>
                                             </Card>
                                         </Grid>
