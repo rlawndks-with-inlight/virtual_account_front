@@ -46,6 +46,27 @@ const CorpAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
+    {
+      id: 'deposit_page',
+      label: '입금페이지',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return `---`
+        }
+        if (row?.is_delete == 1) {
+          return "---";
+        }
+        return (
+          <>
+            <IconButton onClick={() => {
+              window.open(`/corp-account/${row?.id}`)
+            }}>
+              <Icon icon='ri:link' />
+            </IconButton>
+          </>
+        )
+      }
+    },
     ...(user?.level >= 40 ? [
       {
         id: 'delete',
