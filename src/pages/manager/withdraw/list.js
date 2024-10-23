@@ -416,7 +416,7 @@ const WithdrawList = () => {
   }
   const onProcessWithdraw = async (data = {}) => {
     let { mid, tid } = data;
-    let result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/withdraw/check`, 'create', {
+    let result = await apiManager(`withdraws/check-withdraw`, 'create', {
       api_key: themeDnsData?.api_key,
       mid,
       tid,

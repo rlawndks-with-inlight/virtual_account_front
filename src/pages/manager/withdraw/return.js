@@ -127,6 +127,14 @@ const WithdrawReturn = () => {
             withdraw_acct_name,
         } = data;
         let result = undefined;
+        result = await apiManager(`withdraws/check`, 'create', {
+            api_key: themeDnsData?.api_key,
+            mid: user?.mid,
+            withdraw_bank_code: withdraw_bank_code,
+            withdraw_acct_num: withdraw_acct_num,
+            withdraw_acct_name: withdraw_acct_name,
+        });
+        /*
         result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/check`, 'create', {
             api_key: themeDnsData?.api_key,
             mid: user?.mid,
@@ -134,6 +142,7 @@ const WithdrawReturn = () => {
             withdraw_acct_num: withdraw_acct_num,
             withdraw_acct_name: withdraw_acct_name,
         });
+        */
         let withdraw_list = [...withdraws];
         withdraw_list[idx].withdraw_acct_name = result ? result?.withdraw_acct_name : '';
         setWithdraws(withdraw_list);
