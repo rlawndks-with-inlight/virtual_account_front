@@ -32,6 +32,8 @@ import { useState } from 'react';
 import { store } from '../redux/store'
 import { useRouter } from 'next/router';
 import SnackbarProvider from '../components/snackbar';
+import Script from 'next/script';
+import { getLocalStorage } from 'src/utils/local-storage';
 
 const App = (props) => {
   const { Component, pageProps, head_data = {}, host, host_data } = props;
@@ -41,8 +43,11 @@ const App = (props) => {
   useEffect(() => {
     if (Object.keys(head_data).length > 0) {
       setHeadData(head_data)
+    } else {
+      let themeDnsData = getLocalStorage('themeDnsData');
+      setHeadData(JSON.parse(themeDnsData ?? "{}"))
     }
-  }, [])
+  }, [router.asPath])
   return (
     <>
       <Head>
@@ -92,6 +97,7 @@ const App = (props) => {
     </>
   );
 }
+/*
 App.getInitialProps = async (context) => {
   const { ctx } = context;
   try {
@@ -110,4 +116,6 @@ App.getInitialProps = async (context) => {
     }
   }
 };
+*/
+
 export default App
