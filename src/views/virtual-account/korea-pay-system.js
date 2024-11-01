@@ -13,6 +13,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
 import _ from "lodash";
 import { generateRandomString, onlyNumberText } from "src/utils/function";
+import axios from "axios";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -28,6 +29,7 @@ const VirtualAccountKoreaPaySystem = () => {
         name: '',
         phone_num: '',
     });
+
     useEffect(() => {
         // KPPayForm 초기화 함수
         const init = () => {
@@ -52,7 +54,7 @@ const VirtualAccountKoreaPaySystem = () => {
             });
         };
 
-        init();
+        //init();
     }, []);
 
     const start = (config) => {
@@ -73,7 +75,12 @@ const VirtualAccountKoreaPaySystem = () => {
         return true;
     };
 
-    const submit = (config) => {
+    const submit = async (config) => {
+        if (!window.confirm(`발급하러 가시겠습니까?`)) {
+            return;
+        }
+
+
         // 제출 로직
         const form = document.createElement('form');
         form.setAttribute('method', 'get');
@@ -87,7 +94,23 @@ const VirtualAccountKoreaPaySystem = () => {
             input.setAttribute('value', config[key]);
             form.appendChild(input);
         });
-
+        try {
+            let exist_account = await apiManager(`virtual-accounts/exist-check`, 'create', {
+                name: item?.name,
+                phone_num: item?.phone_num,
+                birth: item?.birth,
+            })
+            if (!exist_account) {
+                return;
+            }
+            const input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'account');
+            input.setAttribute('value', exist_account?.virtual_acct_num);
+            form.appendChild(input);
+        } catch (err) {
+            console.log(err);
+        }
         document.body.appendChild(form);
         form.submit();
         form.remove();
