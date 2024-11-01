@@ -176,6 +176,7 @@ const VirtualAccountKoreaPaySystem = () => {
                         trxType: 0,
                         trackId: `${generateRandomString(20)}${new Date().getTime()}`,
                         identity: item?.birth,
+                        holderName: item?.name,
                         phoneNo: item?.phone_num,
                         userAccountName: item?.name,
                         udf1: router.query?.mid,
