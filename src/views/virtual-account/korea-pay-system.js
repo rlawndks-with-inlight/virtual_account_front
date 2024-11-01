@@ -12,7 +12,7 @@ import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
 import _ from "lodash";
-import { onlyNumberText } from "src/utils/function";
+import { generateRandomString, onlyNumberText } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -23,6 +23,11 @@ const VirtualAccountKoreaPaySystem = () => {
 
     const { themeDnsData } = useSettingsContext();
 
+    const [item, setItem] = useState({
+        birth: '',
+        name: '',
+        phone_num: '',
+    });
     useEffect(() => {
         // KPPayForm 초기화 함수
         const init = () => {
@@ -104,14 +109,58 @@ const VirtualAccountKoreaPaySystem = () => {
             <Card sx={{ p: 2, height: '100%', maxWidth: '500px', margin: 'auto' }}>
                 <CardHeader title={`가상계좌 발급하기`} sx={{ padding: '0', marginBottom: '2rem' }} />
                 <Stack spacing={3}>
-
+                    <TextField
+                        label='생년월일 6자리'
+                        value={item.birth}
+                        onChange={(e) => {
+                            if (e.target.value.length > 6) {
+                                return;
+                            }
+                            setItem(
+                                {
+                                    ...item,
+                                    ['birth']: onlyNumberText(e.target.value),
+                                }
+                            )
+                        }} />
+                    <TextField
+                        label='휴대폰번호'
+                        value={item.phone_num}
+                        onChange={(e) => {
+                            if (e.target.value.length > 11) {
+                                return;
+                            }
+                            setItem(
+                                {
+                                    ...item,
+                                    ['phone_num']: onlyNumberText(e.target.value),
+                                }
+                            )
+                        }} />
+                    <TextField
+                        label='이름'
+                        value={item.name}
+                        onChange={(e) => {
+                            setItem(
+                                {
+                                    ...item,
+                                    ['name']: e.target.value,
+                                }
+                            )
+                        }} />
                     <Button onClick={() => start({
-                        publicKey: 'pk_8a10-2389ba-8f4-09d73',
+                        publicKey: themeDnsData?.deposit_sign_key,
                         trxType: 0,
-                        trackId: `${new Date().getTime()}${router.query?.mid}`,
+                        trackId: `${generateRandomString(20)}${new Date().getTime()}`,
+                        identity: item?.birth,
+                        phoneNo: item?.phone_num,
+                        userAccountName: item?.name,
                         udf1: router.query?.mid,
+                        responseFunction: (value) => {
+                            console.log(value);
+                        }
                         // 나머지 설정
-                    })} variant="outlined" style={{ height: '40px', }}>발급하러 가기</Button>
+                    })} variant="outlined" style={{ height: '40px', }}>해당 정보로 발급하러 가기</Button>
                 </Stack>
             </Card>
         </Grid>

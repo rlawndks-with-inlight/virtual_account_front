@@ -540,3 +540,12 @@ export const getFirstDateByMonth = (date_ = "") => {
   let date = date_.split('-');
   return `${date[0]}-${date[1]}-01`
 }
+export function generateRandomString(length = 1) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomString = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomString += characters.charAt(randomIndex);
+  }
+  return randomString;
+}
