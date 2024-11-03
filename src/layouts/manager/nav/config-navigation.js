@@ -174,9 +174,7 @@ const navConfig = (is_show_all) => {
             icon: <Icon icon='mdi:cloud-key-outline' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '가상계좌관리', path: PATH_MANAGER.virtualAccount.list },
-              ...(themeDnsData?.deposit_corp_type != 6 ? [
-                { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
-              ] : []),
+              // { title: '가상계좌발급', path: PATH_MANAGER.virtualAccount.add },
             ],
           },
         ],
