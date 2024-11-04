@@ -73,10 +73,12 @@ const BrandEdit = () => {
       value: 1,
       label: '카카오톡 설정'
     },
+    /*
     {
       value: 2,
       label: '회사정보'
-    },
+    }, 
+    */
     ...(router.query?.edit_category == 'add' ? [{
       value: 3,
       label: '사용할 본사 계정'
