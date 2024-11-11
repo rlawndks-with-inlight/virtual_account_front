@@ -236,7 +236,7 @@ const MotherAccountRequest = () => {
                         <Grid item xs={12} md={4}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
-                                    {themeDnsData?.withdraw_corp_type == 7 &&
+                                    {(themeDnsData?.withdraw_corp_type == 7 && themeDnsData?.deposit_process_type == 0) &&
                                         <>
                                             <Stack spacing={1}>
                                                 <FormControl>
