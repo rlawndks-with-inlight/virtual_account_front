@@ -1016,6 +1016,24 @@ const BrandEdit = () => {
                           </Select>
                         </FormControl>
                       </Stack>
+                      <Stack spacing={1}>
+                        <FormControl>
+                          <InputLabel>입금처리타입</InputLabel>
+                          <Select
+                            label='입금타입'
+                            value={item.deposit_process_type}
+                            onChange={e => {
+                              setItem({
+                                ...item,
+                                ['deposit_process_type']: e.target.value
+                              })
+                            }}
+                          >
+                            <MenuItem value={0}>일반</MenuItem>
+                            <MenuItem value={1}>무기명</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Stack>
                     </Stack>
                   </Card>
                 </Grid>

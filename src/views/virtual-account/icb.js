@@ -240,32 +240,35 @@ const VirtualAccountIcb = () => {
                                                             )
                                                         }} />
                                                 </>}
-                                            <FormControl variant='outlined' size="small" disabled={item?.phone_check == 1 || item?.deposit_acct_check == 1}>
-                                                <InputLabel>사용자구분</InputLabel>
-                                                <Select label='사용자구분' value={item?.user_type}
-                                                    onChange={(e) => {
-                                                        let obj = {
-                                                            ...item,
-                                                            user_type: e.target.value,
-                                                        }
-                                                        if (e.target.value == 0) {
-                                                            obj = {
-                                                                ...obj,
-                                                                business_num: '',
-                                                                company_name: '',
-                                                                ceo_name: '',
-                                                                company_phone_num: '',
-                                                            }
-                                                        }
-                                                        setItem(obj)
-                                                    }}>
-                                                    {virtualAccountUserTypeList.map((itm => {
-                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                    }))}
-                                                </Select>
-                                            </FormControl>
 
-                                            {/* {(item.user_type == 1 || item.user_type == 2) &&
+
+                                            {themeDnsData?.deposit_process_type == 0 &&
+                                                <>
+                                                    <FormControl variant='outlined' size="small" disabled={item?.phone_check == 1 || item?.deposit_acct_check == 1}>
+                                                        <InputLabel>사용자구분</InputLabel>
+                                                        <Select label='사용자구분' value={item?.user_type}
+                                                            onChange={(e) => {
+                                                                let obj = {
+                                                                    ...item,
+                                                                    user_type: e.target.value,
+                                                                }
+                                                                if (e.target.value == 0) {
+                                                                    obj = {
+                                                                        ...obj,
+                                                                        business_num: '',
+                                                                        company_name: '',
+                                                                        ceo_name: '',
+                                                                        company_phone_num: '',
+                                                                    }
+                                                                }
+                                                                setItem(obj)
+                                                            }}>
+                                                            {virtualAccountUserTypeList.map((itm => {
+                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                            }))}
+                                                        </Select>
+                                                    </FormControl>
+                                                    {/* {(item.user_type == 1 || item.user_type == 2) &&
                                                 <>
                                                     <TextField
                                                         label='사업자등록번호'
@@ -321,128 +324,128 @@ const VirtualAccountIcb = () => {
                                                         }} />
 
                                                 </>} */}
-                                            {item?.user_type == 0 &&
-                                                <>
-                                                    <TextField
-                                                        size="small"
-                                                        label='생년월일'
-                                                        value={item.birth}
-                                                        disabled={item?.phone_check == 1}
-                                                        placeholder="19990101"
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['birth']: onlyNumberText(e.target.value)
-                                                                }
-                                                            )
-                                                        }} />
-                                                    <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                        <InputLabel>성별</InputLabel>
-                                                        <Select label='성별' value={item?.gender}
-                                                            onChange={(e) => {
-                                                                setItem(
-                                                                    {
-                                                                        ...item,
-                                                                        ['gender']: e.target.value,
-                                                                    }
-                                                                )
-                                                            }}>
-                                                            {genderList.map((itm) => {
-                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                            })}
-                                                        </Select>
-                                                    </FormControl>
-                                                    <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                        <InputLabel>내외국인</InputLabel>
-                                                        <Select label='내외국인' value={item?.ntv_frnr}
-                                                            onChange={(e) => {
-                                                                setItem(
-                                                                    {
-                                                                        ...item,
-                                                                        ['ntv_frnr']: e.target.value,
-                                                                    }
-                                                                )
-                                                            }}>
-                                                            {ntvFrnrList.map((itm) => {
-                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                            })}
-                                                        </Select>
-                                                    </FormControl>
-                                                    <TextField
-                                                        label='이름'
-                                                        size="small"
-                                                        value={item.deposit_acct_name}
-                                                        disabled={item?.phone_check == 1}
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['deposit_acct_name']: e.target.value,
-                                                                    ['name']: e.target.value,
-                                                                }
-                                                            )
-                                                        }} />
-                                                    <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                        <InputLabel>통신사</InputLabel>
-                                                        <Select label='통신사' value={item?.tel_com}
-                                                            onChange={(e) => {
-                                                                setItem(
-                                                                    {
-                                                                        ...item,
-                                                                        ['tel_com']: e.target.value,
-                                                                    }
-                                                                )
-                                                            }}>
-                                                            {telComList.map((itm) => {
-                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                            })}
-                                                        </Select>
-                                                    </FormControl>
-                                                    <TextField
-                                                        label='휴대폰번호'
-                                                        size="small"
-                                                        value={item.phone_num}
-                                                        disabled={item?.phone_check == 1}
-                                                        placeholder="하이픈(-) 제외 입력"
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['phone_num']: onlyNumberText(e.target.value)
-                                                                }
-                                                            )
-                                                        }}
-                                                        InputProps={{
-                                                            endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
+                                                    {item?.user_type == 0 &&
+                                                        <>
+                                                            <TextField
+                                                                size="small"
+                                                                label='생년월일'
+                                                                value={item.birth}
                                                                 disabled={item?.phone_check == 1}
-                                                                variant='contained'
-                                                                size='small'
-                                                                sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
-                                                        }}
-                                                    />
-                                                    <TextField
-                                                        label='인증번호'
-                                                        size="small"
-                                                        value={item.phone_vrf_word}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['phone_vrf_word']: e.target.value
-                                                                }
-                                                            )
-                                                        }}
-                                                        InputProps={{
-                                                            endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                disabled={(!authItem?.tid) || item?.phone_check == 1}
-                                                                onClick={onCheckPhoneNumCheck}>{item?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
-                                                        }}
-                                                    />
+                                                                placeholder="19990101"
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['birth']: onlyNumberText(e.target.value)
+                                                                        }
+                                                                    )
+                                                                }} />
+                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
+                                                                <InputLabel>성별</InputLabel>
+                                                                <Select label='성별' value={item?.gender}
+                                                                    onChange={(e) => {
+                                                                        setItem(
+                                                                            {
+                                                                                ...item,
+                                                                                ['gender']: e.target.value,
+                                                                            }
+                                                                        )
+                                                                    }}>
+                                                                    {genderList.map((itm) => {
+                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                    })}
+                                                                </Select>
+                                                            </FormControl>
+                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
+                                                                <InputLabel>내외국인</InputLabel>
+                                                                <Select label='내외국인' value={item?.ntv_frnr}
+                                                                    onChange={(e) => {
+                                                                        setItem(
+                                                                            {
+                                                                                ...item,
+                                                                                ['ntv_frnr']: e.target.value,
+                                                                            }
+                                                                        )
+                                                                    }}>
+                                                                    {ntvFrnrList.map((itm) => {
+                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                    })}
+                                                                </Select>
+                                                            </FormControl>
+                                                            <TextField
+                                                                label='이름'
+                                                                size="small"
+                                                                value={item.deposit_acct_name}
+                                                                disabled={item?.phone_check == 1}
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['deposit_acct_name']: e.target.value,
+                                                                            ['name']: e.target.value,
+                                                                        }
+                                                                    )
+                                                                }} />
+                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
+                                                                <InputLabel>통신사</InputLabel>
+                                                                <Select label='통신사' value={item?.tel_com}
+                                                                    onChange={(e) => {
+                                                                        setItem(
+                                                                            {
+                                                                                ...item,
+                                                                                ['tel_com']: e.target.value,
+                                                                            }
+                                                                        )
+                                                                    }}>
+                                                                    {telComList.map((itm) => {
+                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                    })}
+                                                                </Select>
+                                                            </FormControl>
+                                                            <TextField
+                                                                label='휴대폰번호'
+                                                                size="small"
+                                                                value={item.phone_num}
+                                                                disabled={item?.phone_check == 1}
+                                                                placeholder="하이픈(-) 제외 입력"
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['phone_num']: onlyNumberText(e.target.value)
+                                                                        }
+                                                                    )
+                                                                }}
+                                                                InputProps={{
+                                                                    endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
+                                                                        disabled={item?.phone_check == 1}
+                                                                        variant='contained'
+                                                                        size='small'
+                                                                        sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                                        onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
+                                                                }}
+                                                            />
+                                                            <TextField
+                                                                label='인증번호'
+                                                                size="small"
+                                                                value={item.phone_vrf_word}
+                                                                placeholder=""
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['phone_vrf_word']: e.target.value
+                                                                        }
+                                                                    )
+                                                                }}
+                                                                InputProps={{
+                                                                    endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                                        disabled={(!authItem?.tid) || item?.phone_check == 1}
+                                                                        onClick={onCheckPhoneNumCheck}>{item?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
+                                                                }}
+                                                            />
+                                                        </>}
                                                 </>}
-
                                         </Stack>
                                     </Card>
                                 </Grid>
@@ -487,7 +490,7 @@ const VirtualAccountIcb = () => {
                                                 label='예금주명'
                                                 size="small"
                                                 value={item.deposit_acct_name}
-                                                disabled={item?.user_type == 0 || item?.deposit_acct_check == 1}
+                                                disabled={item?.deposit_acct_check == 1}
                                                 onChange={(e) => {
                                                     setItem(
                                                         {
@@ -497,7 +500,7 @@ const VirtualAccountIcb = () => {
                                                         }
                                                     )
                                                 }} />
-                                            {(item?.user_type == 1 || item?.user_type == 2) &&
+                                            {((item?.user_type == 1 || item?.user_type == 2) || themeDnsData?.deposit_process_type == 1) &&
                                                 <>
                                                     <Button onClick={oneWonCertification} disabled={item?.deposit_acct_check == 1} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
                                                     {item.tid &&
@@ -568,7 +571,7 @@ const VirtualAccountIcb = () => {
                                 <Stack spacing={1} style={{ display: 'flex' }}>
 
                                     <Button variant="contained"
-                                        disabled={!((item?.user_type == 0 && item?.phone_check == 1) || ([1, 2].includes(item?.user_type) && item?.deposit_acct_check == 1))}
+                                        disabled={!(item?.deposit_acct_check == 1)}
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {

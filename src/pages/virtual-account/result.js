@@ -58,8 +58,6 @@ const VirtualAccountResult = () => {
         });
         if (result) {
             toast.success("성공적으로 저장 되었습니다.");
-            setDialogObj({});
-            onChangePage(searchObj);
         }
     }
     if (loading) {
