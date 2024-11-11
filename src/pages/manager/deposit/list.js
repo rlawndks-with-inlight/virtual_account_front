@@ -204,6 +204,18 @@ const DepositList = () => {
         return <Chip variant="soft" label={status?.label} color={status?.color} />
       }
     },
+    ...(themeDnsData?.deposit_process_type == 1 ? [
+      {
+        id: 'status',
+        label: '결제상태',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return row?.is_pay_confirm == 1 ? '완료' : '대기중'
+          }
+          return <Chip variant="soft" label={row?.is_pay_confirm == 1 ? '완료' : '대기중'} color={row?.is_pay_confirm == 1 ? 'success' : 'warning'} />
+        }
+      },
+    ] : []),
     ...(themeDnsData?.is_use_corp_account == 1 ? [
       {
         id: 'corp_acct_num',
@@ -869,7 +881,7 @@ const DepositList = () => {
                 </FormControl>
                 <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
                   <InputLabel>입금상태</InputLabel>
-                  <Select label='출금상태' value={searchObj[`deposit_status`]}
+                  <Select label='입금상태' value={searchObj[`deposit_status`]}
                     onChange={(e) => {
                       onChangePage({ ...searchObj, [`deposit_status`]: e.target.value })
                     }}>
@@ -879,6 +891,21 @@ const DepositList = () => {
                     })}
                   </Select>
                 </FormControl>
+                {themeDnsData?.deposit_process_type == 1 &&
+                  <>
+                    <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                      <InputLabel>결제상태</InputLabel>
+                      <Select label='결제상태' value={searchObj[`is_pay_confirm`]}
+                        onChange={(e) => {
+                          onChangePage({ ...searchObj, [`is_pay_confirm`]: e.target.value })
+                        }}>
+                        <MenuItem value={null}>상태 전체</MenuItem>
+                        <MenuItem value={1}>완료</MenuItem>
+                        <MenuItem value={0}>대기중</MenuItem>
+
+                      </Select>
+                    </FormControl>
+                  </>}
                 {((user?.level >= 40 && !(themeDnsData?.parent_id > 0)) || user?.level >= 45) && [1, 3, 6].includes(themeDnsData?.deposit_corp_type) &&
                   <>
                     <Button variant="outlined" onClick={() => {
