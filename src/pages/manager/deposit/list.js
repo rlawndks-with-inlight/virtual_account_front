@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager, apiUtil } from "src/utils/api-manager";
-import { commarNumber, getFirstDateByMonth, getUserFee, getUserLevelByNumber, onlyNumberText, returnMoment } from "src/utils/function";
+import { commarNumber, getFirstDateByMonth, getNumberByPercent, getUserFee, getUserLevelByNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { useSettingsContext } from "src/components/settings";
 import { bankCodeList, depositStatusList, operatorLevelList } from "src/utils/format";
@@ -385,6 +385,20 @@ const DepositList = () => {
         label: '가맹점 요율',
         action: (row, is_excel) => {
           return row['mcht_fee'] + '%'
+        },
+        sx: (row) => {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            return {
+              color: 'red'
+            }
+          }
+        },
+      },
+      {
+        id: 'mcht_fee',
+        label: '가맹점 요율 금액',
+        action: (row, is_excel) => {
+          return row[`mcht_fee`] > 0 ? commarNumber(getNumberByPercent(row['amount'], row['mcht_fee'])) : "---";
         },
         sx: (row) => {
           if (row?.deposit_status == 10 || row?.is_cancel == 1) {
