@@ -92,7 +92,7 @@ const UserList = () => {
         return row['mid'] ?? "---"
       }
     },
-    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' ? [
+    ...((themeDnsData?.withdraw_type == 0 || themeDnsData?.withdraw_corp_type == 6) && themeDnsData?.deposit_type == 'virtual_account' ? [
       {
         id: 'virtual_acct_link',
         label: '가상계좌발급주소',
