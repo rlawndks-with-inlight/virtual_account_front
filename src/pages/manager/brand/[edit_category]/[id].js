@@ -1063,6 +1063,7 @@ const BrandEdit = () => {
                               ...item,
                               ['withdraw_corp_type']: e.target.value
                             };
+                            console.log(e.target.value)
                             if (e.target.value == 1) {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -1086,7 +1087,7 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`api_withdraw_version`]: 3,
                               }
-                              data['withdraw_type'] = 0;
+                              data['withdraw_type'] = 1;
                             } else if (e.target.value == 7) {
                               data['setting_obj'] = {
                                 ...item.setting_obj,

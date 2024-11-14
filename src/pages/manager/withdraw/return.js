@@ -80,6 +80,7 @@ const WithdrawReturn = () => {
                     pay_type: 'return',
                     otp_num: item?.otp_num,
                     api_sign_val: item?.api_sign_val,
+                    identity: withdraw_list[i]?.identity,
                 });
             } else {
                 result = await apiManager('withdraws', 'create', {
@@ -301,7 +302,7 @@ const WithdrawReturn = () => {
                                         */}
 
                                         </>}
-                                    {themeDnsData?.withdraw_type == 0 &&
+                                    {(themeDnsData?.withdraw_type == 0 || themeDnsData?.withdraw_corp_type == 6) &&
                                         <>
                                             <Autocomplete
                                                 fullWidth
@@ -311,7 +312,7 @@ const WithdrawReturn = () => {
                                                 style={{
                                                     whiteSpace: 'pre'
                                                 }}
-                                                getOptionLabel={(option) => `${themeDnsData?.deposit_type == 'virtual_account' ? `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label} ${option?.virtual_acct_num} ${option?.virtual_acct_name ? `(${option?.virtual_acct_name})` : ''}` : `${option?.guid}`}\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label} ${option?.deposit_acct_num} ${option?.deposit_acct_name ? `(${option?.deposit_acct_name})` : ''}`}
+                                                getOptionLabel={(option) => `${themeDnsData?.deposit_type == 'virtual_account' ? `${_.find(bankCodeList(), { value: option?.virtual_bank_code })?.label ?? "---"} ${option?.virtual_acct_num ?? "---"} ${option?.virtual_acct_name ? `(${option?.virtual_acct_name})` : ''}` : `${option?.guid}`}\n${_.find(bankCodeList('withdraw'), { value: option?.deposit_bank_code })?.label ?? "---"} ${option?.deposit_acct_num ?? "---"} ${option?.deposit_acct_name ? `(${option?.deposit_acct_name})` : ''}`}
                                                 value={withdraws}
                                                 onChange={(e, value) => {
                                                     let withdraw_list = [...withdraws];
@@ -330,9 +331,24 @@ const WithdrawReturn = () => {
                                                             }
                                                         }
                                                     } else {//추가할때
-                                                        withdraw_list.push(value[value.length - 1]);
+                                                        let identity = '';
+                                                        if (value[value.length - 1]?.birth) {
+                                                            if (value[value.length - 1]?.birth.length == 8) {
+                                                                identity = value[value.length - 1]?.birth.substring(2, 8);
+                                                            } else {
+                                                                identity = value[value.length - 1]?.birth
+                                                            }
+                                                        }
+                                                        withdraw_list.push({
+                                                            ...value[value.length - 1],
+                                                            withdraw_bank_code: value[value.length - 1]?.deposit_bank_code ?? "",
+                                                            withdraw_acct_num: value[value.length - 1]?.deposit_acct_num ?? "",
+                                                            withdraw_acct_name: value[value.length - 1]?.deposit_acct_name ?? "",
+                                                            identity: identity,
+                                                        });
                                                     }
                                                     setWithdraws(withdraw_list);
+
                                                 }}
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="유저선택" placeholder="유저선택" autoComplete='new-password' />
@@ -473,6 +489,19 @@ const WithdrawReturn = () => {
                                                                         withdraw_list[idx].withdraw_acct_name = e.target.value;
                                                                         setWithdraws(withdraw_list);
                                                                     }} />
+                                                                {themeDnsData?.withdraw_corp_type == 6 &&
+                                                                    <>
+                                                                        <TextField
+                                                                            style={{ width: '50%' }}
+                                                                            label={`생년월일 또는 사업자번호`}
+                                                                            value={vir_acct.identity}
+                                                                            error={vir_acct?.is_error == 1}
+                                                                            onChange={(e) => {
+                                                                                let withdraw_list = [...withdraws];
+                                                                                withdraw_list[idx].identity = e.target.value;
+                                                                                setWithdraws(withdraw_list);
+                                                                            }} />
+                                                                    </>}
                                                             </>}
                                                         <TextField
                                                             style={{ width: '50%' }}
