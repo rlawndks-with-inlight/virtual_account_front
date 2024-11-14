@@ -565,7 +565,7 @@ const VirtualAccountList = () => {
             columns={defaultColumns}
             searchObj={searchObj}
             onChangePage={onChangePage}
-            add_button_text={'가상계좌 발급'}
+            add_button_text={''}
             head_columns={[]}
             table={'virtual-accounts'}
             column_table={`virtual_accounts`}
