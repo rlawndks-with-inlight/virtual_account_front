@@ -917,7 +917,7 @@ const UserEdit = () => {
                     </Grid>
                   </>}
 
-                {themeDnsData?.withdraw_type == 1 &&
+                {themeDnsData?.withdraw_type == 1 && themeDnsData?.withdraw_corp_type != 6 &&
                   <>
                     <Grid item xs={12} md={4}>
                       <Card sx={{ p: 2, height: '100%' }}>
