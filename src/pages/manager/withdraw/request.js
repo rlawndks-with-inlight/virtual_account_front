@@ -39,6 +39,7 @@ const WithdrawRequest = () => {
             api_sign_val = api_sign_val?.api_sign_val;
         }
         let data = await apiManager('auth/deposit', 'get',);
+        console.log(data)
         setItem({
             ...item,
             ...data,
@@ -57,6 +58,7 @@ const WithdrawRequest = () => {
                 withdraw_bank_code: item?.withdraw_bank_code,
                 withdraw_acct_num: item?.withdraw_acct_num,
                 withdraw_acct_name: item?.withdraw_acct_name,
+                identity: item?.identity,
                 pay_type: 'withdraw',
                 otp_num: item?.otp_num,
                 guid: item?.guid,

@@ -917,7 +917,7 @@ const UserEdit = () => {
                     </Grid>
                   </>}
 
-                {themeDnsData?.withdraw_type == 1 && themeDnsData?.withdraw_corp_type != 6 &&
+                {themeDnsData?.withdraw_type == 1 &&
                   <>
                     <Grid item xs={12} md={4}>
                       <Card sx={{ p: 2, height: '100%' }}>
@@ -963,6 +963,23 @@ const UserEdit = () => {
                                 }
                               )
                             }} />
+                          {themeDnsData?.withdraw_corp_type == 6 &&
+                            <>
+                              <TextField
+                                label='생년월일 또는 사업자번호'
+                                value={item.identity}
+                                error={(item?.identity ?? "").length == 8}
+                                helperText={<div style={{ color: `${(item?.identity ?? "").length == 8 ? 'red' : ''}` }}>생년월일일시 6자리 입력 ex) 990101</div>}
+                                onChange={(e) => {
+                                  setItem(
+                                    {
+                                      ...item,
+                                      ['identity']: e.target.value
+                                    }
+                                  )
+                                }} />
+
+                            </>}
                         </Stack>
                       </Card>
                     </Grid>
