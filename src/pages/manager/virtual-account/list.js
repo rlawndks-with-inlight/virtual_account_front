@@ -78,7 +78,7 @@ const VirtualAccountList = () => {
         if (is_excel) {
           return _.find(virtualAccountStatusList, { value: row?.status })?.label
         }
-        if (user?.level >= 40) {
+        if (user?.level >= 40 && themeDnsData?.deposit_process_type == 1) {
           return <Select
             size='small'
             value={row?.status}
