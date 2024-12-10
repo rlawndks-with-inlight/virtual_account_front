@@ -17,6 +17,7 @@ import _ from "lodash";
 
 const DepositList = () => {
   const { setModal } = useModal()
+  const router = useRouter();
   const { user } = useAuthContext();
   const { themeDnsData, themeMode } = useSettingsContext();
   const defaultHeadColumns = [
@@ -624,7 +625,7 @@ const DepositList = () => {
       getCorpAccounts();
     }
 
-    onChangePage({ ...searchObj, page: 1 });
+    onChangePage({ ...searchObj, page: 1, virtual_account_id: (router.query?.virtual_account_id ?? null) });
 
   }
 

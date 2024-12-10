@@ -118,6 +118,21 @@ const VirtualAccountList = () => {
           >추가</Button>
         }
       },
+      {
+        id: 'deposit_history',
+        label: '입금내역',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small"
+            sx={{ width: '84px' }}
+            onClick={() => {
+              router.push(`/manager/deposit/list?virtual_account_id=${row?.id}`)
+            }}
+          >입금내역</Button>
+        }
+      },
     ] : []),
     ...(themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 ? [
       {
@@ -399,6 +414,24 @@ const VirtualAccountList = () => {
           <DialogContentText>
             입금예정금액을 입력 후 확인을 눌러주세요.
           </DialogContentText>
+          <Row style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
+            {[1, 3, 5, 10, 30, 50, 100, 200].map(num => (
+              <>
+                <Button variant="outlined" onClick={() => {
+                  setDialogObj({
+                    ...dialogObj,
+                    amount: (dialogObj?.amount ?? 0) + num * 10000
+                  })
+                }}>{commarNumber(num * 10000)}원</Button>
+              </>
+            ))}
+            <Button variant="outlined" onClick={() => {
+              setDialogObj({
+                ...dialogObj,
+                amount: 0
+              })
+            }}>초기화</Button>
+          </Row>
           <TextField
             autoFocus
             fullWidth
