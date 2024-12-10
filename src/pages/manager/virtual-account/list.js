@@ -13,6 +13,7 @@ import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
 import { commarNumber, onlyNumberText } from "src/utils/function";
+import GaugeBar from "src/components/elements/GaugeBar";
 
 const VirtualAccountList = () => {
   const { setModal } = useModal()
@@ -131,6 +132,21 @@ const VirtualAccountList = () => {
               router.push(`/manager/deposit/list?virtual_account_id=${row?.id}`)
             }}
           >입금내역</Button>
+        }
+      },
+    ] : []),
+    ...(themeDnsData?.deposit_process_type == 1 ? [
+      {
+        id: 'deposit_limit',
+        label: '입금잔여',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <GaugeBar
+            current={row?.daily_deposit_amount ?? 0}
+            total={8000000}
+          />
         }
       },
     ] : []),
