@@ -93,8 +93,9 @@ const VirtualAccountList = () => {
               }
             }}
           >
-            <MenuItem value={'0'}>{'정상'}</MenuItem>
-            <MenuItem value={'10'}>{'사용불가'}</MenuItem>
+            {virtualAccountStatusList.map(el => {
+              return <MenuItem value={el?.value}>{el?.label}</MenuItem>
+            })}
           </Select>
         } else {
           return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
