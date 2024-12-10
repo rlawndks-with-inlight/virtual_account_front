@@ -10,7 +10,7 @@ import { apiManager, apiServer } from "src/utils/api-manager";
 import { bankCodeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 import { Col, Row } from "src/components/elements/styled-components";
-import _ from "lodash";
+import _, { set } from "lodash";
 import { commarNumber } from "src/utils/function";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
@@ -43,6 +43,9 @@ const VirtualAccountResult = () => {
     }, [])
 
     const settingPage = async () => {
+        if (themeDnsData?.deposit_process_type == 1) {
+            setCurrentTab(1);
+        }
         setLoading(true);
         let data = await apiManager(`virtual-accounts/0`, 'list', {
             ci: router.query?.ci
@@ -57,6 +60,7 @@ const VirtualAccountResult = () => {
             amount: amount
         });
         if (result) {
+            setCurrentTab(0);
             toast.success("성공적으로 저장 되었습니다.");
         }
     }
@@ -67,7 +71,7 @@ const VirtualAccountResult = () => {
         <>
             <Col style={{ height: '100vh' }}>
                 <Col style={{ marginTop: '2rem' }}>
-                    {themeDnsData?.deposit_corp_type == 7 &&
+                    {(themeDnsData?.deposit_corp_type == 7 && themeDnsData?.deposit_process_type == 0) &&
                         <>
                             <Grid item xs={12} md={6} style={{ margin: 'auto' }}>
                                 <Grid item xs={12} md={6} style={{ margin: 'auto' }}>
@@ -90,6 +94,9 @@ const VirtualAccountResult = () => {
                         <>
                             <Card sx={{ p: 2, maxWidth: '500px', margin: 'auto', width: '90%' }}>
                                 <Col style={{ rowGap: '0.5rem' }}>
+                                    <Col style={{ margin: '1rem auto' }}>
+                                        개인결제 P2P 플랫폼
+                                    </Col>
                                     <Row style={{ alignItems: 'center' }}>
                                         <Typography variant="body2" style={{ width: '100px' }}>은행명</Typography>
                                         <Typography>{_.find(bankCodeList(), { value: item?.virtual_bank_code })?.label ?? "---"}</Typography>
@@ -110,10 +117,9 @@ const VirtualAccountResult = () => {
                             <Card sx={{ p: 2, maxWidth: '500px', margin: 'auto', width: '90%' }}>
                                 <Col style={{ rowGap: '0.5rem' }}>
                                     <Typography variant="body2">• 1회 최대입금금액은 200만원입니다.</Typography>
-                                    <Typography variant="body2">• 1일 최대 입금금액은 2000만원 까지 입니다.</Typography>
+                                    <Typography variant="body2">• 1일 최대 입금금액은 800만원 까지 입니다.</Typography>
                                     <Typography variant="body2">• 신청한 입금금액과 실 입금액의 오차가 있을시 입금처리 되지 않습니다.</Typography>
                                     <Typography variant="body2">• 타명의 입금, 간편송금어플, ATM, 수표 입금은 불가합니다.</Typography>
-                                    <Typography variant="body2" style={{ color: '#aaa' }}>{item?.virtual_acct_name}</Typography>
                                     <Row style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
                                         {[1, 3, 5, 10, 30, 50, 100, 200].map(num => (
                                             <>
@@ -136,7 +142,7 @@ const VirtualAccountResult = () => {
                                         if (window.confirm(`${commarNumber(amount)}원을 입금 신청하겠습니까?`)) {
                                             addDepositItem();
                                         }
-                                    }}>입금신청</Button>
+                                    }}>확인</Button>
                                 </Col>
                             </Card>
                         </>}
