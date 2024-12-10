@@ -78,7 +78,27 @@ const VirtualAccountList = () => {
         if (is_excel) {
           return _.find(virtualAccountStatusList, { value: row?.status })?.label
         }
-        return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
+        if (user?.level >= 40) {
+          return <Select
+            size='small'
+            value={row?.status}
+            disabled={!(user?.level >= 40)}
+            onChange={async (e) => {
+              let result = await apiManager(`virtual-accounts/change-status`, 'update', {
+                id: row?.id,
+                status: e.target.value
+              });
+              if (result) {
+                onChangePage(searchObj)
+              }
+            }}
+          >
+            <MenuItem value={'0'}>{'정상'}</MenuItem>
+            <MenuItem value={'10'}>{'사용불가'}</MenuItem>
+          </Select>
+        } else {
+          return <Chip variant="soft" label={_.find(virtualAccountStatusList, { value: row?.status })?.label} color={_.find(virtualAccountStatusList, { value: row?.status })?.color} />
+        }
       }
     },
     ...(themeDnsData?.deposit_corp_type == 7 ? [

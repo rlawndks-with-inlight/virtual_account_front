@@ -39,6 +39,7 @@ export const apiCorpList = [
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
     { value: 5, label: '생성중', color: 'warning' },
+    { value: 10, label: '사용불가', color: 'error' },
 ]
 export const giftCardMemberStatusList = [
     { value: 0, label: '본인인증중', color: 'error' },
