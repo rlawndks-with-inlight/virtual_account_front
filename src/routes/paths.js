@@ -45,6 +45,7 @@ export const PATH_MANAGER = {
     add: path(ROOTS_MANAGER, '/withdraw/add'),
     request: path(ROOTS_MANAGER, '/withdraw/request'),
     return: path(ROOTS_MANAGER, '/withdraw/return'),
+    check: path(ROOTS_MANAGER, '/withdraw/check'),
   },
   settle: {
     root: path(ROOTS_MANAGER, '/settle'),

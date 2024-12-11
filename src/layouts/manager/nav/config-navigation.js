@@ -110,6 +110,7 @@ const navConfig = (is_show_all) => {
               { title: '출금내역', path: PATH_MANAGER.withdraw.list },
               ...((!isManager()) ? [{ title: '출금요청', path: PATH_MANAGER.withdraw.request }] : []),
               ...((!isManager() && !isOperator() && user?.can_return == 1) ? [{ title: '반환요청', path: PATH_MANAGER.withdraw.return }] : []),
+              ...((isManager() && themeDnsData?.withdraw_corp_type == 6) ? [{ title: '예금주조회', path: PATH_MANAGER.withdraw.check }] : []),
             ],
           },
         ],
