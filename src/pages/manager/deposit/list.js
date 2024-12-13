@@ -40,7 +40,7 @@ const DepositList = () => {
         }} />
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -58,7 +58,7 @@ const DepositList = () => {
         return text;
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -88,7 +88,7 @@ const DepositList = () => {
         return row['trx_id'] ?? "---"
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -106,7 +106,7 @@ const DepositList = () => {
         }
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -120,7 +120,7 @@ const DepositList = () => {
         return row['created_at'] ?? "---"
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -137,7 +137,7 @@ const DepositList = () => {
         return `${row[`mcht_nickname`]}\n(${row['mcht_user_name']})`
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -163,7 +163,7 @@ const DepositList = () => {
           </Col>
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -186,7 +186,7 @@ const DepositList = () => {
           </Col>
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -225,7 +225,7 @@ const DepositList = () => {
           return row['corp_acct_num'] ?? "---"
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -242,7 +242,7 @@ const DepositList = () => {
         },
         sx: (row) => {
 
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -259,7 +259,7 @@ const DepositList = () => {
         },
         sx: (row) => {
 
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -290,7 +290,7 @@ const DepositList = () => {
         return commarNumber(row['expect_amount'])
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -307,7 +307,7 @@ const DepositList = () => {
         return commarNumber(row['amount'])
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -325,7 +325,7 @@ const DepositList = () => {
           return commarNumber(row['corp_account_balance'])
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -341,7 +341,7 @@ const DepositList = () => {
           return commarNumber(row['virtual_acct_balance'])
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -356,7 +356,7 @@ const DepositList = () => {
         return commarNumber(row['mcht_amount'])
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -373,7 +373,7 @@ const DepositList = () => {
         return commarNumber(row['deposit_fee'])
       },
       sx: (row) => {
-        if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+        if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
           return {
             color: 'red'
           }
@@ -388,7 +388,7 @@ const DepositList = () => {
           return row['mcht_fee'] + '%'
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -402,7 +402,7 @@ const DepositList = () => {
           return row[`mcht_fee`] > 0 ? commarNumber(getNumberByPercent(row['amount'], row['mcht_fee'])) : "---";
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
@@ -426,7 +426,7 @@ const DepositList = () => {
             return row['head_office_fee'] + '%'
           },
           sx: (row) => {
-            if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
               return {
                 color: 'red'
               }
@@ -440,7 +440,7 @@ const DepositList = () => {
             return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
           },
           sx: (row) => {
-            if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
               return {
                 color: 'red'
               }
@@ -454,7 +454,7 @@ const DepositList = () => {
             return commarNumber(row['head_office_amount'])
           },
           sx: (row) => {
-            if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+            if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
               return {
                 color: 'red'
               }
@@ -479,7 +479,7 @@ const DepositList = () => {
                 return row[`sales${operator?.num}_id`] > 0 ? <div style={{ textAlign: 'center' }}>{`${row[`sales${operator?.num}_nickname`]}\n(${row[`sales${operator?.num}_user_name`]})`}</div> : `---`
               },
               sx: (row) => {
-                if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+                if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
                   return {
                     color: 'red'
                   }
@@ -494,7 +494,7 @@ const DepositList = () => {
                   return row[`sales${operator?.num}_id`] > 0 ? row[`sales${operator?.num}_fee`] + '%' : "---"
                 },
                 sx: (row) => {
-                  if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+                  if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
                     return {
                       color: 'red'
                     }
@@ -508,7 +508,7 @@ const DepositList = () => {
                   return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
                 },
                 sx: (row) => {
-                  if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+                  if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
                     return {
                       color: 'red'
                     }
@@ -523,7 +523,7 @@ const DepositList = () => {
                 return row[`sales${operator?.num}_amount`] == 0 ? "---" : commarNumber(row[`sales${operator?.num}_amount`]);
               },
               sx: (row) => {
-                if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+                if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
                   return {
                     color: 'red'
                   }
@@ -566,7 +566,7 @@ const DepositList = () => {
               }}
             >취소처리</Button>;
             if (themeDnsData?.deposit_corp_type == 7) {
-              if (row?.deposit_status != 0) {
+              if (row?.deposit_status != 0 && !(row?.is_cancel == 1 || row?.is_delete == 1)) {
                 return button_item;
               }
             } else {
@@ -576,7 +576,7 @@ const DepositList = () => {
           }
         },
         sx: (row) => {
-          if (row?.deposit_status == 10 || row?.is_cancel == 1) {
+          if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
             return {
               color: 'red'
             }
