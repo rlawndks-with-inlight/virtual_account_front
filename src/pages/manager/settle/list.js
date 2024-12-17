@@ -20,7 +20,7 @@ const SettleList = () => {
     page: 1,
     page_size: 20,
     s_dt: returnMoment().substring(0, 10),
-    s_dt: returnMoment().substring(0, 10),
+    e_dt: returnMoment().substring(0, 10),
     search: '',
     level: 10,
   })

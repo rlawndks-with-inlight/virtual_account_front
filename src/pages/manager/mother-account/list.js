@@ -134,7 +134,7 @@ const MotherAccountList = () => {
     page: 1,
     page_size: 20,
     s_dt: returnMoment().substring(0, 10),
-    s_dt: returnMoment().substring(0, 10),
+    e_dt: returnMoment().substring(0, 10),
     search: '',
     is_mother: 1,
   })
