@@ -19,8 +19,8 @@ const SettleList = () => {
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
-    s_dt: getFirstDateByMonth(returnMoment().substring(0, 10)),
-    e_dt: '',
+    s_dt: returnMoment().substring(0, 10),
+    s_dt: returnMoment().substring(0, 10),
     search: '',
     level: 10,
   })

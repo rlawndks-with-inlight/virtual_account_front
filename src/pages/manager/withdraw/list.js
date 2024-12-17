@@ -334,7 +334,7 @@ const WithdrawList = () => {
     page: 1,
     page_size: 20,
     s_dt: returnMoment().substring(0, 10),
-    e_dt: '',
+    s_dt: returnMoment().substring(0, 10),
     search: '',
     is_sales_man: true,
   })
