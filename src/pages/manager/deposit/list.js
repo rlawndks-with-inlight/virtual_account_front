@@ -921,6 +921,16 @@ const DepositList = () => {
                       </Select>
                     </FormControl>
                   </>}
+                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                  <InputLabel>삭제여부</InputLabel>
+                  <Select label='삭제여부' value={searchObj[`is_delete`]}
+                    onChange={(e) => {
+                      onChangePage({ ...searchObj, [`is_delete`]: e.target.value })
+                    }}>
+                    <MenuItem value={0}>삭제안됨</MenuItem>
+                    <MenuItem value={1}>삭제됨</MenuItem>
+                  </Select>
+                </FormControl>
                 {((user?.level >= 40 && !(themeDnsData?.parent_id > 0)) || user?.level >= 45) && [1, 3, 6].includes(themeDnsData?.deposit_corp_type) &&
                   <>
                     <Button variant="outlined" onClick={() => {
