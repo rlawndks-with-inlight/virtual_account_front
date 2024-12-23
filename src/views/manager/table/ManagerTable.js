@@ -156,6 +156,22 @@ export default function ManagerTable(props) {
     setOrder(isDesc ? 'asc' : 'desc')
     setChecked(prop)
   }
+  const getPageLine = (num = 1) => {
+    let start_num = 0;
+    let end_num = 0;
+    if (num % 10 == 0) {
+      end_num = num;
+      start_num = end_num - 9;
+    } else {
+      start_num = parseInt(num / 10) * 10 + 1;
+      end_num = start_num + 9
+    }
+    let result = [];
+    for (var i = start_num; i <= end_num; i++) {
+      result.push(i);
+    }
+    return result;
+  }
   return (
     <>
       <Dialog open={openProcessColumns}
@@ -409,7 +425,31 @@ export default function ManagerTable(props) {
         </div>
         <Divider />
         <Box sx={{ padding: '0.75rem', display: 'flex', alignItems: 'center', columnGap: '0.5rem' }}>
-          <Pagination
+          <Row style={{ gap: '0.2rem', marginLeft: 'auto' }}>
+            <Button style={{ minWidth: '32px' }} variant='outlined' disabled={getPageLine(searchObj?.page ?? 1)[0] == 1} onClick={() => {
+              onChangePage({
+                ...searchObj,
+                page: searchObj?.page - 10
+              })
+            }} >◁</Button>
+            {getPageLine(searchObj?.page ?? 1).map(num => (
+              <>
+                <Button style={{ minWidth: '32px' }} variant={searchObj?.page == num ? 'contained' : 'outlined'} onClick={() => {
+                  onChangePage({
+                    ...searchObj,
+                    page: num
+                  })
+                }}>{num}</Button>
+              </>
+            ))}
+            <Button style={{ minWidth: '32px' }} variant='outlined' onClick={() => {
+              onChangePage({
+                ...searchObj,
+                page: searchObj?.page + 10
+              })
+            }}>▷</Button>
+          </Row>
+          {/* <Pagination
             style={{ marginLeft: 'auto' }}
             size={'medium'}
             count={getMaxPage(data?.total, data?.page_size)}
@@ -421,7 +461,7 @@ export default function ManagerTable(props) {
                 ...searchObj,
                 page: num
               })
-            }} />
+            }} /> */}
         </Box>
       </TableContainer >
     </>
