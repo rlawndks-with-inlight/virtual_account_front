@@ -33,10 +33,10 @@ const DepositList = () => {
       action: (row, is_excel) => {
 
         return <Checkbox defaultChecked={row?.is_check_user == 1} onChange={async (e) => {
-          let result = await apiUtil(`deposits/is_check_user`, 'update', {
+          let result = await apiManager(`deposits/check-deposit`, 'update', {
             id: row?.id,
             value: e.target.checked ? 1 : 0,
-          })
+          });
         }} />
       },
       sx: (row) => {
