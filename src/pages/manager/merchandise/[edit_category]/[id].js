@@ -434,7 +434,7 @@ const UserEdit = () => {
                               style={{ margin: 'auto' }}
                               size={'medium'}
                               count={getMaxPage(ipData?.total, 10)}
-                              page={ipData?.page}
+                              page={ipSearchObj?.page}
                               variant='outlined' shape='rounded'
                               color='primary'
                               onChange={(_, num) => {
