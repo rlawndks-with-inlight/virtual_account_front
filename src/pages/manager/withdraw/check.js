@@ -98,6 +98,7 @@ const WithdrawCheck = () => {
                                         value={item.withdraw_acct_name}
                                         disabled={true}
                                         placeholder=""
+                                        defaultValue={' '}
                                         onChange={(e) => {
                                             setItem(
                                                 {
