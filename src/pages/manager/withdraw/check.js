@@ -96,6 +96,7 @@ const WithdrawCheck = () => {
                                     <TextField
                                         label='출금계좌예금주명'
                                         value={item.withdraw_acct_name}
+                                        disabled={true}
                                         onChange={(e) => {
                                             setItem(
                                                 {
