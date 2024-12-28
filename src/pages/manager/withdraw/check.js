@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList } from "src/utils/format";
+import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
 import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 const ReactQuill = dynamic(() => import('react-quill'), {
@@ -38,6 +38,9 @@ const WithdrawCheck = () => {
             mid: user?.mid,
             withdraw_bank_code: item?.withdraw_bank_code,
             withdraw_acct_num: item?.withdraw_acct_num,
+            birth: item?.birth,
+            business_num: item?.business_num,
+            user_type: item?.user_type ?? 0,
         });
         /*
         result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/check`, 'create', {
@@ -63,6 +66,22 @@ const WithdrawCheck = () => {
                         <Grid item xs={12} md={4} style={{ margin: 'auto' }}>
                             <Card sx={{ p: 2, height: '100%' }}>
                                 <Stack spacing={3}>
+                                    <Stack spacing={1}>
+                                        <FormControl variant='outlined' >
+                                            <InputLabel>사용자구분</InputLabel>
+                                            <Select label='사용자구분' value={item?.user_type ?? 0}
+                                                onChange={(e) => {
+                                                    setItem({
+                                                        ...item,
+                                                        ['user_type']: e.target.value
+                                                    })
+                                                }}>
+                                                {virtualAccountUserTypeList.map((itm => {
+                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                }))}
+                                            </Select>
+                                        </FormControl>
+                                    </Stack>
                                     <Stack spacing={1}>
                                         <FormControl>
                                             <InputLabel>은행</InputLabel>
@@ -93,6 +112,37 @@ const WithdrawCheck = () => {
                                                 }
                                             )
                                         }} />
+                                    {(item?.user_type ?? 0) == 0 ?
+                                        <>
+                                            <TextField
+                                                label='생년월일'
+                                                value={item.birth}
+                                                placeholder="생년월일 6자리 ex)880101"
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['birth']: onlyNumberText(e.target.value)
+                                                        }
+                                                    )
+                                                }} />
+                                        </>
+                                        :
+                                        <>
+                                            <TextField
+                                                label='사업자 등록번호'
+                                                value={item.business_num}
+                                                placeholder="사업자 등록번호"
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['business_num']: onlyNumberText(e.target.value)
+                                                        }
+                                                    )
+                                                }} />
+                                        </>}
+
                                     <TextField
                                         label='출금계좌예금주명'
                                         value={item.withdraw_acct_name}
