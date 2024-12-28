@@ -281,7 +281,6 @@ const WithdrawList = () => {
           }
         },
       ] : []),
-      /*
       {
         id: 'withdraw_fail',
         label: '출금 실패처리',
@@ -302,8 +301,6 @@ const WithdrawList = () => {
           }
         }
       },
-      */
-
     ] : []),
     {
       id: 'note',
