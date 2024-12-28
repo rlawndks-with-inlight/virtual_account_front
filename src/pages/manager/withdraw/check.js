@@ -73,7 +73,9 @@ const WithdrawCheck = () => {
                                                 onChange={(e) => {
                                                     setItem({
                                                         ...item,
-                                                        ['user_type']: e.target.value
+                                                        ['user_type']: e.target.value,
+                                                        birth: '',
+                                                        business_num: '',
                                                     })
                                                 }}>
                                                 {virtualAccountUserTypeList.map((itm => {
