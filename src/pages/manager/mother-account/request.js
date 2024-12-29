@@ -62,8 +62,8 @@ const MotherAccountRequest = () => {
         real_amount -= item?.sum?.total_oper_amount;
         real_amount += item?.sum?.total_withdraw_fee;
         real_amount -= (_.sum(item?.childrens.map(children => { return children?.real_amount })) ?? 0);
-        real_amount += (_.sum(item?.childrens.map(children => { return (330 * children?.sum?.total_deposit_count + 330 * children?.sum?.total_withdraw_count) })) ?? 0);
-        real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee)) })) ?? 0);
+        //real_amount += (_.sum(item?.childrens.map(children => { return (330 * children?.sum?.total_deposit_count + 330 * children?.sum?.total_withdraw_count) })) ?? 0);
+        //real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee)) })) ?? 0);
         return real_amount;
     }
 
