@@ -477,7 +477,7 @@ const UserEdit = () => {
                                   setItem(
                                     {
                                       ...item,
-                                      ['identity']: e.target.value
+                                      ['identity']: onlyNumberText(e.target.value)
                                     }
                                   )
                                 }} />

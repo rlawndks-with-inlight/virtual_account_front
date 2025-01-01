@@ -498,7 +498,7 @@ const WithdrawReturn = () => {
                                                                             error={vir_acct?.is_error == 1}
                                                                             onChange={(e) => {
                                                                                 let withdraw_list = [...withdraws];
-                                                                                withdraw_list[idx].identity = e.target.value;
+                                                                                withdraw_list[idx].identity = onlyNumberText(e.target.value);
                                                                                 setWithdraws(withdraw_list);
                                                                             }} />
                                                                     </>}
