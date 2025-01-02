@@ -259,23 +259,24 @@ const VirtualAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
-
+    /*
     {
-      id: 'edit',
-      label: '이어서 생성',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return `---`
-        }
-        return (row['status'] == 5 || row['is_delete'] == 1) ? <>
-          <IconButton>
-            <Icon icon='material-symbols:edit-outline' onClick={() => {
-              router.push(`edit/${row?.id}`)
-            }} />
-          </IconButton>
-        </> : "---"
-      }
-    },
+          id: 'edit',
+          label: '이어서 생성',
+          action: (row, is_excel) => {
+            if (is_excel) {
+              return `---`
+            }
+            return (row['status'] == 5 || row['is_delete'] == 1) ? <>
+              <IconButton>
+                <Icon icon='material-symbols:edit-outline' onClick={() => {
+                  router.push(`edit/${row?.id}`)
+                }} />
+              </IconButton>
+            </> : "---"
+          }
+        },
+    */
     ...(user?.level >= 10 ? [
       {
         id: 'delete',
