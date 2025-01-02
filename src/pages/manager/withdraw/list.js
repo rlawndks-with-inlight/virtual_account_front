@@ -380,7 +380,7 @@ const WithdrawList = () => {
     }
   }
   const onRefuseWithdraw = async (id) => {
-    if (window.confirm('출금을 반려 하시겠습니까?')) {
+    if (!window.confirm('출금을 반려 하시겠습니까?')) {
       return;
     }
     let result = undefined
