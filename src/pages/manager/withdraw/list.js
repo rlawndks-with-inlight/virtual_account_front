@@ -240,16 +240,12 @@ const WithdrawList = () => {
             return <Col style={{ rowGap: '0.5rem' }}>
               <Button variant="outlined" size="small" sx={{ width: '100px' }}
                 onClick={() => {
-                  if (window.confirm('출금을 허용 하시겠습니까?')) {
-                    onConfirmWithdraw(row?.id)
-                  }
+                  onConfirmWithdraw(row?.id)
                 }}
               >출금허용</Button>
               <Button variant="contained" size="small" sx={{ width: '100px' }}
                 onClick={() => {
-                  if (window.confirm('출금을 반려 하시겠습니까?')) {
-                    onRefuseWithdraw(row?.id)
-                  }
+                  onRefuseWithdraw(row?.id)
                 }}
               >출금반려</Button>
             </Col>
@@ -270,9 +266,7 @@ const WithdrawList = () => {
             if (row?.withdraw_status == 5) {
               return <Button variant="outlined" size="small" sx={{ width: '100px' }}
                 onClick={() => {
-                  if (window.confirm('출금을 성공처리 하시겠습니까?')) {
-                    onSuccessWithdraw(row?.id)
-                  }
+                  onSuccessWithdraw(row?.id)
                 }}
               >출금성공</Button>
             } else {
@@ -291,9 +285,7 @@ const WithdrawList = () => {
           if (row?.withdraw_status == 5) {
             return <Button variant="outlined" size="small" sx={{ width: '100px' }}
               onClick={() => {
-                if (window.confirm('출금을 실패처리 하시겠습니까?')) {
-                  onFailWithdraw(row?.id)
-                }
+                onFailWithdraw(row?.id)
               }}
             >출금실패</Button>
           } else {
@@ -372,6 +364,9 @@ const WithdrawList = () => {
     }
   }
   const onConfirmWithdraw = async (id) => {
+    if (!window.confirm('출금을 허용 하시겠습니까?')) {
+      return;
+    }
     setPageLoading(true);
     let result = undefined
     result = await apiManager('withdraws/confirm', 'create', {
@@ -385,6 +380,9 @@ const WithdrawList = () => {
     }
   }
   const onRefuseWithdraw = async (id) => {
+    if (window.confirm('출금을 반려 하시겠습니까?')) {
+      return;
+    }
     let result = undefined
     result = await apiManager('withdraws/refuse', 'create', {
       id
@@ -395,6 +393,9 @@ const WithdrawList = () => {
     }
   }
   const onFailWithdraw = async (id) => {
+    if (!window.confirm('출금을 실패처리 하시겠습니까?')) {
+      return;
+    }
     let result = undefined
     result = await apiManager('withdraws/fail', 'create', {
       id
@@ -405,6 +406,9 @@ const WithdrawList = () => {
     }
   }
   const onSuccessWithdraw = async (id) => {
+    if (!window.confirm('출금을 성공처리 하시겠습니까?')) {
+      return;
+    }
     let result = undefined
     result = await apiManager('withdraws/success', 'create', {
       id
