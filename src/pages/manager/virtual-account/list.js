@@ -102,15 +102,15 @@ const VirtualAccountList = () => {
         }
       }
     },
-    ...(themeDnsData?.deposit_corp_type == 7 ? [
-      {
-        id: 'deposit_link',
-        label: '입금데이터 추가 링크',
-        action: (row, is_excel) => {
-          let link = 'https://' + themeDnsData?.dns + `/virtual-account/result/?ci=${row?.ci}`;
-          if (is_excel) {
-            return link
-          }
+    {
+      id: 'deposit_link',
+      label: '가상계좌주소',
+      action: (row, is_excel) => {
+        let link = 'https://' + themeDnsData?.dns + `/virtual-account/result/?ci=${row?.ci}`;
+        if (is_excel) {
+          return link
+        }
+        if (row?.status == 0) {
           return <div style={{
             cursor: 'pointer',
             color: 'blue',
@@ -121,8 +121,13 @@ const VirtualAccountList = () => {
           >
             {link}
           </div>
+        } else {
+          return '---';
         }
-      },
+      }
+    },
+    ...(themeDnsData?.deposit_corp_type == 7 ? [
+
       {
         id: 'deposit_create',
         label: '입금데이터 추가',
