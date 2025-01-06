@@ -5,7 +5,7 @@ import { Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
-import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, getNumberByPercent, onlyNumberText } from "src/utils/function";
+import { base64toFile, commarNumber, commarNumberInput, getAllIdsWithParents, getNumberByPercent, onlyNumberText, returnMoment } from "src/utils/function";
 import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
@@ -63,8 +63,10 @@ const MotherAccountRequest = () => {
         real_amount += item?.sum?.total_withdraw_fee;
         real_amount -= (_.sum(item?.childrens.map(children => { return children?.real_amount })) ?? 0);
 
-        real_amount += (_.sum(item?.childrens.map(children => { return ((children?.brand?.deposit_head_office_fee ?? 330) * children?.sum?.total_deposit_count + (children?.brand?.deposit_head_office_fee ?? 330) * children?.sum?.total_withdraw_count) })) ?? 0);
-        real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee)) })) ?? 0);
+        if (returnMoment().split(' ')[1] <= '23:55:00') {
+            real_amount += (_.sum(item?.childrens.map(children => { return ((children?.brand?.deposit_head_office_fee ?? 330) * children?.sum?.total_deposit_count + (children?.brand?.deposit_head_office_fee ?? 330) * children?.sum?.total_withdraw_count) })) ?? 0);
+            real_amount += (_.sum(item?.childrens.map(children => { return getNumberByPercent(children?.sum?.total_deposit_amount, (children?.brand?.head_office_fee)) })) ?? 0);
+        }
         return real_amount;
     }
 
