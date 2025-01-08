@@ -187,7 +187,7 @@ const VirtualAccountList = () => {
               virtual_user_name: '',
               virtual_account_id: row?.id,
             })
-          }}>{row['virtual_user_name'] ?? "---"}</div>
+          }}>{row?.virtual_user_name ? row?.virtual_user_name : "---"}</div>
         }
       },
     ] : []),
