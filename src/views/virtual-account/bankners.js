@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager, apiServer } from "src/utils/api-manager";
-import { bankCodeList, virtualAccountUserTypeList } from "src/utils/format";
+import { bankCodeList, genderList, telComList, virtualAccountUserTypeList } from "src/utils/format";
 import BlankLayout from "src/layouts/BlankLayout";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
@@ -40,6 +40,7 @@ const VirtualAccountBankners = () => {
         ceo_name: '',
         company_phone_num: '',
     })
+    const [authItem, setAuthItem] = useState({})
     const [currentTab, setCurrentTab] = useState(0);
 
     const tab_list = [
@@ -141,7 +142,80 @@ const VirtualAccountBankners = () => {
             })
         }
     }
+    const onCheckPhoneNumRequest = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v1/phone/request`, 'create', {
+            ...item,
+            api_key: themeDnsData?.api_key,
+            name: item?.deposit_acct_name,
+        });
+        if (result) {
+            toast.success('성공적으로 발송 되었습니다.');
+            setAuthItem(result);
+        }
+    }
+    const onCheckPhoneNumCheck = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v1/phone/check`, 'create', {
+            ...item,
+            api_key: themeDnsData?.api_key,
+            vrf_word: item?.phone_vrf_word,
+            name: item?.deposit_acct_name,
+            ...authItem,
+        });
 
+        if (result) {
+            toast.success('성공적으로 인증 되었습니다.');
+            setItem({
+                ...item,
+                ci: result?.ci,
+                tid: result?.tid,
+                phone_check: 1,
+            })
+            setAuthItem({
+                ...authItem,
+                is_confirm: 1,
+            })
+        }
+    }
+    const bearerOneWonCertification = async () => {
+        setLoading(true);
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v1/acct/request`, 'create', {
+            mid: item?.mid,
+            deposit_bank_code: item?.deposit_bank_code,
+            deposit_acct_num: item?.deposit_acct_num,
+            name: item?.deposit_acct_name,
+            api_key: themeDnsData?.api_key,
+            user_type: item?.user_type,
+            virtual_user_name: item?.virtual_user_name,
+            tid: item?.tid,
+        });
+        let data = item;
+        if (result?.tid) {
+            toast.success('성공적으로 발송 되었습니다.');
+            data = {
+                ...data,
+                tid: result?.tid,
+            }
+        }
+        setItem(data);
+        setLoading(false);
+    }
+    const bearerCheckOneWonCertification = async () => {
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v1/acct/check`, 'create', {
+            mid: item?.mid,
+            tid: item?.tid,
+            vrf_word: item?.vrf_word,
+            api_key: themeDnsData?.api_key,
+            deposit_bank_code: item?.deposit_bank_code,
+            deposit_acct_num: item?.deposit_acct_num,
+        });
+        if (result?.tid) {
+            toast.success('성공적으로 인증 되었습니다.');
+            setItem({
+                ...item,
+                deposit_acct_check: 1,
+            })
+        }
+    }
     return (
         <>
             {!blockPage &&
@@ -179,7 +253,7 @@ const VirtualAccountBankners = () => {
                                 <Grid item xs={12} md={6}>
                                     <Card sx={{ p: 2, height: '100%' }}>
                                         <Stack spacing={3}>
-                                            {user?.level >= 40 &&
+                                            {/* {user?.level >= 40 &&
                                                 <>
                                                     <FormControl variant='outlined'  >
                                                         <InputLabel>가맹점선택</InputLabel>
@@ -200,7 +274,7 @@ const VirtualAccountBankners = () => {
                                                         value={item.mid}
                                                         disabled={true}
                                                     />
-                                                </>}
+                                                </>} */}
 
                                             <FormControl variant='outlined' >
                                                 <InputLabel>사용자구분</InputLabel>
@@ -279,9 +353,22 @@ const VirtualAccountBankners = () => {
 
                                                 </>}
                                             <TextField
+                                                label='이름'
+                                                value={item.deposit_acct_name}
+                                                disabled={item?.phone_check == 1}
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['deposit_acct_name']: e.target.value,
+                                                            ['name']: e.target.value,
+                                                        }
+                                                    )
+                                                }} />
+                                            <TextField
                                                 label='생년월일'
                                                 value={item.birth}
-                                                placeholder="19990101"
+                                                placeholder="990101"
                                                 onChange={(e) => {
                                                     setItem(
                                                         {
@@ -290,6 +377,34 @@ const VirtualAccountBankners = () => {
                                                         }
                                                     )
                                                 }} />
+                                            <TextField
+                                                label='주민번호 뒷자리 첫번째 숫자'
+                                                value={item.acct_back_one_num}
+                                                placeholder="1 또는 2 또는 3 또는 4"
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['acct_back_one_num']: onlyNumberText(e.target.value)
+                                                        }
+                                                    )
+                                                }} />
+                                            <FormControl disabled={item?.phone_check == 1}>
+                                                <InputLabel>통신사</InputLabel>
+                                                <Select label='통신사' value={item?.tel_com}
+                                                    onChange={(e) => {
+                                                        setItem(
+                                                            {
+                                                                ...item,
+                                                                ['tel_com']: e.target.value,
+                                                            }
+                                                        )
+                                                    }}>
+                                                    {telComList.map((itm) => {
+                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                    })}
+                                                </Select>
+                                            </FormControl>
                                             <TextField
                                                 label='휴대폰번호'
                                                 value={item.phone_num}
@@ -301,8 +416,34 @@ const VirtualAccountBankners = () => {
                                                             ['phone_num']: onlyNumberText(e.target.value)
                                                         }
                                                     )
-                                                }} />
-
+                                                }}
+                                                InputProps={{
+                                                    endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
+                                                        disabled={item?.phone_check == 1}
+                                                        variant='contained'
+                                                        size='small'
+                                                        sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                        onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
+                                                }}
+                                            />
+                                            <TextField
+                                                label='인증번호'
+                                                value={item.phone_vrf_word}
+                                                placeholder=""
+                                                onChange={(e) => {
+                                                    setItem(
+                                                        {
+                                                            ...item,
+                                                            ['phone_vrf_word']: e.target.value
+                                                        }
+                                                    )
+                                                }}
+                                                InputProps={{
+                                                    endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                                                        disabled={(!authItem?.tid) || item?.phone_check == 1}
+                                                        onClick={onCheckPhoneNumCheck}>{item?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
+                                                }}
+                                            />
                                         </Stack>
                                     </Card>
                                 </Grid>
@@ -344,6 +485,7 @@ const VirtualAccountBankners = () => {
                                             <TextField
                                                 label='입금자명'
                                                 value={item.deposit_acct_name}
+                                                disabled={true}
                                                 onChange={(e) => {
                                                     setItem(
                                                         {
@@ -352,7 +494,15 @@ const VirtualAccountBankners = () => {
                                                         }
                                                     )
                                                 }} />
-                                            <Button onClick={oneWonCertification} variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
+                                            <Button onClick={() => {
+                                                if (themeDnsData?.deposit_process_type == 1) {
+                                                    bearerOneWonCertification();
+                                                } else {
+                                                    oneWonCertification();
+                                                }
+                                            }}
+                                                disabled={item?.deposit_acct_check == 1 || authItem?.is_confirm != 1}
+                                                variant="outlined" style={{ height: '48px', }}>1원인증 발송</Button>
                                             {item.is_send_one_won_check &&
                                                 <>
                                                     <TextField
@@ -367,7 +517,13 @@ const VirtualAccountBankners = () => {
                                                                 }
                                                             )
                                                         }} />
-                                                    <Button disabled={item?.is_check_bank} onClick={checkOneWonCertification} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
+                                                    <Button disabled={item?.is_check_bank} onClick={() => {
+                                                        if (themeDnsData?.deposit_process_type == 1) {
+                                                            bearerCheckOneWonCertification();
+                                                        } else {
+                                                            checkOneWonCertification();
+                                                        }
+                                                    }} variant="outlined" style={{ height: '48px', }}>{item?.is_check_bank ? '확인완료' : '인증확인'}</Button>
                                                 </>}
                                         </Stack>
                                     </Card>

@@ -259,6 +259,13 @@ const VirtualAccountList = () => {
         return row['created_at'] ?? "---"
       }
     },
+    {
+      id: 'updated_at',
+      label: '마지막수정일',
+      action: (row, is_excel) => {
+        return row['updated_at'] ?? "---"
+      }
+    },
     /*
     {
           id: 'edit',
