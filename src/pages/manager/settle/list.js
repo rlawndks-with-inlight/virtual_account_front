@@ -24,6 +24,7 @@ const SettleList = () => {
     search: '',
     level: 10,
   })
+  const [checkDepositLoading, setCheckDepositLoading] = useState(false);
   const defaultColumns = [
     {
       id: 'trx_id',
@@ -136,6 +137,29 @@ const SettleList = () => {
         }
       },
     },
+    {
+      id: 'user_amount',
+      label: '당시 보유정산금',
+      action: (row, is_excel) => {
+        if (is_excel) {
+          return '---';
+        }
+        if (checkDepositLoading) {
+          return <></>
+        }
+        if (row?.is_check_amount) {
+          return commarNumber(row?.new_amount);
+        }
+        return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+          onClick={() => {
+            checkDeposit(row)
+          }}
+        >확인</Button>;
+      },
+      sx: (row) => {
+
+      },
+    },
     /*
     {
       id: 'new_amount',
@@ -204,6 +228,29 @@ const SettleList = () => {
     if (data_) {
       setData(data_);
     }
+  }
+  const checkDeposit = async (row,) => {
+    setCheckDepositLoading(true);
+    let operator_list = themeDnsData?.operator_list;
+    let mcht_id = row?.mcht_id;
+    let obj = {
+      level: searchObj?.level,
+      id: row?.id,
+      mcht_id,
+    }
+    for (var i = 0; i < operator_list.length; i++) {
+      obj[`sales${operator_list[i]?.num}_id`] = row[`sales${operator_list[i]?.num}_id`];
+    }
+    let new_amount = await apiManager('settles/check-deposit', 'create', obj);
+    let data_ = data;
+    for (var i = 0; i < data_.content.length; i++) {
+      if (row?.id == data_.content[i]?.id) {
+        data_.content[i].new_amount = new_amount?.new_amount;
+        data_.content[i].is_check_amount = true;
+      }
+    }
+    setData(data_);
+    setCheckDepositLoading(false);
   }
   return (
     <>
