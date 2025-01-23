@@ -295,7 +295,7 @@ export default function ManagerTable(props) {
                     </Row>
                   </>}
 
-                <Button variant='outlined'
+                {/* <Button variant='outlined'
                   startIcon={<Icon icon={'icon-park-outline:excel'} />}
                   onClick={exportExcel}
                   disabled={excelLoading}
@@ -309,7 +309,7 @@ export default function ManagerTable(props) {
                     <>
                       엑셀추출
                     </>}
-                </Button>
+                </Button> */}
               </>}
           </Row>
           <Row style={{ columnGap: '0.75rem', flexWrap: 'wrap', rowGap: '0.7rem' }}>
