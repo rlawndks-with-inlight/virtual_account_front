@@ -60,6 +60,7 @@ const SettleList = () => {
         return <Chip variant="soft" label={pay_type?.label} color={pay_type?.color} />
       }
     },
+    /*
     {
       id: 'ago_amount',
       label: '기존 보유정산금',
@@ -67,7 +68,8 @@ const SettleList = () => {
         let amount = row['new_amount'] - row['user_amount'];
         return commarNumber(amount)
       }
-    },
+    }, 
+    */
     {
       id: 'request_amount',
       label: '요청금액',
@@ -134,6 +136,7 @@ const SettleList = () => {
         }
       },
     },
+    /*
     {
       id: 'new_amount',
       label: '이후 보유정산금',
@@ -141,7 +144,8 @@ const SettleList = () => {
         let amount = row['new_amount'];
         return commarNumber(amount)
       },
-    },
+    }, 
+    */
     {
       id: 'note',
       label: '메모',
