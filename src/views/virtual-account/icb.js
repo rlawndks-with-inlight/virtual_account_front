@@ -133,6 +133,30 @@ const VirtualAccountIcb = () => {
             })
         }
     }
+    const checkDepositNameCertification = async () => {
+        setLoading(true);
+        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/name`, 'create', {
+            mid: item?.mid,
+            deposit_bank_code: item?.deposit_bank_code,
+            deposit_acct_num: item?.deposit_acct_num,
+            name: item?.deposit_acct_name,
+            api_key: themeDnsData?.api_key,
+            user_type: item?.user_type,
+            virtual_user_name: item?.virtual_user_name,
+            phone_num: item?.phone_num,
+        });
+        let data = item;
+        if (result?.tid) {
+            toast.success('성공적으로 확인 되었습니다.');
+            data = {
+                ...data,
+                tid: result?.tid,
+                deposit_acct_check: 1,
+            }
+        }
+        setItem(data);
+        setLoading(false);
+    }
     const onCheckPhoneNumRequest = async () => {
         let result = await apiServer(`${process.env.API_URL}/api/acct/v4/phone/request`, 'create', {
             ...item,
@@ -199,7 +223,7 @@ const VirtualAccountIcb = () => {
                                 <Grid item xs={12} md={6}>
                                     <Card sx={{ p: 2, height: '100%' }}>
                                         <Stack spacing={2}>
-                                            {user?.level >= 40 &&
+                                            {/* {user?.level >= 40 &&
                                                 <>
                                                     <FormControl variant='outlined' size="small">
                                                         <InputLabel>가맹점선택</InputLabel>
@@ -222,7 +246,7 @@ const VirtualAccountIcb = () => {
                                                         value={item.mid}
                                                         disabled={true}
                                                     />
-                                                </>}
+                                                </>} */}
 
                                             {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
                                                 <>
@@ -500,6 +524,7 @@ const VirtualAccountIcb = () => {
                                                         }
                                                     )
                                                 }} />
+
                                             {((item?.user_type == 1 || item?.user_type == 2) || themeDnsData?.deposit_process_type == 1) &&
                                                 <>
                                                     <Button onClick={oneWonCertification} disabled={item?.deposit_acct_check == 1} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
@@ -571,7 +596,7 @@ const VirtualAccountIcb = () => {
                                 <Stack spacing={1} style={{ display: 'flex' }}>
 
                                     <Button variant="contained"
-                                        disabled={!(item?.deposit_acct_check == 1)}
+                                        disabled={!(item?.phone_check == 1)}
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {
