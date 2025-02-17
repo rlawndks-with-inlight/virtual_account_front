@@ -285,8 +285,8 @@ const navConfig = (is_show_all) => {
             icon: <Icon icon='uil:setting' style={{ fontSize: '1.5rem' }} />,
             children: [
               { title: '기본설정', path: PATH_MANAGER.brand.edit },
+              { title: '브랜드관리', path: PATH_MANAGER.brand.list },
               ...(isDeveloper() ? [
-                { title: '브랜드관리', path: PATH_MANAGER.brand.list },
                 { title: '본사계정관리', path: PATH_MANAGER.brand.managers },
                 { title: '비용지출내역', path: PATH_MANAGER.brand.payList },
               ] : []),

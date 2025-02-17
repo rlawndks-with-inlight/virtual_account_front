@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -10,14 +10,16 @@ import ManagerLayout from "src/layouts/manager/ManagerLayout";
 import { apiManager } from "src/utils/api-manager";
 import { useAuthContext } from "src/auth/useAuthContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { commarNumber, onlyNumberText, returnMoment } from "src/utils/function";
+import { commarNumber, getUserDepositFee, getUserFee, getUserWithDrawFee, onlyNumberText, returnMoment } from "src/utils/function";
 import { getCookie } from "src/utils/react-cookie";
 import _ from "lodash";
 import { apiCorpList } from "src/utils/format";
+import { useSettingsContext } from "src/components/settings";
 const BrandList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
-
+  const { themeDnsData } = useSettingsContext();
+  const [operatorList, setOperatorList] = useState([]);
   const passByDate = (last_pay_date = '2000-01-01', day) => {
     let now_date = returnMoment().substring(0, 10);
     if (!last_pay_date) {
@@ -165,6 +167,34 @@ const BrandList = () => {
         return row['updated_at'] ?? "---"
       }
     },
+    ...(themeDnsData?.is_oper_dns == 1 ? [
+      {
+        id: 'oper_setting',
+        label: '영업자세팅수정',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={async () => {
+              let brand_data = await apiManager('brands', 'get', {
+                id: row?.id
+              })
+              setDialogObj({
+                operSetting: true,
+                ...brand_data,
+              })
+              let operator_list = await apiManager(`users`, 'list', {
+                level_list: themeDnsData?.operator_list.map(itm => {
+                  return itm?.value
+                }),
+              })
+              setOperatorList(operator_list?.content ?? []);
+            }}
+          >수정</Button>
+        }
+      },
+    ] : []),
     {
       id: 'edit',
       label: `수정${user?.level >= 50 ? '/삭제' : ''}`,
@@ -249,6 +279,13 @@ const BrandList = () => {
       toast.success("성공적으로 저장 되었습니다.");
     }
   }
+  const onSaveSalesParent = async () => {
+    let result = await apiManager('brands/setting-sales-parent', 'create', dialogObj);
+    if (result) {
+      setDialogObj({})
+      toast.success("성공적으로 저장 되었습니다.");
+    }
+  }
   return (
     <>
       <Dialog
@@ -310,6 +347,225 @@ const BrandList = () => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onProcessPay}>
+            저장
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({});
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.operSetting}
+        onClose={() => {
+          setDialogObj({});
+        }}
+      >
+        <DialogTitle>{`영업자세팅`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            바닥요율 설정
+          </DialogContentText>
+          <TextField
+            fullWidth
+            value={dialogObj.sales_parent_fee}
+            margin="dense"
+            type="number"
+            label="바닥입금요율"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                sales_parent_fee: e.target.value
+              })
+            }}
+            InputProps={{
+              endAdornment: (
+                <div>%</div>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            value={dialogObj.sales_parent_deposit_fee}
+            margin="dense"
+            type="number"
+            label="바닥입금수수료"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                sales_parent_deposit_fee: e.target.value
+              })
+            }}
+            InputProps={{
+              endAdornment: (
+                <div>원</div>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            value={dialogObj.sales_parent_withdraw_fee}
+            margin="dense"
+            type="number"
+            label="바닥출금수수료"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                sales_parent_withdraw_fee: e.target.value
+              })
+            }}
+            InputProps={{
+              endAdornment: (
+                <div>원</div>
+              )
+            }}
+          />
+          <DialogContentText>
+            영업자 설정
+          </DialogContentText>
+          {themeDnsData?.operator_list.map((itm, idx) => {
+            return <>
+              <FormControl
+                fullWidth
+                margin="dense"
+              >
+                <InputLabel>{`${itm?.label} 선택`}</InputLabel>
+                <Select
+                  label={`${itm?.label} 선택`}
+                  value={dialogObj[`top_offer${itm?.num}_id`] ?? 0}
+                  onChange={e => {
+                    let obj = {
+                      ...dialogObj,
+                      [`top_offer${itm?.num}_id`]: e.target.value
+                    }
+                    if (!e.target.value) {
+                      obj[`top_offer${itm?.num}_fee`] = 0;
+                      obj[`top_offer${itm?.num}_deposit_fee`] = 0;
+                      obj[`top_offer${itm?.num}_withdraw_fee`] = 0;
+                    }
+                    setDialogObj(obj);
+                  }}
+                >
+                  <MenuItem value={0}>선택안함</MenuItem>
+                  {operatorList && operatorList.map((operator, idx) => {
+                    if (operator?.level == itm?.value) {
+                      return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
+                    }
+                  })}
+                </Select>
+              </FormControl>
+              <Row style={{ gap: '0.5rem' }}>
+                <TextField
+                  type="number"
+                  fullWidth
+                  margin="dense"
+                  label={`${itm?.label} 요율`}
+                  value={dialogObj[`top_offer${itm?.num}_fee`]}
+                  disabled={!(dialogObj[`top_offer${itm?.num}_id`] > 0)}
+                  placeholder=""
+                  onChange={(e) => {
+                    setDialogObj(
+                      {
+                        ...dialogObj,
+                        [`top_offer${itm?.num}_fee`]: e.target.value
+                      }
+                    )
+                  }}
+                  InputProps={{
+                    endAdornment: <div>%</div>
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  type="number"
+                  label={`${itm?.label} 획득 요율`}
+                  value={getUserFee(dialogObj, itm.value, themeDnsData?.operator_list, dialogObj?.sales_parent_fee, true)}
+                  disabled={true}
+                  placeholder=""
+                  InputProps={{
+                    endAdornment: <div>%</div>
+                  }}
+                />
+              </Row>
+              <Row style={{ gap: '0.5rem' }}>
+                <TextField
+                  type="number"
+                  fullWidth
+                  margin="dense"
+                  label={`${itm?.label} 입금수수료`}
+                  value={dialogObj[`top_offer${itm?.num}_deposit_fee`]}
+                  disabled={!(dialogObj[`top_offer${itm?.num}_id`] > 0)}
+                  placeholder=""
+                  onChange={(e) => {
+                    setDialogObj(
+                      {
+                        ...dialogObj,
+                        [`top_offer${itm?.num}_deposit_fee`]: e.target.value
+                      }
+                    )
+                  }}
+                  InputProps={{
+                    endAdornment: <div>원</div>
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  type="number"
+                  label={`${itm?.label} 획득 입금수수료`}
+                  value={getUserDepositFee(dialogObj, itm.value, themeDnsData?.operator_list, dialogObj?.sales_parent_deposit_fee, true)}
+                  disabled={true}
+                  placeholder=""
+                  InputProps={{
+                    endAdornment: <div>원</div>
+                  }}
+                />
+              </Row>
+              <Row style={{ gap: '0.5rem' }}>
+                <TextField
+                  type="number"
+                  fullWidth
+                  margin="dense"
+                  label={`${itm?.label} 출금수수료`}
+                  value={dialogObj[`top_offer${itm?.num}_withdraw_fee`]}
+                  disabled={!(dialogObj[`top_offer${itm?.num}_id`] > 0)}
+                  placeholder=""
+                  onChange={(e) => {
+                    setDialogObj(
+                      {
+                        ...dialogObj,
+                        [`top_offer${itm?.num}_withdraw_fee`]: e.target.value
+                      }
+                    )
+                  }}
+                  InputProps={{
+                    endAdornment: <div>원</div>
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  type="number"
+                  label={`${itm?.label} 획득 출금수수료`}
+                  value={getUserWithDrawFee(dialogObj, itm.value, themeDnsData?.operator_list, dialogObj?.sales_parent_withdraw_fee, true)}
+                  disabled={true}
+                  placeholder=""
+                  InputProps={{
+                    endAdornment: <div>원</div>
+                  }}
+                />
+              </Row>
+
+            </>
+          })}
+          <DialogContentText>
+            출금 계좌설정
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onSaveSalesParent}>
             저장
           </Button>
           <Button color="inherit" onClick={() => {
