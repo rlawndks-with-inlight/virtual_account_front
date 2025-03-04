@@ -496,7 +496,7 @@ const VirtualAccountKoreaPaySystem = () => {
                                                 <>
                                                     <TextField
                                                         size="small"
-                                                        label='인증번호'
+                                                        label='인증번호 (숫자만 입력해 주세요.)'
                                                         value={item.vrf_word}
                                                         placeholder=""
                                                         onChange={(e) => {
