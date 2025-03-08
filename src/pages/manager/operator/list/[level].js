@@ -50,24 +50,26 @@ const OperatorList = () => {
         return row['name'] ?? "---"
       }
     },
-    {
-      id: 'update_user_deposit',
-      label: '정산금 수정',
-      action: (row, is_excel) => {
-        if (is_excel) {
-          return "---";
+    ...(themeDnsData?.is_oper_dns != 1 ? [
+      {
+        id: 'update_user_deposit',
+        label: '정산금 수정',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '100px' }}
+            onClick={() => {
+              setDialogObj({ changeUserDeposit: true })
+              setChangeUserDepositObj({
+                amount: '',
+                user_id: row?.id,
+              })
+            }}
+          >정산금 수정</Button>
         }
-        return <Button variant="outlined" size="small" sx={{ width: '100px' }}
-          onClick={() => {
-            setDialogObj({ changeUserDeposit: true })
-            setChangeUserDepositObj({
-              amount: '',
-              user_id: row?.id,
-            })
-          }}
-        >정산금 수정</Button>
-      }
-    },
+      },
+    ] : []),
     ...(themeDnsData?.withdraw_type == 0 ? [
       {
         id: 'virtual_bank',
