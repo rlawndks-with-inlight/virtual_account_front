@@ -97,7 +97,7 @@ const Dashboards = () => {
 
     }
     const tab_list = [
-        ...((themeDnsData?.withdraw_corp_type == 1 || themeDnsData?.withdraw_corp_type == 6) ? [
+        ...((themeDnsData?.withdraw_corp_type == 1 || themeDnsData?.withdraw_corp_type == 6 || themeDnsData?.withdraw_corp_type == 7) ? [
             {
                 value: 0,
                 label: '기간별(가맹점)',
