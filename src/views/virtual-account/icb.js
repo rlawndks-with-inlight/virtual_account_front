@@ -104,6 +104,7 @@ const VirtualAccountIcb = () => {
             api_key: themeDnsData?.api_key,
             user_type: item?.user_type,
             virtual_user_name: item?.virtual_user_name,
+            business_num: item?.business_num,
         });
         let data = item;
         if (result?.tid) {
@@ -292,62 +293,64 @@ const VirtualAccountIcb = () => {
                                                             }))}
                                                         </Select>
                                                     </FormControl>
-                                                    {/* {(item.user_type == 1 || item.user_type == 2) &&
-                                                <>
-                                                    <TextField
-                                                        label='사업자등록번호'
-                                                        size="small"
-                                                        value={item.business_num}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['business_num']: onlyNumberText(e.target.value)
-                                                                }
-                                                            )
-                                                        }} />
-                                                    <TextField
-                                                        label='회사명(상호)'
-                                                        size="small"
-                                                        value={item.company_name}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['company_name']: e.target.value
-                                                                }
-                                                            )
-                                                        }} />
-                                                    <TextField
-                                                        label='대표자명'
-                                                        size="small"
-                                                        value={item.ceo_name}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['ceo_name']: e.target.value
-                                                                }
-                                                            )
-                                                        }} />
-                                                    <TextField
-                                                        label='회사 전화번호'
-                                                        size="small"
-                                                        value={item.company_phone_num}
-                                                        placeholder=""
-                                                        onChange={(e) => {
-                                                            setItem(
-                                                                {
-                                                                    ...item,
-                                                                    ['company_phone_num']: onlyNumberText(e.target.value)
-                                                                }
-                                                            )
-                                                        }} />
+                                                    {(item.user_type == 1 || item.user_type == 2) &&
+                                                        <>
+                                                            <TextField
+                                                                label='사업자등록번호'
+                                                                size="small"
+                                                                value={item.business_num}
+                                                                placeholder=""
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['business_num']: onlyNumberText(e.target.value)
+                                                                        }
+                                                                    )
+                                                                }} />
+                                                            <TextField
+                                                                label='회사명(상호)'
+                                                                size="small"
+                                                                value={item.company_name}
+                                                                placeholder=""
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['company_name']: e.target.value,
+                                                                            ['deposit_acct_name']: e.target.value,
+                                                                            ['name']: e.target.value,
+                                                                        }
+                                                                    )
+                                                                }} />
+                                                            {/* <TextField
+                                                                label='대표자명'
+                                                                size="small"
+                                                                value={item.ceo_name}
+                                                                placeholder=""
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['ceo_name']: e.target.value
+                                                                        }
+                                                                    )
+                                                                }} />
+                                                            <TextField
+                                                                label='회사 전화번호'
+                                                                size="small"
+                                                                value={item.company_phone_num}
+                                                                placeholder=""
+                                                                onChange={(e) => {
+                                                                    setItem(
+                                                                        {
+                                                                            ...item,
+                                                                            ['company_phone_num']: onlyNumberText(e.target.value)
+                                                                        }
+                                                                    )
+                                                                }} /> */}
 
-                                                </>} */}
+                                                        </>}
                                                     {item?.user_type == 0 &&
                                                         <>
                                                             <TextField
@@ -596,7 +599,7 @@ const VirtualAccountIcb = () => {
                                 <Stack spacing={1} style={{ display: 'flex' }}>
 
                                     <Button variant="contained"
-                                        disabled={!(item?.phone_check == 1)}
+                                        disabled={!(item?.phone_check == 1 || item?.deposit_acct_check == 1)}
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {
