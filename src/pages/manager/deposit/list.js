@@ -541,7 +541,7 @@ const DepositList = () => {
       }).flat(),
     ] : []),
 
-    ...(((user?.level >= 40 && !(themeDnsData?.parent_id > 0)) || user?.level >= 45) ? [
+    ...(themeDnsData?.deposit_corp_type == 7 ? [
       {
         id: 'cancel_deposit',
         label: '입금취소처리',
