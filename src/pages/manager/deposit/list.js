@@ -570,7 +570,7 @@ const DepositList = () => {
                 return button_item;
               }
             } else {
-              return button_item;
+              return "---";
             }
 
           }
