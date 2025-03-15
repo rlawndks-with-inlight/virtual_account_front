@@ -75,10 +75,7 @@ export default function ManagerLayout({ children }) {
           {isDesktop ? <NavHorizontal /> : renderNavVertical}
 
           <Main>
-            {!loading &&
-              <>
-                {children}
-              </>}
+            {children}
           </Main>
         </>
       );
@@ -98,10 +95,7 @@ export default function ManagerLayout({ children }) {
             {isDesktop ? <NavMini /> : renderNavVertical}
 
             <Main>
-              {!loading &&
-                <>
-                  {children}
-                </>}
+              {children}
             </Main>
           </Box>
         </>
@@ -121,10 +115,7 @@ export default function ManagerLayout({ children }) {
           {renderNavVertical}
 
           <Main>
-            {!loading &&
-              <>
-                {children}
-              </>}
+            {children}
           </Main>
         </Box>
       </>

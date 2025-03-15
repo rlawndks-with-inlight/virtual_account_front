@@ -38,7 +38,6 @@ const Login = () => {
 
   useEffect(() => {
     if (user?.level >= 10) {
-      console.log(user)
       router.push(getReturnUri(navList));
     }
     setLoading(false);

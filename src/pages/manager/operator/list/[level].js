@@ -1,5 +1,5 @@
 import { Avatar, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
@@ -295,9 +295,10 @@ const OperatorList = () => {
     id: '',
     user_pw: ''
   })
+  const didRun = useRef(false);
   useEffect(() => {
     pageSetting();
-  }, [router.query])
+  }, [router.query]);
   const pageSetting = () => {
 
     onChangePage({ ...searchObj, page: 1, level: router.query?.level });

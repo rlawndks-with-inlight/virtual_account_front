@@ -48,7 +48,6 @@ export default function TableHeadCustom({
 
   const createSortHandler = (prop) => (e) => {
     onSort(e, prop)
-    console.log(order)
     let is_asc = false;
     if (prop == searchObj?.order) {
       is_asc = !searchObj?.is_asc;
