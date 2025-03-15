@@ -1,4 +1,4 @@
-import { Button, Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Row, themeObj } from "src/components/elements/styled-components";
@@ -72,6 +72,12 @@ const MotherAccountRequest = () => {
 
     return (
         <>
+            {loading &&
+                <>
+                    <Row>
+                        <CircularProgress sx={{ margin: 'auto' }} />
+                    </Row>
+                </>}
             {!loading &&
                 <>
                     <Grid container spacing={3}>
