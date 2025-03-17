@@ -443,7 +443,7 @@ export const getUserFee = (item, user_level, operator_list = [], head_office_fee
   if (is_oper_dns) {
     oper_label = `top_offer`;
   }
-  if (level == 40 && dns_data?.is_use_fee_operator != 1) {
+  if (user_level == 40 && dns_data?.is_use_fee_operator != 1) {
     return item?.mcht_fee - head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
@@ -472,7 +472,7 @@ export const getUserWithDrawFee = (item, user_level, operator_list = [], withdra
   if (is_oper_dns) {
     oper_label = `top_offer`;
   }
-  if (level == 40 && dns_data?.is_use_withdraw_operator != 1) {
+  if (user_level == 40 && dns_data?.is_use_withdraw_operator != 1) {
     return item?.withdraw_fee - withdraw_head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
@@ -501,7 +501,7 @@ export const getUserDepositFee = (item, user_level, operator_list = [], deposit_
   if (is_oper_dns) {
     oper_label = `top_offer`;
   }
-  if (level == 40 && dns_data?.is_use_deposit_operator != 1) {
+  if (user_level == 40 && dns_data?.is_use_deposit_operator != 1) {
     return item?.deposit_fee - deposit_head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
