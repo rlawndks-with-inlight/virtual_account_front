@@ -18,6 +18,7 @@ const OperatorList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
+  const [data, setData] = useState({});
   const defaultColumns = [
     {
       id: 'profile_img',
@@ -69,87 +70,165 @@ const OperatorList = () => {
           >정산금 수정</Button>
         }
       },
-    ] : []),
-    ...(themeDnsData?.withdraw_type == 0 ? [
-      {
-        id: 'virtual_bank',
-        label: '가상계좌정보',
-        action: (row, is_excel) => {
-          if (is_excel) {
-            return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+      ...(themeDnsData?.withdraw_type == 0 ? [
+        {
+          id: 'virtual_bank',
+          label: '가상계좌정보',
+          action: (row, is_excel) => {
+            if (is_excel) {
+              return `${_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"} ${row['virtual_acct_num']} ${row['virtual_acct_name']}`
+            }
+            return <Col>
+              <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
+              <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
+            </Col>
           }
-          return <Col>
-            <div>{_.find(bankCodeList(), { value: row['virtual_bank_code'] })?.label ?? "---"}</div>
-            <div>{row['virtual_acct_num']} {row['virtual_acct_name']}</div>
-          </Col>
+        },
+      ] : []),
+      {
+        id: 'settle_bank',
+        label: '정산계좌정보',
+        action: (row, is_excel) => {
+          if (themeDnsData?.withdraw_type == 0) {
+            if (is_excel) {
+              return `${_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
+            }
+            return <Col>
+              <div>{_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
+              <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
+            </Col>
+          } else if (themeDnsData?.withdraw_type == 1) {
+            if (is_excel) {
+              return `${_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
+            }
+            return <Col>
+              <div>{_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
+              <div>{row['withdraw_acct_num']} {row['withdraw_acct_name']}</div>
+            </Col>
+          }
         }
       },
     ] : []),
     {
-      id: 'settle_bank',
-      label: '정산계좌정보',
-      action: (row, is_excel) => {
-        if (themeDnsData?.withdraw_type == 0) {
-          if (is_excel) {
-            return `${_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"} ${row['settle_acct_num']} ${row['settle_acct_name']}`
-          }
-          return <Col>
-            <div>{_.find(bankCodeList('withdraw'), { value: row['settle_bank_code'] })?.label ?? "---"}</div>
-            <div>{row['settle_acct_num']} {row['settle_acct_name']}</div>
-          </Col>
-        } else if (themeDnsData?.withdraw_type == 1) {
-          if (is_excel) {
-            return `${_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"} ${row['withdraw_acct_num']} ${row['withdraw_acct_name']}`
-          }
-          return <Col>
-            <div>{_.find(bankCodeList('withdraw'), { value: row['withdraw_bank_code'] })?.label ?? "---"}</div>
-            <div>{row['withdraw_acct_num']} {row['withdraw_acct_name']}</div>
-          </Col>
-        }
-      }
-    },
-    {
       id: 'settle_amount',
-      label: '보유정산금',
+      label: themeDnsData?.is_oper_dns == 1 ? '정산금' : '보유정산금',
       action: (row, is_excel) => {
         return commarNumber(row['settle_amount'])
-      }
+      },
+      sx: (row) => {
+        return {
+          color: themeDnsData?.is_oper_dns == 1 ? 'green' : ''
+        }
+      },
     },
-    {
-      id: 'deposit_amount',
-      label: '입금액',
-      action: (row, is_excel) => {
-        return commarNumber(row['deposit_amount'])
+    ...(data?.children_brands ? data?.children_brands.map(el => {
+      return {
+        id: 'settle_amount',
+        label: el?.name + (themeDnsData?.is_oper_dns == 1 ? ` 정산금` : ` 보유정산금`),
+        action: (row, is_excel) => {
+          return commarNumber(row[`settle_amount_${el?.id}`])
+        }
       }
-    },
-    {
-      id: 'withdraw_amount',
-      label: '출금액',
-      action: (row, is_excel) => {
-        return commarNumber(row['withdraw_amount'] + row['withdraw_fee_amount'])
-      }
-    },
-    {
-      id: 'withdraw_fail_amount',
-      label: '출금실패차감정산금',
-      action: (row, is_excel) => {
-        return commarNumber(row['withdraw_fail_amount'])
-      }
-    },
-    {
-      id: 'manager_plus_amount',
-      label: '관리자지급액',
-      action: (row, is_excel) => {
-        return commarNumber(row['manager_plus_amount'])
-      }
-    },
-    {
-      id: 'manager_minus_amount',
-      label: '관리자차감액',
-      action: (row, is_excel) => {
-        return commarNumber(row['manager_minus_amount'])
-      }
-    },
+    }) : []),
+    ...(themeDnsData?.is_oper_dns == 1 ? [
+      {
+        id: 'withdraw_amount',
+        label: '출금액',
+        action: (row, is_excel) => {
+          return commarNumber(row['withdraw_amount'])
+        },
+        sx: (row) => {
+          return {
+            color: 'red'
+          }
+        },
+      },
+      ...(data?.children_brands ? data?.children_brands.map(el => {
+        return {
+          id: `withdraw_amount_${el?.id}`,
+          label: el?.name + ` 출금액`,
+          action: (row, is_excel) => {
+            return commarNumber(row[`withdraw_amount_${el?.id}`])
+          },
+        }
+      }) : []),
+      {
+        id: 'update_user_deposit',
+        label: '수기지급/차감',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button variant="outlined" size="small" sx={{ width: '120px' }}
+            onClick={() => {
+              setDialogObj({ changeUserDeposit: true })
+              setChangeUserDepositObj({
+                amount: '',
+                user_id: row?.id,
+              })
+            }}
+          >수기지급/차감</Button>
+        }
+      },
+      {
+        id: 'manager_plus_amount',
+        label: '수기지급액',
+        action: (row, is_excel) => {
+          return commarNumber(row['manager_plus_amount'])
+        }
+      },
+      {
+        id: 'manager_minus_amount',
+        label: '수기차감액',
+        action: (row, is_excel) => {
+          return commarNumber(row['manager_minus_amount'])
+        }
+      },
+      {
+        id: 'withdraw_amount',
+        label: '출금/수기 차액',
+        action: (row, is_excel) => {
+          return commarNumber(row['withdraw_amount'] - row['manager_plus_amount'] - row['manager_minus_amount'])
+        }
+      },
+    ] : []),
+    ...(themeDnsData?.is_oper_dns != 1 ? [
+      {
+        id: 'deposit_amount',
+        label: '입금액',
+        action: (row, is_excel) => {
+          return commarNumber(row['deposit_amount'])
+        }
+      },
+      {
+        id: 'withdraw_amount',
+        label: '출금액',
+        action: (row, is_excel) => {
+          return commarNumber(row['withdraw_amount'] + row['withdraw_fee_amount'])
+        }
+      },
+      {
+        id: 'withdraw_fail_amount',
+        label: '출금실패차감정산금',
+        action: (row, is_excel) => {
+          return commarNumber(row['withdraw_fail_amount'])
+        }
+      },
+      {
+        id: 'manager_plus_amount',
+        label: '관리자지급액',
+        action: (row, is_excel) => {
+          return commarNumber(row['manager_plus_amount'])
+        }
+      },
+      {
+        id: 'manager_minus_amount',
+        label: '관리자차감액',
+        action: (row, is_excel) => {
+          return commarNumber(row['manager_minus_amount'])
+        }
+      },
+    ] : []),
     {
       id: 'phone_num',
       label: '전화번호',
@@ -276,7 +355,7 @@ const OperatorList = () => {
   const navList = navConfig();
   const router = useRouter();
 
-  const [data, setData] = useState({});
+
   const [searchObj, setSearchObj] = useState({
     page: 1,
     page_size: 20,
@@ -416,10 +495,10 @@ const OperatorList = () => {
           })
         }}
       >
-        <DialogTitle>{`정산금 관리자 수정`}</DialogTitle>
+        <DialogTitle>{themeDnsData?.is_oper_dns == 1 ? `수기 지급/차감` : `정산금 관리자 수정`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            수정할 금액을 입력해 주세요.
+            {themeDnsData?.is_oper_dns == 1 ? `수기처리할 금액을 입력해 주세요.` : `수정할 금액을 입력해 주세요.`}
           </DialogContentText>
           <TextField
             autoFocus
@@ -452,7 +531,7 @@ const OperatorList = () => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={() => onChangeUserDeposit(25)}>
-            적립하기
+            {themeDnsData?.is_oper_dns == 1 ? `지급하기` : `적립하기`}
           </Button>
           <Button variant="outlined" onClick={() => onChangeUserDeposit(30)}>
             차감하기
