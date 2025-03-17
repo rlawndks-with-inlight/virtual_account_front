@@ -623,7 +623,7 @@ const UserEdit = () => {
                                 </Select>
                               </FormControl>
                               <Row style={{ gap: '0.5rem' }}>
-                                {themeDnsData?.is_use_fee_operator &&
+                                {themeDnsData?.is_use_fee_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
@@ -645,7 +645,7 @@ const UserEdit = () => {
                                       }}
                                     />
                                   </>}
-                                {themeDnsData?.is_use_deposit_operator &&
+                                {themeDnsData?.is_use_deposit_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
@@ -666,7 +666,7 @@ const UserEdit = () => {
                                       }}
                                     />
                                   </>}
-                                {themeDnsData?.is_use_withdraw_operator &&
+                                {themeDnsData?.is_use_withdraw_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
@@ -689,7 +689,7 @@ const UserEdit = () => {
                                   </>}
                               </Row>
                               <Row style={{ gap: '0.5rem' }}>
-                                {themeDnsData?.is_use_fee_operator &&
+                                {themeDnsData?.is_use_fee_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
@@ -703,7 +703,7 @@ const UserEdit = () => {
                                       }}
                                     />
                                   </>}
-                                {themeDnsData?.is_use_deposit_operator &&
+                                {themeDnsData?.is_use_deposit_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
@@ -717,7 +717,7 @@ const UserEdit = () => {
                                       }}
                                     />
                                   </>}
-                                {themeDnsData?.is_use_withdraw_operator &&
+                                {themeDnsData?.is_use_withdraw_operator == 1 &&
                                   <>
                                     <TextField
                                       style={{ width: '100%' }}
