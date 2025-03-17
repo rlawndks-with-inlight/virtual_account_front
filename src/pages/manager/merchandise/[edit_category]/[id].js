@@ -2,7 +2,7 @@
 import { Box, Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Pagination, Select, Stack, Switch, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { use, useEffect, useState } from "react";
-import { Row, themeObj } from "src/components/elements/styled-components";
+import { Col, Row, themeObj } from "src/components/elements/styled-components";
 import { useSettingsContext } from "src/components/settings";
 import { Upload } from "src/components/upload";
 import ManagerLayout from "src/layouts/manager/ManagerLayout";
@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import { useModal } from "src/components/dialog/ModalProvider";
 import dynamic from "next/dynamic";
 import { apiManager } from "src/utils/api-manager";
-import { getMaxPage, getUserDepositFee, getUserFee, getUserWithDrawFee, onlyNumberText } from "src/utils/function";
+import { commarNumber, commarNumberInput, getMaxPage, getUserDepositFee, getUserFee, getUserWithDrawFee, onlyNumberText } from "src/utils/function";
 import { bankCodeList } from "src/utils/format";
 import { Icon } from "@iconify/react";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -148,6 +148,28 @@ const UserEdit = () => {
     }
   }
 
+  const getTestAmountContent = (test_amount = 0, type, level, use_plus = false) => {
+    let fee = getUserFee(item, level, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData);
+    let deposit_fee = getUserDepositFee(item, level, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee, false, themeDnsData);
+    let withdraw_fee = getUserWithDrawFee(item, level, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee, false, themeDnsData);
+    let result_fee = '';
+    let result_amount = 0;
+    if (type == 'fee') {
+      result_fee = fee;
+      result_amount = test_amount * fee / 100;
+    } else if (type == 'deposit_fee') {
+      result_fee = deposit_fee;
+      result_amount = deposit_fee;
+    } else if (type == 'withdraw_fee') {
+      result_fee = withdraw_fee;
+      result_amount = withdraw_fee;
+    }
+    return {
+      fee: result_fee,
+      amount: parseFloat(result_amount),
+      plus_text: `${commarNumber(result_amount)}${type == 'fee' ? `(${fee}%)` : ''}${use_plus ? ' + ' : ''}`
+    }
+  }
   return (
     <>
       {!loading &&
@@ -478,7 +500,7 @@ const UserEdit = () => {
                               type="number"
                               label={`가맹점 획득 입금 요율`}
                               disabled={true}
-                              value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                              value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)}
                               placeholder=""
                               InputProps={{
                                 endAdornment: <div>%</div>
@@ -518,6 +540,94 @@ const UserEdit = () => {
                           endAdornment: <div>원</div>
                         }}
                       />
+                      <Typography variant="subtitle" style={{ fontWeight: 'bold' }}>입출금시 테스트</Typography>
+                      <TextField
+                        label={`테스트 금액`}
+                        value={commarNumberInput(item[`test_amount`])}
+                        placeholder=""
+                        onChange={(e) => {
+                          setItem(
+                            {
+                              ...item,
+                              [`test_amount`]: onlyNumberText(e.target.value)
+                            }
+                          )
+                        }}
+                        InputProps={{
+                          endAdornment: <div>원</div>
+                        }}
+                      />
+                      <Col>
+                        {item?.test_amount &&
+                          <>
+                            <Typography variant="subtitle2" sx={{ color: 'text.secondary', mb: '0.5rem' }}>
+                              입금시
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              본사 정산금
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {themeDnsData?.is_use_fee_operator == 1 ? `${getTestAmountContent(item?.test_amount, 'fee', 40, true).plus_text}` : ``}
+                              {getTestAmountContent(item?.deposit_fee, 'deposit_fee', 40, true).plus_text}
+                              {` = ${commarNumber((themeDnsData?.is_use_fee_operator == 1 ? getTestAmountContent(item?.test_amount, 'fee', 40).amount : 0) + getTestAmountContent(item?.test_amount, 'deposit_fee', 40).amount)} 원`}
+                            </Typography>
+                            {themeDnsData?.operator_list.map(itm => {
+                              if (item[`sales${itm?.num}_id`] > 0) {
+                                return <>
+                                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    {itm?.label} 정산금
+                                  </Typography>
+                                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    {themeDnsData?.is_use_fee_operator == 1 ? `${getTestAmountContent(item?.test_amount, 'fee', itm.value, true).plus_text}` : ``}
+                                    {getTestAmountContent(item?.deposit_fee, 'deposit_fee', itm.value, true).plus_text}
+                                    {` = ${commarNumber((themeDnsData?.is_use_fee_operator == 1 ? getTestAmountContent(item?.test_amount, 'fee', itm.value).amount : 0) + getTestAmountContent(item?.test_amount, 'deposit_fee', itm.value).amount)} 원`}
+                                  </Typography>
+                                </>
+                              }
+                            })}
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              가맹점 정산금
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {themeDnsData?.is_use_fee_operator == 1 ? `${getTestAmountContent(item?.test_amount, 'fee', 10, false).plus_text}` : ``}
+                              {` - ` + item?.deposit_fee}
+                              {` = ${commarNumber((themeDnsData?.is_use_fee_operator == 1 ? getTestAmountContent(item?.test_amount, 'fee', 10).amount : 0) - item?.deposit_fee)} 원`}
+                            </Typography>
+                            {/*
+                            -----------------
+                            */}
+                            <Typography variant="subtitle2" sx={{ color: 'text.secondary', mb: '0.5rem', mt: '1rem' }}>
+                              출금시
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              본사 정산금
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {commarNumber(getTestAmountContent(item?.withdraw_fee, 'withdraw_fee', 40, false).amount) + ' 원'}
+                            </Typography>
+                            {themeDnsData?.operator_list.map(itm => {
+                              if (item[`sales${itm?.num}_id`] > 0) {
+                                return <>
+                                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    {itm?.label} 정산금
+                                  </Typography>
+                                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    {commarNumber(getTestAmountContent(item?.withdraw_fee, 'withdraw_fee', itm?.value, false).amount) + ' 원'}
+                                  </Typography>
+                                </>
+                              }
+                            })}
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              가맹점 정산금
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {'(' + commarNumber(item?.test_amount)}
+                              {` + ` + item?.withdraw_fee + ') * (-1)'}
+                              {` = ${commarNumber((parseInt(item?.test_amount) + item?.withdraw_fee) * (-1))} 원`}
+                            </Typography>
+                          </>}
+
+                      </Col>
                     </Stack>
                   </Card>
                 </Grid>
@@ -569,7 +679,7 @@ const UserEdit = () => {
                                   type="number"
                                   label={`본사획득요율`}
                                   disabled={true}
-                                  value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                                  value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)}
                                   InputProps={{
                                     endAdornment: <div>%</div>
                                   }}
@@ -579,7 +689,7 @@ const UserEdit = () => {
                               style={{ width: '100%' }}
                               label={`본사획득 입금수수료`}
                               disabled={true}
-                              value={getUserDepositFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                              value={getUserDepositFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee, false, themeDnsData)}
                               InputProps={{
                                 endAdornment: <div>원</div>
                               }}
@@ -588,7 +698,7 @@ const UserEdit = () => {
                               style={{ width: '100%' }}
                               label={`본사획득 출금수수료`}
                               disabled={true}
-                              value={getUserWithDrawFee(item, 40, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
+                              value={getUserWithDrawFee(item, 40, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee, false, themeDnsData)}
                               InputProps={{
                                 endAdornment: <div>원</div>
                               }}
@@ -695,7 +805,7 @@ const UserEdit = () => {
                                       style={{ width: '100%' }}
                                       type="number"
                                       label={`${itm?.label} 획득 요율`}
-                                      value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                                      value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)}
                                       disabled={true}
                                       placeholder=""
                                       InputProps={{
@@ -709,7 +819,7 @@ const UserEdit = () => {
                                       style={{ width: '100%' }}
                                       type="number"
                                       label={`${itm?.label} 획득 입금수수료`}
-                                      value={getUserDepositFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                                      value={getUserDepositFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee, false, themeDnsData)}
                                       disabled={true}
                                       placeholder=""
                                       InputProps={{
@@ -723,7 +833,7 @@ const UserEdit = () => {
                                       style={{ width: '100%' }}
                                       type="number"
                                       label={`${itm?.label} 획득 출금수수료`}
-                                      value={getUserWithDrawFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
+                                      value={getUserWithDrawFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee, false, themeDnsData)}
                                       disabled={true}
                                       placeholder=""
                                       InputProps={{

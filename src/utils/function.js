@@ -435,13 +435,16 @@ export const uploadExcel = async (e, id_name) => {
     $(`#${id_name}`).val("");
   });
 }
-export const getUserFee = (item, user_level, operator_list = [], head_office_fee, is_oper_dns) => {
+export const getUserFee = (item, user_level, operator_list = [], head_office_fee, is_oper_dns, dns_data,) => {
   let top_fee = head_office_fee;
   let level = 40;
   let result = 0;
   let oper_label = `sales`;
   if (is_oper_dns) {
     oper_label = `top_offer`;
+  }
+  if (level == 40 && dns_data?.is_use_fee_operator != 1) {
+    return item?.mcht_fee - head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
     if (item[`${oper_label}${operator_list[i].num}_id`] > 0) {
@@ -460,7 +463,7 @@ export const getUserFee = (item, user_level, operator_list = [], head_office_fee
   }
   return result;
 }
-export const getUserWithDrawFee = (item, user_level, operator_list = [], withdraw_head_office_fee, is_oper_dns) => {
+export const getUserWithDrawFee = (item, user_level, operator_list = [], withdraw_head_office_fee, is_oper_dns, dns_data,) => {
   let top_fee = withdraw_head_office_fee;
 
   let level = 40;
@@ -468,6 +471,9 @@ export const getUserWithDrawFee = (item, user_level, operator_list = [], withdra
   let oper_label = `sales`;
   if (is_oper_dns) {
     oper_label = `top_offer`;
+  }
+  if (level == 40 && dns_data?.is_use_fee_operator != 1) {
+    return item?.withdraw_fee - withdraw_head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
     if (item[`${oper_label}${operator_list[i].num}_id`] > 0) {
@@ -486,7 +492,7 @@ export const getUserWithDrawFee = (item, user_level, operator_list = [], withdra
   // }
   return result;
 }
-export const getUserDepositFee = (item, user_level, operator_list = [], deposit_head_office_fee, is_oper_dns) => {
+export const getUserDepositFee = (item, user_level, operator_list = [], deposit_head_office_fee, is_oper_dns, dns_data,) => {
   let top_fee = deposit_head_office_fee;
 
   let level = 40;
@@ -494,6 +500,9 @@ export const getUserDepositFee = (item, user_level, operator_list = [], deposit_
   let oper_label = `sales`;
   if (is_oper_dns) {
     oper_label = `top_offer`;
+  }
+  if (level == 40 && dns_data?.is_use_fee_operator != 1) {
+    return item?.deposit_fee - deposit_head_office_fee;
   }
   for (var i = 0; i < operator_list.length; i++) {
     if (item[`${oper_label}${operator_list[i].num}_id`] > 0) {
