@@ -50,8 +50,12 @@ const UserEdit = () => {
     withdraw_bank_code: '',
     withdraw_acct_num: '',
     withdraw_acct_name: '',
-
   })
+  const operator_fee_list = [
+    (themeDnsData?.is_use_fee_operator == 1 ? 'fee' : ''),
+    (themeDnsData?.is_use_deposit_operator == 1 ? 'deposit_fee' : ''),
+    (themeDnsData?.is_use_withdraw_operator == 1 ? 'withdraw_fee' : ''),
+  ]
   const [ipData, setIpData] = useState({});
   const [ipList, setIpList] = useState([]);
   const [ipSearchObj, setIpSearchObj] = useState({
@@ -66,14 +70,8 @@ const UserEdit = () => {
     },
     {
       value: 1,
-      label: '입금수수료정보'
+      label: '수수료정보'
     },
-    ...(themeDnsData?.is_use_fee_operator == 1 ? [
-      {
-        value: 2,
-        label: '수수료정보'
-      },
-    ] : []),
     {
       value: 3,
       label: '정산정보'
@@ -454,8 +452,42 @@ const UserEdit = () => {
                 <Grid item xs={12} md={4}>
                   <Card sx={{ p: 2, height: '100%' }}>
                     <Stack spacing={3}>
+                      {themeDnsData?.is_use_fee_operator == 1 &&
+                        <>
+                          <Row style={{ gap: '0.5rem' }}>
+                            <TextField
+                              style={{ width: '100%' }}
+                              type="number"
+                              label={`가맹점 입금 요율`}
+                              value={item[`mcht_fee`]}
+                              placeholder=""
+                              onChange={(e) => {
+                                setItem(
+                                  {
+                                    ...item,
+                                    [`mcht_fee`]: e.target.value
+                                  }
+                                )
+                              }}
+                              InputProps={{
+                                endAdornment: <div>%</div>
+                              }}
+                            />
+                            <TextField
+                              style={{ width: '100%' }}
+                              type="number"
+                              label={`가맹점 획득 입금 요율`}
+                              disabled={true}
+                              value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                              placeholder=""
+                              InputProps={{
+                                endAdornment: <div>%</div>
+                              }}
+                            />
+                          </Row>
+                        </>}
                       <TextField
-                        label={`입금 수수료`}
+                        label={`가맹점 입금 수수료`}
                         value={item[`deposit_fee`]}
                         placeholder=""
                         onChange={(e) => {
@@ -470,223 +502,248 @@ const UserEdit = () => {
                           endAdornment: <div>원</div>
                         }}
                       />
-                    </Stack>
-                  </Card>
-                </Grid>
-                {user?.level >= 40 &&
-                  <>
-                    <Grid item xs={12} md={4}>
-                      <Card sx={{ p: 2, height: '100%' }}>
-                        <Stack spacing={3}>
-                          {themeDnsData?.is_use_deposit_operator == 1 &&
-                            <>
-                              <TextField
-                                label={`본사 입금수수료`}
-                                value={themeDnsData?.deposit_head_office_fee}
-                                disabled={true}
-                                placeholder=""
-                                InputProps={{
-                                  endAdornment: <div>원</div>
-                                }}
-                              />
-                              <TextField
-                                label={`본사획득 입금수수료`}
-                                disabled={true}
-                                value={getUserDepositFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
-                                InputProps={{
-                                  endAdornment: <div>원</div>
-                                }}
-                              />
-                              {themeDnsData?.operator_list.map((itm, idx) => {
-                                return <>
-                                  <FormControl>
-                                    <InputLabel>{`${itm?.label} 선택`}</InputLabel>
-                                    <Select
-                                      label={`${itm?.label} 선택`}
-                                      value={item[`sales${itm?.num}_id`] ?? 0}
-                                      onChange={e => {
-                                        let obj = {
-                                          ...item,
-                                          [`sales${itm?.num}_id`]: e.target.value
-                                        }
-                                        if (!e.target.value) {
-                                          obj[`sales${itm?.num}_fee`] = 0;
-                                        }
-                                        setItem(obj);
-                                      }}
-                                    >
-                                      <MenuItem value={0}>선택안함</MenuItem>
-                                      {operatorList && operatorList.map((operator, idx) => {
-                                        if (operator?.level == itm?.value) {
-                                          return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
-                                        }
-                                      })}
-                                    </Select>
-                                  </FormControl>
-                                  <TextField
-                                    label={`${itm?.label} 입금수수료`}
-                                    value={item[`sales${itm?.num}_deposit_fee`]}
-                                    disabled={!(item[`sales${itm?.num}_id`] > 0)}
-                                    placeholder=""
-                                    onChange={(e) => {
-                                      setItem(
-                                        {
-                                          ...item,
-                                          [`sales${itm?.num}_deposit_fee`]: onlyNumberText(e.target.value)
-                                        }
-                                      )
-                                    }}
-                                    InputProps={{
-                                      endAdornment: <div>원</div>
-                                    }}
-                                  />
-                                  <TextField
-                                    type="number"
-                                    label={`${itm?.label} 획득 입금수수료`}
-                                    value={getUserDepositFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
-                                    disabled={true}
-                                    placeholder=""
-                                    InputProps={{
-                                      endAdornment: <div>원</div>
-                                    }}
-                                  />
-                                </>
-                              })}
-                            </>}
-
-                        </Stack>
-                      </Card>
-                    </Grid>
-                  </>}
-
-              </>}
-            {currentTab == 2 &&
-              <>
-                {user?.level >= 40 &&
-                  <>
-                    <Grid item xs={12} md={4}>
-                      <Card sx={{ p: 2, height: '100%' }}>
-                        <Stack spacing={3}>
-                          <TextField
-                            type="number"
-                            label={`본사요율`}
-                            disabled={true}
-                            value={themeDnsData?.head_office_fee}
-                            InputProps={{
-                              endAdornment: <div>%</div>
-                            }}
-                          />
-                          <TextField
-                            type="number"
-                            label={`본사획득요율`}
-                            disabled={true}
-                            value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
-                            InputProps={{
-                              endAdornment: <div>%</div>
-                            }}
-                          />
-                        </Stack>
-                      </Card>
-                    </Grid>
-                    {themeDnsData?.is_use_fee_operator == 1 &&
-                      <>
-                        <Grid item xs={12} md={4}>
-                          <Card sx={{ p: 2, height: '100%' }}>
-                            <Stack spacing={3}>
-                              {themeDnsData?.operator_list.map((itm, idx) => {
-                                return <>
-                                  <FormControl>
-                                    <InputLabel>{`${itm?.label} 선택`}</InputLabel>
-                                    <Select
-                                      label={`${itm?.label} 선택`}
-                                      value={item[`sales${itm?.num}_id`] ?? 0}
-                                      onChange={e => {
-                                        let obj = {
-                                          ...item,
-                                          [`sales${itm?.num}_id`]: e.target.value
-                                        }
-                                        if (!e.target.value) {
-                                          obj[`sales${itm?.num}_fee`] = 0;
-                                        }
-                                        setItem(obj);
-                                      }}
-                                    >
-                                      <MenuItem value={0}>선택안함</MenuItem>
-                                      {operatorList && operatorList.map((operator, idx) => {
-                                        if (operator?.level == itm?.value) {
-                                          return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
-                                        }
-                                      })}
-                                    </Select>
-                                  </FormControl>
-                                  <TextField
-                                    type="number"
-                                    label={`${itm?.label} 요율`}
-                                    value={item[`sales${itm?.num}_fee`]}
-                                    disabled={!(item[`sales${itm?.num}_id`] > 0)}
-                                    placeholder=""
-                                    onChange={(e) => {
-                                      setItem(
-                                        {
-                                          ...item,
-                                          [`sales${itm?.num}_fee`]: e.target.value
-                                        }
-                                      )
-                                    }}
-                                    InputProps={{
-                                      endAdornment: <div>%</div>
-                                    }}
-                                  />
-                                  <TextField
-                                    type="number"
-                                    label={`${itm?.label} 획득 요율`}
-                                    value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
-                                    disabled={true}
-                                    placeholder=""
-                                    InputProps={{
-                                      endAdornment: <div>%</div>
-                                    }}
-                                  />
-                                </>
-                              })}
-                            </Stack>
-                          </Card>
-                        </Grid>
-                      </>}
-                  </>}
-                <Grid item xs={12} md={4}>
-                  <Card sx={{ p: 2, height: '100%' }}>
-                    <Stack spacing={3}>
                       <TextField
-                        type="number"
-                        label={`가맹점 요율`}
-                        value={item[`mcht_fee`]}
+                        label={`가맹점 출금 수수료`}
+                        value={item[`withdraw_fee`]}
                         placeholder=""
                         onChange={(e) => {
                           setItem(
                             {
                               ...item,
-                              [`mcht_fee`]: e.target.value
+                              [`withdraw_fee`]: onlyNumberText(e.target.value)
                             }
                           )
                         }}
                         InputProps={{
-                          endAdornment: <div>%</div>
-                        }}
-                      />
-                      <TextField
-                        type="number"
-                        label={`가맹점 획득 요율`}
-                        disabled={true}
-                        value={getUserFee(item, 10, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
-                        placeholder=""
-                        InputProps={{
-                          endAdornment: <div>%</div>
+                          endAdornment: <div>원</div>
                         }}
                       />
                     </Stack>
                   </Card>
                 </Grid>
+                {user?.level >= 40 &&
+                  <>
+                    <Grid item xs={12} md={5 + operator_fee_list.filter(el => el).length}>
+                      <Card sx={{ p: 2, height: '100%' }}>
+                        <Stack spacing={3}>
+                          <Row style={{ gap: '0.5rem' }}>
+                            {themeDnsData?.is_use_fee_operator == 1 &&
+                              <>
+                                <TextField
+                                  style={{ width: '100%' }}
+                                  type="number"
+                                  label={`본사요율`}
+                                  disabled={true}
+                                  value={themeDnsData?.head_office_fee}
+                                  InputProps={{
+                                    endAdornment: <div>%</div>
+                                  }}
+                                />
+                              </>}
+                            <TextField
+                              style={{ width: '100%' }}
+                              label={`본사 입금수수료`}
+                              value={themeDnsData?.deposit_head_office_fee}
+                              disabled={true}
+                              placeholder=""
+                              InputProps={{
+                                endAdornment: <div>원</div>
+                              }}
+                            />
+                            <TextField
+                              style={{ width: '100%' }}
+                              label={`본사 출금수수료`}
+                              value={themeDnsData?.withdraw_head_office_fee}
+                              disabled={true}
+                              placeholder=""
+                              InputProps={{
+                                endAdornment: <div>원</div>
+                              }}
+                            />
+                          </Row>
+                          <Row style={{ gap: '0.5rem' }}>
+                            {themeDnsData?.is_use_fee_operator == 1 &&
+                              <>
+                                <TextField
+                                  style={{ width: '100%' }}
+                                  type="number"
+                                  label={`본사획득요율`}
+                                  disabled={true}
+                                  value={getUserFee(item, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                                  InputProps={{
+                                    endAdornment: <div>%</div>
+                                  }}
+                                />
+                              </>}
+                            <TextField
+                              style={{ width: '100%' }}
+                              label={`본사획득 입금수수료`}
+                              disabled={true}
+                              value={getUserDepositFee(item, 40, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                              InputProps={{
+                                endAdornment: <div>원</div>
+                              }}
+                            />
+                            <TextField
+                              style={{ width: '100%' }}
+                              label={`본사획득 출금수수료`}
+                              disabled={true}
+                              value={getUserWithDrawFee(item, 40, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
+                              InputProps={{
+                                endAdornment: <div>원</div>
+                              }}
+                            />
+                          </Row>
+                          {themeDnsData?.operator_list.map((itm, idx) => {
+                            return <>
+                              <FormControl>
+                                <InputLabel>{`${itm?.label} 선택`}</InputLabel>
+                                <Select
+                                  label={`${itm?.label} 선택`}
+                                  value={item[`sales${itm?.num}_id`] ?? 0}
+                                  onChange={e => {
+                                    let obj = {
+                                      ...item,
+                                      [`sales${itm?.num}_id`]: e.target.value
+                                    }
+                                    if (!e.target.value) {
+                                      obj[`sales${itm?.num}_fee`] = 0;
+                                      obj[`sales${itm?.num}_deposit_fee`] = 0;
+                                      obj[`sales${itm?.num}_withdraw_fee`] = 0;
+                                    }
+                                    setItem(obj);
+                                  }}
+                                >
+                                  <MenuItem value={0}>선택안함</MenuItem>
+                                  {operatorList && operatorList.map((operator, idx) => {
+                                    if (operator?.level == itm?.value) {
+                                      return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
+                                    }
+                                  })}
+                                </Select>
+                              </FormControl>
+                              <Row style={{ gap: '0.5rem' }}>
+                                {themeDnsData?.is_use_fee_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      type="number"
+                                      label={`${itm?.label} 요율`}
+                                      value={item[`sales${itm?.num}_fee`]}
+                                      disabled={!(item[`sales${itm?.num}_id`] > 0)}
+                                      placeholder=""
+                                      onChange={(e) => {
+                                        setItem(
+                                          {
+                                            ...item,
+                                            [`sales${itm?.num}_fee`]: e.target.value
+                                          }
+                                        )
+                                      }}
+                                      InputProps={{
+                                        endAdornment: <div>%</div>
+                                      }}
+                                    />
+                                  </>}
+                                {themeDnsData?.is_use_deposit_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      label={`${itm?.label} 입금수수료`}
+                                      value={item[`sales${itm?.num}_deposit_fee`]}
+                                      disabled={!(item[`sales${itm?.num}_id`] > 0)}
+                                      placeholder=""
+                                      onChange={(e) => {
+                                        setItem(
+                                          {
+                                            ...item,
+                                            [`sales${itm?.num}_deposit_fee`]: onlyNumberText(e.target.value)
+                                          }
+                                        )
+                                      }}
+                                      InputProps={{
+                                        endAdornment: <div>원</div>
+                                      }}
+                                    />
+                                  </>}
+                                {themeDnsData?.is_use_withdraw_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      label={`${itm?.label} 출금수수료`}
+                                      value={item[`sales${itm?.num}_withdraw_fee`]}
+                                      disabled={!(item[`sales${itm?.num}_id`] > 0)}
+                                      placeholder=""
+                                      onChange={(e) => {
+                                        setItem(
+                                          {
+                                            ...item,
+                                            [`sales${itm?.num}_withdraw_fee`]: onlyNumberText(e.target.value)
+                                          }
+                                        )
+                                      }}
+                                      InputProps={{
+                                        endAdornment: <div>원</div>
+                                      }}
+                                    />
+                                  </>}
+                              </Row>
+                              <Row style={{ gap: '0.5rem' }}>
+                                {themeDnsData?.is_use_fee_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      type="number"
+                                      label={`${itm?.label} 획득 요율`}
+                                      value={getUserFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)}
+                                      disabled={true}
+                                      placeholder=""
+                                      InputProps={{
+                                        endAdornment: <div>%</div>
+                                      }}
+                                    />
+                                  </>}
+                                {themeDnsData?.is_use_deposit_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      type="number"
+                                      label={`${itm?.label} 획득 입금수수료`}
+                                      value={getUserDepositFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)}
+                                      disabled={true}
+                                      placeholder=""
+                                      InputProps={{
+                                        endAdornment: <div>원</div>
+                                      }}
+                                    />
+                                  </>}
+                                {themeDnsData?.is_use_withdraw_operator &&
+                                  <>
+                                    <TextField
+                                      style={{ width: '100%' }}
+                                      type="number"
+                                      label={`${itm?.label} 획득 출금수수료`}
+                                      value={getUserWithDrawFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
+                                      disabled={true}
+                                      placeholder=""
+                                      InputProps={{
+                                        endAdornment: <div>원</div>
+                                      }}
+                                    />
+                                  </>}
+
+
+
+                              </Row>
+
+                            </>
+                          })}
+
+                        </Stack>
+                      </Card>
+                    </Grid>
+                  </>}
+
               </>}
             {currentTab == 3 &&
               <>
@@ -739,25 +796,6 @@ const UserEdit = () => {
                             />
                           </Stack>
                         </>}
-                      <TextField
-                        label='가맹점출금수수료'
-                        value={item.withdraw_fee}
-                        placeholder=""
-                        onChange={(e) => {
-                          setItem(
-                            {
-                              ...item,
-                              ['withdraw_fee']: onlyNumberText(e.target.value)
-                            }
-                          )
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <div>원</div>
-                          )
-                        }}
-                      />
-
                       <TextField
                         label='최소 출금액'
                         value={item.min_withdraw_price}
@@ -834,92 +872,6 @@ const UserEdit = () => {
                     </Stack>
                   </Card>
                 </Grid>
-                {user?.level >= 40 &&
-                  <>
-                    <Grid item xs={12} md={4}>
-                      <Card sx={{ p: 2, height: '100%' }}>
-                        <Stack spacing={3}>
-                          {themeDnsData?.is_use_withdraw_operator == 1 &&
-                            <>
-                              <TextField
-                                label={`본사 출금수수료`}
-                                value={themeDnsData?.withdraw_head_office_fee}
-                                disabled={true}
-                                placeholder=""
-                                InputProps={{
-                                  endAdornment: <div>원</div>
-                                }}
-                              />
-                              <TextField
-                                label={`본사획득 출금수수료`}
-                                disabled={true}
-                                value={getUserWithDrawFee(item, 40, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
-                                InputProps={{
-                                  endAdornment: <div>원</div>
-                                }}
-                              />
-                              {themeDnsData?.operator_list.map((itm, idx) => {
-                                return <>
-                                  <FormControl>
-                                    <InputLabel>{`${itm?.label} 선택`}</InputLabel>
-                                    <Select
-                                      label={`${itm?.label} 선택`}
-                                      value={item[`sales${itm?.num}_id`] ?? 0}
-                                      onChange={e => {
-                                        let obj = {
-                                          ...item,
-                                          [`sales${itm?.num}_id`]: e.target.value
-                                        }
-                                        if (!e.target.value) {
-                                          obj[`sales${itm?.num}_fee`] = 0;
-                                        }
-                                        setItem(obj);
-                                      }}
-                                    >
-                                      <MenuItem value={0}>선택안함</MenuItem>
-                                      {operatorList && operatorList.map((operator, idx) => {
-                                        if (operator?.level == itm?.value) {
-                                          return <MenuItem value={operator.id}>{operator.nickname}</MenuItem>
-                                        }
-                                      })}
-                                    </Select>
-                                  </FormControl>
-                                  <TextField
-                                    label={`${itm?.label} 출금수수료`}
-                                    value={item[`sales${itm?.num}_withdraw_fee`]}
-                                    disabled={!(item[`sales${itm?.num}_id`] > 0)}
-                                    placeholder=""
-                                    onChange={(e) => {
-                                      setItem(
-                                        {
-                                          ...item,
-                                          [`sales${itm?.num}_withdraw_fee`]: onlyNumberText(e.target.value)
-                                        }
-                                      )
-                                    }}
-                                    InputProps={{
-                                      endAdornment: <div>원</div>
-                                    }}
-                                  />
-                                  <TextField
-                                    type="number"
-                                    label={`${itm?.label} 획득 출금수수료`}
-                                    value={getUserWithDrawFee(item, itm.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)}
-                                    disabled={true}
-                                    placeholder=""
-                                    InputProps={{
-                                      endAdornment: <div>원</div>
-                                    }}
-                                  />
-                                </>
-                              })}
-                            </>}
-
-                        </Stack>
-                      </Card>
-                    </Grid>
-                  </>}
-
                 {themeDnsData?.withdraw_type == 1 &&
                   <>
                     <Grid item xs={12} md={4}>
