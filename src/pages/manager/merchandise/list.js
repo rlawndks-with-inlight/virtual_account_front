@@ -319,7 +319,7 @@ const UserList = () => {
               id: `sales${operator?.num}_fee_2`,
               label: `${label} 획득 요율`,
               action: (row, is_excel) => {
-                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)) + '%' : "---"
               }
             },
           ] : []),
@@ -335,7 +335,7 @@ const UserList = () => {
               id: `sales${operator?.num}_deposit_fee_2`,
               label: `${label} 획득 입금수수료`,
               action: (row, is_excel) => {
-                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserDepositFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee)) : "---"
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserDepositFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.deposit_head_office_fee, false, themeDnsData)) : "---"
               }
             },
           ] : []),
@@ -351,7 +351,7 @@ const UserList = () => {
               id: `sales${operator?.num}_withdraw_fee_2`,
               label: `${label} 획득 출금수수료`,
               action: (row, is_excel) => {
-                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee)) : "---"
+                return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserWithDrawFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.withdraw_head_office_fee, false, themeDnsData)) : "---"
               }
             },
           ] : []),
