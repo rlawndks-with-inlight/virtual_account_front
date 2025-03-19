@@ -437,7 +437,7 @@ const DepositList = () => {
           id: `head_office_get_fee`,
           label: `본사 획득 요율`,
           action: (row, is_excel) => {
-            return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+            return row[`head_office_fee`] > 0 ? parseFloat(getUserFee(row, 40, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)) + '%' : "---"
           },
           sx: (row) => {
             if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
@@ -505,7 +505,7 @@ const DepositList = () => {
                 id: `sales${operator?.num}_get_fee`,
                 label: `${label} 획득 요율`,
                 action: (row, is_excel) => {
-                  return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee)) + '%' : "---"
+                  return row[`sales${operator?.num}_id`] > 0 ? parseFloat(getUserFee(row, operator?.value, themeDnsData?.operator_list, themeDnsData?.head_office_fee, false, themeDnsData)) + '%' : "---"
                 },
                 sx: (row) => {
                   if (row?.deposit_status == 10 || row?.is_cancel == 1 || row?.is_delete == 1) {
