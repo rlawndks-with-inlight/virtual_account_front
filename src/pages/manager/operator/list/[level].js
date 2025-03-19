@@ -135,7 +135,7 @@ const OperatorList = () => {
         id: 'withdraw_amount',
         label: '출금액',
         action: (row, is_excel) => {
-          return commarNumber(row['withdraw_amount'])
+          return commarNumber(row['withdraw_amount'] * (-1))
         },
         sx: (row) => {
           return {
@@ -148,7 +148,7 @@ const OperatorList = () => {
           id: `withdraw_amount_${el?.id}`,
           label: el?.name + ` 출금액`,
           action: (row, is_excel) => {
-            return commarNumber(row[`withdraw_amount_${el?.id}`])
+            return commarNumber(row[`withdraw_amount_${el?.id}`] * (-1))
           },
         }
       }) : []),
@@ -188,7 +188,7 @@ const OperatorList = () => {
         id: 'withdraw_amount',
         label: '출금/수기 차액',
         action: (row, is_excel) => {
-          return commarNumber(row['withdraw_amount'] - row['manager_plus_amount'] - row['manager_minus_amount'])
+          return commarNumber((row?.withdraw_amount ?? 0) * (-1) - row['manager_plus_amount'] - row['manager_minus_amount'])
         }
       },
     ] : []),
