@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControlLabel, IconButton, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ManagerTable from "src/views/manager/table/ManagerTable";
 import { Icon } from "@iconify/react";
@@ -495,6 +495,7 @@ const UserList = () => {
     search: '',
     level: 10,
   })
+  const [operUserList, setOperUserList] = useState([]);
   const [dialogObj, setDialogObj] = useState({
     changePassword: false,
   })
@@ -511,7 +512,7 @@ const UserList = () => {
     pageSetting();
   }, [])
   const pageSetting = () => {
-
+    getAllOperUser();
     onChangePage({ ...searchObj, page: 1, level: 10, });
   }
   const onChangePage = async (obj_) => {
@@ -535,6 +536,12 @@ const UserList = () => {
     if (data) {
       onChangePage(searchObj);
     }
+  }
+  const getAllOperUser = async () => {
+    let data = await apiManager('users', 'list', {
+      level_list: [...operatorLevelList.map(itm => { return itm.value })],
+    });
+    setOperUserList(data?.content ?? []);
   }
   const onChangeUserPassword = async () => {
     let result = await apiManager(`users/change-pw`, 'update', changePasswordObj);
@@ -705,6 +712,25 @@ const UserList = () => {
       </Dialog>
       <Stack spacing={3}>
         <Card>
+          {user?.level >= 40 &&
+            <>
+              <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+                {(themeDnsData?.operator_list ?? []).map(operator => {
+                  return <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+                    <InputLabel>{operator?.label}</InputLabel>
+                    <Select label={operator?.label} value={searchObj[`sales${operator?.num}_id`]}
+                      onChange={(e) => {
+                        onChangePage({ ...searchObj, [`sales${operator?.num}_id`]: e.target.value, page: 1, })
+                      }}>
+                      <MenuItem value={null}>{operator?.label} 전체</MenuItem>
+                      {operUserList.filter(el => el?.level == operator?.value).map(oper => {
+                        return <MenuItem value={oper?.id}>{`${oper?.nickname}(${oper?.user_name})`}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
+                })}
+              </Row>
+            </>}
           <ManagerTable
             data={data}
             columns={defaultColumns}
