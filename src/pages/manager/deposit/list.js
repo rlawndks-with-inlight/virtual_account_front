@@ -836,9 +836,9 @@ const DepositList = () => {
       </Dialog>
       <Stack spacing={3}>
         <Card>
-          {user?.level >= 40 &&
-            <>
-              <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+          <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
+            {user?.level >= 40 &&
+              <>
                 {themeDnsData?.is_use_corp_account == 1 &&
                   <>
                     <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
@@ -881,18 +881,21 @@ const DepositList = () => {
                     })}
                   </Select>
                 </FormControl>
-                <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
-                  <InputLabel>입금상태</InputLabel>
-                  <Select label='입금상태' value={searchObj[`deposit_status`]}
-                    onChange={(e) => {
-                      onChangePage({ ...searchObj, [`deposit_status`]: e.target.value })
-                    }}>
-                    <MenuItem value={null}>상태 전체</MenuItem>
-                    {depositStatusList.map(status => {
-                      return <MenuItem value={status.value}>{`${status.label}`}</MenuItem>
-                    })}
-                  </Select>
-                </FormControl>
+              </>}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>입금상태</InputLabel>
+              <Select label='입금상태' value={searchObj[`deposit_status`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`deposit_status`]: e.target.value })
+                }}>
+                <MenuItem value={null}>상태 전체</MenuItem>
+                {depositStatusList.map(status => {
+                  return <MenuItem value={status.value}>{`${status.label}`}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+            {user?.level >= 40 &&
+              <>
                 {themeDnsData?.deposit_process_type == 1 &&
                   <>
                     <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
@@ -926,8 +929,9 @@ const DepositList = () => {
                       })
                     }}>노티 누락건 추가</Button>
                   </>}
-              </Row>
-            </>}
+              </>}
+
+          </Row>
           <ManagerTable
             data={data}
             columns={defaultColumns}
