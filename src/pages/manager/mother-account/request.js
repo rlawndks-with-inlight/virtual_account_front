@@ -60,7 +60,6 @@ const MotherAccountRequest = () => {
         let real_amount = item?.real_amount;
         real_amount -= item?.sum?.total_mcht_amount;
         real_amount -= item?.sum?.total_oper_amount;
-        real_amount += item?.sum?.total_withdraw_fee;
         real_amount -= (_.sum(item?.childrens.map(children => { return children?.real_amount })) ?? 0);
 
         if (returnMoment().split(' ')[1] <= '23:55:00') {
