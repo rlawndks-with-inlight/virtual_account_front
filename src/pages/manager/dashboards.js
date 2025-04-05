@@ -96,7 +96,45 @@ const Dashboards = () => {
         });
 
     }
-    const tab_list = [
+
+    const tab_list = themeDnsData?.is_oper_dns == 1 ? [
+        {
+            value: 0,
+            label: '영업자별 정산',
+            title: '영업자별 정산액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '영업자명',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: 'MID',
+                    action: (row, idx) => {
+                        return row['mid'] ?? "---"
+                    }
+                },
+                {
+                    label: '정산액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+            ],
+        },
+    ] : [
         ...((themeDnsData?.withdraw_corp_type == 1 || themeDnsData?.withdraw_corp_type == 6 || themeDnsData?.withdraw_corp_type == 7) ? [
             {
                 value: 0,
@@ -406,9 +444,23 @@ const Dashboards = () => {
         onChangePage(searchObj);
     }, [currentTab])
     const getDepositByMcht = async (search_obj) => {
-        setSearchObj(search_obj);
-        let result = await apiManager('dashboard/mcht-deposit', 'list', search_obj);
-        setDeposits(result ?? []);
+        try {
+            setSearchObj(search_obj);
+            let uri = 'dashboard/mcht-deposit';
+            if (themeDnsData?.is_oper_dns == 1) {
+                uri = 'dashboard/top-offer-settle';
+            }
+            let result = await apiManager(uri, 'list', search_obj);
+            if (!result) {
+                setDeposits([]);
+            } else {
+                setDeposits(result ?? []);
+            }
+        } catch (err) {
+            console.log(err);
+            setDeposits([]);
+        }
+
     }
     const getDepositByTime = async (time_type, search_obj) => {
         setSearchObj(search_obj);
