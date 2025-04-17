@@ -236,7 +236,7 @@ const WithdrawList = () => {
           if (is_excel) {
             return "---";
           }
-          if (row?.is_withdraw_hold == 1) {
+          if (row?.is_withdraw_hold == 1 && row?.withdraw_status == 5) {
             return <Col style={{ rowGap: '0.5rem' }}>
               <Button variant="outlined" size="small" sx={{ width: '100px' }}
                 onClick={() => {
