@@ -134,6 +134,222 @@ const Dashboards = () => {
                 },
             ],
         },
+        {
+            value: 1,
+            label: '시간별입금액',
+            title: '시간별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '시간',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 2,
+            label: '일별입금액',
+            title: '일별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '일자',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 3,
+            label: '월별입금액',
+            title: '월별 입금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '월별',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '입금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '입금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 4,
+            label: '시간별출금액',
+            title: '시간별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '시간',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 5,
+            label: '일별출금액',
+            title: '일별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '일자',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
+        {
+            value: 6,
+            label: '월별출금액',
+            title: '월별 출금액',
+            columns: [
+                {
+                    label: 'No.',
+                    action: (row, idx) => {
+                        return idx + 1
+                    }
+                },
+                {
+                    label: '월별',
+                    action: (row, idx) => {
+                        return row['label'] ?? "---"
+                    }
+                },
+                {
+                    label: '출금액',
+                    action: (row, idx) => {
+                        return commarNumber(row['amount'])
+                    },
+                    sx: (row) => {
+                        return {
+                            color: 'blue'
+                        }
+                    },
+                },
+                {
+                    label: '출금건',
+                    action: (row, idx) => {
+                        return commarNumber(row['count'])
+                    }
+                },
+            ],
+        },
     ] : [
         ...((themeDnsData?.withdraw_corp_type == 1 || themeDnsData?.withdraw_corp_type == 6 || themeDnsData?.withdraw_corp_type == 7) ? [
             {
