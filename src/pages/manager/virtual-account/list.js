@@ -12,7 +12,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
-import { commarNumber, onlyNumberText } from "src/utils/function";
+import { commarNumber, onlyNumberText, returnMoment } from "src/utils/function";
 import GaugeBar from "src/components/elements/GaugeBar";
 
 const VirtualAccountList = () => {
@@ -127,7 +127,26 @@ const VirtualAccountList = () => {
       }
     },
     ...(themeDnsData?.deposit_corp_type == 7 ? [
-
+      {
+        id: 'last_auth_date',
+        label: '데일리인증',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button
+            disabled={row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10)}
+            variant="outlined" size="small"
+            onClick={() => {
+              setDialogObj({
+                lastAuth: true,
+                virtual_account_id: row?.id,
+                phone_num: row?.phone_num,
+              })
+            }}
+          >{row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10) ? '인증완료' : '인증'}</Button>
+        }
+      },
       {
         id: 'deposit_create',
         label: '입금데이터 추가',
@@ -441,6 +460,27 @@ const VirtualAccountList = () => {
       onChangePage(searchObj);
     }
   }
+  const onCheckPhoneNumRequest = async () => {
+    let result = undefined
+    if (window.confirm('인증번호 발송 하시겠습니까?')) {
+      result = await apiManager('virtual-accounts/daily-auth-request', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
+      if (result) {
+        setDialogObj({
+          ...dialogObj,
+          ...result,
+        })
+      }
+    }
+
+  }
+  const onCheckPhoneNumCheck = async () => {
+    let result = undefined;
+    result = await apiManager('virtual-accounts/daily-auth-check', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
+    if (result) {
+      toast.success('성공적으로 인증 완료 되었습니다.');
+      onChangePage(searchObj);
+    }
+  }
   return (
     <>
       <Dialog open={pageLoading}
@@ -452,6 +492,69 @@ const VirtualAccountList = () => {
         }}
       >
         <CircularProgress />
+      </Dialog>
+      <Dialog
+        open={dialogObj.lastAuth}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`데일리 인증`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            인증요청 후 인증번호를 입력해 주세요.
+          </DialogContentText>
+          <TextField
+            label='휴대폰번호'
+            autoFocus
+            fullWidth
+            size="small"
+            margin="dense"
+            value={dialogObj.phone_num}
+            placeholder="하이픈(-) 제외 입력"
+            onChange={(e) => {
+
+            }}
+            InputProps={{
+              endAdornment: <Button
+                variant='contained'
+                size='small'
+                sx={{ width: '160px', marginRight: '-0.5rem' }}
+                onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button>
+            }}
+          />
+          <TextField
+            label='인증번호'
+            fullWidth
+            size="small"
+            margin="dense"
+            value={dialogObj.vrf_word}
+            placeholder=""
+            onChange={(e) => {
+              setDialogObj(
+                {
+                  ...dialogObj,
+                  ['vrf_word']: e.target.value
+                }
+              )
+            }}
+            InputProps={{
+              endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
+                disabled={dialogObj?.phone_check == 1}
+                onClick={onCheckPhoneNumCheck}>{dialogObj?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={addDepositItem}>
+            확인
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
       </Dialog>
       <Dialog
         open={dialogObj.addDeposit}
