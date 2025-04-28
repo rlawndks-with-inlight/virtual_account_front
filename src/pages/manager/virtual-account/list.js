@@ -12,7 +12,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import _ from "lodash";
 import { bankCodeList, operatorLevelList, virtualAccountStatusList, virtualAccountUserTypeList } from "src/utils/format";
 import { useSettingsContext } from "src/components/settings";
-import { commarNumber, onlyNumberText, returnMoment } from "src/utils/function";
+import { commarNumber, differenceSecondTwoDate, onlyNumberText, returnMoment } from "src/utils/function";
 import GaugeBar from "src/components/elements/GaugeBar";
 
 const VirtualAccountList = () => {
@@ -129,7 +129,7 @@ const VirtualAccountList = () => {
     ...(themeDnsData?.deposit_corp_type == 7 ? [
       {
         id: 'last_auth_date',
-        label: '데일리인증',
+        label: '데일리휴대폰인증',
         action: (row, is_excel) => {
           if (is_excel) {
             return "---";
@@ -137,6 +137,7 @@ const VirtualAccountList = () => {
           return <Button
             disabled={row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10)}
             variant="outlined" size="small"
+            sx={{ width: '84px' }}
             onClick={() => {
               setDialogObj({
                 lastAuth: true,
@@ -145,6 +146,29 @@ const VirtualAccountList = () => {
               })
             }}
           >{row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10) ? '인증완료' : '인증'}</Button>
+        }
+      },
+      {
+        id: 'last_acct_auth_date',
+        label: '5분계좌인증',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button
+            disabled={differenceSecondTwoDate(returnMoment(), row?.last_acct_auth_date) < 300 && row?.last_acct_auth_date}
+            variant="outlined" size="small"
+            sx={{ width: '84px' }}
+            onClick={() => {
+              setDialogObj({
+                lastAcctAuth: true,
+                virtual_account_id: row?.id,
+                deposit_bank_code: row?.deposit_bank_code,
+                deposit_acct_num: row?.deposit_acct_num,
+                deposit_acct_name: row?.deposit_acct_name,
+              })
+            }}
+          >{(differenceSecondTwoDate(returnMoment(), row?.last_acct_auth_date) < 300 && row?.last_acct_auth_date) ? '인증완료' : '인증'}</Button>
         }
       },
       {
@@ -465,6 +489,7 @@ const VirtualAccountList = () => {
     if (window.confirm('인증번호 발송 하시겠습니까?')) {
       result = await apiManager('virtual-accounts/daily-auth-request', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
       if (result) {
+        toast.success('성공적으로 발송 되었습니다.');
         setDialogObj({
           ...dialogObj,
           ...result,
@@ -478,6 +503,29 @@ const VirtualAccountList = () => {
     result = await apiManager('virtual-accounts/daily-auth-check', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
     if (result) {
       toast.success('성공적으로 인증 완료 되었습니다.');
+      setDialogObj({});
+      onChangePage(searchObj);
+    }
+  }
+  const oneWonCertification = async () => {
+    let result = undefined
+    if (window.confirm('인증번호 발송 하시겠습니까?')) {
+      result = await apiManager('virtual-accounts/acct-auth-request', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
+      if (result) {
+        toast.success('성공적으로 발송 되었습니다.');
+        setDialogObj({
+          ...dialogObj,
+          ...result,
+        })
+      }
+    }
+  }
+  const checkOneWonCertification = async () => {
+    let result = undefined;
+    result = await apiManager('virtual-accounts/acct-auth-check', 'create', { ...dialogObj, id: dialogObj?.virtual_account_id });
+    if (result) {
+      toast.success('성공적으로 인증 완료 되었습니다.');
+      setDialogObj({});
       onChangePage(searchObj);
     }
   }
@@ -546,9 +594,75 @@ const VirtualAccountList = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={addDepositItem}>
-            확인
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
           </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogObj.lastAcctAuth}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`5분 계좌 인증`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            인증요청 후 인증번호를 입력해 주세요.
+          </DialogContentText>
+          <Stack spacing={2}>
+            <Stack spacing={1}>
+              <FormControl size="small" disabled={true} fullWidth>
+                <InputLabel>입금은행</InputLabel>
+                <Select
+                  label='입금은행'
+                  value={dialogObj.deposit_bank_code}
+                >
+                  {bankCodeList().map((itm, idx) => {
+                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                  })}
+                </Select>
+              </FormControl>
+            </Stack>
+            <TextField
+              fullWidth
+              disabled={true}
+              size="small"
+              label='입금계좌번호'
+              value={dialogObj.deposit_acct_num}
+            />
+            <TextField
+              fullWidth
+              label='예금주명'
+              size="small"
+              value={dialogObj.deposit_acct_name}
+              disabled={true}
+            />
+            <Button onClick={oneWonCertification} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
+            {dialogObj.tid &&
+              <>
+                <TextField
+                  size="small"
+                  label='인증번호'
+                  value={dialogObj.vrf_word}
+                  placeholder=""
+                  onChange={(e) => {
+                    setDialogObj(
+                      {
+                        ...dialogObj,
+                        ['vrf_word']: e.target.value
+                      }
+                    )
+                  }} />
+                <Button
+                  fullWidth
+                  onClick={checkOneWonCertification} variant="outlined" style={{ height: '40px', }}>인증확인</Button>
+              </>}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
           <Button color="inherit" onClick={() => {
             setDialogObj({})
           }}>

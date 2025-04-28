@@ -114,6 +114,7 @@ const VirtualAccountIcb = () => {
             data = {
                 ...data,
                 tid: result?.tid,
+                date: result?.date,
             }
         }
         setItem(data);
@@ -123,6 +124,7 @@ const VirtualAccountIcb = () => {
         let result = await apiServer(`${process.env.API_URL}/api/acct/v4/check`, 'create', {
             mid: item?.mid,
             tid: item?.tid,
+            date: item?.date,
             vrf_word: item?.vrf_word,
             api_key: themeDnsData?.api_key,
             deposit_bank_code: item?.deposit_bank_code,
@@ -481,8 +483,6 @@ const VirtualAccountIcb = () => {
                                 <Grid item xs={12} md={6}>
                                     <Card sx={{ p: 2, height: '100%' }}>
                                         <Stack spacing={2}>
-
-
                                             <Stack spacing={1}>
                                                 <FormControl size="small" disabled={item?.deposit_acct_check == 1}>
                                                     <InputLabel>입금은행</InputLabel>

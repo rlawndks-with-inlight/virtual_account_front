@@ -54,7 +54,23 @@ export const returnMoment = (num, date) => {//num 0: 오늘, num -1: 어제 , da
   }
 
 }
-
+export const differenceTwoDate = (f_d_, s_d_) => {//두날짜의 시간차
+  let f_d = new Date(f_d_).getTime();//큰시간
+  let s_d = new Date(s_d_).getTime();//작은시간
+  let hour = (f_d - s_d) / (1000 * 3600);
+  let minute = (f_d - s_d) / (1000 * 60);
+  let day = (f_d - s_d) / (1000 * 3600 * 24);
+  return day;
+}
+export const differenceSecondTwoDate = (f_d_, s_d_) => {//두날짜의 시간차
+  let f_d = new Date(f_d_).getTime();//큰시간
+  let s_d = new Date(s_d_).getTime();//작은시간
+  let second = (f_d - s_d) / (1000);
+  let minute = (f_d - s_d) / (1000 * 60);
+  let hour = (f_d - s_d) / (1000 * 3600);
+  let day = (f_d - s_d) / (1000 * 3600 * 24);
+  return second;
+}
 export const commarNumber = (num) => {
   if (num > 0 && num < 0.000001) {
     return "0.00";
