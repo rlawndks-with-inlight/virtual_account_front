@@ -169,10 +169,9 @@ const VirtualAccountIcb = () => {
             api_key: themeDnsData?.api_key,
             name: item?.deposit_acct_name,
         });
-        console.log(result)
         if (result?.result > 0) {
             toast.success('성공적으로 발송 되었습니다.');
-            setAuthItem(result);
+            setAuthItem(result?.data);
         } else {
             toast.error(result?.message);
             if (result?.result == -105) {
