@@ -190,7 +190,7 @@ const VirtualAccountResult = () => {
                                 <Col style={{ rowGap: '0.5rem' }}>
                                     {themeDnsData?.deposit_corp_type == 7 ?
                                         <>
-                                            {item?.last_auth_date.substring(0, 10) != returnMoment().substring(0, 10) ?
+                                            {(item?.last_auth_date.substring(0, 10) != returnMoment().substring(0, 10) && item?.user_type == 0) ?
                                                 <>
                                                     <Col style={{ margin: '1rem auto' }}>
                                                         데일리 인증

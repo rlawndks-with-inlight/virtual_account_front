@@ -135,7 +135,7 @@ const VirtualAccountList = () => {
             return "---";
           }
           return <Button
-            disabled={row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10)}
+            disabled={row?.last_auth_date.substring(0, 10) == returnMoment().substring(0, 10) || row?.user_type != 0}
             variant="outlined" size="small"
             sx={{ width: '84px' }}
             onClick={() => {
