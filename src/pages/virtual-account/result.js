@@ -167,7 +167,7 @@ const VirtualAccountResult = () => {
                             <Card sx={{ p: 2, maxWidth: '500px', margin: 'auto', width: '90%' }}>
                                 <Col style={{ rowGap: '0.5rem' }}>
                                     <Col style={{ margin: '1rem auto' }}>
-                                        개인결제 P2P 플랫폼
+                                        {/* 개인결제 P2P 플랫폼 */}
                                     </Col>
                                     <Row style={{ alignItems: 'center' }}>
                                         <Typography variant="body2" style={{ width: '100px' }}>은행명</Typography>
