@@ -13,6 +13,7 @@ import { useAuthContext } from "src/auth/useAuthContext";
 import { Row } from "src/components/elements/styled-components";
 import _ from "lodash";
 import { onlyNumberText } from "src/utils/function";
+import axios from "axios";
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -163,14 +164,23 @@ const VirtualAccountIcb = () => {
         setLoading(false);
     }
     const onCheckPhoneNumRequest = async () => {
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/phone/request`, 'create', {
+        let { data: result } = await axios.post(`${process.env.API_URL}/api/acct/v4/phone/request`, {
             ...item,
             api_key: themeDnsData?.api_key,
             name: item?.deposit_acct_name,
         });
-        if (result) {
+        console.log(result)
+        if (result?.result > 0) {
             toast.success('성공적으로 발송 되었습니다.');
             setAuthItem(result);
+        } else {
+            toast.error(result?.message);
+            if (result?.result == -105) {
+                setTimeout(() => {
+                    alert('발급된 계좌로 이동합니다.');
+                    window.location.href = `/virtual-account/result?ci=${result?.data?.ci}`
+                }, 500);
+            }
         }
     }
     const onCheckPhoneNumCheck = async () => {
