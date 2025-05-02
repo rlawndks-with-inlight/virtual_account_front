@@ -616,11 +616,9 @@ const VirtualAccountIcb = () => {
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {
-                                            setModal({
-                                                func: () => { onSave() },
-                                                icon: 'material-symbols:edit-outline',
-                                                title: '발급 하시겠습니까?'
-                                            })
+                                            if (window.confirm('발급 하시겠습니까?')) {
+                                                onSave()
+                                            }
                                         }}>
                                         발급
                                     </Button>
