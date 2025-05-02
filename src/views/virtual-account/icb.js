@@ -612,7 +612,7 @@ const VirtualAccountIcb = () => {
                                 <Stack spacing={1} style={{ display: 'flex' }}>
 
                                     <Button variant="contained"
-                                        disabled={!(item?.phone_check == 1 || item?.deposit_acct_check == 1)}
+                                        disabled={!item?.deposit_acct_check == 1}
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {
