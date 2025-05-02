@@ -474,7 +474,7 @@ const VirtualAccountIcb = () => {
                                                                     setItem(
                                                                         {
                                                                             ...item,
-                                                                            ['phone_vrf_word']: e.target.value
+                                                                            ['phone_vrf_word']: onlyNumberText(e.target.value)
                                                                         }
                                                                     )
                                                                 }}
@@ -555,7 +555,7 @@ const VirtualAccountIcb = () => {
                                                                     setItem(
                                                                         {
                                                                             ...item,
-                                                                            ['vrf_word']: e.target.value
+                                                                            ['vrf_word']: onlyNumberText(e.target.value)
                                                                         }
                                                                     )
                                                                 }} />
