@@ -265,11 +265,11 @@ const navConfig = (is_show_all) => {
         id: 'phoneAuthHistory',
         items: [
           {
-            title: '휴대폰인증관리',
+            title: '인증관리',
             path: PATH_MANAGER.phoneAuthHistory.root,
             icon: <Icon icon='fluent:phone-12-regular' style={{ fontSize: '1.5rem' }} />,
             children: [
-              { title: '휴대폰인증관리', path: PATH_MANAGER.phoneAuthHistory.list },
+              { title: '인증관리', path: PATH_MANAGER.phoneAuthHistory.list },
             ],
           },
         ],
