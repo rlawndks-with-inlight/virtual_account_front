@@ -48,6 +48,7 @@ const VirtualAccountResult = () => {
         if (themeDnsData?.deposit_process_type == 1) {
             setCurrentTab(1);
         }
+        setAuthItem({});
         setLoading(true);
         let data = await apiManager(`virtual-accounts/0`, 'list', {
             ci: router.query?.ci
@@ -70,6 +71,7 @@ const VirtualAccountResult = () => {
     const onCheckPhoneNumRequest = async () => {
         let result = undefined
         if (window.confirm('인증번호 발송 하시겠습니까?')) {
+
             result = await apiManager('virtual-accounts/daily-auth-request', 'create', { id: item?.id });
             if (result) {
                 toast.success('성공적으로 발송 되었습니다.');
