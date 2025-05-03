@@ -144,6 +144,18 @@ const PhoneAuthHistoryList = () => {
                   </Select>
                 </FormControl>
               </>}
+            <FormControl variant='outlined' size='small' sx={{ minWidth: '150px' }}>
+              <InputLabel>인증타입</InputLabel>
+              <Select label='인증타입' value={searchObj[`auth_type`]}
+                onChange={(e) => {
+                  onChangePage({ ...searchObj, [`auth_type`]: e.target.value, page: 1, })
+                }}>
+                <MenuItem value={null}>타입 전체</MenuItem>
+                <MenuItem value={0}>휴대폰</MenuItem>
+                <MenuItem value={1}>계좌</MenuItem>
+
+              </Select>
+            </FormControl>
           </Row>
           <ManagerTable
             data={data}
