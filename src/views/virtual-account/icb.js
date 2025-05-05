@@ -543,7 +543,7 @@ const VirtualAccountIcb = () => {
                                                 //( (item?.user_type == 1 || item?.user_type == 2) ||themeDnsData?.deposit_process_type == 1) 
                                                 true &&
                                                 <>
-                                                    <Button onClick={oneWonCertification} disabled={item?.deposit_acct_check == 1} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
+                                                    <Button onClick={oneWonCertification} disabled={item?.deposit_acct_check == 1 || (item?.user_type == 0 && item?.phone_check != 1)} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
                                                     {item.tid &&
                                                         <>
                                                             <TextField
