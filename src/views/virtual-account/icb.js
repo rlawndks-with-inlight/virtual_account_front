@@ -132,7 +132,7 @@ const VirtualAccountIcb = () => {
             deposit_acct_num: item?.deposit_acct_num,
         });
         if (result?.tid) {
-            toast.success('성공적으로 인증 되었습니다.');
+            toast.success('성공적으로 인증 되었습니다.\n발급 버튼을 눌러주세요.');
             setItem({
                 ...item,
                 deposit_acct_check: 1,
