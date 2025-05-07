@@ -239,7 +239,7 @@ const VirtualAccountResult = () => {
                                                 </>
                                                 :
                                                 <>
-                                                    {differenceSecondTwoDate(returnMoment(), item?.last_acct_auth_date) < 300 && item?.last_acct_auth_date ?
+                                                    {((differenceSecondTwoDate(returnMoment(), item?.last_acct_auth_date) < 300 && item?.last_acct_auth_date) || item?.user_type != 0) ?
                                                         <>
                                                             {getVirtualAccountRequest()}
                                                         </>
