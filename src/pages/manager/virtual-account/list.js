@@ -134,6 +134,22 @@ const VirtualAccountList = () => {
           if (is_excel) {
             return "---";
           }
+
+          if (row?.status == 0) {
+            return "완료"
+          }
+          if (row?.user_type == 0) {
+            if (row?.phone_check != 1) {
+              return "폰인증 필요";
+            }
+            if (row?.deposit_acct_check != 1) {
+              return "계좌인증 필요";
+            }
+          } else if (row?.user_type == 1 || row?.user_type == 2) {
+            if (row?.deposit_acct_check != 1) {
+              return "계좌인증 필요";
+            }
+          }
           return <Button
             variant="outlined" size="small"
             sx={{ width: '84px' }}
@@ -150,22 +166,6 @@ const VirtualAccountList = () => {
 
             }}
           >발급</Button>
-          if (row?.status == 0) {
-            return "완료"
-          }
-          if (row?.user_type == 0) {
-            if (row?.phone_check != 1) {
-              return "폰인증 필요";
-            }
-            if (row?.deposit_acct_check != 1) {
-              return "계좌인증 필요";
-            }
-          } else if (row?.user_type == 1 || row?.user_type == 2) {
-            if (row?.deposit_acct_check != 1) {
-              return "계좌인증 필요";
-            }
-          }
-
         }
       },
       {
