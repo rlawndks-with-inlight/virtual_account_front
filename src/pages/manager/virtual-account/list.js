@@ -128,6 +128,47 @@ const VirtualAccountList = () => {
     },
     ...(themeDnsData?.deposit_corp_type == 7 ? [
       {
+        id: 'issuance',
+        label: '발급',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return "---";
+          }
+          return <Button
+            variant="outlined" size="small"
+            sx={{ width: '84px' }}
+            onClick={async () => {
+              if (window.confirm('발급 하시겠습니까?')) {
+                let result = await apiManager('virtual-accounts/issuance', 'create', {
+                  id: row?.id,
+                })
+                if (result) {
+                  toast.success(`성공적으로 발급 되었습니다.`);
+                  onChangePage(searchObj);
+                }
+              }
+
+            }}
+          >발급</Button>
+          if (row?.status == 0) {
+            return "완료"
+          }
+          if (row?.user_type == 0) {
+            if (row?.phone_check != 1) {
+              return "폰인증 필요";
+            }
+            if (row?.deposit_acct_check != 1) {
+              return "계좌인증 필요";
+            }
+          } else if (row?.user_type == 1 || row?.user_type == 2) {
+            if (row?.deposit_acct_check != 1) {
+              return "계좌인증 필요";
+            }
+          }
+
+        }
+      },
+      {
         id: 'last_auth_date',
         label: '데일리휴대폰인증',
         action: (row, is_excel) => {
