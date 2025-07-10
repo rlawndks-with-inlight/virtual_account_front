@@ -885,6 +885,11 @@ const BrandEdit = () => {
                                 ...item.setting_obj,
                                 [`api_virtual_account_version`]: 4,
                               }
+                            } else if (e.target.value == 8) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_virtual_account_version`]: 5,
+                              }
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -915,7 +920,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 6, 7].includes(item.deposit_corp_type) &&
+                      {[1, 6, 7, 8].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -975,7 +980,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 6].includes(item.deposit_corp_type) &&
+                      {[1, 2, 6, 8].includes(item.deposit_corp_type) &&
                         <>
                           <Stack spacing={1}>
                             <FormControl>
@@ -1094,6 +1099,12 @@ const BrandEdit = () => {
                                 [`api_withdraw_version`]: 5,
                               }
                               data['withdraw_type'] = 0;
+                            } else if (e.target.value == 8) {
+                              data['setting_obj'] = {
+                                ...item.setting_obj,
+                                [`api_withdraw_version`]: 6,
+                              }
+                              data['withdraw_type'] = 1;
                             } else {
                               data['setting_obj'] = {
                                 ...item.setting_obj,
@@ -1139,7 +1150,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 5, 6, 7].includes(item.withdraw_corp_type) &&
+                      {[1, 5, 6, 7, 8].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API ID'
@@ -1215,7 +1226,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 5, 6,].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 5, 6, 8].includes(item.withdraw_corp_type) &&
                         <>
                           <Stack spacing={1}>
                             <FormControl>
@@ -1712,6 +1723,7 @@ const BrandEdit = () => {
                           <MenuItem value={3}>{'v3'}</MenuItem>
                           <MenuItem value={4}>{'v4'}</MenuItem>
                           <MenuItem value={5}>{'v5'}</MenuItem>
+                          <MenuItem value={6}>{'v6'}</MenuItem>
                         </Select>
                       </FormControl>
                       <FormControl>

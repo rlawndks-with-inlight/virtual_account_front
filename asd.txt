@@ -38,10 +38,10 @@ server {
 // sudo certbot --nginx -d mjcp0125.com
 server {
     listen 443 ssl;
-    server_name goodspay.net;
+    server_name spay.it.com;
 
-    ssl_certificate /etc/nginx/key/goodspay.net/certificate.pem;
-    ssl_certificate_key /etc/nginx/key/goodspay.net/private.pem;
+    ssl_certificate /etc/nginx/key/spay.it.com/certificate.pem;
+    ssl_certificate_key /etc/nginx/key/spay.it.com/private.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -62,7 +62,7 @@ server {
 
 server {
     listen 80;
-    server_name goodspay.net; # 도메인이나 IP 주소로 변경
+    server_name spay.it.com; # 도메인이나 IP 주소로 변경
 
     location / {
         proxy_pass http://0.0.0.0:3000; # 변경된 부분: 3000 포트로 설정

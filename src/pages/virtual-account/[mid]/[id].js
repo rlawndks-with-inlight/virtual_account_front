@@ -8,6 +8,7 @@ import { Row } from "src/components/elements/styled-components";
 import VirtualAccountCoocon from "src/views/virtual-account/coocon";
 import VirtualAccountKoreaPaySystem from "src/views/virtual-account/korea-pay-system";
 import VirtualAccountIcb from "src/views/virtual-account/icb";
+import VirtualAccountWingGlobal from "src/views/virtual-account/wing-global";
 
 const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
@@ -41,6 +42,10 @@ const VirtualAccountAddNoneAuth = () => {
                     {themeDnsData?.deposit_corp_type == 7 &&
                         <>
                             <VirtualAccountIcb />
+                        </>}
+                    {themeDnsData?.deposit_corp_type == 8 &&
+                        <>
+                            <VirtualAccountWingGlobal />
                         </>}
                 </div>
             </Row>

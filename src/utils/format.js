@@ -36,6 +36,7 @@ export const apiCorpList = [
     { value: 5, label: '헥토파이낸셜' },
     { value: 6, label: '코리아결제시스템' },
     { value: 7, label: 'ICB' },
+    { value: 8, label: '윙글로벌' },
 ]
 export const virtualAccountStatusList = [
     { value: 0, label: '정상', color: 'success' },
