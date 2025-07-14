@@ -72,12 +72,17 @@ const VirtualAccountWingGlobal = () => {
             data = await apiManager('virtual-accounts', 'get', {
                 id: router.query.id
             })
-            console.log(data)
         }
         if (router.query?.mid) {
             let mcht = await apiManager(`users/mid/${router.query?.mid}`, 'list',)
             if (mcht?.virtual_acct_link_status != 0) {
                 return;
+            }
+        }
+        if (router?.query?.phone_num) {
+            data = {
+                ...data,
+                ...router?.query
             }
         }
         setItem(data);
@@ -86,7 +91,7 @@ const VirtualAccountWingGlobal = () => {
     }
     const onSave = async () => {
         let result = undefined
-        result = await apiServer(`${process.env.API_URL}/api/acct/v4/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: item?.mid, });
+        result = await apiServer(`${process.env.API_URL}/api/acct/v5/issuance`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: item?.mid, });
         if (result?.ci) {
             toast.success("성공적으로 발급 되었습니다.");
             if (router.asPath.split('/')[1] == 'manager') {
@@ -96,108 +101,10 @@ const VirtualAccountWingGlobal = () => {
             }
         }
     }
-    const oneWonCertification = async () => {
-        setLoading(true);
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/request`, 'create', {
-            mid: item?.mid,
-            deposit_bank_code: item?.deposit_bank_code,
-            deposit_acct_num: item?.deposit_acct_num,
-            name: item?.deposit_acct_name,
-            api_key: themeDnsData?.api_key,
-            user_type: item?.user_type,
-            virtual_user_name: item?.virtual_user_name,
-            business_num: item?.business_num,
-            phone_num: item?.phone_num,
-        });
-        let data = item;
-        if (result?.tid) {
-            toast.success('성공적으로 발송 되었습니다.');
-            data = {
-                ...data,
-                tid: result?.tid,
-                date: result?.date,
-            }
-        }
-        setItem(data);
-        setLoading(false);
-    }
-    const checkOneWonCertification = async () => {
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/check`, 'create', {
-            mid: item?.mid,
-            tid: item?.tid,
-            date: item?.date,
-            vrf_word: item?.vrf_word,
-            api_key: themeDnsData?.api_key,
-            deposit_bank_code: item?.deposit_bank_code,
-            deposit_acct_num: item?.deposit_acct_num,
-        });
-        if (result?.tid) {
-            toast.success('성공적으로 인증 되었습니다.\n발급 버튼을 눌러주세요.');
-            setItem({
-                ...item,
-                deposit_acct_check: 1,
-            })
-        }
-    }
-    const checkDepositNameCertification = async () => {
-        setLoading(true);
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/name`, 'create', {
-            mid: item?.mid,
-            deposit_bank_code: item?.deposit_bank_code,
-            deposit_acct_num: item?.deposit_acct_num,
-            name: item?.deposit_acct_name,
-            api_key: themeDnsData?.api_key,
-            user_type: item?.user_type,
-            virtual_user_name: item?.virtual_user_name,
-            phone_num: item?.phone_num,
-        });
-        let data = item;
-        if (result?.tid) {
-            toast.success('성공적으로 확인 되었습니다.');
-            data = {
-                ...data,
-                tid: result?.tid,
-                deposit_acct_check: 1,
-            }
-        }
-        setItem(data);
-        setLoading(false);
-    }
-    const onCheckPhoneNumRequest = async () => {
-        let { data: result } = await axios.post(`${process.env.API_URL}/api/acct/v4/phone/request`, {
-            ...item,
-            api_key: themeDnsData?.api_key,
-            name: item?.deposit_acct_name,
-        });
-        if (result?.result > 0) {
-            toast.success('성공적으로 발송 되었습니다.');
-            setAuthItem(result?.data);
-        } else {
-            toast.error(result?.message);
-            if (result?.result == -105) {
-                setTimeout(() => {
-                    alert('발급된 계좌로 이동합니다.');
-                    window.location.href = `/virtual-account/result?ci=${result?.data?.ci}`
-                }, 500);
-            }
-        }
-    }
-    const onCheckPhoneNumCheck = async () => {
-        let result = await apiServer(`${process.env.API_URL}/api/acct/v4/phone/check`, 'create', {
-            ...item,
-            api_key: themeDnsData?.api_key,
-            vrf_word: item?.phone_vrf_word,
-            name: item?.deposit_acct_name,
-            ...authItem,
-        });
-        if (result) {
-            toast.success('성공적으로 인증 되었습니다.');
-            setItem({
-                ...item,
-                ci: result?.ci,
-                phone_check: 1,
-            })
-        }
+    const callNice = async () => {
+        let result = undefined
+        result = await apiServer(`${process.env.API_URL}/api/acct/v5/nice`, 'create', { ...item, api_key: themeDnsData?.api_key, mid: item?.mid, });
+        window.location.href = result?.url;
     }
 
     return (
@@ -234,336 +141,78 @@ const VirtualAccountWingGlobal = () => {
                     <Grid container spacing={3}>
                         {currentTab == 0 &&
                             <>
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={12} md={12}>
                                     <Card sx={{ p: 2, height: '100%' }}>
                                         <Stack spacing={2}>
-                                            {/* {user?.level >= 40 &&
+                                            {router?.query?.phone_num ?
                                                 <>
-                                                    <FormControl variant='outlined' size="small">
-                                                        <InputLabel>가맹점선택</InputLabel>
-                                                        <Select label='가맹점선택' value={item?.mid}
-                                                            onChange={(e) => {
-                                                                setItem({
-                                                                    ...item,
-                                                                    mid: e.target.value,
-                                                                })
-                                                            }}>
-                                                            <MenuItem value={null}>{`가맹점 선택안함`}</MenuItem>
-                                                            {mchtList.map(mcht => {
-                                                                return <MenuItem value={mcht?.mid}>{`${mcht?.nickname}(${mcht?.user_name})`}</MenuItem>
-                                                            })}
-                                                        </Select>
-                                                    </FormControl>
                                                     <TextField
+                                                        label='전화번호'
                                                         size="small"
-                                                        label='MID'
-                                                        value={item.mid}
+                                                        value={item.phone_num}
+                                                        placeholder=""
                                                         disabled={true}
                                                     />
-                                                </>} */}
-
-                                            {themeDnsData?.setting_obj?.is_use_virtual_user_name == 1 &&
-                                                <>
                                                     <TextField
-                                                        label='아이디'
+                                                        label='생년월일'
                                                         size="small"
-                                                        value={item.virtual_user_name}
+                                                        value={item.birth}
                                                         placeholder=""
+                                                        disabled={true}
+                                                    />
+                                                    <TextField
+                                                        label='이름(예금주명)'
+                                                        size="small"
+                                                        value={item.deposit_acct_name}
+                                                        placeholder=""
+                                                        disabled={true}
+                                                    />
+                                                    <Stack spacing={1}>
+                                                        <FormControl size="small" >
+                                                            <InputLabel>입금은행</InputLabel>
+                                                            <Select
+                                                                label='입금은행'
+                                                                value={item.deposit_bank_code}
+                                                                onChange={e => {
+                                                                    setItem({
+                                                                        ...item,
+                                                                        ['deposit_bank_code']: e.target.value
+                                                                    })
+                                                                }}
+                                                            >
+                                                                {bankCodeList().map((itm, idx) => {
+                                                                    return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                                                                })}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Stack>
+                                                    <TextField
+                                                        size="small"
+                                                        label='입금계좌번호'
+                                                        value={item.deposit_acct_num}
                                                         onChange={(e) => {
                                                             setItem(
                                                                 {
                                                                     ...item,
-                                                                    ['virtual_user_name']: e.target.value
+                                                                    ['deposit_acct_num']: onlyNumberText(e.target.value),
                                                                 }
                                                             )
                                                         }} />
-                                                </>}
-
-
-                                            {themeDnsData?.deposit_process_type == 0 &&
+                                                </>
+                                                :
                                                 <>
-                                                    <FormControl variant='outlined' size="small" disabled={item?.phone_check == 1 || item?.deposit_acct_check == 1}>
-                                                        <InputLabel>사용자구분</InputLabel>
-                                                        <Select label='사용자구분' value={item?.user_type}
-                                                            onChange={(e) => {
-                                                                let obj = {
-                                                                    ...item,
-                                                                    user_type: e.target.value,
-                                                                }
-                                                                if (e.target.value == 0) {
-                                                                    obj = {
-                                                                        ...obj,
-                                                                        business_num: '',
-                                                                        company_name: '',
-                                                                        ceo_name: '',
-                                                                        company_phone_num: '',
-                                                                    }
-                                                                }
-                                                                setItem(obj)
-                                                            }}>
-                                                            {virtualAccountUserTypeList.map((itm => {
-                                                                return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                            }))}
-                                                        </Select>
-                                                    </FormControl>
-                                                    {(item.user_type == 1 || item.user_type == 2) &&
-                                                        <>
-                                                            <TextField
-                                                                label='사업자등록번호'
-                                                                size="small"
-                                                                value={item.business_num}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['business_num']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            <TextField
-                                                                label='회사명(상호)'
-                                                                size="small"
-                                                                value={item.company_name}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['company_name']: e.target.value,
-                                                                            ['deposit_acct_name']: e.target.value,
-                                                                            ['name']: e.target.value,
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            {/* <TextField
-                                                                label='대표자명'
-                                                                size="small"
-                                                                value={item.ceo_name}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['ceo_name']: e.target.value
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            <TextField
-                                                                label='회사 전화번호'
-                                                                size="small"
-                                                                value={item.company_phone_num}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['company_phone_num']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }} /> */}
-
-                                                        </>}
-                                                    {item?.user_type == 0 &&
-                                                        <>
-                                                            <TextField
-                                                                size="small"
-                                                                label='생년월일'
-                                                                value={item.birth}
-                                                                disabled={item?.phone_check == 1}
-                                                                placeholder="19990101"
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['birth']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                                <InputLabel>성별</InputLabel>
-                                                                <Select label='성별' value={item?.gender}
-                                                                    onChange={(e) => {
-                                                                        setItem(
-                                                                            {
-                                                                                ...item,
-                                                                                ['gender']: e.target.value,
-                                                                            }
-                                                                        )
-                                                                    }}>
-                                                                    {genderList.map((itm) => {
-                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                                    })}
-                                                                </Select>
-                                                            </FormControl>
-                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                                <InputLabel>내외국인</InputLabel>
-                                                                <Select label='내외국인' value={item?.ntv_frnr}
-                                                                    onChange={(e) => {
-                                                                        setItem(
-                                                                            {
-                                                                                ...item,
-                                                                                ['ntv_frnr']: e.target.value,
-                                                                            }
-                                                                        )
-                                                                    }}>
-                                                                    {ntvFrnrList.map((itm) => {
-                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                                    })}
-                                                                </Select>
-                                                            </FormControl>
-                                                            <TextField
-                                                                label='이름'
-                                                                size="small"
-                                                                value={item.deposit_acct_name}
-                                                                disabled={item?.phone_check == 1}
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['deposit_acct_name']: e.target.value,
-                                                                            ['name']: e.target.value,
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            <FormControl size="small" disabled={item?.phone_check == 1}>
-                                                                <InputLabel>통신사</InputLabel>
-                                                                <Select label='통신사' value={item?.tel_com}
-                                                                    onChange={(e) => {
-                                                                        setItem(
-                                                                            {
-                                                                                ...item,
-                                                                                ['tel_com']: e.target.value,
-                                                                            }
-                                                                        )
-                                                                    }}>
-                                                                    {telComList.map((itm) => {
-                                                                        return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                                    })}
-                                                                </Select>
-                                                            </FormControl>
-                                                            <TextField
-                                                                label='휴대폰번호'
-                                                                size="small"
-                                                                value={item.phone_num}
-                                                                disabled={item?.phone_check == 1}
-                                                                placeholder="하이픈(-) 제외 입력"
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['phone_num']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }}
-                                                                InputProps={{
-                                                                    endAdornment: (themeDnsData?.setting_obj?.is_use_auth == 1 ? <Button
-                                                                        disabled={item?.phone_check == 1}
-                                                                        variant='contained'
-                                                                        size='small'
-                                                                        sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                        onClick={onCheckPhoneNumRequest}>{'인증번호 발송'}</Button> : <div />)
-                                                                }}
-                                                            />
-                                                            <TextField
-                                                                label='인증번호'
-                                                                size="small"
-                                                                value={item.phone_vrf_word}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['phone_vrf_word']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }}
-                                                                InputProps={{
-                                                                    endAdornment: <Button variant='contained' size='small' sx={{ width: '160px', marginRight: '-0.5rem' }}
-                                                                        disabled={(!authItem?.tid) || item?.phone_check == 1}
-                                                                        onClick={onCheckPhoneNumCheck}>{item?.phone_check == 1 ? '확인완료' : '인증번호 확인'}</Button>
-                                                                }}
-                                                            />
-                                                        </>}
-                                                </>}
-                                        </Stack>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Card sx={{ p: 2, height: '100%' }}>
-                                        <Stack spacing={2}>
-                                            <Stack spacing={1}>
-                                                <FormControl size="small" disabled={item?.deposit_acct_check == 1}>
-                                                    <InputLabel>입금은행</InputLabel>
-                                                    <Select
-                                                        label='입금은행'
-                                                        value={item.deposit_bank_code}
-                                                        onChange={e => {
-                                                            setItem({
-                                                                ...item,
-                                                                ['deposit_bank_code']: e.target.value
-                                                            })
+                                                    <div style={{ height: '100px' }} />
+                                                    <Button
+                                                        variant="outlined"
+                                                        onClick={() => {
+                                                            callNice();
                                                         }}
                                                     >
-                                                        {bankCodeList().map((itm, idx) => {
-                                                            return <MenuItem value={itm.value}>{itm.label}</MenuItem>
-                                                        })}
-                                                    </Select>
-                                                </FormControl>
-                                            </Stack>
-                                            <TextField
-                                                disabled={item?.deposit_acct_check == 1}
-                                                size="small"
-                                                label='입금계좌번호'
-                                                value={item.deposit_acct_num}
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['deposit_acct_num']: onlyNumberText(e.target.value),
-                                                        }
-                                                    )
-                                                }} />
-                                            <TextField
-                                                label='예금주명'
-                                                size="small"
-                                                value={item.deposit_acct_name}
-                                                disabled={item?.deposit_acct_check == 1}
-                                                onChange={(e) => {
-                                                    setItem(
-                                                        {
-                                                            ...item,
-                                                            ['deposit_acct_name']: e.target.value,
-                                                            ['name']: e.target.value,
-                                                        }
-                                                    )
-                                                }} />
-
-                                            {
-                                                //( (item?.user_type == 1 || item?.user_type == 2) ||themeDnsData?.deposit_process_type == 1) 
-                                                true &&
-                                                <>
-                                                    <Button onClick={oneWonCertification} disabled={item?.deposit_acct_check == 1 || (item?.user_type == 0 && item?.phone_check != 1)} variant="outlined" style={{ height: '40px', }}>1원인증 발송</Button>
-                                                    {item.tid &&
-                                                        <>
-                                                            <TextField
-                                                                size="small"
-                                                                label='인증번호'
-                                                                value={item.vrf_word}
-                                                                placeholder=""
-                                                                onChange={(e) => {
-                                                                    setItem(
-                                                                        {
-                                                                            ...item,
-                                                                            ['vrf_word']: onlyNumberText(e.target.value)
-                                                                        }
-                                                                    )
-                                                                }} />
-                                                            <Button
-                                                                disabled={item?.deposit_acct_check}
-                                                                onClick={checkOneWonCertification} variant="outlined" style={{ height: '40px', }}>{item?.deposit_acct_check ? '확인완료' : '인증확인'}</Button>
-                                                        </>}
+                                                        휴대폰인증하러 가기
+                                                    </Button>
+                                                    <div style={{ height: '100px' }} />
                                                 </>}
+
                                         </Stack>
                                     </Card>
                                 </Grid>
@@ -612,7 +261,7 @@ const VirtualAccountWingGlobal = () => {
                                 <Stack spacing={1} style={{ display: 'flex' }}>
 
                                     <Button variant="contained"
-                                        disabled={!item?.deposit_acct_check == 1}
+                                        disabled={!item?.phone_num}
                                         style={{
                                             height: '48px', width: '120px', marginLeft: 'auto'
                                         }} onClick={() => {

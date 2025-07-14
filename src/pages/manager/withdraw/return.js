@@ -471,7 +471,7 @@ const WithdrawReturn = () => {
                                                                         withdraw_list[idx].withdraw_acct_name = e.target.value;
                                                                         setWithdraws(withdraw_list);
                                                                     }} /> */}
-                                                                {[2, 6].includes(themeDnsData?.withdraw_corp_type) &&
+                                                                {[2, 6, 8].includes(themeDnsData?.withdraw_corp_type) &&
                                                                     <>
                                                                         <Button variant="outlined" onClick={() => {
                                                                             onCheckAcct(vir_acct, idx)

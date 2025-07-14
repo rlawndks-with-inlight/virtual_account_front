@@ -935,7 +935,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 6, 7].includes(item.deposit_corp_type) &&
+                      {[1, 6, 7, 8].includes(item.deposit_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'
@@ -1165,7 +1165,7 @@ const BrandEdit = () => {
                               )
                             }} />
                         </>}
-                      {[1, 2, 5, 6, 7].includes(item.withdraw_corp_type) &&
+                      {[1, 2, 5, 6, 7, 8].includes(item.withdraw_corp_type) &&
                         <>
                           <TextField
                             label='API 서명키'

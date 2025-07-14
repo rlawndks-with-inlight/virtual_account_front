@@ -251,6 +251,21 @@ const UserEdit = () => {
                               )
                             }} />
                         </>}
+                      {themeDnsData?.deposit_corp_type == 8 &&
+                        <>
+                          <TextField
+                            label='인증가맹점아이디'
+                            value={item.auth_user_name}
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['auth_user_name']: e.target.value
+                                }
+                              )
+                            }} />
+                        </>}
+
                       <TextField
                         label='닉네임'
                         value={item.nickname}
