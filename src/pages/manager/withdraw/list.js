@@ -207,7 +207,7 @@ const WithdrawList = () => {
         },
       },
     ] : []),
-    ...([2, 5, 7].includes(themeDnsData?.withdraw_corp_type) ? [
+    ...([2, 5, 7, 8].includes(themeDnsData?.withdraw_corp_type) ? [
       {
         id: 'withdraw_check',
         label: '출금체크',
