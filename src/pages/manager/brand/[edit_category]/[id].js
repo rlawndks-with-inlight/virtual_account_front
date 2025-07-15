@@ -478,6 +478,22 @@ const BrandEdit = () => {
                             }}
                           />
                         </>}
+                      {user?.level >= 45 &&
+                        <>
+                          <TextField
+                            label='무조건 보류 출금금액'
+                            value={item.must_hold_withdraw_amount}
+                            placeholder=""
+                            onChange={(e) => {
+                              setItem(
+                                {
+                                  ...item,
+                                  ['must_hold_withdraw_amount']: onlyNumberText(e.target.value)
+                                }
+                              )
+                            }}
+                          />
+                        </>}
                       {item?.withdraw_type == 0 && item?.deposit_type == 'virtual_account' &&
                         <>
                           <Stack>

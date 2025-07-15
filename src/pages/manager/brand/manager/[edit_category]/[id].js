@@ -36,7 +36,7 @@ const UserEdit = () => {
     nickname: '',
     name: '',
     email: '',
-    level: 10,
+    level: 40,
     user_pw: '',
     withdraw_fee: 0,
     min_withdraw_price: 0,
@@ -106,9 +106,7 @@ const UserEdit = () => {
   }
   const onSave = async () => {
     let data = item;
-    if (!data?.mcht_fee && themeDnsData?.is_use_fee_operator == 1) {
-      return toast.error('가맹점 요율은 필수값입니다.');
-    }
+
     let result = undefined
     if (data?.telegram_chat_ids) {
       data['telegram_chat_ids'] = JSON.stringify((data?.telegram_chat_ids ?? "").split(','));
