@@ -144,7 +144,7 @@ const DepositList = () => {
         }
       },
     },
-    ...(themeDnsData?.deposit_type == 'virtual_account' ? [
+    ...(themeDnsData?.deposit_type == 'virtual_account' && [10, 40].includes(user?.level) ? [
       {
         id: 'deposit_bank_code',
         label: '입금은행정보',
@@ -233,7 +233,7 @@ const DepositList = () => {
         },
       },
     ] : []),
-    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' ? [
+    ...(themeDnsData?.withdraw_type == 0 && themeDnsData?.deposit_type == 'virtual_account' && [10, 40].includes(user?.level) ? [
       {
         id: 'virtual_acct_num',
         label: '가상계좌번호',
@@ -466,8 +466,7 @@ const DepositList = () => {
         },
       ] : []),
       ...(themeDnsData?.operator_list ?? []).map(operator => {
-        if (user?.level >= 40) {
-          //if (user?.level >= operator?.value) {
+        if (user?.level >= operator?.value) {
           let label = operator?.label;
           if (user?.level > 10 && user?.level < 40) {
             label = (operator?.label ?? "").includes('대리점') ? '대리점' : operator?.label;
