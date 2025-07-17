@@ -572,6 +572,43 @@ const VirtualAccountList = () => {
       onChangePage(searchObj);
     }
   }
+  const onCheckAcct = async (data) => {
+    let {
+      deposit_bank_code,
+      deposit_acct_num,
+      deposit_acct_name,
+    } = data;
+    let result = undefined;
+    result = await apiManager(`withdraws/check`, 'create', {
+      api_key: themeDnsData?.api_key,
+      mid: user?.mid,
+      withdraw_bank_code: deposit_bank_code,
+      withdraw_acct_num: deposit_acct_num,
+      withdraw_acct_name: deposit_acct_name,
+    });
+    /*
+    result = await apiServer(`${process.env.API_URL}/api/withdraw/v${themeDnsData?.setting_obj?.api_withdraw_version}/check`, 'create', {
+        api_key: themeDnsData?.api_key,
+        mid: user?.mid,
+        withdraw_bank_code: withdraw_bank_code,
+        withdraw_acct_num: withdraw_acct_num,
+        withdraw_acct_name: withdraw_acct_name,
+    });
+    */
+    return result;
+  }
+  const onCreateVirtualAccount = async () => {
+    let result = undefined;
+    if (window.confirm('생성 하시겠습니까?')) {
+      result = await apiManager('virtual-accounts', 'create', { ...dialogObj });
+      if (result) {
+        toast.success('성공적으로 생성 되었습니다.');
+        setDialogObj({});
+        onChangePage(searchObj);
+      }
+    }
+
+  }
   return (
     <>
       <Dialog open={pageLoading}
@@ -851,6 +888,97 @@ const VirtualAccountList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+        open={dialogObj.addVirtualAccount}
+        onClose={() => {
+          setDialogObj({})
+        }}
+      >
+        <DialogTitle>{`가상계좌생성`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            가상계좌 생성 정보를 입력해 주세요
+          </DialogContentText>
+          <Stack spacing={1} style={{ margin: '0.5rem 0' }}>
+            <Autocomplete
+              fullWidth
+              autoComplete='new-password'
+              options={operUserList}
+              style={{
+                whiteSpace: 'pre'
+              }}
+              getOptionLabel={(option) => `${option?.user_name} (${option?.nickname})`}
+              value={dialogObj?.mcht_id}
+              onChange={(e, value) => {
+                setDialogObj({
+                  ...dialogObj,
+                  mcht_id: value?.id
+                })
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="가맹점선택" placeholder="가맹점선택" autoComplete='new-password' />
+              )}
+            />
+          </Stack>
+          <Stack spacing={1}>
+            <FormControl >
+
+              <InputLabel>입금은행</InputLabel>
+              <Select
+                label='입금은행'
+                value={dialogObj.deposit_bank_code}
+                onChange={e => {
+                  setDialogObj({
+                    ...dialogObj,
+                    ['deposit_bank_code']: e.target.value
+                  })
+                }}
+              >
+                {bankCodeList().map((itm, idx) => {
+                  return <MenuItem value={itm.value}>{itm.label}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+          </Stack>
+          <TextField
+            fullWidth
+            value={dialogObj.deposit_acct_num}
+            margin="dense"
+            label="계좌번호"
+            onChange={(e) => {
+              setDialogObj({
+                ...dialogObj,
+                deposit_acct_num: e.target.value
+              })
+            }}
+          />
+          <Row>
+            <Button variant="outlined" style={{ margin: '1rem auto' }} onClick={async () => {
+              let result = await onCheckAcct(dialogObj);
+              setDialogObj({
+                ...dialogObj,
+                deposit_acct_name: result?.withdraw_acct_name ?? ""
+              })
+            }}>조회</Button>
+          </Row>
+          <TextField
+            fullWidth
+            value={dialogObj.deposit_acct_name}
+            margin="dense"
+            disabled={true}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onCreateVirtualAccount} disabled={!dialogObj.deposit_acct_name}>
+            등록
+          </Button>
+          <Button color="inherit" onClick={() => {
+            setDialogObj({})
+          }}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Stack spacing={3}>
         <Card>
           <Row style={{ padding: '12px', columnGap: '0.5rem', flexWrap: 'wrap', rowGap: '0.5rem' }}>
@@ -900,6 +1028,14 @@ const VirtualAccountList = () => {
                     title: '가상계좌 일괄삭제 하시겠습니까?'
                   })
                 }}>가맹점 하부 가상계좌 삭제</Button>
+              </>}
+            {user?.level >= 40 && ([8].includes(themeDnsData?.deposit_corp_type)) &&
+              <>
+                <Button variant="outlined" sx={{}} onClick={() => {
+                  setDialogObj({
+                    addVirtualAccount: true
+                  })
+                }}>가상계좌 생성</Button>
               </>}
           </Row>
 
