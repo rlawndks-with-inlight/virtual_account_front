@@ -466,7 +466,8 @@ const DepositList = () => {
         },
       ] : []),
       ...(themeDnsData?.operator_list ?? []).map(operator => {
-        if (user?.level >= operator?.value) {
+        if (user?.level >= 40) {
+          //if (user?.level >= operator?.value) {
           let label = operator?.label;
           if (user?.level > 10 && user?.level < 40) {
             label = (operator?.label ?? "").includes('대리점') ? '대리점' : operator?.label;
