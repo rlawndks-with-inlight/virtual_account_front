@@ -370,7 +370,7 @@ const VirtualAccountList = () => {
           }
         },
     */
-    ...(user?.level >= 10 ? [
+    ...(((user?.level >= 10 && themeDnsData?.deposit_corp_type != 8) || user?.level >= 40) ? [
       {
         id: 'delete',
         label: '삭제',
