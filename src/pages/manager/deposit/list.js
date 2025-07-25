@@ -144,7 +144,7 @@ const DepositList = () => {
         }
       },
     },
-    ...(themeDnsData?.deposit_type == 'virtual_account' && [10, 40].includes(user?.level) ? [
+    ...(themeDnsData?.deposit_type == 'virtual_account' && [10, 40, 50].includes(user?.level) ? [
       {
         id: 'deposit_bank_code',
         label: '입금은행정보',
