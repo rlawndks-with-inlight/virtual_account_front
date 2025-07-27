@@ -147,7 +147,8 @@ export const apiManager = (table, type, params) => {
         return put(`${base_url}/${table}/${params?.id ?? ""}`, obj);
     }
     if (type == 'delete') {
-        return deleteItem(`${base_url}/${table}/${params?.id}`);
+        console.log(obj)
+        return deleteItem(`${base_url}/${table}/${params?.id}?${new URLSearchParams(obj).toString()}`, obj);
     }
 }
 export const apiUtil = async (table, type, params) => {
@@ -229,6 +230,9 @@ export const settingParams = (table, type, params) => {
         obj = settingdeleteImageObj(obj);
     }
     if (type == 'update') {
+        obj = settingdeleteImageObj(obj);
+    }
+    if (type == 'delete') {
         obj = settingdeleteImageObj(obj);
     }
     return obj

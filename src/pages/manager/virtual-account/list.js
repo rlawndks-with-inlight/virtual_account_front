@@ -19,7 +19,14 @@ const VirtualAccountList = () => {
   const { setModal } = useModal()
   const { user } = useAuthContext();
   const { themeDnsData } = useSettingsContext();
-
+  const [searchObj, setSearchObj] = useState({
+    page: 1,
+    page_size: 20,
+    s_dt: '',
+    e_dt: '',
+    search: '',
+    is_sales_man: true,
+  })
   const defaultColumns = [
     {
       id: 'user_name',
@@ -394,20 +401,37 @@ const VirtualAccountList = () => {
         }
       },
     ] : []),
+    ...(user?.level >= 40 && themeDnsData?.is_use_force_delete_vaccount == 1 ? [
+      {
+        id: 'force_delete',
+        label: searchObj?.is_delete == 1 ? '강제복구' : '강제삭제',
+        action: (row, is_excel) => {
+          if (is_excel) {
+            return `---`
+          }
+          return (
+            <>
+              <IconButton onClick={() => {
+                setModal({
+                  func: () => { deleteItem(row?.id, 1, searchObj?.is_delete == 1 ? 0 : 1) },
+                  icon: searchObj?.is_delete == 1 ? 'material-symbols:autorenew-rounded' : 'material-symbols:delete-outline',
+                  title: `정말 ${searchObj?.is_delete == 1 ? '강제복구' : '강제삭제'} 하시겠습니까?`
+                })
+              }}>
+                <Icon icon={searchObj?.is_delete == 1 ? 'material-symbols:autorenew-rounded' : 'material-symbols:delete-outline'} color="red" />
+              </IconButton>
+            </>
+          )
+        }
+      },
+    ] : []),
   ]
   const router = useRouter();
 
   const [data, setData] = useState({});
   const [operUserList, setOperUserList] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
-  const [searchObj, setSearchObj] = useState({
-    page: 1,
-    page_size: 20,
-    s_dt: '',
-    e_dt: '',
-    search: '',
-    is_sales_man: true,
-  })
+
   const [dialogObj, setDialogObj] = useState({
     changePassword: false,
     changeVirtualUserName: false,
@@ -448,10 +472,10 @@ const VirtualAccountList = () => {
       setData(data_);
     }
   }
-  const deleteItem = async (id) => {
+  const deleteItem = async (id, is_force = 0, delete_value = 1,) => {
     setPageLoading(true);
     toast.error('삭제처리가 완료될때까지 기다려주세요....');
-    let data = await apiManager('virtual-accounts', 'delete', { id });
+    let data = await apiManager('virtual-accounts', 'delete', { id, is_force, delete_value });
     setPageLoading(false);
     if (data) {
 
